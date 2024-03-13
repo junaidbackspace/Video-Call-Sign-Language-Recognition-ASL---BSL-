@@ -1,0 +1,32 @@
+PODS:
+  - DropDown (2.3.13)
+  - GoogleWebRTC (1.1.32000)
+  - Kingfisher (7.10.1)
+  - Starscream (3.0.6)
+  - SwiftGifOrigin (1.7.0)
+
+DEPENDENCIES:
+  - DropDown
+  - GoogleWebRTC
+  - Kingfisher
+  - Starscream (~> 3.0.2)
+  - SwiftGifOrigin
+
+SPEC REPOS:
+  trunk:
+    - DropDown
+    - GoogleWebRTC
+    - Kingfisher
+    - Starscream
+    - SwiftGifOrigin
+
+SPEC CHECKSUMS:
+  DropDown: 8a2116376c1981888557f72ec2ffc9a5e0e456ec
+  GoogleWebRTC: 4d261187b30512efdb711d21fa961a6adf138717
+  Kingfisher: bc5abe80a8e0144537ef1dd5a0b2621b04f7f439
+  Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
+  SwiftGifOrigin: fbd6cf37afcfcf97a5c3db996ddc0492e5c5c145
+
+PODFILE CHECKSUM: 9be735768f406163cbe89aa34e14cf587768cd51
+
+COCOAPODS: 1.13.0
