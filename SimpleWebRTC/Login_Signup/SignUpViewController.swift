@@ -9,17 +9,38 @@
 import UIKit
 import DropDown
 
-class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
+class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & UIGestureRecognizerDelegate, UINavigationControllerDelegate {
+    
     let serverWrapper = APIWrapper()
     let dateFormatter = DateFormatter()
+    var imgPicker =  UIImagePickerController()
+    
    // var imgList = [Media]()
     var u = User()
+    
+ //second view
+    @IBOutlet weak var imgview: UIImageView!
+    @IBOutlet weak var outletBtnBack: UIButton!
+    @IBOutlet weak var outletBtnNext: UIButton!
+    @IBOutlet weak var txtAbout: UITextField!
+    @IBOutlet weak var imgabout: UIImageView!
     
     @IBAction func backSignUp(_ sender: Any) {
         
         let controller = self.storyboard!.instantiateViewController(identifier: "firstscreen")
         controller.modalPresentationStyle = .fullScreen
           self.navigationController?.pushViewController(controller, animated: true)
+       
+    }
+    @IBAction func backbtn(_ sender: Any) {
+        
+        firstScreen.isHidden = false
+        SecondScreen.isHidden = true
+        imgview.isHidden = true
+        txtAbout.isHidden = true
+        outletBtnBack.isHidden = true
+        btnsignupOutlet.isHidden = true
+        imgabout.isHidden = true
        
     }
     
@@ -30,6 +51,9 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
     
     @IBOutlet weak var btnsignupOutlet: UIButton!
     @IBOutlet weak var lbldropdown: UILabel!
+    
+    @IBOutlet weak var firstScreen: UIView!
+    @IBOutlet weak var SecondScreen: UIView!
     
     
     @IBAction func btndrpdown(_ sender: Any) {
@@ -56,6 +80,25 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
         }
         dropDown.show()
     }
+ 
+    @IBAction func btnNext(_ sender: Any) {
+        
+        firstScreen.isHidden = true
+        SecondScreen.isHidden = false
+        
+        imgview.isHidden = false
+        txtAbout.isHidden = false
+        outletBtnBack.isHidden = false
+        btnsignupOutlet.isHidden = false
+        imgabout.isHidden = false
+        
+        self.view.addSubview(imgview)
+        self.view.addSubview(txtAbout)
+        self.view.addSubview(outletBtnBack)
+        self.view.addSubview(btnsignupOutlet)
+        self.view.addSubview(imgabout)
+    }
+    
     @IBAction func btnSignup(_ sender: Any) {
         
         
@@ -124,7 +167,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
         u.AccountStatus = "Hi i am using CommFusion"
         u.Status = 0
         if imgname == ""{
-            imguploadoutlet.layer.borderColor = CGColor.init(red: 1, green: 0, blue: 0, alpha: 1)
+            imgview.layer.borderColor = CGColor.init(red: 1, green: 0, blue: 0, alpha: 1)
         }
         else{
         u.ProfilePicture = imgname
@@ -178,31 +221,29 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
     }
 
     
-    @IBOutlet weak var imguploadoutlet: UIButton!
+   
     @IBOutlet weak var txtdob: UIDatePicker!
     @IBOutlet weak var txtconfirmPassword: UITextField!
     @IBOutlet weak var txtemail: UITextField!
     @IBOutlet weak var txtName: UITextField!
-    @IBAction func imgUpload(_ sender: Any) {
-        openImagePicker()
-    }
-    func openImagePicker() {
-        imgPicker.sourceType = .photoLibrary // or .camera if you want to use the camera
-       present(imgPicker, animated: true, completion: nil)
-    }
-    var imgPicker =  UIImagePickerController()
     
+   
+   
     var imgname = ""
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any])
         {
         if let imageURL = info[.imageURL] as? URL {
                 imgname = imageURL.lastPathComponent
                
-               self.imguploadoutlet.setTitle(imgname, for: .normal)
+            print("selected image: \(imgname)")
             
-            let Url = "http://192.168.31.105:5000/upload_image"
-            serverWrapper.uploadImage(baseUrl: Url, imageURL: imageURL)
+//            let Url = "\(Constants.serverURL)/upload_image"
+//            serverWrapper.uploadImage(baseUrl: Url, imageURL: imageURL)
            }
+        if let img = info[.originalImage] as? UIImage
+        {
+            self.imgview.image = img
+        }
            picker.dismiss(animated: true, completion: nil)
        }
     
@@ -210,7 +251,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
     
     func setupUI()
     {
-        
+        SecondScreen.isHidden = true
         viewDOB.layer.borderWidth = 1.0
         viewDOB.layer.borderColor = UIColor.gray.cgColor
         viewDOB.layer.cornerRadius = 25
@@ -229,9 +270,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
         
         btnsignupOutlet.layer.cornerRadius = 15
         
-        imguploadoutlet.layer.borderWidth = 1.0
-        imguploadoutlet.layer.borderColor = UIColor.gray.cgColor
-        imguploadoutlet.layer.cornerRadius = 25
+      imgview.layer.cornerRadius = 57
         
         txtemail.layer.borderWidth = 1.0
         txtemail.layer.borderColor = UIColor.gray.cgColor
@@ -255,13 +294,28 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
             self.txtdob.addTarget(self, action: #selector(self.datePickerValueChanged(_:)), for: .valueChanged)
   
      
-                   self.addDoneButtonToKeyboard(for: self.txtName)
-                   self.addDoneButtonToKeyboard(for: self.txtemail)
-                   self.addDoneButtonToKeyboard(for: self.txtpassword)
-                   self.addDoneButtonToKeyboard(for: self.txtconfirmPassword)
                
+        imgview.isUserInteractionEnabled = true
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imgViewTapped(_:)))
+        imgview.addGestureRecognizer(tapGesture)
+        
+        let tapscreen = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tapscreen.delegate = self
+                self.view.addGestureRecognizer(tapscreen)
+        
+       
     }
-               
+     
+    @objc func imgViewTapped(_ sender: Any)
+    {
+        self.present(imgPicker, animated: true,completion: nil)
+    }
+    
+    @objc func hideKeyboard() {
+            self.view.endEditing(true)
+        }
+    
     
     
     @objc func datePickerValueChanged(_ sender: UIDatePicker) {
@@ -276,14 +330,5 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
     
     
 
-    func addDoneButtonToKeyboard(for textField: UITextField) {
-        let toolbar = UIToolbar()
-        toolbar.sizeToFit()
-        
-        let doneButton = UIBarButtonItem(barButtonSystemItem: .close, target: textField, action: #selector(UIResponder.resignFirstResponder))
-        toolbar.items = [doneButton]
-        
-        textField.inputAccessoryView = toolbar
-    }
 }
 

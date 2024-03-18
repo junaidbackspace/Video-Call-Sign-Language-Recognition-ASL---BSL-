@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LoginToAccountViewController: UIViewController {
+class LoginToAccountViewController: UIViewController, UIGestureRecognizerDelegate {
     var serverWrapper = APIWrapper()
     var logindefaults = UserDefaults()
     
@@ -99,10 +99,16 @@ class LoginToAccountViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
        setupui()
-        addDoneButtonToKeyboard(for: txtemail)
-        addDoneButtonToKeyboard(for: txtpassword)
-        // Do any additional setup after loading the view.
+//        addDoneButtonToKeyboard(for: txtemail)
+//        addDoneButtonToKeyboard(for: txtpassword)
+        let tapscreen = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tapscreen.delegate = self
+                self.view.addGestureRecognizer(tapscreen)
+        
     }
+    @objc func hideKeyboard() {
+            self.view.endEditing(true)
+        }
     
 
     func addDoneButtonToKeyboard(for textField: UITextField) {
