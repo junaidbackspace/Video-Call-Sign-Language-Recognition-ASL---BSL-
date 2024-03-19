@@ -11,6 +11,8 @@ import DropDown
 
 class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & UIGestureRecognizerDelegate, UINavigationControllerDelegate {
     
+    var logindefaults = UserDefaults()
+    
     let serverWrapper = APIWrapper()
     let dateFormatter = DateFormatter()
     var imgPicker =  UIImagePickerController()
@@ -162,21 +164,18 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
         else{
             lbldropdown.layer.borderColor = CGColor.init(red: 1, green: 0, blue: 0, alpha: 1)
         }
-        
-        
-        u.AccountStatus = "Hi i am using CommFusion"
-        u.Status = 0
-        if imgname == ""{
-            imgview.layer.borderColor = CGColor.init(red: 1, green: 0, blue: 0, alpha: 1)
-        }
-        else{
-        u.ProfilePicture = imgname
-        }
+       
         
         if(formattedDate != nil)
         {
        
         u.DateOfBirth = formattedDate
+        }
+        if txtAbout.text != ""{
+            u.AccountStatus = txtAbout.text!
+        }
+        else{
+            u.AccountStatus = "HI I am Using CommFusion"
         }
         
         let currentDate = Date()
@@ -185,42 +184,78 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
 
         u.RegistrationDate = calendar.date(from: components)!
         u.Status = 1
-        u.AccountStatus = "HI I am Using CommFusion"
+        
         
        upload()
     }
     
     func upload(){
-        let Url = "http://192.168.31.105:5000/signup"
+        let Url = "\(Constants.serverURL)/user/signup"
         
         
         let Dic: [String: Any] = [
-            "username": u.Username,
-            "date_of_birth": dateFormatter.string(from: u.DateOfBirth),
-            "password": u.Password,
-            "profile_picture": "/profile_images/"+u.ProfilePicture,
-            "email": u.Email,
-            "user_type": u.UserType,
             "fname": u.Fname,
             "lname": u.Lname,
-            "account_status": u.AccountStatus,
-            "status": u.Status,
-            "registration_date":  dateFormatter.string(from: u.RegistrationDate)
+            "DateOfBirth": dateFormatter.string(from: u.DateOfBirth),
+            "password": u.Password,
+            //"profile_picture": "/profile_images/"+u.ProfilePicture,
+            "email": u.Email,
+            "disability_type": u.UserType,
+            "bio_status": u.AccountStatus,
+            "registration_date":  dateFormatter.string(from: u.RegistrationDate),
+            "online_status": u.Status
         ]
+//          "fname": "string",
+//          "lname": "string",
+//          "DateOfBirth": "2024-03-19",
+//          "password": "string",
+//          "email": "string",
+//          "disability_type": "string",
+//          "account_status": "Active",
+//          "bio_status": "",
+//          "registration_date": "2024-03-19",
+//          "online_status": 1
        
-        serverWrapper.insertData(baseUrl : Url, userDictionary: Dic) { responseString,error in
+        serverWrapper.insertData(baseUrl: Url, userDictionary: Dic) { responseString, error in
             if let error = error {
-                print("Error:", error)
+                print("\n\nError:", error)
             } else {
-                print("User signed up successfully")
-                        let controller = self.storyboard!.instantiateViewController(identifier: "dashboard")
-                        controller.modalPresentationStyle = .fullScreen
-                          self.navigationController?.pushViewController(controller, animated: true)
+                if let responseString = responseString {
+                    print("Signup Server response:", responseString)
+                    do {
+                        if let responseData = responseString.data(using: .utf8) {
+                            do {
+                                let jsonObject = try JSONSerialization.jsonObject(with: responseData, options: [])
+                                if let jsonDict = jsonObject as? [String: Any], let userId = jsonDict["Id"] as? Int {
+                                    self.logindefaults.set(userId, forKey: "userID")
+                                    
+                                    let Url = "\(Constants.serverURL)/user/uploadprofilepicture/\(userId)"
+                                    
+                                    // Call uploadImage function within a do-catch block
+                                    do {
+                                        try self.serverWrapper.uploadImage(baseUrl: Url, imageURL: self.imageToUpload!)
+                                    } catch {
+                                        print("Error uploading image:", error)
+                                        // Handle error uploading image
+                                    }
+                                    
+                                    let controller = self.storyboard!.instantiateViewController(identifier: "dashboard")
+                                    controller.modalPresentationStyle = .fullScreen
+                                    self.navigationController?.pushViewController(controller, animated: true)
+                                }
+                            } catch {
+                                print("Error deserializing JSON:", error)
+                                // Handle error deserializing JSON
+                            }
+                        }
+                    } catch {
+                        print("Error creating data from response string:", error)
+                        // Handle error creating data from response string
+                    }
+                }
             }
         }
     }
-
-    
    
     @IBOutlet weak var txtdob: UIDatePicker!
     @IBOutlet weak var txtconfirmPassword: UITextField!
@@ -229,21 +264,25 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
     
    
    
-    var imgname = ""
+    var imageToUpload: URL?
+
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any])
         {
         if let imageURL = info[.imageURL] as? URL {
-                imgname = imageURL.lastPathComponent
-               
-            print("selected image: \(imgname)")
-            
-//            let Url = "\(Constants.serverURL)/upload_image"
-//            serverWrapper.uploadImage(baseUrl: Url, imageURL: imageURL)
-           }
-        if let img = info[.originalImage] as? UIImage
-        {
-            self.imgview.image = img
+//                imgname = imageURL.lastPathComponent
+            imageToUpload = imageURL
         }
+          
+//
+//
+//        if let img = info[.originalImage] as? UIImage
+//        {
+//            self.imgview.image = img
+//            if let imageData = img.pngData() {
+//                imageToData = imageData
+//
+//            }
+//        }
            picker.dismiss(animated: true, completion: nil)
        }
     
@@ -270,7 +309,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
         
         btnsignupOutlet.layer.cornerRadius = 15
         
-      imgview.layer.cornerRadius = 57
+        imgview.layer.cornerRadius = 57
         
         txtemail.layer.borderWidth = 1.0
         txtemail.layer.borderColor = UIColor.gray.cgColor
