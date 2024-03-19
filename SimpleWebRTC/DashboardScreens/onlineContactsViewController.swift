@@ -258,7 +258,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
         }
       }
     func fetchContactsData() {
-        var u = User()
+       
         guard let userID = self.logindefaults.string(forKey: "userID") else {
             print("User ID not found")
             return
@@ -270,7 +270,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
             "user_id": userID
         ]
         
-        self.serverWrapper.insertData(baseUrl: Url, u: u, userDictionary: parameters) { responseString, error in
+        self.serverWrapper.insertData(baseUrl: Url,  userDictionary: parameters) { responseString, error in
             if let error = error {
                 print("Error:", error)
                 // Handle the error appropriately

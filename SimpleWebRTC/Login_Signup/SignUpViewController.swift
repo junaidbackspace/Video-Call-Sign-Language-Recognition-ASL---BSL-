@@ -208,7 +208,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
             "registration_date":  dateFormatter.string(from: u.RegistrationDate)
         ]
        
-        serverWrapper.insertData(baseUrl : Url,u: u, userDictionary: Dic) { responseString,error in
+        serverWrapper.insertData(baseUrl : Url, userDictionary: Dic) { responseString,error in
             if let error = error {
                 print("Error:", error)
             } else {

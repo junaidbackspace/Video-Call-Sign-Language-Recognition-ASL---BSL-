@@ -71,7 +71,7 @@ class APIWrapper {
 
 
 
-    func insertData(baseUrl: String, u: User, userDictionary: [String: Any], completion: @escaping (String?, Error?) -> Void) {
+    func insertData(baseUrl: String, userDictionary: [String: Any], completion: @escaping (String?, Error?) -> Void) {
         guard let url = URL(string: baseUrl) else {
             completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]))
             return
@@ -118,6 +118,7 @@ class APIWrapper {
             }
         }.resume()
     }
+
 
     
   //  MARK:- Img Upload

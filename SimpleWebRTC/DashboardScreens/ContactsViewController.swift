@@ -328,8 +328,8 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
     
     func mute_block_pin(Url : String , Dic : [String: Any] )
     {
-        var u = User()
-        serverWrapper.insertData(baseUrl: Url, u: u, userDictionary: Dic) { responseString, error in
+       
+        serverWrapper.insertData(baseUrl: Url,userDictionary: Dic) { responseString, error in
             if let error = error {
                 print("Error:", error)
                
@@ -355,7 +355,7 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
             "user_id": userID
         ]
         
-        self.serverWrapper.insertData(baseUrl: Url, u: u, userDictionary: parameters) { responseString, error in
+        self.serverWrapper.insertData(baseUrl: Url,  userDictionary: parameters) { responseString, error in
             if let error = error {
                 print("Error:", error)
                 // Handle the error appropriately

@@ -28,16 +28,16 @@ class LoginToAccountViewController: UIViewController, UIGestureRecognizerDelegat
         var u = User()
         u.Username = txtemail.text!
         u.Password = txtpassword.text!
-        let Url = "\(Constants.serverURL)/login"
+        let Url = "\(Constants.serverURL)/user/login"
 
         let Dic: [String: Any] = [
-            "username": u.Username,
+            "email": u.Username,
             "password": u.Password,
         ]
 
-        serverWrapper.insertData(baseUrl: Url, u: u, userDictionary: Dic) { responseString, error in
+        serverWrapper.insertData(baseUrl: Url,  userDictionary: Dic) { responseString, error in
             if let error = error {
-                print("Error:", error)
+                print("\n\nError:", error)
                 self.txtemail.layer.borderColor = CGColor.init(red: 1, green: 0, blue: 0, alpha: 1)
                 self.txtpassword.layer.borderColor = CGColor.init(red: 1, green: 0, blue: 0, alpha: 1)
             } else {
@@ -45,20 +45,28 @@ class LoginToAccountViewController: UIViewController, UIGestureRecognizerDelegat
                     print("login Server response:", responseString)
                     
                     do {
-                        let jsonData = responseString.data(using: .utf8)
-                        let jsonArray = try JSONSerialization.jsonObject(with: jsonData!, options: []) as? [Any]
-                        
-                        if let userId = (jsonArray?.first as? [String: Any])?["user_id"] as? Int {
-                            self.logindefaults.set(userId, forKey: "userID")
-                            print("login User ID saved successfully: \(userId)")
-                            
-                            print("User sign-in successfully")
-                            self.logindefaults.setValue(u.Username, forKey: "loginedUser")
-                            let controller = self.storyboard!.instantiateViewController(identifier: "dashboard")
-                            controller.modalPresentationStyle = .fullScreen
-                            self.navigationController?.pushViewController(controller, animated: true)
-                            
-                        }else{
+                        if let responseData = responseString.data(using: .utf8) {
+                            do {
+                                let jsonObject = try JSONSerialization.jsonObject(with: responseData, options: [])
+                                if let jsonDict = jsonObject as? [String: Any], let userId = jsonDict["user_id"] as? Int {
+                                    self.logindefaults.set(userId, forKey: "userID")
+                                    
+                                    print("login User ID saved successfully: \(userId)")
+                                }
+                                    if let jsonDict = jsonObject as? [String: Any], let username = jsonDict["username"] as? String {
+                                        
+                                        print("Usernmae is : \(username)")
+                                        self.logindefaults.setValue(username, forKey: "loginedUser")
+                                    let controller = self.storyboard!.instantiateViewController(identifier: "dashboard")
+                                    controller.modalPresentationStyle = .fullScreen
+                                    self.navigationController?.pushViewController(controller, animated: true)
+                                    
+                                }
+                            } catch {
+                                print("Error parsing JSON data: \(error)")
+                            }
+                        }
+                        else{
                             return
                         }
                     } catch {
@@ -123,9 +131,7 @@ class LoginToAccountViewController: UIViewController, UIGestureRecognizerDelegat
 
     
     @IBAction func btnForgotpass(_ sender: Any) {
-//        let controller = self.storyboard!.instantiateViewController(identifier: "dashboard")
-//        controller.modalPresentationStyle = .fullScreen
-//          self.navigationController?.pushViewController(controller, animated: true)
+
     }
     
     @IBAction func btn_Signup(_ sender: Any) {

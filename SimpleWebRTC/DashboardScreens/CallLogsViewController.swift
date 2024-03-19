@@ -276,7 +276,7 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
       
     }
     func fetchCallHistory() {
-        let u = User()
+    
         guard let userID = self.logindefaults.string(forKey: "userID") else {
             print("User ID not found")
             return
@@ -288,7 +288,7 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
             "user_id": userID
         ]
         
-        self.serverWrapper.insertData(baseUrl: Url, u: u, userDictionary: parameters) { responseString, error in
+        self.serverWrapper.insertData(baseUrl: Url, userDictionary: parameters) { responseString, error in
             if let error = error {
                 print("Error:", error)
                 // Handle the error appropriately

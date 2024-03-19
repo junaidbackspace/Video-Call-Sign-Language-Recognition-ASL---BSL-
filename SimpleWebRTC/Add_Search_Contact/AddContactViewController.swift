@@ -50,7 +50,7 @@ class AddContactViewController: UIViewController ,UITableViewDataSource, UITable
            
     }
     func fetchContactsData(Url : String, searchby : String) {
-        var u = User()
+      
         guard let userID = self.logindefaults.string(forKey: "userID") else {
             print("User ID not found")
             return
@@ -76,7 +76,7 @@ class AddContactViewController: UIViewController ,UITableViewDataSource, UITable
         ]
         }
         
-        self.serverWrapper.insertData(baseUrl: Url, u: u, userDictionary: parameters) { responseString, error in
+        self.serverWrapper.insertData(baseUrl: Url, userDictionary: parameters) { responseString, error in
             if let error = error {
                 print("Error:", error)
                 // Handle the error appropriately
@@ -230,7 +230,7 @@ class AddContactViewController: UIViewController ,UITableViewDataSource, UITable
             "contacts_id": sender.tag,
         ]
 
-        serverWrapper.insertData(baseUrl: Url, u: User(), userDictionary: Dic) { responseString, error in
+        serverWrapper.insertData(baseUrl: Url,  userDictionary: Dic) { responseString, error in
             if let error = error {
                 print("Error:", error)
             } else {
