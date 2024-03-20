@@ -169,7 +169,7 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         
         
-        if contacts[indexPath.row].Status == 1{
+        if contacts[indexPath.row].OnlineStatus == 1{
         if let image = UIImage(named: "online", in: Bundle.main, compatibleWith: nil) {
             cell?.isActive?.image = image
                 }
@@ -209,7 +209,7 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
       
         
         controller.name = contacts[indexPath.row].Fname+" "+contacts[indexPath.row].Lname
-        controller.about = contacts[indexPath.row].AccountStatus
+        controller.about = contacts[indexPath.row].BioStatus
         controller.distype = contacts[indexPath.row].UserType
         
         let base = "\(Constants.serverURL)\(contacts[indexPath.row].ProfilePicture)"
@@ -344,11 +344,11 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
             
             var user = User()
             print("Fname: \(firstName) Lname: \(lastName) accountStatus: \(accountStatus) ProfilePic: \(profilePicture)")
-            user.AccountStatus = accountStatus
+            user.BioStatus = accountStatus
             user.Fname = firstName
             user.Lname = lastName
             user.ProfilePicture = profilePicture
-            user.Status = online
+            user.OnlineStatus = online
             user.Call_StartTime = callStart
             user.Call_EndTime = callEnd
             user.Callparticipant_Id = participantID

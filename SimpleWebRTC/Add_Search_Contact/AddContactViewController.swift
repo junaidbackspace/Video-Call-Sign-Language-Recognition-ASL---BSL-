@@ -138,7 +138,7 @@ class AddContactViewController: UIViewController ,UITableViewDataSource, UITable
            
             var user = User()
             print("Fname: \(firstName) Lname: \(lastName) accountStatus: \(accountStatus) ProfilePic: ")
-            user.AccountStatus = accountStatus
+            user.BioStatus = accountStatus
             user.Fname = firstName
             user.Lname = lastName
             user.ProfilePicture = profilepic
@@ -196,7 +196,7 @@ class AddContactViewController: UIViewController ,UITableViewDataSource, UITable
         let cell = tble.dequeueReusableCell(withIdentifier: "c1") as? AddFriendTableViewCell
         
         cell?.name.text = contacts[indexPath.row].Fname+" "+contacts[indexPath.row].Lname
-        cell?.about.text = contacts[indexPath.row].AccountStatus
+        cell?.about.text = contacts[indexPath.row].BioStatus
         cell?.btnadd.tag = contacts[indexPath.row].UserId
         cell?.btnadd.addTarget(self, action: #selector(AddFriend(_:)), for: .touchUpInside)
 

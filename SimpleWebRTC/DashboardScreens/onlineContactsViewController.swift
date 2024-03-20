@@ -161,7 +161,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
         print("User Full name : \(contacts[indexPath.row].Fname+" "+contacts[indexPath.row].Lname)")
         
         cell?.name.text = contacts[indexPath.row].Fname+" "+contacts[indexPath.row].Lname
-        cell?.about.text = contacts[indexPath.row].AccountStatus
+        cell?.about.text = contacts[indexPath.row].BioStatus
        
         if let image = UIImage(named: "online", in: Bundle.main, compatibleWith: nil) {
             cell?.isActive?.image = image
@@ -171,12 +171,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
         cell?.call?.addTarget(self, action: #selector(btn_call(_:)), for: .touchUpInside)
         
              
-//        if let image = UIImage(named: "http://localhost:5000"+contacts[indexPath.row].ProfilePicture, in: Bundle.main, compatibleWith: nil) {
-////            http://localhost:5000/profile_images/B3DA9C5F-F977-4894-BF50-64D27A5FA0FF.jpeg
-//            cell?.profilepic?.image = image
-//
-//
-//                }
+
         let base = "\(Constants.serverURL)\(contacts[indexPath.row].ProfilePicture)"
         print("\n url is: \(base)")
         if let url = URL(string: base) {
@@ -198,7 +193,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
       
         
         controller.name = contacts[indexPath.row].Fname+" "+contacts[indexPath.row].Lname
-        controller.about = contacts[indexPath.row].AccountStatus
+        controller.about = contacts[indexPath.row].BioStatus
         controller.distype = contacts[indexPath.row].UserType
         
         let base = "\(Constants.serverURL)\(contacts[indexPath.row].ProfilePicture)"
@@ -264,76 +259,47 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
             return
         }
         
-        let Url = "\(Constants.serverURL)/get_user_contacts"
+        let Url = "\(Constants.serverURL)/contacts/\(userID)/contacts"
+        print("URL: "+Url)
+      
         
-        let parameters: [String: Any] = [
-            "user_id": userID
-        ]
-        
-        self.serverWrapper.insertData(baseUrl: Url,  userDictionary: parameters) { responseString, error in
+        self.serverWrapper.fetchData(baseUrl: Url) { jsonData, error in
             if let error = error {
-                print("Error:", error)
+                print("Error:", error.localizedDescription)
                 // Handle the error appropriately
-            } else if let responseString = responseString {
-                print("Server response:", responseString)
-                
-                do {
-                           guard let jsonData = responseString.data(using: .utf8) else {
-                               print("Failed to convert response string to data")
-                               return
-                           }
-                           
-                           let jsonArrayServer = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [Any]
-                           
-                           guard let jsonArray = jsonArrayServer else {
-                               print("Invalid JSON array format")
-                               return
-                           }
-                           
-                           print("JSON Array:", jsonArray)
-                            
-                           if let userObjectsArray = jsonArray.first as? [[String: Any]] {
-                            self.processContactsData(userObjectsArray)
-                            
-                           }
-
-                           
-                       } catch {
-                           print("Error parsing JSON data:", error)
-                           // Handle the parsing error appropriately
-                       }
-                   } else {
-                       print("No response string received from server")
-                   }
-            
+            } else if let jsonData = jsonData {
+                print("JSON Data:", jsonData)
+                // Process the fetched JSON data
+                self.processContactsData(jsonData)
+            } else {
+                print("No data received from the server")
+            }
         }
+    
     }
 
-    func processContactsData(_ jsonArray: [[String: Any]]) {
-        for userObject in jsonArray {
-            guard let accountStatus = userObject["account_status"] as? String,
-                  let firstName = userObject["fname"] as? String,
-                  let lastName = userObject["lname"] as? String,
-                  let profilePicture = userObject["profile_picture"] as? String else {
-                print("Error: Invalid user data")
-                continue
+    func processContactsData(_ jsonArray: [ContactsUser]) {
+            for userObject in jsonArray {
+                let bioStatus = userObject.bio_status
+                let onlineStatus = userObject.online_status
+                let firstName = userObject.fname
+                let lastName = userObject.lname
+                let profilePicture = userObject.profile_picture
+
+                // Now you can use these properties as needed
+                print("Fname: \(firstName), Lname: \(lastName), OnlineStatus: \(onlineStatus), BioStatus: \(bioStatus), ProfilePic: \(profilePicture)")
+
+                // Optionally, you can create a User object and append it to contacts array
+                var user = User()
+                user.BioStatus = bioStatus
+                user.Fname = firstName
+                user.Lname = lastName
+                user.ProfilePicture = profilePicture
+                user.OnlineStatus = onlineStatus
+                self.contacts.append(user)
             }
-            
-            var user = User()
-            print("Fname: \(firstName) Lname: \(lastName) accountStatus: \(accountStatus) ProfilePic: \(profilePicture)")
-            user.AccountStatus = accountStatus
-            user.Fname = firstName
-            user.Lname = lastName
-            user.ProfilePicture = profilePicture
-            self.contacts.append(user)
-            
-            print("User details:")
-            print("Account Status:", accountStatus)
-            print("First Name:", firstName)
-            print("Last Name:", lastName)
-            print("Profile Picture:", profilePicture)
-            print("------------------")
-        }
+        
+
         
         DispatchQueue.main.async {
             self.tble.dataSource = self

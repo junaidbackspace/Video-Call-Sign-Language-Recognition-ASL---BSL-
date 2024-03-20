@@ -11,8 +11,8 @@ struct User : Codable {
     var UserType = ""
     var Fname = ""
     var Lname = ""
-    var AccountStatus = ""
-    var Status = 0
+    var BioStatus = ""
+    var OnlineStatus = 0
     var RegistrationDate = Date()
     var isfriend = false
     var UserId = 0
@@ -25,3 +25,12 @@ struct User : Codable {
     var IsPinned = 0
 
 }
+struct ContactsUser: Codable {
+    let fname: String
+    let lname: String
+    let profile_picture: String
+    let account_status: String
+    let bio_status: String
+    let online_status: Int
+}
+

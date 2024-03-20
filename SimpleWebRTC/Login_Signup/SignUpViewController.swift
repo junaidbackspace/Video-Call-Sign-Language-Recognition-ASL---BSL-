@@ -99,11 +99,6 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
         self.view.addSubview(outletBtnBack)
         self.view.addSubview(btnsignupOutlet)
         self.view.addSubview(imgabout)
-    }
-    
-    @IBAction func btnSignup(_ sender: Any) {
-        
-        
         
         if txtName.text != ""{
         if let fullName = txtName.text {
@@ -171,20 +166,25 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
        
         u.DateOfBirth = formattedDate
         }
-        if txtAbout.text != ""{
-            u.AccountStatus = txtAbout.text!
-        }
-        else{
-            u.AccountStatus = "HI I am Using CommFusion"
-        }
+        
         
         let currentDate = Date()
         let calendar = Calendar.current
         let components = calendar.dateComponents([.year, .month, .day], from: currentDate)
 
         u.RegistrationDate = calendar.date(from: components)!
-        u.Status = 1
+        u.OnlineStatus = 1
         
+    }
+    
+    @IBAction func btnSignup(_ sender: Any) {
+        
+        if txtAbout.text != ""{
+            u.BioStatus = txtAbout.text!
+        }
+        else{
+            u.BioStatus = "HI I am Using CommFusion"
+        }
         
        upload()
     }
@@ -201,9 +201,9 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
             //"profile_picture": "/profile_images/"+u.ProfilePicture,
             "email": u.Email,
             "disability_type": u.UserType,
-            "bio_status": u.AccountStatus,
+            "bio_status": u.BioStatus,
             "registration_date":  dateFormatter.string(from: u.RegistrationDate),
-            "online_status": u.Status
+            "online_status": u.OnlineStatus
         ]
 //          "fname": "string",
 //          "lname": "string",
@@ -275,14 +275,14 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
           
 //
 //
-//        if let img = info[.originalImage] as? UIImage
-//        {
-//            self.imgview.image = img
+        if let img = info[.originalImage] as? UIImage
+        {
+            self.imgview.image = img
 //            if let imageData = img.pngData() {
 //                imageToData = imageData
 //
 //            }
-//        }
+        }
            picker.dismiss(animated: true, completion: nil)
        }
     
