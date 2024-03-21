@@ -325,11 +325,35 @@ extension onlineContactsViewController: UITextFieldDelegate {
             return true
     
         }
-        // Filter the contacts based on the new text
-        //contacts = filteredContacts.filter { $0.Fname.lowercased().contains(newText.lowercased()) }
-        contacts = filteredContacts.filter {
-            $0.Fname.lowercased().contains(newText) || $0.Lname.lowercased().contains(newText)
+
+        
+        let searchText = newText.lowercased()
+        contacts = filteredContacts.filter { contact in
+            let fullName = "\(contact.Fname.lowercased()) \(contact.Lname.lowercased())"
+            print("\n\n\n\nmacthing name: \(fullName)")
+            
+            // Check if full name length is greater than or equal to search text length
+            guard fullName.count >= searchText.count else {
+                return false
+            }
+            
+            var searchIndex = searchText.startIndex
+            
+            // Iterate through each character of the full name
+            for char in fullName {
+                // If character matches search text character, move to next search text character
+                if char == searchText[searchIndex] {
+                    searchIndex = searchText.index(after: searchIndex)
+                }
+                // If reached end of search text, return true
+                if searchIndex == searchText.endIndex {
+                    return true
+                }
+            }
+            // If search text characters were not found in sequence in full name, return false
+            return false
         }
+
         // Update the UI with the filtered data
         tble.reloadData()
         

@@ -343,121 +343,61 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
     }
     }
     func fetchContactsData() {
-        let u = User()
+       
         guard let userID = self.logindefaults.string(forKey: "userID") else {
             print("User ID not found")
             return
         }
         
-        let Url = "\(Constants.serverURL)/get_all_user_contacts"
+        let Url = "\(Constants.serverURL)/contacts/\(userID)/contacts"
+        print("URL: "+Url)
+      
         
-        let parameters: [String: Any] = [
-            "user_id": userID
-        ]
-        
-        self.serverWrapper.insertData(baseUrl: Url,  userDictionary: parameters) { responseString, error in
+        self.serverWrapper.fetchData(baseUrl: Url) { jsonData, error in
             if let error = error {
-                print("Error:", error)
-                // Handle the error appropriately
-            } else if let responseString = responseString {
-                //print("Server response:", responseString)
-                
-                do {
-                           guard let jsonData = responseString.data(using: .utf8) else {
-                               print("Failed to convert response string to data")
-                               return
-                           }
-                           
-                           let jsonArrayServer = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [Any]
-                           
-                           guard let jsonArray = jsonArrayServer else {
-                               print("Invalid JSON array format")
-                               return
-                           }
-                           
-                           
-                            
-                           if let userObjectsArray = jsonArray.first as? [[String: Any]] {
-                            self.processContactsData(userObjectsArray)
-                            
-                           }
-
-                           
-                       } catch {
-                           print("Error parsing JSON data:", error)
-                           // Handle the parsing error appropriately
-                       }
-                   } else {
-                       print("No response string received from server")
-                   }
-            
+                print("Error:", error.localizedDescription)
+               
+            } else if let jsonData = jsonData {
+                print("JSON Data:", jsonData)
+               
+                self.processContactsData(jsonData)
+            } else {
+                print("No data received from the server")
+            }
         }
+    
     }
 
-    func processContactsData(_ jsonArray: [[String: Any]]) {
-        for userObject in jsonArray {
-            guard let accountStatus = userObject["account_status"] as? String,
-                  let firstName = userObject["fname"] as? String,
-                  let lastName = userObject["lname"] as? String,
-                  let online = userObject["status"] as? Int,
-                  let isblocked = userObject["isBlocked"] as? Int,
-                  let ismuted = userObject["isMuted"] as? Int,
-                  let ispinned = userObject["isPinned"] as? Int,
-                  let userid = userObject["userid"] as? Int,
-                  let username = userObject["username"] as? String,
-                  let profilePicture = userObject["profile_picture"] as? String else {
-                print("Error: Invalid user data")
-                continue
+    func processContactsData(_ jsonArray: [ContactsUser]) {
+            for userObject in jsonArray {
+                let bioStatus = userObject.bio_status
+                let onlineStatus = userObject.online_status
+                let firstName = userObject.fname
+                let lastName = userObject.lname
+                let profilePicture = userObject.profile_picture
+
+                // Now you can use these properties as needed
+                print("Fname: \(firstName), Lname: \(lastName), OnlineStatus: \(onlineStatus), BioStatus: \(bioStatus), ProfilePic: \(profilePicture)")
+
+                // Optionally, you can create a User object and append it to contacts array
+                var user = User()
+                user.BioStatus = bioStatus
+                user.Fname = firstName
+                user.Lname = lastName
+                user.ProfilePicture = profilePicture
+                user.OnlineStatus = onlineStatus
+                self.contacts.append(user)
             }
-            
-            var user = User()
-           
-            user.BioStatus = accountStatus
-            user.Fname = firstName
-            user.Lname = lastName
-            user.ProfilePicture = profilePicture
-            user.OnlineStatus = online
-            user.IsPinned = ispinned
-            user.IsBlocked = isblocked
-            user.IsMutted = ismuted
-            user.UserId = userid
-            user.Username = username
-            self.contacts.append(user)
-            
-           
-        }
+        
+
         
         DispatchQueue.main.async {
-            
-            if let retrievedArray = UserDefaults.standard.array(forKey: "pinnedUser") as? [String] {
-                let pinned_users = retrievedArray
-            print("pined user: ",pinned_users)
-                
-                    
-           
-            
-                
-            self.contacts.sort { user1, user2 in
-                let user1IsPinned = pinned_users.contains(user1.Username)
-                let user2IsPinned = pinned_users.contains(user2.Username)
-                   
-                   // Pinned users should come first
-                if user1IsPinned && !user2IsPinned {
-                       return true
-                   } else if !user1IsPinned && user2IsPinned{
-                       return false
-                   } else {
-                       // For non-pinned users, sort by user_id
-                    return user1.Username < user2.Username
-                   }
-               }
-            }
             self.tble.dataSource = self
             self.tble.delegate = self
             self.tble.reloadData()
         }
-    
-}
+    }
+
     @IBAction func Back(_ sender: Any) {
         
         self.navigationController?.popViewController(animated: true)
@@ -528,6 +468,7 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
                 return cell
     }
     
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if   actionbuttons_On {
@@ -617,9 +558,35 @@ extension ContactsViewController: UITextFieldDelegate {
             return true
     
         }
-        // Filter the contacts based on the new text
-        contacts = filteredContacts.filter { $0.Fname.lowercased().contains(newText.lowercased()) }
+
         
+        let searchText = newText.lowercased()
+        contacts = filteredContacts.filter { contact in
+            let fullName = "\(contact.Fname.lowercased()) \(contact.Lname.lowercased())"
+            print("\n\n\n\nmacthing name: \(fullName)")
+            
+            // Check if full name length is greater than or equal to search text length
+            guard fullName.count >= searchText.count else {
+                return false
+            }
+            
+            var searchIndex = searchText.startIndex
+            
+            // Iterate through each character of the full name
+            for char in fullName {
+                // If character matches search text character, move to next search text character
+                if char == searchText[searchIndex] {
+                    searchIndex = searchText.index(after: searchIndex)
+                }
+                // If reached end of search text, return true
+                if searchIndex == searchText.endIndex {
+                    return true
+                }
+            }
+            // If search text characters were not found in sequence in full name, return false
+            return false
+        }
+
         // Update the UI with the filtered data
         tble.reloadData()
         
