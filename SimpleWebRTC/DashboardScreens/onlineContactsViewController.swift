@@ -120,16 +120,15 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
             
             
             if let constraint = tableViewTopConstraint {
-                // Adjust the top constraint of the table view
+    
                 if searchTextField.isHidden {
-                    // Hide the text field
+                    
                     constraint.constant = 50
                 } else {
-                    // Show the text field and increase top constraint
+                    
                     constraint.constant = 100
                 }
                 
-                // Animate the constraint change
                 UIView.animate(withDuration: 0.3) {
                     self.view.layoutIfNeeded()
                 }
@@ -327,8 +326,10 @@ extension onlineContactsViewController: UITextFieldDelegate {
     
         }
         // Filter the contacts based on the new text
-        contacts = filteredContacts.filter { $0.Fname.lowercased().contains(newText.lowercased()) }
-        
+        //contacts = filteredContacts.filter { $0.Fname.lowercased().contains(newText.lowercased()) }
+        contacts = filteredContacts.filter {
+            $0.Fname.lowercased().contains(newText) || $0.Lname.lowercased().contains(newText)
+        }
         // Update the UI with the filtered data
         tble.reloadData()
         
