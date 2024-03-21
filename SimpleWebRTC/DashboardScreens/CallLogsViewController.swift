@@ -276,104 +276,60 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
       
     }
     func fetchCallHistory() {
-    
+       
         guard let userID = self.logindefaults.string(forKey: "userID") else {
             print("User ID not found")
             return
         }
         
-        let Url = "\(Constants.serverURL)/get_user_calls"
+        let Url = "\(Constants.serverURL)/contacts/\(userID)/contacts"
+        print("URL: "+Url)
+      
         
-        let parameters: [String: Any] = [
-            "user_id": userID
-        ]
-        
-        self.serverWrapper.insertData(baseUrl: Url, userDictionary: parameters) { responseString, error in
+        self.serverWrapper.fetchData(baseUrl: Url) { jsonData, error in
             if let error = error {
-                print("Error:", error)
-                // Handle the error appropriately
-            } else if let responseString = responseString {
-                print("Server response:", responseString)
-                
-                do {
-                           guard let jsonData = responseString.data(using: .utf8) else {
-                               print("Failed to convert response string to data")
-                               return
-                           }
-                           
-                           let jsonArrayServer = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [Any]
-                           
-                           guard let jsonArray = jsonArrayServer else {
-                               print("Invalid JSON array format")
-                               return
-                           }
-                           
-                           print("JSON Array:", jsonArray)
-                            
-                           if let userObjectsArray = jsonArray.first as? [[String: Any]] {
-                            self.processContactsData(userObjectsArray)
-                            
-                           }
-
-                           
-                       } catch {
-                           print("Error parsing JSON data:", error)
-                           // Handle the parsing error appropriately
-                       }
-                   } else {
-                       print("No response string received from server")
-                   }
-            
+                print("Error:", error.localizedDescription)
+               
+            } else if let jsonData = jsonData {
+                print("JSON Data:", jsonData)
+               
+                self.processCallData(jsonData)
+            } else {
+                print("No data received from the server")
+            }
         }
+    
     }
 
-    func processContactsData(_ jsonArray: [[String: Any]]) {
-        for userObject in jsonArray {
-            guard let accountStatus = userObject["AccountStatus"] as? String,
-                  let firstName = userObject["Fname"] as? String,
-                  let lastName = userObject["Lname"] as? String,
-                  let online = userObject["Status"] as? Int,
-                  let callStart = userObject["StartTime"] as? String,
-                  let callEnd = userObject["EndTime"] as? String,
-                  let iscaller = userObject["IsCaller"] as? Bool,
-                  let participantID = userObject["User_id"] as? Int,
-                  let profilePicture = userObject["ProfilePicture"] as? String else {
-                print("Error: Invalid user data")
-                continue
+    func processCallData(_ jsonArray: [ContactsUser]) {
+            for userObject in jsonArray {
+                let bioStatus = userObject.bio_status
+                let onlineStatus = userObject.online_status
+                let firstName = userObject.fname
+                let lastName = userObject.lname
+                let profilePicture = userObject.profile_picture
+
+                // Now you can use these properties as needed
+                print("Fname: \(firstName), Lname: \(lastName), OnlineStatus: \(onlineStatus), BioStatus: \(bioStatus), ProfilePic: \(profilePicture)")
+
+                // Optionally, you can create a User object and append it to contacts array
+                var user = User()
+                user.BioStatus = bioStatus
+                user.Fname = firstName
+                user.Lname = lastName
+                user.ProfilePicture = profilePicture
+                user.OnlineStatus = onlineStatus
+                self.contacts.append(user)
             }
-            
-            var user = User()
-            print("Fname: \(firstName) Lname: \(lastName) accountStatus: \(accountStatus) ProfilePic: \(profilePicture)")
-            user.BioStatus = accountStatus
-            user.Fname = firstName
-            user.Lname = lastName
-            user.ProfilePicture = profilePicture
-            user.OnlineStatus = online
-            user.Call_StartTime = callStart
-            user.Call_EndTime = callEnd
-            user.Callparticipant_Id = participantID
-            user.isCaller = iscaller
-            self.contacts.append(user)
-            
-            print("User details:")
-            print("Account Status:", accountStatus)
-            print("First Name:", firstName)
-            print("Last Name:", lastName)
-            print("Call Start:", callStart)
-            print("Call End:", callEnd)
-            print("Profile Picture:", profilePicture)
-            print("Participant id :", participantID)
-            print("Is i am caller :", iscaller)
-            print("------------------")
-        }
+        
+
         
         DispatchQueue.main.async {
             self.tble.dataSource = self
             self.tble.delegate = self
             self.tble.reloadData()
         }
-    
-}
+    }
     
 
 }
@@ -392,9 +348,34 @@ extension CallLogsViewController: UITextFieldDelegate {
             return true
     
         }
-        // Filter the contacts based on the new text
-        contacts = filteredContacts.filter { $0.Fname.lowercased().contains(newText.lowercased()) }
+
         
+        let searchText = newText.lowercased()
+        contacts = filteredContacts.filter { contact in
+            let fullName = "\(contact.Fname.lowercased()) \(contact.Lname.lowercased())"
+           
+            // Check if full name length is greater than or equal to search text length
+            guard fullName.count >= searchText.count else {
+                return false
+            }
+            
+            var searchIndex = searchText.startIndex
+            
+            // Iterate through each character of the full name
+            for char in fullName {
+                // If character matches search text character, move to next search text character
+                if char == searchText[searchIndex] {
+                    searchIndex = searchText.index(after: searchIndex)
+                }
+                // If reached end of search text, return true
+                if searchIndex == searchText.endIndex {
+                    return true
+                }
+            }
+            // If search text characters were not found in sequence in full name, return false
+            return false
+        }
+
         // Update the UI with the filtered data
         tble.reloadData()
         

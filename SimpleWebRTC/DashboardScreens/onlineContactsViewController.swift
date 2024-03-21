@@ -330,7 +330,6 @@ extension onlineContactsViewController: UITextFieldDelegate {
         let searchText = newText.lowercased()
         contacts = filteredContacts.filter { contact in
             let fullName = "\(contact.Fname.lowercased()) \(contact.Lname.lowercased())"
-            print("\n\n\n\nmacthing name: \(fullName)")
             
             // Check if full name length is greater than or equal to search text length
             guard fullName.count >= searchText.count else {
