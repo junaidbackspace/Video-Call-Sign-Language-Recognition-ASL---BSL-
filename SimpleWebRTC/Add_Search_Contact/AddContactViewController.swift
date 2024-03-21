@@ -121,9 +121,7 @@ class AddContactViewController: UIViewController ,UITableViewDataSource, UITable
     }
 
     func processContactsData(_ jsonArray: [[String: Any]]) {
-        print("\nProcessing----\n")
         for userObject in jsonArray {
-            print("user Object : \(userObject)")
             
             guard let accountStatus = userObject["account_status"] as? String,
                   let firstName = userObject["fname"] as? String,

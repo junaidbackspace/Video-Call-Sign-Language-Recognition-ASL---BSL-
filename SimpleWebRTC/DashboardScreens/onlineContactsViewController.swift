@@ -260,7 +260,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
             return
         }
         
-        let Url = "\(Constants.serverURL)/contacts/\(userID)/contacts"
+        let Url = "\(Constants.serverURL)/contacts/\(userID)/online-contacts"
         print("URL: "+Url)
       
         
