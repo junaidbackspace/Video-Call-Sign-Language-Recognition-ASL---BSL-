@@ -197,6 +197,8 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
         controller.distype = contacts[indexPath.row].UserType
         
         let base = "\(Constants.serverURL)\(contacts[indexPath.row].ProfilePicture)"
+        
+        print("\nfor \(controller.name) \nProfilePic : \(base)")
         if let url = URL(string: base) {
             
             KingfisherManager.shared.retrieveImage(with: url) { result in
@@ -266,10 +268,10 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
         self.serverWrapper.fetchData(baseUrl: Url) { jsonData, error in
             if let error = error {
                 print("Error:", error.localizedDescription)
-                // Handle the error appropriately
+               
             } else if let jsonData = jsonData {
                 print("JSON Data:", jsonData)
-                // Process the fetched JSON data
+               
                 self.processContactsData(jsonData)
             } else {
                 print("No data received from the server")
