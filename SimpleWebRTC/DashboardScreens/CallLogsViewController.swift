@@ -286,18 +286,18 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
         print("URL: "+Url)
       
         
-        self.serverWrapper.fetchData(baseUrl: Url) { jsonData, error in
-            if let error = error {
-                print("Error:", error.localizedDescription)
-               
-            } else if let jsonData = jsonData {
-                print("JSON Data:", jsonData)
-               
-                self.processCallData(jsonData)
-            } else {
-                print("No data received from the server")
-            }
-        }
+//        self.serverWrapper.fetchData(baseUrl: Url) { jsonData, error in
+//            if let error = error {
+//                print("Error:", error.localizedDescription)
+//
+//            } else if let jsonData = jsonData {
+//                print("JSON Data:", jsonData)
+//
+//                self.processCallData(jsonData)
+//            } else {
+//                print("No data received from the server")
+//            }
+//        }
     
     }
 

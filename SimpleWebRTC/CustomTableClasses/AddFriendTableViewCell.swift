@@ -9,6 +9,7 @@
 import UIKit
 
 class AddFriendTableViewCell: UITableViewCell {
+    @IBOutlet weak var requestsend: UIButton!
     @IBOutlet weak var profilePic: UIImageView!
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var about: UILabel!

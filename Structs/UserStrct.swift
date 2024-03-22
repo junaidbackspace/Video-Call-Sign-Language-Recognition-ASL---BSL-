@@ -35,3 +35,26 @@ struct ContactsUser: Codable {
     
 }
 
+struct addUser: Codable {
+    let user_id: Int
+    let username: String
+    let fname: String
+    let lname: String
+    let account_status: String
+    let profile_picture: String
+    let is_friend: Bool
+    let bio_status: String
+
+    enum CodingKeys: String, CodingKey {
+        case user_id
+        case username
+        case fname
+        case lname
+        case account_status
+        case profile_picture
+        case is_friend
+        case bio_status
+    }
+}
+
+

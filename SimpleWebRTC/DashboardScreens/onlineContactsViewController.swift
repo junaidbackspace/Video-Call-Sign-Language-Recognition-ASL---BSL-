@@ -263,12 +263,12 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
         let Url = "\(Constants.serverURL)/contacts/\(userID)/online-contacts"
         print("URL: "+Url)
       
-        
-        self.serverWrapper.fetchData(baseUrl: Url) { jsonData, error in
+        let url = URL(string: Url)!
+        serverWrapper.fetchData(baseUrl: url, structure: [ContactsUser].self) { contactsUsers, error in
             if let error = error {
                 print("Error:", error.localizedDescription)
                
-            } else if let jsonData = jsonData {
+            } else if let jsonData = contactsUsers {
                 print("JSON Data:", jsonData)
                
                 self.processContactsData(jsonData)
