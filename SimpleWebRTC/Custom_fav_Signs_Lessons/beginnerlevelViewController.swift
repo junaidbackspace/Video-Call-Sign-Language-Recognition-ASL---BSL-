@@ -17,8 +17,10 @@ class Lessons_LevelsViewController: UIViewController {
 
     @IBOutlet weak var viewNumbers: UIView!
     @IBOutlet weak var viewAlphabets: UIView!
-
+    @IBOutlet weak var viewWords: UIView!
+    @IBOutlet weak var viewGreeting: UIView!
    
+
     
     var trainingname = ""
     override func viewDidLoad() {
@@ -32,12 +34,27 @@ class Lessons_LevelsViewController: UIViewController {
         viewAlphabets.layer.borderWidth = 1.0
         viewAlphabets.layer.borderColor = UIColor.black.cgColor
         
+        viewWords.layer.cornerRadius = 20
+        viewWords.layer.borderWidth = 1.0
+        viewWords.layer.borderColor = UIColor.black.cgColor
+        
+        viewGreeting.layer.cornerRadius = 20
+        viewGreeting.layer.borderWidth = 1.0
+        viewGreeting.layer.borderColor = UIColor.black.cgColor
+        
+        
+//        self.view.addSubview(outletNumbers)
+//        self.view.addSubview(outletAlphabets)
+//        self.view.addSubview(outletWords)
+//        self.view.addSubview(outletGreeting)
        
     }
     
 
     
     @IBAction func btn_Numbers(_ sender: Any) {
+        
+       
         let controller = self.storyboard?.instantiateViewController(identifier: "LessonsGallery") as! LessonsListViewController
         controller.trainingname = "Number"
         controller.lesson_level = "Beginner"
@@ -46,6 +63,8 @@ class Lessons_LevelsViewController: UIViewController {
         self.navigationController?.pushViewController(controller, animated: true)
     }
     @IBAction func btn_Alphabets(_ sender: Any) {
+        
+       
         let controller = self.storyboard?.instantiateViewController(identifier: "LessonsGallery") as! LessonsListViewController
         controller.trainingname = "Alphabets"
         controller.lesson_level = "Beginner"

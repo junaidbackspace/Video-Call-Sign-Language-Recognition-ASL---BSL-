@@ -205,16 +205,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
             "registration_date":  dateFormatter.string(from: u.RegistrationDate),
             "online_status": u.OnlineStatus
         ]
-//          "fname": "string",
-//          "lname": "string",
-//          "DateOfBirth": "2024-03-19",
-//          "password": "string",
-//          "email": "string",
-//          "disability_type": "string",
-//          "account_status": "Active",
-//          "bio_status": "",
-//          "registration_date": "2024-03-19",
-//          "online_status": 1
+
        
         serverWrapper.insertData(baseUrl: Url, userDictionary: Dic) { responseString, error in
             if let error = error {
