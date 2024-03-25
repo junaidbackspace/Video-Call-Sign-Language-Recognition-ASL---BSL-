@@ -109,26 +109,18 @@ class APIWrapper {
         URLSession.shared.dataTask(with: request) { data, response, error in
             DispatchQueue.main.async {
                 if let error = error {
-                    print("Error in receiving:", error.localizedDescription)
-                    completion(nil, error)
+//                    handleError(error, completion)
                     return
                 }
 
                 guard let httpResponse = response as? HTTPURLResponse else {
-                    let error = NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid HTTP response"])
-                    print("Error in receiving:", error.localizedDescription)
-                    completion(nil, error)
+//                    handleError(nil, completion)
                     return
                 }
 
                 if (200...299).contains(httpResponse.statusCode) {
                     if let responseData = data {
                         do {
-                            // Convert response data to string with UTF-8 encoding
-                            if let responseString = String(data: responseData, encoding: .utf8) {
-                                print("Response data:", responseString)
-                            }
-                            
                             let decoder = JSONDecoder()
                             let decodedData = try decoder.decode(structure, from: responseData)
                             completion(decodedData, nil)

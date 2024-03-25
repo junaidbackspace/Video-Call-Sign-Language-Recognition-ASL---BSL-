@@ -172,7 +172,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
              
 
         let base = "\(Constants.serverURL)\(contacts[indexPath.row].ProfilePicture)"
-        print("\n url is: \(base)")
+        print("\n img url is: \(base)")
         if let url = URL(string: base) {
             cell?.profilepic.kf.setImage(with: url, placeholder: UIImage(named: "No image found"))
             cell?.profilepic?.layer.cornerRadius = 27

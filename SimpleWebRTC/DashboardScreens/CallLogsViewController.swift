@@ -118,23 +118,29 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     //Check call Status is missed or iscaller
 
-    func callStatusCheck(iscaller :Int , ismissed: Int) -> UIImage{
-        //"arrow.down.right"
+    func callStatusCheck(iscaller: Int, ismissed: Int) -> UIImage {
+        var imageName = ""
+        var tintColor: UIColor = .blue // Default tint color
+
         if iscaller == 0 {
-        let imageName = "arrow.up.backward"
-        let image = UIImage(systemName: imageName)!
-            return image.withTintColor(.red)
+            print("\n\nin red color")
+            imageName = "arrow.up.backward"
+            tintColor = .red
+        } else {
+            print("\n\nin Green color")
+            imageName = "arrow.down.right"
+            tintColor = .green
         }
-        else {
-            let imageName = "arrow.down.right"
-            let image = UIImage(systemName: imageName)!
-            return image.withTintColor(.green)
+
+        guard let image = UIImage(systemName: imageName)?.withRenderingMode(.alwaysTemplate) else {
+            print("Error: Unable to load system image named \(imageName)")
+            return UIImage()
         }
-        return UIImage(systemName: "imageName")!
-        
-        
+
+        return image.withTintColor(tintColor)
     }
-    
+
+
     
  
 
@@ -161,12 +167,9 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
        
         
         cell?.name.text = contacts[indexPath.row].Fname+" "+contacts[indexPath.row].Lname
-        if contacts[indexPath.row].isCaller {
-        cell?.callStatus.image = callStatusCheck(iscaller: 1,ismissed: 0)
-        }
-        else {
-            cell?.callStatus.image = callStatusCheck(iscaller: 0,ismissed: 0)
-        }
+        
+        cell?.callStatus.image = callStatusCheck(iscaller: contacts[indexPath.row].isCaller,ismissed: 0)
+       
         
         
         if contacts[indexPath.row].OnlineStatus == 1{
@@ -282,43 +285,53 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
             return
         }
         
-        let Url = "\(Constants.serverURL)/contacts/\(userID)/contacts"
+        let Url = "\(Constants.serverURL)/videocallparticipants/\(userID)/calls"
         print("URL: "+Url)
       
-        
-//        self.serverWrapper.fetchData(baseUrl: Url) { jsonData, error in
-//            if let error = error {
-//                print("Error:", error.localizedDescription)
-//
-//            } else if let jsonData = jsonData {
-//                print("JSON Data:", jsonData)
-//
-//                self.processCallData(jsonData)
-//            } else {
-//                print("No data received from the server")
-//            }
-//        }
+        let url = URL(string: Url)!
+        serverWrapper.fetchData(baseUrl: url, structure: [CallLogs].self) { UserCallHistory, error in
+            if let error = error {
+                print("Error:", error.localizedDescription)
+               
+            } else if let jsonData = UserCallHistory {
+                print("JSON Data:", jsonData)
+               
+                self.processContactsData(jsonData)
+            } else {
+                print("No data received from the server")
+            }
+        }
     
     }
 
-    func processCallData(_ jsonArray: [ContactsUser]) {
+    
+    func processContactsData(_ jsonArray: [CallLogs]) {
             for userObject in jsonArray {
-                let bioStatus = userObject.bio_status
-                let onlineStatus = userObject.online_status
-                let firstName = userObject.fname
-                let lastName = userObject.lname
-                let profilePicture = userObject.profile_picture
+                
+                let call_id = userObject.VideoCallId
+                let onlineStatus = userObject.OnlineStatus
+                let firstName = userObject.OtherParticipantFname
+                let lastName = userObject.OtherParticipantLname
+                let profilePicture = userObject.ProfilePicture
+                let iscaller = userObject.isCaller
+                let startTime = userObject.StartTime
+                let endTime = userObject.EndTime
 
                 // Now you can use these properties as needed
-                print("Fname: \(firstName), Lname: \(lastName), OnlineStatus: \(onlineStatus), BioStatus: \(bioStatus), ProfilePic: \(profilePicture)")
+                print("Call id : \(call_id), Fname: \(firstName), OnlineStatus: \(onlineStatus), IScaller: \(iscaller), ProfilePic: \(profilePicture)")
 
+            
+                
                 // Optionally, you can create a User object and append it to contacts array
                 var user = User()
-                user.BioStatus = bioStatus
+                user.CallId = call_id
                 user.Fname = firstName
                 user.Lname = lastName
                 user.ProfilePicture = profilePicture
                 user.OnlineStatus = onlineStatus
+                user.isCaller = iscaller
+                user.Call_StartTime = startTime
+                user.Call_EndTime = endTime
                 self.contacts.append(user)
             }
         
@@ -330,8 +343,6 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
             self.tble.reloadData()
         }
     }
-    
-
 }
 extension CallLogsViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
