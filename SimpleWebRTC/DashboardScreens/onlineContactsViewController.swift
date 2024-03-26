@@ -194,6 +194,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
         controller.name = contacts[indexPath.row].Fname+" "+contacts[indexPath.row].Lname
         controller.about = contacts[indexPath.row].BioStatus
         controller.distype = contacts[indexPath.row].UserType
+        controller.contactid = contacts[indexPath.row].UserId
         
         let base = "\(Constants.serverURL)\(contacts[indexPath.row].ProfilePicture)"
         
@@ -214,7 +215,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
         }
           
         controller.modalPresentationStyle = .fullScreen
-        //self.present(controller, animated: true, completion: nil)
+        controller.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(controller, animated: true)
            }
     
@@ -286,6 +287,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
                 let firstName = userObject.fname
                 let lastName = userObject.lname
                 let profilePicture = userObject.profile_picture
+                let userid = userObject.user_id
 
                 // Now you can use these properties as needed
                 print("Fname: \(firstName), Lname: \(lastName), OnlineStatus: \(onlineStatus), BioStatus: \(bioStatus), ProfilePic: \(profilePicture)")
@@ -297,6 +299,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
                 user.Lname = lastName
                 user.ProfilePicture = profilePicture
                 user.OnlineStatus = onlineStatus
+                user.UserId = userid
                 self.contacts.append(user)
             }
         

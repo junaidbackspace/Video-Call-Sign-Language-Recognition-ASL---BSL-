@@ -19,6 +19,11 @@ class CallTranscriptionViewController: UIViewController,UITableViewDataSource, U
     @IBOutlet weak var FeedBack_DoneView: UIView!
     
     
+    @IBAction func Back(_ sender: Any) {
+        
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     var longPressGesture: UILongPressGestureRecognizer!
     var longPressIndexPath: IndexPath?
     

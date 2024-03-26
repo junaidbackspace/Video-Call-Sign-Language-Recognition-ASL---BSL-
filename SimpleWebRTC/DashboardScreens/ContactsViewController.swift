@@ -375,7 +375,7 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
                 let firstName = userObject.fname
                 let lastName = userObject.lname
                 let profilePicture = userObject.profile_picture
-
+                let userid = userObject.user_id
                 // Now you can use these properties as needed
                 print("Fname: \(firstName), Lname: \(lastName), OnlineStatus: \(onlineStatus), BioStatus: \(bioStatus), ProfilePic: \(profilePicture)")
 
@@ -386,6 +386,7 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
                 user.Lname = lastName
                 user.ProfilePicture = profilePicture
                 user.OnlineStatus = onlineStatus
+                user.UserId = userid
                 self.contacts.append(user)
             }
         
@@ -485,9 +486,10 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
         let controller = self.storyboard?.instantiateViewController(identifier: "userdetails") as! UserProfileViewController
       
         
-        controller.name = contacts[indexPath.row].Fname+" "+contacts[indexPath.row].Lname
+            controller.name = contacts[indexPath.row].Fname+" "+contacts[indexPath.row].Lname
             controller.about = contacts[indexPath.row].BioStatus
-        controller.distype = contacts[indexPath.row].UserType
+            controller.distype = contacts[indexPath.row].UserType
+            controller.contactid = contacts[indexPath.row].UserId
         
         let base = "\(Constants.serverURL)\(contacts[indexPath.row].ProfilePicture)"
         if let url = URL(string: base) {

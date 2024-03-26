@@ -33,6 +33,7 @@ struct ContactsUser: Codable {
     let account_status: String
     let bio_status: String
     let online_status: Int
+    let user_id: Int
     
 }
 
