@@ -34,6 +34,7 @@ struct ContactsUser: Codable {
     let bio_status: String
     let online_status: Int
     let user_id: Int
+    let user_name : String
     
 }
 

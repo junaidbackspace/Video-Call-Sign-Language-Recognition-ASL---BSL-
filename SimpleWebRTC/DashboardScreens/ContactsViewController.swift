@@ -128,10 +128,12 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         if let retrievedArray = UserDefaults.standard.array(forKey: "pinnedUser") as? [String] {
             let pinned_users = retrievedArray
+           
             pinned_contacts = pinned_users
+            
+            
         }
         
         if let muttedArray = UserDefaults.standard.array(forKey: "muttedUser") as? [String] {
@@ -237,12 +239,10 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
     
         
         @objc func pinButtonTapped() {
-            
-
            
              customView.isHidden = true
               actionbuttons_On = false // Assuming you want to reset this flag
-        
+            print("\n\n\nselected row is : \(selectedrow)")
             
             //if user already exist
             if pinned_contacts.contains(contacts[selectedrow].Username)
@@ -252,16 +252,37 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
                 pinned_contacts.removeAll { $0 == selectedUsername }
                 tble.reloadData()
             }
+            
             else{
+                print("pinning : \(contacts[selectedrow].Username)")
             pinned_contacts.append(contacts[selectedrow].Username)
             }
-            UserDefaults.standard.setValue(pinned_contacts, forKey: "pinnedUser")
-            print("selected username is \(contacts[selectedrow].Username)")
             
+            UserDefaults.standard.setValue(pinned_contacts, forKey: "pinnedUser")
+            
+            contacts = sortContactsByPinned(contacts: contacts, pinned: pinned_contacts)
             tble.reloadData()
         }
         
-    
+    func sortContactsByPinned(contacts: [User], pinned: [String]) -> [User] {
+        
+        let pinnedSet = Set(pinned)
+        
+        let sortedContacts = contacts.sorted { (user1, user2) -> Bool in
+            let isUser1Pinned = pinnedSet.contains(user1.Username)
+            let isUser2Pinned = pinnedSet.contains(user2.Username)
+            
+            // If both are pinned or both are not pinned, sort by username
+            if isUser1Pinned == isUser2Pinned {
+                return user1.Username < user2.Username
+            } else {
+                // If one is pinned and the other is not, sort by pinned status
+                return isUser1Pinned
+            }
+        }
+        
+        return sortedContacts
+    }
     
     
         @objc func muteButtonTapped() {
@@ -376,6 +397,7 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
                 let lastName = userObject.lname
                 let profilePicture = userObject.profile_picture
                 let userid = userObject.user_id
+                let username  = userObject.user_name
                 // Now you can use these properties as needed
                 print("Fname: \(firstName), Lname: \(lastName), OnlineStatus: \(onlineStatus), BioStatus: \(bioStatus), ProfilePic: \(profilePicture)")
 
@@ -387,6 +409,7 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
                 user.ProfilePicture = profilePicture
                 user.OnlineStatus = onlineStatus
                 user.UserId = userid
+                user.Username = username
                 self.contacts.append(user)
             }
         
@@ -395,6 +418,9 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
         DispatchQueue.main.async {
             self.tble.dataSource = self
             self.tble.delegate = self
+            //Sorting pinned contacts
+            self.contacts = self.sortContactsByPinned(contacts: self.contacts, pinned: self.pinned_contacts)
+            
             self.tble.reloadData()
         }
     }
@@ -451,6 +477,7 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
                 
       if let image = UIImage(named: "pin", in: Bundle.main, compatibleWith: nil) {
         if pinned_contacts.contains(contacts[indexPath.row].Username){
+            print("username \(pinned_contacts) == \(contacts[indexPath.row].Username)")
             cell.pin?.image = image
                 }
         else{
