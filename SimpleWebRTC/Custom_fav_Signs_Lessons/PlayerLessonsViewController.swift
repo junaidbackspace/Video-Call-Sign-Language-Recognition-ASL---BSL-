@@ -16,11 +16,15 @@ class PlayerLessonsViewController: UIViewController {
     var gifImage: UIImage?
     var pausedImage: UIImage?
     var isGifPaused = false
+    var logindefaults = UserDefaults.standard
+    var serverWrapper = APIWrapper()
 
     var trainingname = ""
     var signtext = "Lecture name here"
     var lesson_level = ""
+    var Resource_URL = ""
     var lesson_id = 0
+    var guester_id = 0
     var animatedImage: UIImage?
     var isAnimating = true
     
@@ -69,16 +73,74 @@ class PlayerLessonsViewController: UIViewController {
     }
     @IBAction func btn_next_lesson(_ sender: Any) {
     }
+    
+    
     @IBAction func isFavorite_Start(_ sender: Any) {
         
         if let currentImage = OutLetisfaviorteStar.currentBackgroundImage,
                currentImage == UIImage(systemName: "star.fill")?.withTintColor(UIColor.yellow) {
+            
+            print("going to unlike ....")
                 // Change the button's background image to the default state
-                OutLetisfaviorteStar.setBackgroundImage(UIImage(systemName: "star"), for: .normal)
-            } else {
-                // If not, change the button's background image to the yellow star
-                if let image = UIImage(systemName: "star.fill")?.withTintColor(UIColor.yellow) {
-                    OutLetisfaviorteStar.setBackgroundImage(image, for: .normal)
+            let Url = "\(Constants.serverURL)/userfavoritegesture"
+
+            var userid = self.logindefaults.integer(forKey: "userID")
+            let Dic: [String: Any] = [
+                "user_id": userid,
+                  "gesture_id": guester_id
+            ]
+
+            serverWrapper.deleteData(baseUrl: Url,  data: Dic) { responseString, error in
+                if let error = error {
+                    print("\n\nError:", error)
+                  
+                }
+                if let responseString = responseString {
+                    print("Lessons response:", responseString)
+                    
+                    self.OutLetisfaviorteStar.setBackgroundImage(UIImage(systemName: "star"), for: .normal)
+                        
+                        
+                    guard let responseData = responseString.data(using: .utf8) else {
+                        print("Error converting response data to UTF-8")
+                        return
+                    }
+                        
+                    }
+            }
+            
+        }
+              
+             else {
+                
+                
+                let Url = "\(Constants.serverURL)/userfavoritegesture/add"
+
+                var userid = self.logindefaults.integer(forKey: "userID")
+                let Dic: [String: Any] = [
+                    "user_id": userid,
+                      "gesture_id": guester_id
+                ]
+
+                serverWrapper.insertData(baseUrl: Url,  userDictionary: Dic) { responseString, error in
+                    if let error = error {
+                        print("\n\nError:", error)
+                      
+                    }
+                    if let responseString = responseString {
+                        print("Lessons response:", responseString)
+                        
+                        if let image = UIImage(systemName: "star.fill")?.withTintColor(UIColor.yellow) {
+                            self.OutLetisfaviorteStar.setBackgroundImage(image, for: .normal)
+                            
+                            
+                        guard let responseData = responseString.data(using: .utf8) else {
+                            print("Error converting response data to UTF-8")
+                            return
+                        }
+                            
+                        }
+                    }
                 }
             }
     }
@@ -105,7 +167,7 @@ class PlayerLessonsViewController: UIViewController {
         super.viewDidLoad()
         lbl_Current_Content_name.text = "Sign for \(signtext)"
         lbl_Training_name.text = trainingname
-       
+       print("\n\n\nGif URL :\(Resource_URL)")
         lbl_Lessonlevel.text = lesson_level
         viewplayer.layer.cornerRadius = 20
         viewplayer.layer.borderWidth = 1.0

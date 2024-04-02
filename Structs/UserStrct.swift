@@ -27,6 +27,7 @@ struct User : Codable {
     var Les_id = 0
     var Les_Des = ""
     var Les_Res = ""
+    var Gesture_id = 0
 
 }
 struct ContactsUser: Codable {

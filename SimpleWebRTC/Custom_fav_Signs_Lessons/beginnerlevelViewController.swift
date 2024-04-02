@@ -106,7 +106,7 @@ class Lessons_LevelsViewController: UIViewController {
         
        
         let controller = self.storyboard?.instantiateViewController(identifier: "LessonsGallery") as! LessonsListViewController
-        controller.trainingname = "Alphabets"
+        controller.trainingname = "Words"
         controller.lesson_level = "Beginner"
         print("lesson id is \(lessonstrct[0].Les_id)")
         controller.les_id = lessonstrct[0].Les_id
@@ -118,7 +118,7 @@ class Lessons_LevelsViewController: UIViewController {
         
        
         let controller = self.storyboard?.instantiateViewController(identifier: "LessonsGallery") as! LessonsListViewController
-        controller.trainingname = "Number"
+        controller.trainingname = "Alphabets"
         controller.lesson_level = "Beginner"
         controller.les_id = lessonstrct[1].Les_id
         controller.hidesBottomBarWhenPushed = true
@@ -130,7 +130,7 @@ class Lessons_LevelsViewController: UIViewController {
         
        
         let controller = self.storyboard?.instantiateViewController(identifier: "LessonsGallery") as! LessonsListViewController
-        controller.trainingname = "Words"
+        controller.trainingname = "Greetings"
         controller.lesson_level = "Beginner"
         controller.les_id = lessonstrct[2].Les_id
         controller.hidesBottomBarWhenPushed = true
@@ -141,7 +141,7 @@ class Lessons_LevelsViewController: UIViewController {
         
        
         let controller = self.storyboard?.instantiateViewController(identifier: "LessonsGallery") as! LessonsListViewController
-        controller.trainingname = "Greetings"
+        controller.trainingname = "Numbers"
         controller.lesson_level = "Beginner"
         controller.les_id = lessonstrct[3].Les_id
         controller.hidesBottomBarWhenPushed = true

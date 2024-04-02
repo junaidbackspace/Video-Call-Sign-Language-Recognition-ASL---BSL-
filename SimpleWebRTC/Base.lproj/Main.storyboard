@@ -308,11 +308,11 @@
         <scene sceneID="eCh-nQ-xbI">
             <objects>
                 <viewController storyboardIdentifier="signupscreen" id="OFn-Vj-P9m" customClass="SignUpViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="1w1-FW-uC5">
+                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="1w1-FW-uC5">
                         <rect key="frame" x="0.0" y="0.0" width="828" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nqL-Fh-3wM">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nqL-Fh-3wM">
                                 <rect key="frame" x="0.0" y="0.0" width="828" height="736"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XLo-Oe-pFd">
@@ -2263,14 +2263,14 @@
         <scene sceneID="KxS-R2-bg1">
             <objects>
                 <viewController storyboardIdentifier="termsconditions" id="6pY-0x-mis" customClass="termsConditionViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="IkY-Jv-J3B">
+                    <view key="view" contentMode="scaleToFill" id="IkY-Jv-J3B">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vfm-PR-29H">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vfm-PR-29H">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4WX-Ji-1Zt">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4WX-Ji-1Zt">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="3400"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" lineBreakMode="wordWrap" numberOfLines="150" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9cu-2A-9BU">
@@ -2671,7 +2671,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
         <scene sceneID="Wr7-9d-02a">
             <objects>
                 <viewController storyboardIdentifier="playerController" hidesBottomBarWhenPushed="YES" id="8hF-Et-3gG" customClass="PlayerLessonsViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="WZm-hd-wR4">
+                    <view key="view" contentMode="scaleToFill" id="WZm-hd-wR4">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -2682,7 +2682,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                     <constraint firstAttribute="width" constant="352" id="oap-hc-Wa0"/>
                                 </constraints>
                             </imageView>
-                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" ambiguous="YES" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Kdg-E6-a9r">
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Kdg-E6-a9r">
                                 <rect key="frame" x="56" y="459" width="302" height="4"/>
                             </progressView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mz0-HZ-ZOb">
@@ -2723,7 +2723,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="drA-ZD-Opy">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="drA-ZD-Opy">
                                 <rect key="frame" x="0.0" y="563" width="414" height="164"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gDc-fk-eZS">
@@ -4001,7 +4001,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                         <rect key="frame" x="21" y="166" width="375" height="79"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Alphabets" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Owe-DC-UdY">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Words" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Owe-DC-UdY">
                                                 <rect key="frame" x="100" y="29" width="81" height="32"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
@@ -4032,8 +4032,8 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                         <rect key="frame" x="21" y="275" width="375" height="79"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Numbers" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CbK-hf-zcr">
-                                                <rect key="frame" x="100" y="29" width="73" height="32"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Alphabets" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CbK-hf-zcr">
+                                                <rect key="frame" x="100" y="29" width="91" height="32"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                                 <nil key="textColor"/>
@@ -4063,8 +4063,8 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                         <rect key="frame" x="21" y="382" width="375" height="79"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Words" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jqn-j5-eTY">
-                                                <rect key="frame" x="100" y="29" width="51.333333333333343" height="32"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Greetings" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jqn-j5-eTY">
+                                                <rect key="frame" x="100" y="29" width="86" height="32"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                                 <nil key="textColor"/>
@@ -4094,7 +4094,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                         <rect key="frame" x="21" y="491" width="375" height="79"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Greetings" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FfC-5Q-5ld">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Numbers" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FfC-5Q-5ld">
                                                 <rect key="frame" x="100" y="29" width="78" height="32"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
@@ -4168,7 +4168,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wf4-2M-KAf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4257" y="1576"/>
+            <point key="canvasLocation" x="4256.521739130435" y="1575.8152173913045"/>
         </scene>
         <!--third-->
         <scene sceneID="OXS-KT-Cjp">
@@ -4525,17 +4525,19 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MZv-49-w1g">
                                                     <rect key="frame" x="28" y="8" width="157" height="210"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2yA-tK-DSu">
-                                                            <rect key="frame" x="61" y="71" width="55" height="28"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="23"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2yA-tK-DSu">
+                                                            <rect key="frame" x="8" y="71" width="141" height="28"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Iqd-RQ-791">
-                                                            <rect key="frame" x="57.666666666666671" y="133" width="42" height="38.000000000000014"/>
+                                                            <rect key="frame" x="58" y="120" width="42" height="38.000000000000014"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <constraints>
+                                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="42" id="3vd-an-RSA"/>
                                                                 <constraint firstAttribute="width" constant="42" id="YUA-sJ-4hK"/>
+                                                                <constraint firstAttribute="height" constant="39.329999999999998" id="wp2-fH-vSJ"/>
                                                             </constraints>
                                                             <color key="tintColor" red="1" green="0.55721506750000005" blue="0.0020686525409999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <state key="normal" backgroundImage="play.circle" catalog="system">
@@ -4553,11 +4555,11 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                                         <constraint firstItem="Iqd-RQ-791" firstAttribute="centerX" secondItem="MZv-49-w1g" secondAttribute="centerX" id="FQD-QW-BuS"/>
                                                         <constraint firstItem="2yA-tK-DSu" firstAttribute="centerX" secondItem="MZv-49-w1g" secondAttribute="centerX" id="H6q-XD-URb"/>
                                                         <constraint firstAttribute="width" constant="163" id="gnq-gl-4uh"/>
-                                                        <constraint firstItem="Iqd-RQ-791" firstAttribute="top" secondItem="2yA-tK-DSu" secondAttribute="bottom" constant="33" id="hQe-Jz-qwr"/>
+                                                        <constraint firstItem="Iqd-RQ-791" firstAttribute="top" secondItem="2yA-tK-DSu" secondAttribute="bottom" constant="20" id="hQe-Jz-qwr"/>
                                                         <constraint firstItem="2yA-tK-DSu" firstAttribute="top" secondItem="MZv-49-w1g" secondAttribute="top" constant="71" id="jWk-0Y-3K7"/>
-                                                        <constraint firstItem="2yA-tK-DSu" firstAttribute="leading" secondItem="MZv-49-w1g" secondAttribute="leading" constant="61" id="m37-py-Kkj"/>
-                                                        <constraint firstAttribute="bottom" secondItem="Iqd-RQ-791" secondAttribute="bottom" constant="38.666666666666686" id="mat-BB-2M8"/>
-                                                        <constraint firstItem="2yA-tK-DSu" firstAttribute="centerX" secondItem="Iqd-RQ-791" secondAttribute="centerX" constant="7.5" id="pEn-PW-d7J"/>
+                                                        <constraint firstItem="2yA-tK-DSu" firstAttribute="leading" secondItem="MZv-49-w1g" secondAttribute="leading" constant="8" id="m37-py-Kkj"/>
+                                                        <constraint firstAttribute="bottom" secondItem="Iqd-RQ-791" secondAttribute="bottom" constant="51.666666666666686" id="mat-BB-2M8"/>
+                                                        <constraint firstItem="2yA-tK-DSu" firstAttribute="centerX" secondItem="Iqd-RQ-791" secondAttribute="centerX" constant="-0.5" id="pEn-PW-d7J"/>
                                                     </constraints>
                                                 </view>
                                             </subviews>
@@ -4586,14 +4588,14 @@ By using the Application, you acknowledge that you have read, understood, and ag
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="KJ6-UH-ja7" firstAttribute="leading" secondItem="qjS-Qy-sV9" secondAttribute="leading" constant="23" id="7GA-4h-eSl"/>
-                            <constraint firstItem="oaI-Bw-pjw" firstAttribute="leading" secondItem="qjS-Qy-sV9" secondAttribute="leading" id="8an-zk-4Dy"/>
                             <constraint firstItem="EIP-ZR-CwH" firstAttribute="leading" secondItem="qjS-Qy-sV9" secondAttribute="leading" constant="2" id="IlW-6y-evq"/>
                             <constraint firstItem="KJ6-UH-ja7" firstAttribute="top" secondItem="qjS-Qy-sV9" secondAttribute="top" constant="12" id="L7x-Ki-jpG"/>
-                            <constraint firstItem="oaI-Bw-pjw" firstAttribute="trailing" secondItem="qjS-Qy-sV9" secondAttribute="trailing" id="Na2-dg-hfa"/>
                             <constraint firstItem="EIP-ZR-CwH" firstAttribute="top" secondItem="qjS-Qy-sV9" secondAttribute="top" constant="18" id="PHI-5b-eQt"/>
                             <constraint firstItem="e8Q-q9-wqL" firstAttribute="leading" secondItem="EIP-ZR-CwH" secondAttribute="trailing" constant="14" id="SKS-Pq-2Mb"/>
-                            <constraint firstItem="oaI-Bw-pjw" firstAttribute="bottom" secondItem="qjS-Qy-sV9" secondAttribute="bottom" id="vAM-Lh-qLq"/>
-                            <constraint firstItem="oaI-Bw-pjw" firstAttribute="top" secondItem="e8Q-q9-wqL" secondAttribute="bottom" constant="31" id="vcA-a6-8kR"/>
+                            <constraint firstItem="oaI-Bw-pjw" firstAttribute="bottom" secondItem="qjS-Qy-sV9" secondAttribute="bottom" id="evJ-bh-sQu"/>
+                            <constraint firstItem="oaI-Bw-pjw" firstAttribute="leading" secondItem="qjS-Qy-sV9" secondAttribute="leading" id="lfD-je-1Nh"/>
+                            <constraint firstItem="oaI-Bw-pjw" firstAttribute="top" secondItem="e8Q-q9-wqL" secondAttribute="bottom" constant="31" id="m0H-If-GXi"/>
+                            <constraint firstItem="oaI-Bw-pjw" firstAttribute="centerX" secondItem="u0a-tI-Zkq" secondAttribute="centerX" id="pnU-h4-Hz0"/>
                             <constraint firstItem="EIP-ZR-CwH" firstAttribute="bottom" secondItem="e8Q-q9-wqL" secondAttribute="bottom" id="w0I-rk-1BE"/>
                         </constraints>
                     </view>
@@ -4607,7 +4609,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0mu-QJ-ha0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4947.826086956522" y="2329.8913043478265"/>
+            <point key="canvasLocation" x="4369.5652173913049" y="2274.4565217391305"/>
         </scene>
     </scenes>
     <resources>

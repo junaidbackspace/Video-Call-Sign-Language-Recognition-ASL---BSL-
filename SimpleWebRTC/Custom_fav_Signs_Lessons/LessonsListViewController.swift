@@ -57,6 +57,9 @@ class LessonsListViewController: UIViewController, UICollectionViewDataSource, U
         controller.lesson_level = self.lesson_level
         controller.signtext = content[row].Les_Des
         controller.lesson_id = content[row].Les_id
+        controller.guester_id = content[row].Gesture_id
+        controller.Resource_URL = content[row].Les_Res
+        
         print("")
         controller.hidesBottomBarWhenPushed = true
         controller.modalPresentationStyle = .fullScreen
@@ -98,17 +101,18 @@ class LessonsListViewController: UIViewController, UICollectionViewDataSource, U
 
     func processContactsData(_ jsonArray: [Lesson]) {
             for userObject in jsonArray {
-                let Id = userObject.Id
+                let GestId = userObject.Id
                 let Lid = userObject.LessonId
                 let Des = userObject.Description
                 let Res = userObject.Resource
               
 
                 // Now you can use these properties as needed
-                print("ID: \(Id), Lesson Id : \(Lid), Description: \(Des), Resource: \(Res)")
+                print("Guester_ID: \(GestId), Lesson Id : \(Lid), Description: \(Des), Resource: \(Res)")
 
                 // Optionally, you can create a User object and append it to contacts array
                 var user = User()
+                user.Gesture_id = GestId
                 user.Les_id = Lid
                 user.Les_Des = Des
                 user.Les_Res = Res

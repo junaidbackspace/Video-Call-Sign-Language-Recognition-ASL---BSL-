@@ -196,6 +196,56 @@ class APIWrapper {
     }
 
     
+
+
+//Lesson dislike
+    func deleteData(baseUrl: String, data: [String: Any], completion: @escaping (String?, Error?) -> Void) {
+        guard let url = URL(string: baseUrl) else {
+            completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]))
+            return
+        }
+
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: data) else {
+            completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to serialize data to JSON"]))
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = jsonData
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    completion(nil, error)
+                    return
+                }
+
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid HTTP response"]))
+                    return
+                }
+
+                if httpResponse.statusCode == 200 {
+                    // Check if there is data received from the server
+                    guard let responseData = data else {
+                        completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data received from the server"]))
+                        return
+                    }
+
+                    // Convert data to string
+                    if let responseString = String(data: responseData, encoding: .utf8) {
+                        completion(responseString, nil)
+                    } else {
+                        completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to convert data to string"]))
+                    }
+                } else {
+                    completion(nil, NSError(domain: "", code: httpResponse.statusCode, userInfo: [NSLocalizedDescriptionKey: "Failed request with status code \(httpResponse.statusCode)"]))
+                }
+            }
+        }.resume()
+    }
+
+
 }
-
-
