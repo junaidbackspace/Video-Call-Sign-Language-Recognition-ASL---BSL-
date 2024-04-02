@@ -15,6 +15,7 @@
 		651AD82C2B7B49E800D94D1B /* GeneralSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651AD82B2B7B49E800D94D1B /* GeneralSettingsViewController.swift */; };
 		651E5C002BA4609C005DB71C /* CallTranscriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651E5BFF2BA4609C005DB71C /* CallTranscriptionViewController.swift */; };
 		651E5C0A2BA466DC005DB71C /* CallTranscriptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651E5C092BA466DB005DB71C /* CallTranscriptionTableViewCell.swift */; };
+		652C0AEE2BBC0A0C00D89A57 /* lessonsStrct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652C0AED2BBC0A0C00D89A57 /* lessonsStrct.swift */; };
 		656168BB2B724FA70006E5D2 /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656168BA2B724FA70006E5D2 /* ContactsViewController.swift */; };
 		656168BF2B72A80B0006E5D2 /* DetailedContactsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656168BE2B72A80B0006E5D2 /* DetailedContactsTableViewCell.swift */; };
 		6573B4772B716AAE000DD658 /* onlineContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6573B4762B716AAE000DD658 /* onlineContactsViewController.swift */; };
@@ -115,6 +116,7 @@
 		651AD82B2B7B49E800D94D1B /* GeneralSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsViewController.swift; sourceTree = "<group>"; };
 		651E5BFF2BA4609C005DB71C /* CallTranscriptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallTranscriptionViewController.swift; sourceTree = "<group>"; };
 		651E5C092BA466DB005DB71C /* CallTranscriptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallTranscriptionTableViewCell.swift; sourceTree = "<group>"; };
+		652C0AED2BBC0A0C00D89A57 /* lessonsStrct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lessonsStrct.swift; sourceTree = "<group>"; };
 		656168BA2B724FA70006E5D2 /* ContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
 		656168BE2B72A80B0006E5D2 /* DetailedContactsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedContactsTableViewCell.swift; sourceTree = "<group>"; };
 		6573B4762B716AAE000DD658 /* onlineContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = onlineContactsViewController.swift; sourceTree = "<group>"; };
@@ -303,6 +305,7 @@
 			children = (
 				6509506A2B9488AD00035C85 /* UserStrct.swift */,
 				65E813A62B98C726006424B6 /* ServerResponse.swift */,
+				652C0AED2BBC0A0C00D89A57 /* lessonsStrct.swift */,
 			);
 			path = Structs;
 			sourceTree = "<group>";
@@ -708,6 +711,7 @@
 				65A986E72B7C9CA40011753C /* NotificationsViewController.swift in Sources */,
 				AF711AA721DFAD6C005CA4FA /* ViewController.swift in Sources */,
 				65CE5D422B7696F700771A84 /* PlayerLessonsViewController.swift in Sources */,
+				652C0AEE2BBC0A0C00D89A57 /* lessonsStrct.swift in Sources */,
 				AF90A8E0220CF07A0083687C /* RTCCustomFrameCapture.swift in Sources */,
 				651E5C002BA4609C005DB71C /* CallTranscriptionViewController.swift in Sources */,
 				6574CA852B8F197000B80C11 /* intermediatelevelViewController.swift in Sources */,

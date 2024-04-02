@@ -10,6 +10,9 @@ import UIKit
 
 class Lessons_LevelsViewController: UIViewController {
 
+   var lessonstrct =  [LessonStrct]()
+    var serverWrapper = APIWrapper()
+    
     @IBAction func btnback(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
     }
@@ -43,31 +46,104 @@ class Lessons_LevelsViewController: UIViewController {
         viewGreeting.layer.borderColor = UIColor.black.cgColor
         
         
-//        self.view.addSubview(outletNumbers)
-//        self.view.addSubview(outletAlphabets)
-//        self.view.addSubview(outletWords)
-//        self.view.addSubview(outletGreeting)
-       
+        let Url = "\(Constants.serverURL)/lesson/query"
+
+        // Define your parameters
+        let Dic: [String: Any] = [
+            "LanguageType": "ASL",
+            "LessonLevel": "Beginner"
+        ]
+
+        serverWrapper.insertData(baseUrl: Url,  userDictionary: Dic) { responseString, error in
+            if let error = error {
+                print("\n\nError:", error)
+              
+            }
+            if let responseString = responseString {
+                print("Lessons response:", responseString)
+                
+                guard let responseData = responseString.data(using: .utf8) else {
+                    print("Error converting response data to UTF-8")
+                    return
+                }
+
+                do {
+                    // Parse the response as an array of dictionaries
+                    let jsonArray = try JSONSerialization.jsonObject(with: responseData, options: []) as? [[String: Any]]
+                    
+                    guard let lessonsArray = jsonArray else {
+                        print("Invalid JSON format")
+                        return
+                    }
+                    
+                    
+                    for lessonDict in lessonsArray {
+                        var lessondata = LessonStrct()
+                        if let lessonId = lessonDict["LessonId"] as? Int {
+                            lessondata.Les_id = lessonId
+                               
+                        }
+                        
+                        if let lessonType = lessonDict["LessonType"] as? String {
+                            lessondata.Les_type = lessonType
+                            
+                        }
+                        self.lessonstrct.append(lessondata)
+                    }
+                } catch {
+                    print("Error parsing JSON data: \(error)")
+                }
+            }
+
+        }
+            
     }
+        
     
 
     
-    @IBAction func btn_Numbers(_ sender: Any) {
-        
-       
-        let controller = self.storyboard?.instantiateViewController(identifier: "LessonsGallery") as! LessonsListViewController
-        controller.trainingname = "Number"
-        controller.lesson_level = "Beginner"
-        controller.hidesBottomBarWhenPushed = true
-        controller.modalPresentationStyle = .fullScreen
-        self.navigationController?.pushViewController(controller, animated: true)
-    }
     @IBAction func btn_Alphabets(_ sender: Any) {
         
        
         let controller = self.storyboard?.instantiateViewController(identifier: "LessonsGallery") as! LessonsListViewController
         controller.trainingname = "Alphabets"
         controller.lesson_level = "Beginner"
+        print("lesson id is \(lessonstrct[0].Les_id)")
+        controller.les_id = lessonstrct[0].Les_id
+        controller.hidesBottomBarWhenPushed = true
+        controller.modalPresentationStyle = .fullScreen
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    @IBAction func btn_Numbers(_ sender: Any) {
+        
+       
+        let controller = self.storyboard?.instantiateViewController(identifier: "LessonsGallery") as! LessonsListViewController
+        controller.trainingname = "Number"
+        controller.lesson_level = "Beginner"
+        controller.les_id = lessonstrct[1].Les_id
+        controller.hidesBottomBarWhenPushed = true
+        controller.modalPresentationStyle = .fullScreen
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+ 
+    @IBAction func btn_Words(_ sender: Any) {
+        
+       
+        let controller = self.storyboard?.instantiateViewController(identifier: "LessonsGallery") as! LessonsListViewController
+        controller.trainingname = "Words"
+        controller.lesson_level = "Beginner"
+        controller.les_id = lessonstrct[2].Les_id
+        controller.hidesBottomBarWhenPushed = true
+        controller.modalPresentationStyle = .fullScreen
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    @IBAction func btn_Greetings(_ sender: Any) {
+        
+       
+        let controller = self.storyboard?.instantiateViewController(identifier: "LessonsGallery") as! LessonsListViewController
+        controller.trainingname = "Greetings"
+        controller.lesson_level = "Beginner"
+        controller.les_id = lessonstrct[3].Les_id
         controller.hidesBottomBarWhenPushed = true
         controller.modalPresentationStyle = .fullScreen
         self.navigationController?.pushViewController(controller, animated: true)

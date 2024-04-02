@@ -24,6 +24,9 @@ struct User : Codable {
     var IsBlocked = 0
     var IsMutted = 0
     var IsPinned = 0
+    var Les_id = 0
+    var Les_Des = ""
+    var Les_Res = ""
 
 }
 struct ContactsUser: Codable {
@@ -72,6 +75,16 @@ struct CallLogs : Codable {
     let EndTime: String
     let StartTime: String
 }
+
+struct Lesson: Codable {
+    let Id: Int
+    let LessonId: Int
+    let Description: String
+    let Resource: String
+    
+    
+}
+
 
 
 

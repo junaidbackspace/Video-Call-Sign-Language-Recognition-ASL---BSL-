@@ -20,6 +20,7 @@ class PlayerLessonsViewController: UIViewController {
     var trainingname = ""
     var signtext = "Lecture name here"
     var lesson_level = ""
+    var lesson_id = 0
     var animatedImage: UIImage?
     var isAnimating = true
     

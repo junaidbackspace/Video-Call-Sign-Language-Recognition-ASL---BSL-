@@ -1039,7 +1039,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lnQ-xE-xQB">
-                                                    <rect key="frame" x="123" y="49" width="190" height="18"/>
+                                                    <rect key="frame" x="123" y="49" width="190" height="17.666666666666671"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="190" id="1pP-K5-r50"/>
                                                     </constraints>
@@ -1783,14 +1783,14 @@
         <scene sceneID="zPq-uy-VkO">
             <objects>
                 <viewController storyboardIdentifier="profilesettingsScreen" id="K7Z-Vh-RAa" customClass="ProfileSettingsViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="n1f-oW-XYb">
+                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="n1f-oW-XYb">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="blZ-uu-W4P">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="blZ-uu-W4P">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QNu-QK-fp3">
+                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QNu-QK-fp3">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="1200"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VhQ-vS-CJ7">
@@ -2671,7 +2671,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
         <scene sceneID="Wr7-9d-02a">
             <objects>
                 <viewController storyboardIdentifier="playerController" hidesBottomBarWhenPushed="YES" id="8hF-Et-3gG" customClass="PlayerLessonsViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="WZm-hd-wR4">
+                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="WZm-hd-wR4">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -2682,7 +2682,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                     <constraint firstAttribute="width" constant="352" id="oap-hc-Wa0"/>
                                 </constraints>
                             </imageView>
-                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Kdg-E6-a9r">
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" ambiguous="YES" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Kdg-E6-a9r">
                                 <rect key="frame" x="56" y="459" width="302" height="4"/>
                             </progressView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mz0-HZ-ZOb">
@@ -2723,7 +2723,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="drA-ZD-Opy">
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="drA-ZD-Opy">
                                 <rect key="frame" x="0.0" y="563" width="414" height="164"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gDc-fk-eZS">
@@ -3875,9 +3875,6 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
-                                                <connections>
-                                                    <action selector="btn_Alphabets:" destination="rLd-4b-ho9" eventType="touchUpInside" id="dKy-d0-kFr"/>
-                                                </connections>
                                             </button>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="two_Fingers_Sign" translatesAutoresizingMaskIntoConstraints="NO" id="rlr-Ux-OnA">
                                                 <rect key="frame" x="18" y="13" width="52" height="50"/>
@@ -3906,9 +3903,6 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
-                                                <connections>
-                                                    <action selector="btn_Numbers:" destination="rLd-4b-ho9" eventType="touchUpInside" id="hBc-uc-kiF"/>
-                                                </connections>
                                             </button>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="punch_Sign" translatesAutoresizingMaskIntoConstraints="NO" id="7iz-EQ-vxZ">
                                                 <rect key="frame" x="15" y="13" width="52" height="50"/>
@@ -3988,7 +3982,6 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                         <connections>
                                             <action selector="BacktoOnlinefreinds:" destination="3CS-VC-RRz" eventType="touchUpInside" id="mJx-lH-UFt"/>
                                             <action selector="btnback:" destination="8hF-Et-3gG" eventType="touchUpInside" id="Y0T-c6-O5W"/>
-                                            <action selector="btnback:" destination="rLd-4b-ho9" eventType="touchUpInside" id="Za9-QM-omT"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Level" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hrq-aY-kmE">
@@ -4025,7 +4018,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                                     <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="btn_Alphabets:" destination="rLd-4b-ho9" eventType="touchUpInside" id="ave-bg-G7t"/>
+                                                    <action selector="btn_Alphabets:" destination="rLd-4b-ho9" eventType="touchUpInside" id="qtt-a9-nIn"/>
                                                 </connections>
                                             </button>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="two_Fingers_Sign" translatesAutoresizingMaskIntoConstraints="NO" id="uJg-hY-oBm">
@@ -4056,7 +4049,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                                     <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="btn_Numbers:" destination="rLd-4b-ho9" eventType="touchUpInside" id="7WV-JB-kn8"/>
+                                                    <action selector="btn_Numbers:" destination="rLd-4b-ho9" eventType="touchUpInside" id="ZEE-18-Kyc"/>
                                                 </connections>
                                             </button>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="punch_Sign" translatesAutoresizingMaskIntoConstraints="NO" id="2rY-vO-BdT">
@@ -4086,6 +4079,9 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="btn_Words:" destination="rLd-4b-ho9" eventType="touchUpInside" id="r93-Ch-CmA"/>
+                                                </connections>
                                             </button>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="two_Fingers_Sign" translatesAutoresizingMaskIntoConstraints="NO" id="DNe-qN-gJk">
                                                 <rect key="frame" x="18" y="14" width="52" height="50"/>
@@ -4114,6 +4110,9 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="btn_Greetings:" destination="rLd-4b-ho9" eventType="touchUpInside" id="y4j-oY-5ou"/>
+                                                </connections>
                                             </button>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="punch_Sign" translatesAutoresizingMaskIntoConstraints="NO" id="Pgh-cV-3dF">
                                                 <rect key="frame" x="20" y="14" width="52" height="50"/>
@@ -4136,7 +4135,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                         <state key="normal" backgroundImage="arrow.backward" catalog="system"/>
                                         <connections>
                                             <action selector="BacktoOnlinefreinds:" destination="3CS-VC-RRz" eventType="touchUpInside" id="fmH-if-9wL"/>
-                                            <action selector="btnback:" destination="rLd-4b-ho9" eventType="touchUpInside" id="rdZ-ah-ECP"/>
+                                            <action selector="btnback:" destination="rLd-4b-ho9" eventType="touchUpInside" id="v1e-2f-HFw"/>
                                             <action selector="btnback:" destination="8hF-Et-3gG" eventType="touchUpInside" id="wbo-bq-gnF"/>
                                         </connections>
                                     </button>
@@ -4533,7 +4532,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Iqd-RQ-791">
-                                                            <rect key="frame" x="50" y="133" width="42" height="38.000000000000014"/>
+                                                            <rect key="frame" x="57.666666666666671" y="133" width="42" height="38.000000000000014"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="42" id="YUA-sJ-4hK"/>
