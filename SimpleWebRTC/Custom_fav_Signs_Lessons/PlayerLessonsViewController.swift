@@ -12,6 +12,7 @@ import ImageIO
 
 class PlayerLessonsViewController: UIViewController {
 
+    var fav_less = [Int]()
     var gifData: Data?
     var gifImage: UIImage?
     var pausedImage: UIImage?
@@ -77,6 +78,8 @@ class PlayerLessonsViewController: UIViewController {
     
     @IBAction func isFavorite_Start(_ sender: Any) {
         
+        if fav_less.contains(guester_id)
+        {
         if let currentImage = OutLetisfaviorteStar.currentBackgroundImage,
                currentImage == UIImage(systemName: "star.fill")?.withTintColor(UIColor.yellow) {
             
@@ -100,18 +103,17 @@ class PlayerLessonsViewController: UIViewController {
                     
                     self.OutLetisfaviorteStar.setBackgroundImage(UIImage(systemName: "star"), for: .normal)
                         
-                        
-                    guard let responseData = responseString.data(using: .utf8) else {
-                        print("Error converting response data to UTF-8")
-                        return
+                    //Update Array in User Default
+                    self.fav_less.removeAll { $0 == self.guester_id }
+                    UserDefaults.standard.setValue(self.fav_less, forKey: "fav_Les")
+                    
                     }
                         
                     }
             }
             
         }
-              
-             else {
+    else {
                 
                 
                 let Url = "\(Constants.serverURL)/userfavoritegesture/add"
@@ -133,16 +135,17 @@ class PlayerLessonsViewController: UIViewController {
                         if let image = UIImage(systemName: "star.fill")?.withTintColor(UIColor.yellow) {
                             self.OutLetisfaviorteStar.setBackgroundImage(image, for: .normal)
                             
+                            //Store Array in User Default
+                            self.fav_less.append(self.guester_id)
+                            UserDefaults.standard.setValue(self.fav_less, forKey: "fav_Les")
                             
-                        guard let responseData = responseString.data(using: .utf8) else {
-                            print("Error converting response data to UTF-8")
-                            return
-                        }
-                            
-                        }
+                    
                     }
                 }
+                
+                
             }
+    }
     }
     //to make round blue footer
     @IBOutlet weak var viewplayer: UIView!
@@ -165,6 +168,19 @@ class PlayerLessonsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let retrievedArray = UserDefaults.standard.array(forKey: "fav_Les") as? [Int] {
+            let Fav_Lessons = retrievedArray
+           
+            fav_less = Fav_Lessons
+         }
+        if fav_less.contains(guester_id)
+        {
+            if let image = UIImage(systemName: "star.fill")?.withTintColor(UIColor.yellow) {
+                self.OutLetisfaviorteStar.setBackgroundImage(image, for: .normal)
+            }
+        }
+        
         lbl_Current_Content_name.text = "Sign for \(signtext)"
         lbl_Training_name.text = trainingname
        print("\n\n\nGif URL :\(Resource_URL)")
