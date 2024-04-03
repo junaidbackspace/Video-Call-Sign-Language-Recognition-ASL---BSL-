@@ -47,16 +47,18 @@ class AddContactViewController: UIViewController ,UITableViewDataSource, UITable
     
     @IBAction func btnSearch(_ sender: Any) {
         //on again click
+      
         contacts.removeAll()
         self.tble.reloadData()
       
             if self.rdemail.isSelected{
-                self.fetchContactsData(Url: "http://192.168.31.106:8000/user/search?user_id=\(userID)&search_Email=\(txtsearch.text!)")
+                self.fetchContactsData(Url:
+                                        "\(Constants.serverURL)/user/search?user_id=\(userID)&search_Email=\(txtsearch.text!)")
             //http://192.168.31.106:8000/user/search?user_id=2&search_username=umer123
                 print("Entered in Email Selected: \(self.txtsearch.text!)")
             }
             else if self.rdusername.isSelected {
-                self.fetchContactsData(Url: "http://192.168.31.106:8000/user/search?user_id=\(userID)&search_username=\(txtsearch.text!)")
+                self.fetchContactsData(Url: "\(Constants.serverURL)/user/search?user_id=\(userID)&search_username=\(txtsearch.text!)")
                 print("Entered in username Selected: \(self.txtsearch.text!)")
                 
             }

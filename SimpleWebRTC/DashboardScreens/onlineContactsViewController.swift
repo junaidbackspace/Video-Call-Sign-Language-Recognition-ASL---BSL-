@@ -157,8 +157,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
             filteredContacts = contacts
              n += 1
         }
-        print("User Full name : \(contacts[indexPath.row].Fname+" "+contacts[indexPath.row].Lname)")
-        
+       
         cell?.name.text = contacts[indexPath.row].Fname+" "+contacts[indexPath.row].Lname
         cell?.about.text = contacts[indexPath.row].BioStatus
        
@@ -238,13 +237,55 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
     }
     
        
+   func getOnlineStatus()
+   {
+    var userid = self.logindefaults.integer(forKey: "userID")
+    let Url = "\(Constants.serverURL)/user/\(userid)/online-status"
+    print("Url of online update : \(Url)")
+    let requestBody = OnlineStatusRequestBody(online_status: 0)
+    // Call the putRequest function
+    serverWrapper.putRequest(urlString: Url, requestBody: requestBody) { data, response, error in
+        if let error = error {
+                print("Error: \(error)")
+                return
+            }
+
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("Invalid HTTP response")
+                return
+            }
+
+            if httpResponse.statusCode == 200 {
+                if let responseData = data {
+                    // Parse JSON data
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any]
+                        if let message = json?["message"] as? String, let id = json?["Id"] as? Int {
+                            print("Message: \(message)")
+                            print("ID: \(id)")
+                        } else {
+                            print("Invalid JSON format")
+                        }
+                    } catch {
+                        print("Error parsing JSON: \(error)")
+                    }
+                } else {
+                    print("No data received from the server")
+                }
+            } else {
+                print("Request failed with status code \(httpResponse.statusCode)")
+            }
+    }
+   }
    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         DispatchQueue.global().async {
                self.fetchContactsData()
+                self.getOnlineStatus()
            }
         btncontactOutlet.isHidden = true
         searchbtnSetup()
@@ -270,7 +311,6 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
                 print("Error:", error.localizedDescription)
                
             } else if let jsonData = contactsUsers {
-                print("JSON Data:", jsonData)
                
                 self.processContactsData(jsonData)
             } else {
@@ -289,9 +329,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
                 let profilePicture = userObject.profile_picture
                 let userid = userObject.user_id
 
-                // Now you can use these properties as needed
-                print("Fname: \(firstName), Lname: \(lastName), OnlineStatus: \(onlineStatus), BioStatus: \(bioStatus), ProfilePic: \(profilePicture)")
-
+                
                 // Optionally, you can create a User object and append it to contacts array
                 var user = User()
                 user.BioStatus = bioStatus

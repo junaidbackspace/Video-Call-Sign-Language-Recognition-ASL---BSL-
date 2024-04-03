@@ -85,6 +85,9 @@ struct Lesson: Codable {
     
     
 }
+struct OnlineStatusRequestBody: Codable {
+    let online_status: Int
+}
 
 
 

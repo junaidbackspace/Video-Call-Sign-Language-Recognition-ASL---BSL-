@@ -233,10 +233,6 @@ class UserProfileViewController: UIViewController, UITableViewDataSource, UITabl
         controller.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(controller, animated: true)
         
-//        controller.name = contacts[indexPath.row].Fname+" "+contacts[indexPath.row].Lname
-//        controller.about = contacts[indexPath.row].BioStatus
-//        controller.distype = contacts[indexPath.row].UserType
-//
    
     }
     
