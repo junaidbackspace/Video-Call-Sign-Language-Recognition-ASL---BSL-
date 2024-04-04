@@ -18,11 +18,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WebSocketDelegate {
         socket = WebSocket(url: URL(string: "ws://" + ipAddress + ":8080/")!)
         socket.delegate = self
         socket.connect()
+        var online = onlineContactsViewController()
+        print("termination app, turning offline status")
+        online.getOnlineStatus(status: 0)
+        
 
         return true
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
+        
+       
         backgroundTask = application.beginBackgroundTask {
             // End background task if time expires
             application.endBackgroundTask(self.backgroundTask)
@@ -64,6 +70,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WebSocketDelegate {
     func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
         // Handle received data
     }
+    
+    
 }
 
 

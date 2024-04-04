@@ -237,13 +237,16 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
     }
     
        
-   func getOnlineStatus()
+    func getOnlineStatus(status : Int)
    {
+    
+   
     var userid = self.logindefaults.integer(forKey: "userID")
-    let Url = "\(Constants.serverURL)/user/\(userid)/online-status"
-    print("Url of online update : \(Url)")
+    let Url = "\(Constants.serverURL)/user/\(userid)/online-status?online_status=\(status)"
+    
     let requestBody = OnlineStatusRequestBody(online_status: 0)
-    // Call the putRequest function
+   
+    
     serverWrapper.putRequest(urlString: Url, requestBody: requestBody) { data, response, error in
         if let error = error {
                 print("Error: \(error)")
@@ -285,7 +288,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
         
         DispatchQueue.global().async {
                self.fetchContactsData()
-                self.getOnlineStatus()
+            self.getOnlineStatus(status: 1)
            }
         btncontactOutlet.isHidden = true
         searchbtnSetup()
