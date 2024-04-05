@@ -8,8 +8,9 @@
 
 import UIKit
 import DropDown
+import Kingfisher
 
-class ProfileSettingsViewController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
+class ProfileSettingsViewController: UIViewController, UIImagePickerControllerDelegate & UIGestureRecognizerDelegate, UINavigationControllerDelegate {
     
     
     
@@ -29,7 +30,9 @@ class ProfileSettingsViewController: UIViewController, UIImagePickerControllerDe
     var About = ""
     var newpass = ""
     var confirmpass = ""
-    var fontsize = 0
+    
+    var profile = ""
+    var distype = ""
     
     @IBAction func btnback(_ sender: Any) {
         navigationController?.popViewController(animated: true)
@@ -70,7 +73,7 @@ class ProfileSettingsViewController: UIViewController, UIImagePickerControllerDe
     @IBAction func btndrpdwnDisablity(_ sender: Any) {
         let dropDown = DropDown()
         dropDown.anchorView = disTypeView
-        dropDown.dataSource = ["Normal","Deff & Mute ","Blind"]
+        dropDown.dataSource = ["General","Deff & Mute ","Blind"]
         dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
             self.lblDisablity.text = "\(item)"
             
@@ -110,12 +113,37 @@ class ProfileSettingsViewController: UIViewController, UIImagePickerControllerDe
         lblname?.text = name
         txtabout?.placeholder = About
         lblabout?.text = About
+        lblDisablity?.text = distype
+        setup()
         
-        addDoneButtonToKeyboard(for: txtname)
-        addDoneButtonToKeyboard(for: txtabout)
-        addDoneButtonToKeyboard(for: txtCurrentpass)
-        addDoneButtonToKeyboard(for: txtNewPass)
-        addDoneButtonToKeyboard(for: txtConfirmPass)
+    }
+        
+   func setup()
+   {
+    let urlString = "\(Constants.serverURL)\(profile)"
+
+    if let url = URL(string: urlString) {
+        profilepic.kf.setImage(with: url, placeholder: UIImage(named: "No image found"))
+    } else {
+        // Handle invalid URL
+        print("Invalid URL:", urlString)
+    }
+    
+    if distype == "General" {
+        if let image = UIImage(named: "normalperson", in: Bundle.main, compatibleWith: nil) {
+            print("Normal Entered")
+            imgdisablity.image = image
+        }
+    } else if distype == "Blind" {
+        if let image = UIImage(named: "blind", in: Bundle.main, compatibleWith: nil) {
+            imgdisablity.image = image
+        }
+    } else {
+        if let image = UIImage(named: "deff", in: Bundle.main, compatibleWith: nil) {
+            imgdisablity.image = image
+        }
+    
+   }
         
        profilepic.isUserInteractionEnabled = true
 
@@ -124,7 +152,9 @@ class ProfileSettingsViewController: UIViewController, UIImagePickerControllerDe
 
         imgPicker.delegate = self
 
-
+        let tapscreen = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tapscreen.delegate = self
+                self.view.addGestureRecognizer(tapscreen)
     }
     @objc func imgViewTapped(_ sender: Any)
     {
@@ -135,14 +165,9 @@ class ProfileSettingsViewController: UIViewController, UIImagePickerControllerDe
        present(imgPicker, animated: true, completion: nil)
     }
 
-    func addDoneButtonToKeyboard(for textField: UITextField) {
-        let toolbar = UIToolbar()
-        toolbar.sizeToFit()
-        
-        let doneButton = UIBarButtonItem(barButtonSystemItem: .close, target: textField, action: #selector(UIResponder.resignFirstResponder))
-        toolbar.items = [doneButton]
-        
-        textField.inputAccessoryView = toolbar
-    }
+    @objc func hideKeyboard() {
+            self.view.endEditing(true)
+        }
+    
     
 }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class settingsViewController: UIViewController {
 
@@ -52,6 +53,21 @@ class settingsViewController: UIViewController {
             user.UserType = userObject.disability_type
             user.BioStatus = userObject.bio_status
             user.OnlineStatus = userObject.online_status
+            lblname.text = user.Fname+" "+user.Lname
+            
+            let group = DispatchGroup()
+              group.enter()
+
+            let urlString = "\(Constants.serverURL)\(user.ProfilePicture)"
+
+            if let url = URL(string: urlString) {
+                profileImageView.kf.setImage(with: url, placeholder: UIImage(named: "No image found"))
+            } else {
+                // Handle invalid URL
+                print("Invalid URL:", urlString)
+            }
+            
+            group.leave()
         }
 
     
@@ -59,10 +75,8 @@ class settingsViewController: UIViewController {
            super.viewDidLoad()
         
         fetchUserData()
-        var userKey = UserDefaults.standard.string(forKey: "userpass")
-        print("Password is : \(userKey)")
-        print("name : \(user.Fname) \(user.Lname)")
-        lblname.text = user.Fname+" - "+user.Lname
+       
+        
            // Make the profile image round
            profileImageView.layer.cornerRadius = profileImageView.frame.width / 2
            profileImageView.clipsToBounds = true
@@ -108,11 +122,15 @@ class settingsViewController: UIViewController {
        @IBAction func btn_profileSettings() {
          
         let controller = (self.storyboard?.instantiateViewController(identifier: "profilesettingsScreen"))! as ProfileSettingsViewController
-        controller.name = "Junaid"
-        controller.About = "Hi i am usign CommFusion"
-        controller.currentpass = "*******"
-        controller.newpass = "*******"
-        controller.confirmpass = "*******"
+        
+        var userKey = UserDefaults.standard.string(forKey: "userpass")
+        print("Password is : \(userKey)")
+       
+        controller.name = user.Fname+" "+user.Lname
+        controller.About = user.BioStatus
+        controller.currentpass = userKey!
+        controller.profile = user.ProfilePicture
+        controller.distype = user.UserType
         
        
         controller.modalPresentationStyle = .fullScreen
