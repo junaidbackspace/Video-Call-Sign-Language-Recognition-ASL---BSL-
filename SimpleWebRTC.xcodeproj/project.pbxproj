@@ -351,13 +351,13 @@
 			path = Custom_fav_Signs_Lessons;
 			sourceTree = "<group>";
 		};
-		65E2077A2B73A95C00978CAC /* Add_Search_Contact */ = {
+		65E2077A2B73A95C00978CAC /* AddContact_UserProfile */ = {
 			isa = PBXGroup;
 			children = (
 				65E2077B2B73A99E00978CAC /* AddContactViewController.swift */,
 				65E207892B74061000978CAC /* UserProfileViewController.swift */,
 			);
-			path = Add_Search_Contact;
+			path = AddContact_UserProfile;
 			sourceTree = "<group>";
 		};
 		AF15C0AE21E41A58005B4ED6 /* Extentions */ = {
@@ -409,9 +409,9 @@
 				65A986FA2B7CF0DE0011753C /* VideoCalls */,
 				65C2B3732B79F1EB00A916E6 /* settings */,
 				65CE5D402B76969800771A84 /* Custom_fav_Signs_Lessons */,
-				65E2077A2B73A95C00978CAC /* Add_Search_Contact */,
-				656168B32B724EE40006E5D2 /* DashboardScreens */,
+				65E2077A2B73A95C00978CAC /* AddContact_UserProfile */,
 				6573B47F2B716DC1000DD658 /* CustomTableClasses */,
+				656168B32B724EE40006E5D2 /* DashboardScreens */,
 				658E032D2B6F616100BEDE73 /* Login_Signup */,
 				65A01BB22B6E19D5007AC395 /* Assets.xcassets */,
 				378B38D62365C281002C5E8B /* CameraFilter */,

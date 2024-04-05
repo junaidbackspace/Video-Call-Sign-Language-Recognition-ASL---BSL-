@@ -5,6 +5,7 @@ struct User : Codable {
     
     var Username = " "
     var DateOfBirth = Date()
+    var DOB = Date()
     var Password = " "
     var ProfilePicture = ""
     var Email = ""
@@ -14,6 +15,7 @@ struct User : Codable {
     var BioStatus = ""
     var OnlineStatus = 0
     var RegistrationDate = Date()
+    var RegDate = Date()
     var isfriend = false
     var UserId = 0
     var Call_StartTime = ""
@@ -90,5 +92,19 @@ struct OnlineStatusRequestBody: Codable {
 }
 
 
-
+struct singleUserInfo : Codable{
+   
+    let fname : String
+    let lname : String
+    let DateOfBirth : String
+    let password : String
+    let profile_picture : String
+    let email : String
+    let disability_type : String
+    let account_status : String
+    let bio_status : String
+    let registration_date : String
+    let online_status : Int
+    
+}
 

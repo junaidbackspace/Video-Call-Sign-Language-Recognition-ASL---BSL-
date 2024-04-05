@@ -9,6 +9,7 @@
 import UIKit
 
 class LoginToAccountViewController: UIViewController, UIGestureRecognizerDelegate {
+    
     var serverWrapper = APIWrapper()
     var logindefaults = UserDefaults()
     
@@ -57,6 +58,7 @@ class LoginToAccountViewController: UIViewController, UIGestureRecognizerDelegat
                                         
                                         print("Usernmae is : \(username)")
                                         self.logindefaults.setValue(username, forKey: "loginedUser")
+                                        self.logindefaults.setValue(self.txtpassword.text!, forKey: "userpass")
                                     let controller = self.storyboard!.instantiateViewController(identifier: "dashboard")
                                     controller.modalPresentationStyle = .fullScreen
                                     self.navigationController?.pushViewController(controller, animated: true)
@@ -112,6 +114,7 @@ class LoginToAccountViewController: UIViewController, UIGestureRecognizerDelegat
         let tapscreen = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         tapscreen.delegate = self
                 self.view.addGestureRecognizer(tapscreen)
+       
         
     }
     @objc func hideKeyboard() {

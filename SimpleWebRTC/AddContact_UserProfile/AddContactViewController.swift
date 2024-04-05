@@ -160,7 +160,7 @@ class AddContactViewController: UIViewController ,UITableViewDataSource, UITable
             cell?.btnadd.setBackgroundImage(UIImage(named: "freind_Added"), for: .normal)
         }
         
-        let base = "http://192.168.31.106:8000\(contacts[indexPath.row].ProfilePicture)"
+        let base = "\(Constants.serverURL)\(contacts[indexPath.row].ProfilePicture)"
         print("\n url is: \(base)")
         if let url = URL(string: base) {
             cell?.profilePic?.kf.setImage(with: url, placeholder: UIImage(named: "No image found"))

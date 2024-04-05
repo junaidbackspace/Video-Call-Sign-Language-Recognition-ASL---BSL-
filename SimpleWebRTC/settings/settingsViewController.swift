@@ -11,13 +11,58 @@ import UIKit
 class settingsViewController: UIViewController {
 
     @IBOutlet var profileImageView: UIImageView!
-       @IBOutlet var lblname: UILabel!
-      
-       @IBOutlet var borderedView: UIView!
+    @IBOutlet var lblname: UILabel!
+    @IBOutlet var borderedView: UIView!
+    
+        var user = User()
+    var serverWrapper = APIWrapper()
        
+
+    func fetchUserData() {
+            guard let userID = UserDefaults.standard.string(forKey: "userID") else {
+                print("User ID not found")
+                return
+            }
+            
+            let Url = "\(Constants.serverURL)/user/userdetails/\(userID)"
+            print("URL: "+Url)
+          
+            let url = URL(string: Url)!
+            
+            self.serverWrapper.fetchUserInfo(baseUrl: url, structure: singleUserInfo.self) { userInfo, error in
+                if let error = error {
+                    print("inner URL: \(Url)")
+                    print("Error in receiving:", error.localizedDescription)
+                } else if let userObject = userInfo {
+                    print("JSON Data:", userObject)
+                    self.processContactsData(userObject)
+                } else {
+                    print("No data received from the server")
+                }
+            }
+        }
+
+        func processContactsData(_ userObject: singleUserInfo) {
+            print("Processing user data")
+            user.Fname = userObject.fname
+            user.Lname = userObject.lname
+            user.Password = userObject.password
+            user.ProfilePicture = userObject.profile_picture
+            user.Email = userObject.email
+            user.UserType = userObject.disability_type
+            user.BioStatus = userObject.bio_status
+            user.OnlineStatus = userObject.online_status
+        }
+
+    
        override func viewDidLoad() {
            super.viewDidLoad()
-           
+        
+        fetchUserData()
+        var userKey = UserDefaults.standard.string(forKey: "userpass")
+        print("Password is : \(userKey)")
+        print("name : \(user.Fname) \(user.Lname)")
+        lblname.text = user.Fname+" - "+user.Lname
            // Make the profile image round
            profileImageView.layer.cornerRadius = profileImageView.frame.width / 2
            profileImageView.clipsToBounds = true

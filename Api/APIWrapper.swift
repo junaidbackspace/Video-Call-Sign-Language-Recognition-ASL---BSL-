@@ -194,6 +194,60 @@ class APIWrapper {
             }
         }.resume()
     }
+    
+    func fetchUserInfo(baseUrl: URL, structure: singleUserInfo.Type, completion: @escaping (singleUserInfo?, Error?) -> Void) {
+        var request = URLRequest(url: baseUrl)
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    print("Error in receiving:", error.localizedDescription)
+                    completion(nil, error)
+                    return
+                }
+
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    let error = NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid HTTP response"])
+                    print("Error in receiving:", error.localizedDescription)
+                    completion(nil, error)
+                    return
+                }
+
+                if (200...299).contains(httpResponse.statusCode) {
+                    if let responseData = data {
+                        do {
+                            // Attempt manual decoding
+                            if let json = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any] {
+                                print("\ndecoding user info \n")
+                                let decoder = JSONDecoder()
+                                let jsonData = try JSONSerialization.data(withJSONObject: json)
+                                let decodedData = try decoder.decode(singleUserInfo.self, from: jsonData)
+                                completion(decodedData, nil)
+                            } else {
+                                let error = NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to decode JSON response"])
+                                print("Error in receiving:", error.localizedDescription)
+                                completion(nil, error)
+                            }
+
+                        } catch {
+                            print("Error decoding response:", error.localizedDescription)
+                            completion(nil, error)
+                        }
+                    } else {
+                        let error = NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data received from the server"])
+                        print("Error in receiving:", error.localizedDescription)
+                        completion(nil, error)
+                    }
+                } else {
+                    let error = NSError(domain: "", code: httpResponse.statusCode, userInfo: [NSLocalizedDescriptionKey: "Failed to fetch data"])
+                    print("Error in receiving:", error.localizedDescription)
+                    completion(nil, error)
+                }
+            }
+        }.resume()
+    }
 
     
 
