@@ -108,3 +108,13 @@ struct singleUserInfo : Codable{
     
 }
 
+struct updateUserProfile : Codable {
+    
+    let user_id: Int
+    let current_password: String
+    let new_password: String
+    let new_fname : String
+    let new_lname : String
+    let new_bio_status : String
+    let new_disability_type : String
+}

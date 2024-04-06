@@ -13,7 +13,7 @@ import Kingfisher
 class ProfileSettingsViewController: UIViewController, UIImagePickerControllerDelegate & UIGestureRecognizerDelegate, UINavigationControllerDelegate {
     
     
-    
+    var serverWrapper = APIWrapper()
     var imgPicker =  UIImagePickerController()
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any])
@@ -33,12 +33,75 @@ class ProfileSettingsViewController: UIViewController, UIImagePickerControllerDe
     
     var profile = ""
     var distype = ""
+    var LangType = ""
     
     @IBAction func btnback(_ sender: Any) {
         navigationController?.popViewController(animated: true)
     }
     @IBAction func btnSave(_ sender: Any) {
+        
+        
+        if verifyPass(){
+            
+            print("\n\nin updating user profile...")
+            let Url = "\(Constants.serverURL)/user/update-profile"
+
+            var userid = UserDefaults.standard.integer(forKey: "userID")
+
+            let fullName = txtname.text!
+
+            
+            let components = fullName.components(separatedBy: " ")
+            let fname = components.first ?? ""
+            let lname = components.dropFirst().joined(separator: " ")
+
+            
+            let requestBody = updateUserProfile( user_id : userid,
+                                                current_password : currentpass,
+                                                new_password: newpass,
+                                                new_fname : fname,
+                                                new_lname : lname,
+                                                new_bio_status : txtabout.text!,
+                                                new_disability_type: lblDisablity.text!)
+           
+            
+            serverWrapper.putRequest(urlString: Url, requestBody: requestBody) { data, response, error in
+                if let error = error {
+                        print("Error: \(error)")
+                        return
+                    }
+
+                    guard let httpResponse = response as? HTTPURLResponse else {
+                        print("Invalid HTTP response")
+                        return
+                    }
+
+                    if httpResponse.statusCode == 200 {
+                        if let responseData = data {
+                            // Parse JSON data
+                            do {
+                                let json = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any]
+                                if let message = json?["message"] as? String, let id = json?["Id"] as? Int {
+                                    print("Message: \(message)")
+                                    print("ID: \(id)")
+                                } else {
+                                    print("Invalid JSON format")
+                                }
+                            } catch {
+                                print("Error parsing JSON: \(error)")
+                            }
+                        } else {
+                            print("No data received from the server")
+                        }
+                    } else {
+                        print("Request failed with status code \(httpResponse.statusCode)")
+                    }
+            }
+        
+        }
+
     }
+
     @IBOutlet weak var txtConfirmPass: UITextField!
     @IBOutlet weak var txtNewPass: UITextField!
     @IBOutlet weak var txtCurrentpass: UITextField!
@@ -55,12 +118,14 @@ class ProfileSettingsViewController: UIViewController, UIImagePickerControllerDe
             if let image = UIImage(named: "disablity_Sign", in: Bundle.main, compatibleWith: nil) {
                 imgLangType.image = image
                     }
+                UserDefaults.standard.set("ASL", forKey: "SignType")
             }
         
         else{
             if let image = UIImage(named: "two_Fingers_Sign", in: Bundle.main, compatibleWith: nil) {
                 imgLangType.image = image
                     }
+            UserDefaults.standard.set("BSL", forKey: "SignType")
             }
             
         }
@@ -120,6 +185,11 @@ class ProfileSettingsViewController: UIViewController, UIImagePickerControllerDe
         
    func setup()
    {
+    //Setting ASL byDefault
+    GetSignLang()
+    
+    
+    
     let urlString = "\(Constants.serverURL)\(profile)"
 
     if let url = URL(string: urlString) {
@@ -170,4 +240,79 @@ class ProfileSettingsViewController: UIViewController, UIImagePickerControllerDe
         }
     
     
+    func GetSignLang()
+    {
+        if UserDefaults.standard.object(forKey: "SignType") == nil {
+            
+            UserDefaults.standard.set("ASL", forKey: "SignType")
+        }
+        else{
+            LangType = UserDefaults.standard.string(forKey: "SignType")!
+          }
+        
+        //fetching ASL / BSL
+        if ( LangType == "ASL")
+        {
+            lblLangType.text = LangType
+        if let image = UIImage(named: "disablity_Sign", in: Bundle.main, compatibleWith: nil) {
+            imgLangType.image = image
+                }
+           
+        }
+
+    else{
+        lblLangType.text = LangType
+        if let image = UIImage(named: "two_Fingers_Sign", in: Bundle.main, compatibleWith: nil) {
+            imgLangType.image = image
+                }
+       
+        }
+    }
+    
+    
+    func verifyPass()->Bool
+    {
+        if txtNewPass.text! == "" && txtConfirmPass.text! == ""{
+            newpass = currentpass
+            confirmpass = currentpass
+            return true
+            print("pass not changed")
+        }
+        else{
+            if txtNewPass.text == txtConfirmPass.text
+            {
+                if txtCurrentpass.text == currentpass {
+                    
+                    //checking new pass and confirm pass
+                    
+                    newpass = txtNewPass.text!
+                    confirmpass = newpass
+                    
+                    self.txtConfirmPass.layer.borderWidth = 0
+                    self.txtCurrentpass.layer.borderWidth = 0
+                    self.txtNewPass.layer.borderWidth = 0
+                    return true
+                   
+                    }
+                else{
+                 
+                    print("Wrong current pass")
+                    self.txtCurrentpass.layer.borderWidth = 1.0
+                    self.txtCurrentpass.layer.borderColor = UIColor.red.cgColor
+                    return false
+                   }
+                
+            }
+            else{
+                print("new pass and confirm pass not matched")
+                self.txtConfirmPass.layer.borderWidth = 1.0
+                self.txtConfirmPass.layer.borderColor = UIColor.red.cgColor
+                self.txtNewPass.layer.borderWidth = 1.0
+                self.txtNewPass.layer.borderColor = UIColor.red.cgColor
+                return false
+               
+            }
+            return true
+        }
+    }
 }

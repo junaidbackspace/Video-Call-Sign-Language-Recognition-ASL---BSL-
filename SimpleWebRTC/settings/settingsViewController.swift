@@ -136,6 +136,7 @@ class settingsViewController: UIViewController {
         controller.modalPresentationStyle = .fullScreen
           self.navigationController?.pushViewController(controller, animated: true)
        }
+    
     @IBAction func btn_Logout(_ sender: Any) {
         UserDefaults.standard.setValue(0, forKey: "userID")
         self.navigationController?.popViewController(animated: true)
@@ -143,7 +144,6 @@ class settingsViewController: UIViewController {
         controller.hidesBottomBarWhenPushed = true
         controller.modalPresentationStyle = .fullScreen
           self.navigationController?.pushViewController(controller, animated: true)
-        
         
         
     }
