@@ -15,12 +15,33 @@ class ProfileSettingsViewController: UIViewController, UIImagePickerControllerDe
     
     var serverWrapper = APIWrapper()
     var imgPicker =  UIImagePickerController()
+    var userid = UserDefaults.standard.integer(forKey: "userID")
+    var imageToUpload: URL?
+
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any])
         {
+        if let imageURL = info[.imageURL] as? URL {
+
+            imageToUpload = imageURL
+        }
+        
             if let img = info[.originalImage] as? UIImage
             {
                 self.profilepic.image = img
+                let Url = "\(Constants.serverURL)/user/uploadprofilepicture/\(userid)"
+                
+                // Call uploadImage function within a do-catch block
+                do {
+                    try self.serverWrapper.uploadImage(baseUrl: Url, imageURL: self.imageToUpload!)
+                } catch {
+                    print("Error uploading image:", error)
+                    // Handle error uploading image
+                }
+                do {
+                    let toastView = ToastView(message: "Profile Picture updated successfully")
+                    toastView.show(in: self.view)
+                }
             }
             imgPicker.dismiss(animated: true, completion: nil)
         }
@@ -46,8 +67,7 @@ class ProfileSettingsViewController: UIViewController, UIImagePickerControllerDe
             print("\n\nin updating user profile...")
             let Url = "\(Constants.serverURL)/user/update-profile"
 
-            var userid = UserDefaults.standard.integer(forKey: "userID")
-
+            
             let fullName = txtname.text!
 
             
@@ -77,24 +97,9 @@ class ProfileSettingsViewController: UIViewController, UIImagePickerControllerDe
                     }
 
                     if httpResponse.statusCode == 200 {
-                        if let responseData = data {
-                            // Parse JSON data
-                            do {
-                                let json = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any]
-                                if let message = json?["message"] as? String, let id = json?["Id"] as? Int {
-                                    print("Message: \(message)")
-                                    print("ID: \(id)")
-                                } else {
-                                    print("Invalid JSON format")
-                                }
-                            } catch {
-                                print("Error parsing JSON: \(error)")
-                            }
-                        } else {
-                            print("No data received from the server")
-                        }
-                    } else {
-                        print("Request failed with status code \(httpResponse.statusCode)")
+                        
+                        let toastView = ToastView(message: "Details updated successfully")
+                        toastView.show(in: self.view)
                     }
             }
         
@@ -102,6 +107,7 @@ class ProfileSettingsViewController: UIViewController, UIImagePickerControllerDe
 
     }
 
+    
     @IBOutlet weak var txtConfirmPass: UITextField!
     @IBOutlet weak var txtNewPass: UITextField!
     @IBOutlet weak var txtCurrentpass: UITextField!
@@ -191,7 +197,7 @@ class ProfileSettingsViewController: UIViewController, UIImagePickerControllerDe
     
     
     let urlString = "\(Constants.serverURL)\(profile)"
-
+    print("\n\n\n\npic: \(urlString)")
     if let url = URL(string: urlString) {
         profilepic.kf.setImage(with: url, placeholder: UIImage(named: "No image found"))
     } else {
@@ -229,6 +235,7 @@ class ProfileSettingsViewController: UIViewController, UIImagePickerControllerDe
     @objc func imgViewTapped(_ sender: Any)
     {
         openImagePicker()
+       
     }
     func openImagePicker() {
         imgPicker.sourceType = .photoLibrary // or .camera if you want to use the camera
@@ -291,6 +298,7 @@ class ProfileSettingsViewController: UIViewController, UIImagePickerControllerDe
                     self.txtConfirmPass.layer.borderWidth = 0
                     self.txtCurrentpass.layer.borderWidth = 0
                     self.txtNewPass.layer.borderWidth = 0
+                    UserDefaults.standard.set(newpass, forKey: "userpass")
                     return true
                    
                     }
@@ -313,6 +321,64 @@ class ProfileSettingsViewController: UIViewController, UIImagePickerControllerDe
                
             }
             return true
+        }
+    }
+}
+
+
+class ToastView: UIView {
+    // Properties
+    private let messageLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    // Initialization
+    init(message: String) {
+        super.init(frame: .zero)
+        configureUI(withMessage: message)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func configureUI(withMessage message: String) {
+        backgroundColor = UIColor.green.withAlphaComponent(0.8)
+        layer.cornerRadius = 10
+        clipsToBounds = true
+        
+        addSubview(messageLabel)
+        messageLabel.translatesAutoresizingMaskIntoConstraints = false
+        messageLabel.text = message
+        messageLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        messageLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        messageLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
+        messageLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
+        
+     
+    }
+
+    
+    func show(in view: UIView) {
+        view.addSubview(self)
+        translatesAutoresizingMaskIntoConstraints = false
+        centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50).isActive = true
+        widthAnchor.constraint(equalToConstant: 400).isActive = true
+        heightAnchor.constraint(equalToConstant: 60).isActive = true
+        
+        UIView.animate(withDuration: 0.5, animations: {
+            self.alpha = 1
+        }) { _ in
+            UIView.animate(withDuration: 0.5, delay: 2.0, animations: {
+                self.alpha = 0
+            }) { _ in
+                self.removeFromSuperview()
+            }
         }
     }
 }
