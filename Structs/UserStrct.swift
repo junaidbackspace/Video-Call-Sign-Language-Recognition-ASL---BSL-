@@ -118,3 +118,11 @@ struct updateUserProfile : Codable {
     let new_bio_status : String
     let new_disability_type : String
 }
+
+struct UserFavouriteLessons : Codable{
+    
+    let UserId:  Int
+    let GestureId : Int
+}
+
+
