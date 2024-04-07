@@ -24,7 +24,7 @@ class FavoriteLectureViewController: UIViewController, UITableViewDelegate, UITa
         return 80
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("Guesters count : \(content.count)")
+     
         return content.count
     }
     
@@ -42,6 +42,7 @@ class FavoriteLectureViewController: UIViewController, UITableViewDelegate, UITa
         cell?.Category.text = content[indexPath.row].Les_Des
         cell?.signtext.text =  " Tap to view"
         cell?.btnfavorite.setBackgroundImage(UIImage(systemName: "star.fill"), for: .normal)
+        cell?.btnfavorite.tag = indexPath.row
         cell?.btnfavorite.addTarget(self, action: #selector(btn_favpriteClick(_:)), for: .touchUpInside)
         return cell!
     }
@@ -51,6 +52,7 @@ class FavoriteLectureViewController: UIViewController, UITableViewDelegate, UITa
         print("clicked",sender.tag)
         
         let gestureid = self.content[sender.tag].Gesture_id
+        print("clicked GEs id",gestureid)
         
         let Url = "\(Constants.serverURL)/userfavoritegesture"
         guard let userID = UserDefaults.standard.string(forKey: "userID") else {

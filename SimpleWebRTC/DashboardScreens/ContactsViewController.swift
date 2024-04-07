@@ -315,54 +315,49 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
             // Handle block button tap
             print("\(contacts[selectedrow].Fname) Block button tapped")
            
+            var contactid = contacts[selectedrow].UserId
+                 var userid = UserDefaults.standard.integer(forKey: "userID")
+             let Url = "\(Constants.serverURL)/contacts/\(userid)/contacts/\(contactid)/block?is_blocked=true"
+             
+             let requestBody = OnlineStatusRequestBody(online_status: 0)
             
-            var Dic = [String: Any]()
-            
-            
-            
-            let Url = "\(Constants.serverURL)/pin-block-mute_user"
+             
+             serverWrapper.putRequest(urlString: Url, requestBody: requestBody) { data, response, error in
+                 if let error = error {
+                         print("Error: \(error)")
+                         return
+                     }
 
+                     guard let httpResponse = response as? HTTPURLResponse else {
+                         print("Invalid HTTP response")
+                         return
+                     }
+
+                     if httpResponse.statusCode == 200 {
+                         if let responseData = data {
+                             // Parse JSON data
+                         }
+                     } else {
+                         print("Request failed with status code \(httpResponse.statusCode)")
+                     }
+             }
             
+//            if contacts[selectedrow].IsBlocked == 0 {
+//
+//                contacts[selectedrow].IsBlocked = 1
+//            }
+//            else{
+//
+//                contacts[selectedrow].IsBlocked = 0
+//            }
             
-            if contacts[selectedrow].IsBlocked == 0 {
-             Dic =  [
-                "userid": contacts[selectedrow].UserId  ,
-                "column_name": "isBlocked",
-                "new_value": 1
-            ]
-                contacts[selectedrow].IsBlocked = 1
-            }
-            else{
-                Dic = [
-                   "userid": contacts[selectedrow].UserId  ,
-                   "column_name": "isBlocked",
-                   "new_value": 0
-               ]
-                contacts[selectedrow].IsBlocked = 0
-            }
-            
-            mute_block_pin(Url: Url, Dic: Dic)
+           
         
            
         }
     
     
-    func mute_block_pin(Url : String , Dic : [String: Any] )
-    {
-       
-        serverWrapper.insertData(baseUrl: Url,userDictionary: Dic) { responseString, error in
-            if let error = error {
-                print("Error:", error)
-               
-            } else {
-                if let responseString = responseString {
-                    print("Updated Server response:", responseString)
-                    
-                    self.tble.reloadData()
-                    }
-                }
-    }
-    }
+   
     func fetchContactsData() {
        
         guard let userID = self.logindefaults.string(forKey: "userID") else {
@@ -398,8 +393,9 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
                 let profilePicture = userObject.profile_picture
                 let userid = userObject.user_id
                 let username  = userObject.user_name
+                let isBlocked  = userObject.is_blocked
                 // Now you can use these properties as needed
-                print("Fname: \(firstName), Lname: \(lastName), OnlineStatus: \(onlineStatus), BioStatus: \(bioStatus), ProfilePic: \(profilePicture)")
+             
 
                 // Optionally, you can create a User object and append it to contacts array
                 var user = User()
@@ -410,6 +406,7 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
                 user.OnlineStatus = onlineStatus
                 user.UserId = userid
                 user.Username = username
+                user.IsBlocked = isBlocked
                 self.contacts.append(user)
             }
         
@@ -456,6 +453,15 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
              n += 1
         }
         
+        
+        if contacts[indexPath.row].IsBlocked == 0 {
+            
+            
+            cell.call.setBackgroundImage(UIImage(named: "videocall"), for: .normal)
+            cell.call.imageView?.contentMode = .scaleAspectFit
+            cell.call.frame.size.width = CGFloat(32)
+            cell.call.frame.size.height = CGFloat(18)
+            
         cell.name.text = contacts[indexPath.row].Fname+" "+contacts[indexPath.row].Lname
         cell.about.text = contacts[indexPath.row].BioStatus
         if contacts[indexPath.row].OnlineStatus == 1{
@@ -482,17 +488,55 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
                 }
         else{
             cell.pin?.image = nil
-        }
-      }
+                }
+            }
         if let image = UIImage(named: "mute", in: Bundle.main, compatibleWith: nil) {
             if muted_contacts.contains(contacts[indexPath.row].Username){
             cell.mute?.image = image
                 }
-            else{
+                else{
                 cell.mute?.image = nil
-            }
-        }
+                    }
+                }
         
+        }
+        //user blocked
+        else{
+            print("Blocked user are : \(contacts[indexPath.row].Fname)")
+            
+          
+            cell.name.text = contacts[indexPath.row].Fname+" "+contacts[indexPath.row].Lname
+            cell.about.text = contacts[indexPath.row].BioStatus
+            
+            cell.call.setBackgroundImage(UIImage(named: "disabledvideocall"), for: .normal)
+            cell.call.imageView?.contentMode = .scaleToFill
+            cell.call.frame.size.width = CGFloat(49)
+            cell.call.frame.size.height = CGFloat(40)
+            if let p_pic = UIImage(named: "noprofile", in: Bundle.main, compatibleWith: nil) {
+                cell.profilepic.layer.cornerRadius = 28
+                cell.profilepic.clipsToBounds = true
+                cell.profilepic.image = p_pic
+            }
+            cell.isActive?.image = nil
+                    
+          if let image = UIImage(named: "pin", in: Bundle.main, compatibleWith: nil) {
+            if pinned_contacts.contains(contacts[indexPath.row].Username){
+                print("username \(pinned_contacts) == \(contacts[indexPath.row].Username)")
+                cell.pin?.image = image
+                    }
+            else{
+                cell.pin?.image = nil
+                    }
+                }
+            if let image = UIImage(named: "mute", in: Bundle.main, compatibleWith: nil) {
+                if muted_contacts.contains(contacts[indexPath.row].Username){
+                cell.mute?.image = image
+                    }
+                    else{
+                    cell.mute?.image = nil
+                        }
+                    }
+        }
                 return cell
     }
     
@@ -518,6 +562,7 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
             controller.distype = contacts[indexPath.row].UserType
             controller.contactid = contacts[indexPath.row].UserId
         
+            if contacts[indexPath.row].IsBlocked == 0 {
         let base = "\(Constants.serverURL)\(contacts[indexPath.row].ProfilePicture)"
         if let url = URL(string: base) {
             
@@ -532,7 +577,13 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
             }
         } else {
             print("Invalid URL")
+                }
         }
+            //user is blocked
+            else{
+                controller.isblocked = 1
+                controller.img = UIImage(named: "noprofile", in: Bundle.main, compatibleWith: nil)!
+            }
           
         controller.modalPresentationStyle = .fullScreen
         //self.present(controller, animated: true, completion: nil)

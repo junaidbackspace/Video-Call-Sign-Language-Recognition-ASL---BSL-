@@ -25,7 +25,7 @@ class UserProfileViewController: UIViewController, UITableViewDataSource, UITabl
     @IBOutlet weak var profilepic: UIImageView!
     @IBOutlet weak var disabilityImg: UIImageView!
     @IBOutlet weak var lblabout: UILabel!
-    
+    @IBOutlet weak var btn_block: UIButton!
     
     @IBAction func btncall(_ sender: Any) {
         
@@ -45,6 +45,7 @@ class UserProfileViewController: UIViewController, UITableViewDataSource, UITabl
     var distype = " "
     var contactid = 0
     var contactidofprofile = 0
+    var isblocked = 0
     var img = UIImage()
     
     override func viewDidLoad() {
@@ -54,6 +55,22 @@ class UserProfileViewController: UIViewController, UITableViewDataSource, UITabl
         lblabout.text = about
         profilepic.image = img
         contactidofprofile = contactid
+        if isblocked == 1 {
+           
+            btn_block.setBackgroundImage(UIImage(named: "unblock_user"), for: .normal)
+
+            // Set the content mode for the button's image view
+            btn_block.imageView?.contentMode = .scaleAspectFit
+
+            // Adjust the frame size for the button
+            let buttonWidth: CGFloat = 20 // Example width
+            let buttonHeight: CGFloat = 20 // Example height
+            btn_block.frame = CGRect(x: btn_block.frame.origin.x, y: btn_block.frame.origin.y, width: buttonWidth, height: buttonHeight)
+
+
+            
+        }
+        
         if distype == "deff"
         {
             if let image = UIImage(named: "deff", in: Bundle.main, compatibleWith: nil) {
@@ -209,10 +226,18 @@ class UserProfileViewController: UIViewController, UITableViewDataSource, UITabl
             cell?.isActive?.image = image
                 }
         
+        if isblocked == 0 {
         cell?.call.tag = indexPath.row
         cell?.call.addTarget(self, action: #selector(btn_call(_:)), for: .touchUpInside)
         
-        
+        }
+        //user is blocked
+        else{
+            
+            cell?.call.setBackgroundImage(nil, for: .normal)
+            cell?.isActive?.image = nil
+           
+            }
         let base = "\(Constants.serverURL)\(contacts[indexPath.row].ProfilePicture)"
         print("\n url is: \(base)")
         if let url = URL(string: base) {

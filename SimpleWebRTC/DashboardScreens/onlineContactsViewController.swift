@@ -148,8 +148,11 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
     
     var n = 0
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = tble.dequeueReusableCell(withIdentifier: "c1") as? ContactTableTableViewCell
         
+      
+        
+        let cell = tble.dequeueReusableCell(withIdentifier: "c1") as? ContactTableTableViewCell
+       
         //To take orignallist
         if n < 1{
             print(" Copying orignal contacts")
@@ -177,9 +180,10 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
             cell?.profilepic?.layer.cornerRadius = 27
             cell?.profilepic?.clipsToBounds = true
               }
-                
+      
         return cell!
-    }
+             
+}
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
@@ -241,7 +245,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
    {
     
    
-    var userid = self.logindefaults.integer(forKey: "userID")
+        var userid = UserDefaults.standard.integer(forKey: "userID")
     let Url = "\(Constants.serverURL)/user/\(userid)/online-status?online_status=\(status)"
     
     let requestBody = OnlineStatusRequestBody(online_status: 0)
@@ -285,6 +289,11 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //Setting ASL by Default
+        if UserDefaults.standard.object(forKey: "SignType") == nil {
+            
+            UserDefaults.standard.set("ASL", forKey: "SignType")
+        }
         
         DispatchQueue.global().async {
                self.fetchContactsData()
@@ -331,9 +340,10 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
                 let lastName = userObject.lname
                 let profilePicture = userObject.profile_picture
                 let userid = userObject.user_id
+                let isBlocked  = userObject.is_blocked
 
                 
-                // Optionally, you can create a User object and append it to contacts array
+                if isBlocked != 1  {
                 var user = User()
                 user.BioStatus = bioStatus
                 user.Fname = firstName
@@ -341,7 +351,9 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
                 user.ProfilePicture = profilePicture
                 user.OnlineStatus = onlineStatus
                 user.UserId = userid
+                user.IsBlocked = isBlocked
                 self.contacts.append(user)
+                }
             }
         
 
@@ -402,4 +414,6 @@ extension onlineContactsViewController: UITextFieldDelegate {
         
         return true
     }
+    
+   
 }

@@ -43,10 +43,10 @@ class intermediatelevelViewController: UIViewController {
         
         
         let Url = "\(Constants.serverURL)/lesson/query"
-
+        var signtype = UserDefaults.standard.string(forKey: "SignType")!
         // Define your parameters
         let Dic: [String: Any] = [
-            "LanguageType": "ASL",
+            "LanguageType": signtype,
             "LessonLevel": "Intermediate"
         ]
 

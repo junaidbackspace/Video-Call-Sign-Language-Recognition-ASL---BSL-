@@ -54,7 +54,7 @@
 		65E207822B73F9FC00978CAC /* CallLogsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E207812B73F9FC00978CAC /* CallLogsViewController.swift */; };
 		65E207862B73FA3100978CAC /* leassonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E207852B73FA3100978CAC /* leassonsViewController.swift */; };
 		65E2078A2B74061100978CAC /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E207892B74061000978CAC /* UserProfileViewController.swift */; };
-		65E813A72B98C726006424B6 /* ServerResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E813A62B98C726006424B6 /* ServerResponse.swift */; };
+		65E813A72B98C726006424B6 /* ServerIP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E813A62B98C726006424B6 /* ServerIP.swift */; };
 		AF15C0B221E422D9005B4ED6 /* UIViewExtention.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF15C0B121E422D9005B4ED6 /* UIViewExtention.swift */; };
 		AF15C0B521E4F1F7005B4ED6 /* SignalingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF15C0B421E4F1F7005B4ED6 /* SignalingMessage.swift */; };
 		AF15C0B721E54EB1005B4ED6 /* SignalingCandidate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF15C0B621E54EB1005B4ED6 /* SignalingCandidate.swift */; };
@@ -155,7 +155,7 @@
 		65E207812B73F9FC00978CAC /* CallLogsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallLogsViewController.swift; sourceTree = "<group>"; };
 		65E207852B73FA3100978CAC /* leassonsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = leassonsViewController.swift; sourceTree = "<group>"; };
 		65E207892B74061000978CAC /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
-		65E813A62B98C726006424B6 /* ServerResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerResponse.swift; sourceTree = "<group>"; };
+		65E813A62B98C726006424B6 /* ServerIP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerIP.swift; sourceTree = "<group>"; };
 		71DE1602CC2CCD930514371A /* Pods-SimpleWebRTC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleWebRTC.release.xcconfig"; path = "Target Support Files/Pods-SimpleWebRTC/Pods-SimpleWebRTC.release.xcconfig"; sourceTree = "<group>"; };
 		AF15C0B121E422D9005B4ED6 /* UIViewExtention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtention.swift; sourceTree = "<group>"; };
 		AF15C0B421E4F1F7005B4ED6 /* SignalingMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalingMessage.swift; sourceTree = "<group>"; };
@@ -304,7 +304,7 @@
 			isa = PBXGroup;
 			children = (
 				6509506A2B9488AD00035C85 /* UserStrct.swift */,
-				65E813A62B98C726006424B6 /* ServerResponse.swift */,
+				65E813A62B98C726006424B6 /* ServerIP.swift */,
 				652C0AED2BBC0A0C00D89A57 /* lessonsStrct.swift */,
 			);
 			path = Structs;
@@ -735,7 +735,7 @@
 				658E03352B6FF72100BEDE73 /* LoginToAccountViewController.swift in Sources */,
 				AFBCD53421E8F55900694C14 /* UIDeviceExtention.swift in Sources */,
 				657F46732B8FB3DD00B391A6 /* LessonsListViewController.swift in Sources */,
-				65E813A72B98C726006424B6 /* ServerResponse.swift in Sources */,
+				65E813A72B98C726006424B6 /* ServerIP.swift in Sources */,
 				AF601142245481FC00E6E407 /* RTCSimluatorVideoEncoderFactory.swift in Sources */,
 				AF90A8E3220D00D60083687C /* CameraSession.swift in Sources */,
 				65E207862B73FA3100978CAC /* leassonsViewController.swift in Sources */,
