@@ -5,7 +5,13 @@ import UIKit
 
 
 class UserProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    
+  
+    //notifcation for update contacts
+    func actionThatRequiresRefresh() {
+           print("Calling for refresh contacts")
+           NotificationCenter.default.post(name: .RefreshContacts, object: nil)
+       }
+   
     
     var logindefaults = UserDefaults.standard
     var serverWrapper = APIWrapper()
@@ -39,6 +45,75 @@ class UserProfileViewController: UIViewController, UITableViewDataSource, UITabl
     }
     
     @IBAction func btnBlock(_ sender: Any) {
+        if isblocked == 1 {
+            //unblocking user
+            
+            blockuser(shouldblock: false)
+            
+        }
+        else{
+            //blocking user
+            
+            blockuser(shouldblock: true)
+            
+
+        }
+    }
+    func blockuser(shouldblock : Bool)
+    {
+        var contactid = self.contactid
+             var userid = UserDefaults.standard.integer(forKey: "userID")
+         let Url = "\(Constants.serverURL)/contacts/\(userid)/contacts/\(contactid)/block?is_blocked=\(shouldblock)"
+         
+         let requestBody = OnlineStatusRequestBody(online_status: 0)
+        
+         
+         serverWrapper.putRequest(urlString: Url, requestBody: requestBody) { data, response, error in
+             if let error = error {
+                     print("Error: \(error)")
+                     return
+                 }
+
+                 guard let httpResponse = response as? HTTPURLResponse else {
+                     print("Invalid HTTP response")
+                     return
+                 }
+
+                 if httpResponse.statusCode == 200 {
+                     if let responseData = data {
+                        //ublocking user
+                        if shouldblock == false {
+                            self.isblocked = 0
+                            self.btn_block.setBackgroundImage(UIImage(named: "Block_USer"), for: .normal)
+                            let toastView = ToastView(message: "User Unblocked successfully")
+                            toastView.show(in: self.view)
+                            
+                           
+
+                        }
+                        else{
+                            
+                            self.isblocked = 1
+                            self.profilepic.image =  UIImage(named: "noprofile", in: Bundle.main, compatibleWith: nil)!
+                            self.btn_block.setBackgroundImage(UIImage(named: "unblock_user"), for: .normal)
+
+                            // Set the content mode for the button's image view
+                            self.btn_block.imageView?.contentMode = .scaleAspectFit
+
+                            // Adjust the frame size for the button
+                            let buttonWidth: CGFloat = 17 // Example width
+                            let buttonHeight: CGFloat = 17 // Example height
+                            self.btn_block.frame = CGRect(x: self.btn_block.frame.origin.x, y: self.btn_block.frame.origin.y, width: buttonWidth, height: buttonHeight)
+                            let toastView = ToastView(message: "User Blocked successfully")
+                            toastView.show(in: self.view)
+                        }
+                        //Refreshing contact list
+                        self.actionThatRequiresRefresh()
+                     }
+                 } else {
+                     print("Request failed with status code \(httpResponse.statusCode)")
+                 }
+         }
     }
     var name = " "
     var about = " "
@@ -48,8 +123,8 @@ class UserProfileViewController: UIViewController, UITableViewDataSource, UITabl
     var isblocked = 0
     var img = UIImage()
     
+    
     override func viewDidLoad() {
-        
         super.viewDidLoad()
         lblname.text = name
         lblabout.text = about
@@ -63,11 +138,12 @@ class UserProfileViewController: UIViewController, UITableViewDataSource, UITabl
             btn_block.imageView?.contentMode = .scaleAspectFit
 
             // Adjust the frame size for the button
-            let buttonWidth: CGFloat = 20 // Example width
-            let buttonHeight: CGFloat = 20 // Example height
+            let buttonWidth: CGFloat = 17 // Example width
+            let buttonHeight: CGFloat = 17 // Example height
             btn_block.frame = CGRect(x: btn_block.frame.origin.x, y: btn_block.frame.origin.y, width: buttonWidth, height: buttonHeight)
 
-
+            profilepic.image =  UIImage(named: "noprofile", in: Bundle.main, compatibleWith: nil)!
+            
             
         }
         
@@ -294,3 +370,4 @@ class UserProfileViewController: UIViewController, UITableViewDataSource, UITabl
     
     
 }
+

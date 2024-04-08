@@ -10,6 +10,8 @@ import UIKit
 
 class ContactTableTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var pin: UIImageView!
+    @IBOutlet weak var mute: UIImageView!
     @IBOutlet weak var isActive: UIImageView!
     
     @IBOutlet weak var call: UIButton!

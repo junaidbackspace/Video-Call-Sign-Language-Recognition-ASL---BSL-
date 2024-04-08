@@ -12,6 +12,12 @@ import Kingfisher
 
 class onlineContactsViewController: UIViewController,UITableViewDataSource, UITableViewDelegate {
     
+    
+    var pinned_contacts = [String]()
+    var muted_contacts = [String]()
+    var longPressGesture: UILongPressGestureRecognizer!
+    var longPressIndexPath: IndexPath?
+    
     var logindefaults = UserDefaults.standard
     var serverWrapper = APIWrapper()
     
@@ -289,6 +295,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         //Setting ASL by Default
         if UserDefaults.standard.object(forKey: "SignType") == nil {
             
@@ -306,6 +313,16 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
         for i in 0..<contacts.count {
             contacts.append(contacts[i])
         }
+        
+        longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+        tble.addGestureRecognizer(longPressGesture)
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleScreenTap(sender:)))
+            // Make sure the recognizer doesn't cancel other touch events, like table view cell selections
+            tapGestureRecognizer.cancelsTouchesInView = false
+            view.addGestureRecognizer(tapGestureRecognizer)
+        
+        
       }
     func fetchContactsData() {
        
@@ -364,6 +381,214 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
             self.tble.reloadData()
         }
     }
+    
+
+    
+//    MARK:-
+    
+    //  MARK:-
+  
+  
+  @objc func handleScreenTap(sender: UITapGestureRecognizer) {
+      let location = sender.location(in: view)
+
+     
+      if customView.isHidden == false && !customView.frame.contains(location) {
+          customView.isHidden = true
+          print("Hiding view")
+          actionbuttons_On = true // Assuming you want to reset this flag
+      }
+  }
+
+  
+  var selectedrow = 0
+  var actionbuttons_On = false
+  var customView = UIView(frame: CGRect(x: 0, y: 0, width: 120, height: 30))
+  @objc func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
+      if !actionbuttons_On {
+          if gestureRecognizer.state == .began {
+              actionbuttons_On = true
+              let point = gestureRecognizer.location(in: tble)
+                        if let indexPath = tble.indexPathForRow(at: point), let cell = tble.cellForRow(at: indexPath) {
+                            longPressIndexPath = indexPath
+                            selectedrow = indexPath.row
+
+                  customView.subviews.forEach { $0.removeFromSuperview() }
+                          let lightBlueColor = UIColor(red: 173/255, green: 216/255, blue: 230/255, alpha: 1.0)
+
+                          customView.backgroundColor = lightBlueColor
+                  customView.alpha = 0.8
+                  customView.isHidden = false
+
+                 
+                  
+                  // Add pin button
+                  let pinButton = UIButton(type: .system)
+                  pinButton.setBackgroundImage(UIImage(named: "pin"), for: .normal)
+                  pinButton.frame = CGRect(x: 10, y: 5, width: 17, height: 17)
+                  pinButton.addTarget(self, action: #selector(pinButtonTapped), for: .touchUpInside)
+                  customView.addSubview(pinButton)
+
+                  // Add mute button
+                  let muteButton = UIButton(type: .system)
+                  muteButton.setBackgroundImage(UIImage(named: "mute"), for: .normal)
+                  muteButton.frame = CGRect(x: 50, y: 5, width: 17, height: 17)
+                  muteButton.addTarget(self, action: #selector(muteButtonTapped), for: .touchUpInside)
+                  customView.addSubview(muteButton)
+
+                  // Add block user button
+                  let blockButton = UIButton(type: .system)
+                  blockButton.setBackgroundImage(UIImage(named: "Block_USer"), for: .normal)
+                  blockButton.frame = CGRect(x: 90, y: 5, width: 20, height: 20)
+                  blockButton.addTarget(self, action: #selector(blockButtonTapped), for: .touchUpInside)
+                  customView.addSubview(blockButton)
+                  
+                  // Make sure customView is not already added somewhere else
+                  customView.removeFromSuperview()
+                  
+                  
+                  let cellRect = cell.convert(cell.bounds, to: view)
+                                  let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
+
+                                  // Set customView's center to the cell's center
+                                  customView.center = cellCenter
+                  // Add the custom view to your view hierarchy
+                  view.addSubview(customView)
+              }
+          }
+      }
+  }
+
+
+
+
+  
+  
+      
+      @objc func pinButtonTapped() {
+         
+           customView.isHidden = true
+            actionbuttons_On = false // Assuming you want to reset this flag
+          print("\n\n\nselected row is : \(selectedrow)")
+          
+          //if user already exist
+          if pinned_contacts.contains(contacts[selectedrow].Username)
+          {
+              let selectedUsername = contacts[selectedrow].Username
+                  
+              pinned_contacts.removeAll { $0 == selectedUsername }
+              tble.reloadData()
+          }
+          
+          else{
+              print("pinning : \(contacts[selectedrow].Username)")
+          pinned_contacts.append(contacts[selectedrow].Username)
+          }
+          
+          UserDefaults.standard.setValue(pinned_contacts, forKey: "pinnedUser")
+          
+          contacts = sortContactsByPinned(contacts: contacts, pinned: pinned_contacts)
+          tble.reloadData()
+      }
+      
+  func sortContactsByPinned(contacts: [User], pinned: [String]) -> [User] {
+      
+      let pinnedSet = Set(pinned)
+      
+      let sortedContacts = contacts.sorted { (user1, user2) -> Bool in
+          let isUser1Pinned = pinnedSet.contains(user1.Username)
+          let isUser2Pinned = pinnedSet.contains(user2.Username)
+          
+          // If both are pinned or both are not pinned, sort by username
+          if isUser1Pinned == isUser2Pinned {
+              return user1.Username < user2.Username
+          } else {
+              // If one is pinned and the other is not, sort by pinned status
+              return isUser1Pinned
+          }
+      }
+      
+      return sortedContacts
+  }
+  
+  
+      @objc func muteButtonTapped() {
+          customView.isHidden = true
+           actionbuttons_On = false // Assuming you want to reset this flag
+          
+          if muted_contacts.contains(contacts[selectedrow].Username)
+          {
+              let selectedUsername = contacts[selectedrow].Username
+                  
+              muted_contacts.removeAll { $0 == selectedUsername }
+              tble.reloadData()
+          }
+          else{
+              muted_contacts.append(contacts[selectedrow].Username)
+          }
+          UserDefaults.standard.setValue(muted_contacts, forKey: "muttedUser")
+          print("Mutted : \(muted_contacts)")
+         
+          tble.reloadData()
+      }
+      
+  
+  
+      @objc func blockButtonTapped() {
+          customView.isHidden = true
+           actionbuttons_On = false // Assuming you want to reset this flag
+          
+          var shouldblock = false
+          if contacts[selectedrow].IsBlocked == 0 {
+
+              shouldblock = true
+          }
+          
+          // Handle block button tap
+          print("\(contacts[selectedrow].Fname) Block button tapped")
+         
+          var contactid = contacts[selectedrow].UserId
+               var userid = UserDefaults.standard.integer(forKey: "userID")
+           let Url = "\(Constants.serverURL)/contacts/\(userid)/contacts/\(contactid)/block?is_blocked=\(shouldblock)"
+           
+           let requestBody = OnlineStatusRequestBody(online_status: 0)
+          
+           
+           serverWrapper.putRequest(urlString: Url, requestBody: requestBody) { data, response, error in
+               if let error = error {
+                       print("Error: \(error)")
+                       return
+                   }
+
+                   guard let httpResponse = response as? HTTPURLResponse else {
+                       print("Invalid HTTP response")
+                       return
+                   }
+
+                   if httpResponse.statusCode == 200 {
+                       if let responseData = data {
+                          
+                          let toastView = ToastView(message: "User Blocked successfully")
+                          toastView.show(in: self.view)
+                          
+                          DispatchQueue.global().async {
+                              print("Refreshing data")
+                                  self.contacts = []
+                                 self.fetchContactsData()
+                          }
+                       }
+                   } else {
+                       print("Request failed with status code \(httpResponse.statusCode)")
+                   }
+           }
+          
+
+          
+         
+      
+         
+      }
+  
 }
 //On Key Press
 extension onlineContactsViewController: UITextFieldDelegate {
@@ -415,5 +640,6 @@ extension onlineContactsViewController: UITextFieldDelegate {
         return true
     }
     
+   
    
 }

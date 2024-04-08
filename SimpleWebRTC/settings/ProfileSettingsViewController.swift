@@ -330,7 +330,7 @@ class ToastView: UIView {
     // Properties
     private let messageLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .white
+        label.textColor = .black
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
@@ -347,7 +347,7 @@ class ToastView: UIView {
     }
     
     private func configureUI(withMessage message: String) {
-        backgroundColor = UIColor.green.withAlphaComponent(0.8)
+        backgroundColor = UIColor.green.withAlphaComponent(0.5)
         layer.cornerRadius = 10
         clipsToBounds = true
         

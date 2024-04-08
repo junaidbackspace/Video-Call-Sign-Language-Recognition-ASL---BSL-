@@ -10,11 +10,18 @@ import UIKit
 import Kingfisher
 
 
+protocol ContactsViewControllerDelegate: AnyObject {
+    func refreshContacts()
+}
+
 
 
 class ContactsViewController: UIViewController ,UITableViewDataSource, UITableViewDelegate{
     
+   
     
+    
+       
    
     var pinned_contacts = [String]()
     var muted_contacts = [String]()
@@ -125,9 +132,21 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
             }
         }
     
+    //Notification from user profile controller
+    @objc func refreshContacts() {
+           print("Refreshing contacts...")
+        DispatchQueue.global().async {
+            print("Refreshing data")
+                self.contacts = []
+               self.fetchContactsData()
+        }
+       }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshContacts), name: .RefreshContacts, object: nil)
+       
         if let retrievedArray = UserDefaults.standard.array(forKey: "pinnedUser") as? [String] {
             let pinned_users = retrievedArray
            
@@ -311,13 +330,18 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
             customView.isHidden = true
              actionbuttons_On = false // Assuming you want to reset this flag
             
+            var shouldblock = false
+            if contacts[selectedrow].IsBlocked == 0 {
+
+                shouldblock = true
+            }
             
             // Handle block button tap
             print("\(contacts[selectedrow].Fname) Block button tapped")
            
             var contactid = contacts[selectedrow].UserId
                  var userid = UserDefaults.standard.integer(forKey: "userID")
-             let Url = "\(Constants.serverURL)/contacts/\(userid)/contacts/\(contactid)/block?is_blocked=true"
+             let Url = "\(Constants.serverURL)/contacts/\(userid)/contacts/\(contactid)/block?is_blocked=\(shouldblock)"
              
              let requestBody = OnlineStatusRequestBody(online_status: 0)
             
@@ -335,21 +359,22 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
 
                      if httpResponse.statusCode == 200 {
                          if let responseData = data {
-                             // Parse JSON data
+                            
+                            let toastView = ToastView(message: "User Blocked successfully")
+                            toastView.show(in: self.view)
+                            
+                            DispatchQueue.global().async {
+                                print("Refreshing data")
+                                    self.contacts = []
+                                   self.fetchContactsData()
+                            }
                          }
                      } else {
                          print("Request failed with status code \(httpResponse.statusCode)")
                      }
              }
             
-//            if contacts[selectedrow].IsBlocked == 0 {
-//
-//                contacts[selectedrow].IsBlocked = 1
-//            }
-//            else{
-//
-//                contacts[selectedrow].IsBlocked = 0
-//            }
+
             
            
         
@@ -459,8 +484,8 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
             
             cell.call.setBackgroundImage(UIImage(named: "videocall"), for: .normal)
             cell.call.imageView?.contentMode = .scaleAspectFit
-            cell.call.frame.size.width = CGFloat(32)
-            cell.call.frame.size.height = CGFloat(18)
+//            cell.call.frame.size.width = CGFloat(32)
+//            cell.call.frame.size.height = CGFloat(18)
             
         cell.name.text = contacts[indexPath.row].Fname+" "+contacts[indexPath.row].Lname
         cell.about.text = contacts[indexPath.row].BioStatus
@@ -508,10 +533,14 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
             cell.name.text = contacts[indexPath.row].Fname+" "+contacts[indexPath.row].Lname
             cell.about.text = contacts[indexPath.row].BioStatus
             
-            cell.call.setBackgroundImage(UIImage(named: "disabledvideocall"), for: .normal)
-            cell.call.imageView?.contentMode = .scaleToFill
-            cell.call.frame.size.width = CGFloat(49)
-            cell.call.frame.size.height = CGFloat(40)
+//            cell.call.setBackgroundImage(UIImage(named: "disabledvideocall"), for: .normal)
+//            cell.call.imageView?.contentMode = .scaleAspectFit
+//           cell.call.frame.size.width = CGFloat(49)
+//            cell.call.frame.size.height = CGFloat(30)
+            cell.call.setBackgroundImage( nil , for: .normal)
+            
+            
+            
             if let p_pic = UIImage(named: "noprofile", in: Bundle.main, compatibleWith: nil) {
                 cell.profilepic.layer.cornerRadius = 28
                 cell.profilepic.clipsToBounds = true
@@ -538,6 +567,7 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
                     }
         }
                 return cell
+      
     }
     
 
@@ -620,6 +650,8 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
             self.navigationController?.pushViewController(controller, animated: true)
                
     }
+    
+  
 
 }
 
@@ -671,5 +703,10 @@ extension ContactsViewController: UITextFieldDelegate {
         
         return true
     }
+    
+ 
 }
 
+extension Notification.Name {
+    static let RefreshContacts = Notification.Name("RefreshContactsNotification")
+}
