@@ -10,9 +10,7 @@ import UIKit
 import Kingfisher
 
 
-protocol ContactsViewControllerDelegate: AnyObject {
-    func refreshContacts()
-}
+
 
 
 

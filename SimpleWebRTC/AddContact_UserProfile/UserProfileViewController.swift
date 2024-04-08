@@ -9,7 +9,8 @@ class UserProfileViewController: UIViewController, UITableViewDataSource, UITabl
     //notifcation for update contacts
     func actionThatRequiresRefresh() {
            print("Calling for refresh contacts")
-           NotificationCenter.default.post(name: .RefreshContacts, object: nil)
+            NotificationCenter.default.post(name: .RefreshContacts, object: nil)
+            NotificationCenter.default.post(name: .RefreshOnlineContacts, object: nil)
        }
    
     

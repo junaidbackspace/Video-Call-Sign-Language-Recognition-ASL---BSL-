@@ -177,7 +177,25 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
         cell?.call?.tag = indexPath.row
         cell?.call?.addTarget(self, action: #selector(btn_call(_:)), for: .touchUpInside)
         
-             
+        if let image = UIImage(named: "pin", in: Bundle.main, compatibleWith: nil) {
+            
+          if pinned_contacts.contains(contacts[indexPath.row].Username){
+              print("username \(pinned_contacts) == \(contacts[indexPath.row].Username)")
+            
+              cell?.pin?.image = image
+                  }
+          else{
+              cell?.pin?.image = nil
+                  }
+              }
+          if let image = UIImage(named: "mute", in: Bundle.main, compatibleWith: nil) {
+              if muted_contacts.contains(contacts[indexPath.row].Username){
+              cell?.mute?.image = image
+                  }
+                  else{
+                  cell?.mute?.image = nil
+                      }
+                  }
 
         let base = "\(Constants.serverURL)\(contacts[indexPath.row].ProfilePicture)"
         print("\n img url is: \(base)")
@@ -295,6 +313,20 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //for update list after block /unblock from user profile
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshContacts), name: .RefreshOnlineContacts, object: nil)
+
+        
+        if let retrievedArray = UserDefaults.standard.array(forKey: "pinnedUser") as? [String] {
+            pinned_contacts = retrievedArray
+           
+            
+        }
+        
+        if let muttedArray = UserDefaults.standard.array(forKey: "muttedUser") as? [String] {
+            let mutted_users = muttedArray
+            muted_contacts = mutted_users
+        }
         
         //Setting ASL by Default
         if UserDefaults.standard.object(forKey: "SignType") == nil {
@@ -324,6 +356,8 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
         
         
       }
+    
+
     func fetchContactsData() {
        
         guard let userID = self.logindefaults.string(forKey: "userID") else {
@@ -358,6 +392,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
                 let profilePicture = userObject.profile_picture
                 let userid = userObject.user_id
                 let isBlocked  = userObject.is_blocked
+                let usernam = userObject.user_name
 
                 
                 if isBlocked != 1  {
@@ -369,6 +404,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
                 user.OnlineStatus = onlineStatus
                 user.UserId = userid
                 user.IsBlocked = isBlocked
+                user.Username = usernam
                 self.contacts.append(user)
                 }
             }
@@ -378,6 +414,8 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
         DispatchQueue.main.async {
             self.tble.dataSource = self
             self.tble.delegate = self
+            self.contacts = self.sortContactsByPinned(contacts: self.contacts, pinned: self.pinned_contacts)
+            
             self.tble.reloadData()
         }
     }
@@ -475,7 +513,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
           if pinned_contacts.contains(contacts[selectedrow].Username)
           {
               let selectedUsername = contacts[selectedrow].Username
-                  
+                 
               pinned_contacts.removeAll { $0 == selectedUsername }
               tble.reloadData()
           }
@@ -486,7 +524,10 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
           }
           
           UserDefaults.standard.setValue(pinned_contacts, forKey: "pinnedUser")
-          
+        
+        for user in pinned_contacts{
+            print("Pined username : \(user)")
+        }
           contacts = sortContactsByPinned(contacts: contacts, pinned: pinned_contacts)
           tble.reloadData()
       }
@@ -590,6 +631,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
       }
   
 }
+
 //On Key Press
 extension onlineContactsViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -640,6 +682,16 @@ extension onlineContactsViewController: UITextFieldDelegate {
         return true
     }
     
+    @objc func refreshContacts() {
+           print("Refreshing online contacts...")
+        DispatchQueue.global().async {
+            print("Refreshing data")
+                self.contacts = []
+               self.fetchContactsData()
+        }
+       }
    
-   
+}
+extension Notification.Name {
+    static let RefreshOnlineContacts = Notification.Name("RefreshContactsNotification")
 }
