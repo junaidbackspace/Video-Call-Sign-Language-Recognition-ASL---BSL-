@@ -26,8 +26,9 @@ class PlayerLessonsViewController: UIViewController {
     var Resource_URL = ""
     var lesson_id = 0
     var guester_id = 0
-    var animatedImage: UIImage?
+
     var isAnimating = true
+    var userid = UserDefaults.standard.integer(forKey: "userID")
     
     @IBAction func btnback(_ sender: Any) {
         self.navigationController?.popViewController(animated: true) 
@@ -87,7 +88,7 @@ class PlayerLessonsViewController: UIViewController {
                 // Change the button's background image to the default state
             let Url = "\(Constants.serverURL)/userfavoritegesture"
 
-            var userid = self.logindefaults.integer(forKey: "userID")
+           
             let Dic: [String: Any] = [
                 "user_id": userid,
                   "gesture_id": guester_id
@@ -164,7 +165,66 @@ class PlayerLessonsViewController: UIViewController {
      var isPaused: Bool = false // Track if the video is paused
        
  
+func usergetLesson()
+{
+    let Url = "\(Constants.serverURL)/usertakeslesson/add"
+   
+    
+    
+    // Define your parameters
+    let Dic: [String: Any] = [
+        "UserId": userid,
+          "LessonId": lesson_id
+    ]
 
+    serverWrapper.insertData(baseUrl: Url,  userDictionary: Dic) { responseString, error in
+        if let error = error {
+            print("\n\nError:", error)
+          
+        }
+        if let responseString = responseString {
+            print("w response:", responseString)
+            
+            guard let responseData = responseString.data(using: .utf8) else {
+                print("Error converting response data to UTF-8")
+                return
+            }
+
+            
+          
+        }
+
+    }
+}
+    
+
+    var  urlString = String()
+    func getLessonGIF()
+    {
+        let category = trainingname.lowercased()
+        var signtype = UserDefaults.standard.string(forKey: "SignType")!.lowercased()
+         urlString = "\(Constants.serverURL)/gesture/\(signtype)/\(category)/\(Resource_URL)"
+        print ("URL IS : \(urlString)")
+        if let url = URL(string: urlString) {
+            fetchGifFromServer(url: url) { (gifImage, error) in
+                if let error = error {
+                    print("Error fetching GIF: \(error.localizedDescription)")
+                    return
+                }
+                
+                if let gifImage = gifImage {
+                   
+                    DispatchQueue.main.async {
+                        let imageView = UIImageView(image: gifImage)
+                       
+                    }
+                } else {
+                    print("Failed to fetch GIF")
+                }
+            }
+        }
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -190,15 +250,18 @@ class PlayerLessonsViewController: UIViewController {
         viewplayer.layer.borderWidth = 1.0
         viewplayer.layer.borderColor = UIColor.black.cgColor
         
-        // Load the GIF data
+        //fetching gif from server
+        getLessonGIF()
+       
                 if let gifURL = Bundle.main.url(forResource: "test", withExtension: "gif") {
                     gifData = try? Data(contentsOf: gifURL)
                     gifImage = UIImage.gif(data: gifData!)
                     pausedImage =  extractFrame(fromGif: gifURL, atIndex: 0)
                     
                 }
-
         
+
+        usergetLesson()
         startGifAnimation()
         pgrbar_Time.progress = 0
         // Set total time label
@@ -260,5 +323,23 @@ class PlayerLessonsViewController: UIViewController {
         guard let cgImage = CGImageSourceCreateImageAtIndex(source, index, nil) else { return nil }
         return UIImage(cgImage: cgImage)
     }
+    
+    
+    func fetchGifFromServer(url: URL, completion: @escaping (UIImage?, Error?) -> Void) {
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                completion(nil, error)
+                return
+            }
+            
+            guard let data = data, let gifImage = UIImage(data: data) else {
+                completion(nil, NSError(domain: "InvalidData", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to convert data to UIImage"]))
+                return
+            }
+            
+            completion(gifImage, nil)
+        }.resume()
+    }
+
     
 }
