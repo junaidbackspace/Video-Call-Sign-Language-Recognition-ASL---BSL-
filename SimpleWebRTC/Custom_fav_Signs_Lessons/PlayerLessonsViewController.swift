@@ -26,6 +26,10 @@ class PlayerLessonsViewController: UIViewController {
     var Resource_URL = ""
     var lesson_id = 0
     var guester_id = 0
+    
+    var filenames = [String]()
+
+   
 
     var isAnimating = true
     var userid = UserDefaults.standard.integer(forKey: "userID")
@@ -35,6 +39,51 @@ class PlayerLessonsViewController: UIViewController {
     }
     @IBAction func btn_back_lesson(_ sender: Any) {
         
+        //Setting next gif path
+        var count = 0
+        for i in 0..<26 {
+            let letter = Character(UnicodeScalar(97 + i)!)
+            let filename = "\(letter).gif"
+            print("\n letter: \(filename)")
+            filenames.append(filename)
+             }
+        //minimum id
+        if guester_id > 41 {
+        for name in filenames{
+            if name == Resource_URL{
+               
+                Resource_URL = filenames[count-1]
+                break
+            }
+            count += 1
+        }
+            guester_id -= 1
+        }
+            let parts = Resource_URL.split(separator: ".")
+            let firstPart = String(parts.first ?? "")
+            lbl_Current_Content_name.text = "Sign for \(firstPart)"
+            getLessonGIF()
+           
+      
+        
+        timer?.invalidate()
+        timer = nil
+        
+        elapsedTime = 0
+        pgrbar_Time.progress = 0
+        isPaused = !isPaused
+           
+        startTimer()
+        if fav_less.contains(guester_id)
+        {
+        if let currentImage = OutLetisfaviorteStar.currentBackgroundImage,
+               currentImage == UIImage(systemName: "star.fill")?.withTintColor(UIColor.yellow) {
+        }
+        }
+        else{
+            self.OutLetisfaviorteStar.setBackgroundImage(UIImage(systemName: "star"), for: .normal)
+           
+        }
     }
     @IBAction func btn_pause_lesson(_ sender: Any) {
         
@@ -74,11 +123,63 @@ class PlayerLessonsViewController: UIViewController {
             isPaused = !isPaused
     }
     @IBAction func btn_next_lesson(_ sender: Any) {
+        
+        
+        //Setting next gif path
+        var count = 0
+        for i in 0..<26 {
+            let letter = Character(UnicodeScalar(97 + i)!)
+            let filename = "\(letter).gif"
+            print("\n letter: \(filename)")
+            filenames.append(filename)
+             }
+        //max Limit
+        if guester_id < 66 {
+        for name in filenames{
+            if name == Resource_URL{
+               
+                Resource_URL = filenames[count+1]
+                break
+            }
+            count += 1
+        }
+    
+            guester_id += 1
+        }
+            let parts = Resource_URL.split(separator: ".")
+            let firstPart = String(parts.first ?? "")
+            lbl_Current_Content_name.text = "Sign for \(firstPart)"
+            getLessonGIF()
+           
+      
+        
+        timer?.invalidate()
+        timer = nil
+        
+        elapsedTime = 0
+        pgrbar_Time.progress = 0
+        
+        isPaused = !isPaused
+           
+        startTimer()
+        if fav_less.contains(guester_id)
+        {
+            self.OutLetisfaviorteStar.setBackgroundImage(UIImage(systemName: "star.fill"), for: .normal)
+        }
+        else{
+            self.OutLetisfaviorteStar.setBackgroundImage(UIImage(systemName: "star"), for: .normal)
+           
+        }
+            
+        
     }
     
     
     @IBAction func isFavorite_Start(_ sender: Any) {
         
+       
+        
+        print("Gesture id : \(guester_id), char is \(lbl_Current_Content_name.text)")
         if fav_less.contains(guester_id)
         {
         if let currentImage = OutLetisfaviorteStar.currentBackgroundImage,
@@ -115,7 +216,7 @@ class PlayerLessonsViewController: UIViewController {
             
         }
     else {
-                
+                print("Not in list \(lbl_Current_Content_name.text)")
                 
                 let Url = "\(Constants.serverURL)/userfavoritegesture/add"
 
@@ -147,6 +248,12 @@ class PlayerLessonsViewController: UIViewController {
                 
             }
     }
+        //updating current list
+        if let retrievedArray = UserDefaults.standard.array(forKey: "fav_Les") as? [Int] {
+            let Fav_Lessons = retrievedArray
+           
+            fav_less = Fav_Lessons
+         }
     }
     //to make round blue footer
     @IBOutlet weak var viewplayer: UIView!
@@ -206,25 +313,59 @@ func usergetLesson()
          urlString = "\(Constants.serverURL)/gesture/\(signtype)/\(category)/\(Resource_URL)"
         print ("URL IS : \(urlString)")
         if let url = URL(string: urlString) {
-            fetchGifFromServer(url: url) { (gifImage, error) in
-                if let error = error {
-                    print("Error fetching GIF: \(error.localizedDescription)")
-                    return
-                }
-                
-                if let gifImage = gifImage {
+               fetchGifDataFromServer(url: url) { (gifData, error) in
+                   if let error = error {
+                       print("Error fetching GIF data: \(error.localizedDescription)")
+                       return
+                   }
                    
-                    DispatchQueue.main.async {
-                        let imageView = UIImageView(image: gifImage)
+                   if let gifData = gifData {
+                       DispatchQueue.main.async {
+                         
+                           print("GIF data received:", gifData)
+                        
+                        if let temporaryFileURL = self.saveGifDataToTemporaryFile(gifData) {
+                                    
+                                   
+                                    
+                                    let localURL = temporaryFileURL
+                            
+                            self.gifData = try? Data(contentsOf: localURL)
+                            self.gifImage = UIImage.gif(data: gifData)
+                            self.pausedImage =  self.extractFrame(fromGif: localURL, atIndex: 0)
+                            
+                            self.imageplayer.image = self.gifImage
+
+                                } else {
+                                    print("Failed to save GIF data to temporary file")
+                                }
+                        
                        
-                    }
-                } else {
-                    print("Failed to fetch GIF")
-                }
-            }
+                       
+                       
+                
+                       }
+                   } else {
+                       print("Failed to fetch GIF data")
+                   }
+               }
+           }
+    }
+    func saveGifDataToTemporaryFile(_ gifData: Data) -> URL? {
+        // Create a unique temporary file URL
+        let temporaryDirectory = FileManager.default.temporaryDirectory
+        let temporaryFilename = UUID().uuidString + ".gif"
+        let temporaryFileURL = temporaryDirectory.appendingPathComponent(temporaryFilename)
+        
+        // Write the GIF data to the temporary file
+        do {
+            try gifData.write(to: temporaryFileURL)
+            return temporaryFileURL
+        } catch {
+            print("Error saving GIF data to temporary file:", error)
+            return nil
         }
     }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -253,13 +394,7 @@ func usergetLesson()
         //fetching gif from server
         getLessonGIF()
        
-                if let gifURL = Bundle.main.url(forResource: "test", withExtension: "gif") {
-                    gifData = try? Data(contentsOf: gifURL)
-                    gifImage = UIImage.gif(data: gifData!)
-                    pausedImage =  extractFrame(fromGif: gifURL, atIndex: 0)
-                    
-                }
-        
+              
 
         usergetLesson()
         startGifAnimation()
@@ -291,8 +426,19 @@ func usergetLesson()
                 // Check if video playback is completed
                 if elapsedTime >= duration {
                     // Stop the timer
+                   
+                    pauseGif()
+                    // Pause the timer
                     timer?.invalidate()
                     timer = nil
+                    if let image = UIImage(systemName: "arrowtriangle.right.circle")?.withTintColor(UIColor.white) {
+                        Outlet_btnPause.setBackgroundImage(image, for: .normal)
+
+                        elapsedTime = 0
+                        pgrbar_Time.progress = 0
+                        isGifPaused.toggle()
+                        isPaused = !isPaused
+                    }
                 }
             }
         }
@@ -325,21 +471,22 @@ func usergetLesson()
     }
     
     
-    func fetchGifFromServer(url: URL, completion: @escaping (UIImage?, Error?) -> Void) {
+    func fetchGifDataFromServer(url: URL, completion: @escaping (Data?, Error?) -> Void) {
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let error = error {
                 completion(nil, error)
                 return
             }
             
-            guard let data = data, let gifImage = UIImage(data: data) else {
-                completion(nil, NSError(domain: "InvalidData", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to convert data to UIImage"]))
+            guard let data = data else {
+                completion(nil, NSError(domain: "NoData", code: 0, userInfo: [NSLocalizedDescriptionKey: "No data received"]))
                 return
             }
             
-            completion(gifImage, nil)
+            completion(data, nil)
         }.resume()
     }
+
 
     
 }
