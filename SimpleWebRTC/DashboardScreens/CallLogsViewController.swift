@@ -214,6 +214,7 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
         controller.name = contacts[indexPath.row].Fname+" "+contacts[indexPath.row].Lname
         controller.about = contacts[indexPath.row].BioStatus
         controller.distype = contacts[indexPath.row].UserType
+        controller.contactid = contacts[indexPath.row].UserId
         
         let base = "\(Constants.serverURL)\(contacts[indexPath.row].ProfilePicture)"
         if let url = URL(string: base) {
@@ -230,6 +231,9 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
         } else {
             print("Invalid URL")
         }
+        controller.modalPresentationStyle = .fullScreen
+        controller.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(controller, animated: true)
     }
            
     @objc func btn_call(_ sender:UIButton)
@@ -276,8 +280,51 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
         for i in 0..<contacts.count {
             contacts.append(contacts[i])
         }
+        
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+               swipeLeft.direction = .left
+               view.addGestureRecognizer(swipeLeft)
+               
+               let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+               swipeRight.direction = .right
+               view.addGestureRecognizer(swipeRight)
       
     }
+    
+    
+    @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
+        
+        guard let tabBarController = tabBarController else {
+               return
+           }
+           
+           guard let selectedNavigationController = tabBarController.selectedViewController as? UINavigationController else {
+               return
+           }
+        // Assuming you're using storyboards
+        if let storyboard = storyboard {
+            if gesture.direction == .right {
+                tabBarController.selectedIndex = 0
+
+                if let newViewController = storyboard.instantiateViewController(withIdentifier: "onlineContacts") as? onlineContactsViewController {
+                    selectedNavigationController.pushViewController(newViewController, animated: false)
+                
+                } else {
+                    print("Failed to instantiate OnlineContactsViewController")
+                }
+            } else if gesture.direction == .left {
+                tabBarController.selectedIndex = 2
+                if let newViewController = storyboard.instantiateViewController(withIdentifier: "leassonsDashbaord") as? leassonsViewController {
+                    selectedNavigationController.pushViewController(newViewController, animated: false)
+                } else {
+                    print("Failed to instantiate LeassonsViewController")
+                }
+            }
+            //tabBarController.selectedIndex = 1
+        }
+
+        
+       }
     func fetchCallHistory() {
        
         guard let userID = self.logindefaults.string(forKey: "userID") else {
@@ -316,6 +363,7 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
                 let iscaller = userObject.isCaller
                 let startTime = userObject.StartTime
                 let endTime = userObject.EndTime
+                let userid = userObject.user_id
 
                 // Now you can use these properties as needed
                 print("Call id : \(call_id), Fname: \(firstName), OnlineStatus: \(onlineStatus), IScaller: \(iscaller), ProfilePic: \(profilePicture)")
@@ -332,6 +380,7 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
                 user.isCaller = iscaller
                 user.Call_StartTime = startTime
                 user.Call_EndTime = endTime
+                user.UserId = userid
                 self.contacts.append(user)
             }
         

@@ -78,6 +78,7 @@ struct CallLogs : Codable {
     let isCaller: Int
     let EndTime: String
     let StartTime: String
+    let user_id: Int
 }
 
 struct Lesson: Codable {

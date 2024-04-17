@@ -116,9 +116,36 @@ class leassonsViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
 
-        // Do any additional setup after loading the view.
+               
+    let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+               swipeRight.direction = .right
+               view.addGestureRecognizer(swipeRight)
     }
     
+    @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
+        
+        guard let tabBarController = tabBarController else {
+               return
+           }
+        tabBarController.selectedIndex = 1
+           guard let selectedNavigationController = tabBarController.selectedViewController as? UINavigationController else {
+               return
+           }
+        // Assuming you're using storyboards
+        if let storyboard = storyboard {
+            
+             if gesture.direction == .right {
+                
+                if let newViewController = storyboard.instantiateViewController(withIdentifier: "calllogs") as? CallLogsViewController {
+                    selectedNavigationController.pushViewController(newViewController, animated: false)
+                } else {
+                    print("Failed to instantiate LeassonsViewController")
+                }
+            }
+            //tabBarController.selectedIndex = 1
+        }
 
+        
+       }
    
 }

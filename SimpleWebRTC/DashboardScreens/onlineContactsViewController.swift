@@ -308,7 +308,33 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
             }
     }
    }
-   
+    @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
+        
+        guard let tabBarController = tabBarController else {
+           
+               return
+           }
+        tabBarController.selectedIndex = 1
+           guard let selectedNavigationController = tabBarController.selectedViewController as? UINavigationController else {
+            
+               return
+           }
+        // Assuming you're using storyboards
+        if let storyboard = storyboard {
+            
+             if gesture.direction == .left {
+              
+                if let newViewController = storyboard.instantiateViewController(withIdentifier: "calllogs") as? CallLogsViewController {
+                    selectedNavigationController.pushViewController(newViewController, animated: false)
+                } else {
+                    print("Failed to instantiate LeassonsViewController")
+                }
+            }
+            //tabBarController.selectedIndex = 1
+        }
+
+        
+       }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -355,9 +381,27 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
             view.addGestureRecognizer(tapGestureRecognizer)
         
         
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+               swipeLeft.direction = .left
+               view.addGestureRecognizer(swipeLeft)
+              
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(swipedDown(_:)))
+        swipeDown.direction = .down
+             view.addGestureRecognizer(swipeDown)
       }
     
-
+    @objc func swipedDown(_ gesture: UISwipeGestureRecognizer) {
+           if gesture.direction == .down {
+               // Call your function here
+            print("Refreshing online contacts...")
+         DispatchQueue.global().async {
+             print("Refreshing data")
+                 self.contacts = []
+                self.fetchContactsData()
+         }
+           }
+       }
+    
     func fetchContactsData() {
        
         guard let userID = self.logindefaults.string(forKey: "userID") else {
