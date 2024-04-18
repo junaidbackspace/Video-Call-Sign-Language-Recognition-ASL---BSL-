@@ -637,8 +637,11 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
 
     @objc func btn_call(_ sender:UIButton)
     {
-        
+        var userid = UserDefaults.standard.integer(forKey: "userID")
             let controller = self.storyboard?.instantiateViewController(identifier: "callerscreen") as! CallerViewController
+        
+        controller.callerid = userid
+        controller.recieverid = contacts[sender.tag].UserId
         controller.name =  contacts[sender.tag].Fname+" "+contacts[sender.tag].Lname
         controller.isringing = "Calling"
         
@@ -657,11 +660,10 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
         } else {
             print("Invalid URL")
         }
-        
        
-            controller.modalPresentationStyle = .fullScreen
-            controller.hidesBottomBarWhenPushed = true
-            self.navigationController?.pushViewController(controller, animated: true)
+        controller.modalPresentationStyle = .fullScreen
+        controller.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(controller, animated: true)
                
     }
     

@@ -238,33 +238,35 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
            
     @objc func btn_call(_ sender:UIButton)
     {
+        var userid = UserDefaults.standard.integer(forKey: "userID")
+            let controller = self.storyboard?.instantiateViewController(identifier: "callerscreen") as! CallerViewController
         
-        let controller = self.storyboard?.instantiateViewController(identifier: "callerscreen") as! CallerViewController
-    controller.name =  contacts[sender.tag].Fname+" "+contacts[sender.tag].Lname
-    controller.isringing = "Calling"
-    
-    let base = "\(Constants.serverURL)\(contacts[sender.tag].ProfilePicture)"
-    if let url = URL(string: base) {
+        controller.callerid = userid
+        controller.recieverid = contacts[sender.tag].UserId
+        controller.name =  contacts[sender.tag].Fname+" "+contacts[sender.tag].Lname
+        controller.isringing = "Calling"
         
-        KingfisherManager.shared.retrieveImage(with: url) { result in
-            switch result {
-            case .success(let value):
-                let downloadedImage = value.image
-                controller.profilepic = downloadedImage
-            case .failure(let error):
-                print("Error downloading image: \(error)")
+        let base = "\(Constants.serverURL)\(contacts[sender.tag].ProfilePicture)"
+        if let url = URL(string: base) {
+            
+            KingfisherManager.shared.retrieveImage(with: url) { result in
+                switch result {
+                case .success(let value):
+                    let downloadedImage = value.image
+                    controller.profilepic = downloadedImage
+                case .failure(let error):
+                    print("Error downloading image: \(error)")
+                }
             }
+        } else {
+            print("Invalid URL")
         }
-    } else {
-        print("Invalid URL")
-    }
-    
-   
+       
         controller.modalPresentationStyle = .fullScreen
         controller.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(controller, animated: true)
-           
-}
+               
+    }
                
     
     
