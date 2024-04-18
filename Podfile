@@ -9,5 +9,6 @@ target 'SimpleWebRTC' do
   pod 'DropDown'
   pod 'Kingfisher'
   pod 'DKImagePickerController'
+  pod 'SDWebImage'
 
 end
