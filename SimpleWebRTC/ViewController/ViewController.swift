@@ -83,14 +83,14 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     // Constants
     // MARK: Change this ip address in your case
 
-    
   
     
     
-    
+  
     //MARK: - ViewController Override Methods ----------------------------
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
         #if targetEnvironment(simulator)
         // simulator does not have camera
@@ -267,20 +267,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
 //        }
         webRTCClient.switchCameraPosition()
     }
+
     
-//    private func startLikeAnimation(){
-//        let likeImageView = UIImageView(frame: likeImageViewRect)
-//        likeImageView.backgroundColor = UIColor.clear
-//        likeImageView.contentMode = .scaleAspectFit
-//        likeImageView.image = likeImage
-//        likeImageView.alpha = 1.0
-//        self.view.addSubview(likeImageView)
-//        UIView.animate(withDuration: 0.5, animations: {
-//            likeImageView.alpha = 0.0
-//        }) { (reuslt) in
-//            likeImageView.removeFromSuperview()
-//        }
-//    }
     
     // MARK: - WebRTC Signaling
     private func sendSDP(sessionDescription: RTCSessionDescription){
