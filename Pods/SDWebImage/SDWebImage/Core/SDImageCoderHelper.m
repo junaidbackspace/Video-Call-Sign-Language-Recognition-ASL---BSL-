@@ -27,7 +27,7 @@ static inline UIImage *SDImageDecodeUIKit(UIImage *image) {
     // See: https://developer.apple.com/documentation/uikit/uiimage/3750834-imagebypreparingfordisplay
     // Need CGImage-based
     if (@available(iOS 15, tvOS 15, *)) {
-        UIImage *decodedImage = [image imageByPreparingForDisplay];
+//        UIImage *decodedImage = [image imageByPreparingForDisplay];
         if (decodedImage) {
             SDImageCopyAssociatedObject(image, decodedImage);
             decodedImage.sd_isDecoded = YES;
@@ -44,7 +44,7 @@ static inline UIImage *SDImageDecodeAndScaleDownUIKit(UIImage *image, CGSize des
         // Calculate thumbnail point size
         CGFloat scale = image.scale ?: 1;
         CGSize thumbnailSize = CGSizeMake(destResolution.width / scale, destResolution.height / scale);
-        UIImage *decodedImage = [image imageByPreparingThumbnailOfSize:thumbnailSize];
+//        UIImage *decodedImage = [image imageByPreparingThumbnailOfSize:thumbnailSize];
         if (decodedImage) {
             SDImageCopyAssociatedObject(image, decodedImage);
             decodedImage.sd_isDecoded = YES;
