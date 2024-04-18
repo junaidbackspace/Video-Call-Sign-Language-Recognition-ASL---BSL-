@@ -29,43 +29,9 @@ class CallerViewController: UIViewController {
     var videoPreviewLayer: AVCaptureVideoPreviewLayer?
     var isFrontCamera = true
        
-    
-    var serverWrapper = APIWrapper()
-  
-    var callerid = 0
-    var recieverid = 0
-    
-    func CallAPI(caller : Int ,reciver : Int )
-    {
-        let Url = "\(Constants.serverURL)/video-call/start"
-        print("calling : \(Url)")
-        let Dic: [String: Any] = [
-            "caller_id": caller,
-              "receiver_id": reciver ]
-
-        serverWrapper.insertData(baseUrl: Url,  userDictionary: Dic) { responseString, error in
-            if let error = error {
-                print("\n\nError:", error)
-               }
-            
-            if let responseString = responseString {
-                print("w response:", responseString)
-                
-                guard let responseData = responseString.data(using: .utf8) else {
-                    print("Error converting response data to UTF-8")
-                    return
-                }
-                
-            }
-
-        }
-    }
-    
        override func viewDidLoad() {
            super.viewDidLoad()
-        
-        
-        setupCamera()
+           setupCamera()
         imgview.image = profilepic
         imgview.layer.cornerRadius = 30
         imgview.clipsToBounds = true
@@ -80,7 +46,6 @@ class CallerViewController: UIViewController {
         lbl_is_ringing.layer.zPosition = 1
         imgview.layer.zPosition = 1
         
-        CallAPI(caller: callerid, reciver: recieverid)
        }
        
        func setupCamera() {
