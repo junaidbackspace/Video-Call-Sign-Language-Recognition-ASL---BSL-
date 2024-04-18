@@ -9,8 +9,23 @@
 import UIKit
 import DropDown
 import Kingfisher
+import MobileCoreServices
+import DKImagePickerController
 
-class ProfileSettingsViewController: UIViewController, UIImagePickerControllerDelegate & UIGestureRecognizerDelegate, UINavigationControllerDelegate {
+extension ProfileSettingsViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let pickedImage = info[.originalImage] as? UIImage {
+            // Do something with the picked image
+        }
+        picker.dismiss(animated: true, completion: nil)
+    }
+
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
+}
+
+class ProfileSettingsViewController: UIViewController {
     
     
     var serverWrapper = APIWrapper()
@@ -19,32 +34,41 @@ class ProfileSettingsViewController: UIViewController, UIImagePickerControllerDe
     var imageToUpload: URL?
 
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any])
-        {
-        if let imageURL = info[.imageURL] as? URL {
+    func pickImage() {
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.delegate = self
+        imagePickerController.sourceType = .photoLibrary // or .camera for camera access
+        imagePickerController.mediaTypes = [kUTTypeImage as String]
+        present(imagePickerController, animated: true, completion: nil)
+    }
 
-            imageToUpload = imageURL
-        }
-        
-            if let img = info[.originalImage] as? UIImage
-            {
-                self.profilepic.image = img
-                let Url = "\(Constants.serverURL)/user/uploadprofilepicture/\(userid)"
-                
-                // Call uploadImage function within a do-catch block
-                do {
-                    try self.serverWrapper.uploadImage(baseUrl: Url, imageURL: self.imageToUpload!)
-                } catch {
-                    print("Error uploading image:", error)
-                    // Handle error uploading image
-                }
-                do {
-                    let toastView = ToastView(message: "Profile Picture updated successfully")
-                    toastView.show(in: self.view)
-                }
-            }
-            imgPicker.dismiss(animated: true, completion: nil)
-        }
+    
+//    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any])
+//        {
+//        if let imageURL = info[.imageURL] as? URL {
+//
+//            imageToUpload = imageURL
+//        }
+//
+//            if let img = info[.originalImage] as? UIImage
+//            {
+//                self.profilepic.image = img
+//                let Url = "\(Constants.serverURL)/user/uploadprofilepicture/\(userid)"
+//
+//                // Call uploadImage function within a do-catch block
+//                do {
+//                    try self.serverWrapper.uploadImage(baseUrl: Url, imageURL: self.imageToUpload!)
+//                } catch {
+//                    print("Error uploading image:", error)
+//                    // Handle error uploading image
+//                }
+//                do {
+//                    let toastView = ToastView(message: "Profile Picture updated successfully")
+//                    toastView.show(in: self.view)
+//                }
+//            }
+//            imgPicker.dismiss(animated: true, completion: nil)
+//        }
     
     var name = ""
     var currentpass = ""
@@ -175,7 +199,7 @@ class ProfileSettingsViewController: UIViewController, UIImagePickerControllerDe
     @IBOutlet weak var lblabout: UILabel!
     
     @IBAction func btn_editProfile(_ sender: Any) {
-        openImagePicker()
+//        openImagePicker()
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -221,26 +245,9 @@ class ProfileSettingsViewController: UIViewController, UIImagePickerControllerDe
     
    }
         
-       profilepic.isUserInteractionEnabled = true
-
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imgViewTapped(_:)))
-       profilepic.addGestureRecognizer(tapGesture)
-
-        imgPicker.delegate = self
-
-        let tapscreen = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
-        tapscreen.delegate = self
-                self.view.addGestureRecognizer(tapscreen)
-    }
-    @objc func imgViewTapped(_ sender: Any)
-    {
-        openImagePicker()
        
     }
-    func openImagePicker() {
-        imgPicker.sourceType = .photoLibrary // or .camera if you want to use the camera
-       present(imgPicker, animated: true, completion: nil)
-    }
+   
 
     @objc func hideKeyboard() {
             self.view.endEditing(true)
@@ -382,3 +389,4 @@ class ToastView: UIView {
         }
     }
 }
+

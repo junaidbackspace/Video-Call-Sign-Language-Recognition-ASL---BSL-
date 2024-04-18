@@ -8,5 +8,6 @@ target 'SimpleWebRTC' do
   pod 'SwiftGifOrigin'
   pod 'DropDown'
   pod 'Kingfisher'
+  pod 'DKImagePickerController'
 
 end
