@@ -64,7 +64,6 @@ DEPENDENCIES:
   - DropDown
   - GoogleWebRTC
   - Kingfisher
-  - SDWebImage (~> 5.0)
   - Starscream (~> 3.0.2)
   - SwiftGifOrigin
 
@@ -95,6 +94,6 @@ SPEC CHECKSUMS:
   SwiftGifOrigin: fbd6cf37afcfcf97a5c3db996ddc0492e5c5c145
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
 
-PODFILE CHECKSUM: e3c791bbac3707074024cb0609ca98229bc47e0e
+PODFILE CHECKSUM: 612789af2db3fe158cfcc8e6ddbd0a52e326b979
 
 COCOAPODS: 1.13.0
