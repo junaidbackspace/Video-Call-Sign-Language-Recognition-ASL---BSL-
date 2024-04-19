@@ -86,8 +86,18 @@ class settingsViewController: UIViewController {
         addBordersToView(borderedView, top: true, bottom: true, left: false, right: false, borderColor: UIColor.black, borderWidth: 1.0)
                 
            
-           
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(swipedDown(_:)))
+        swipeDown.direction = .down
+             view.addGestureRecognizer(swipeDown)
        }
+    
+    @objc func swipedDown(_ gesture: UISwipeGestureRecognizer) {
+           if gesture.direction == .down {
+            //Displaying Refreshing
+            fetchUserData()
+           }
+        
+    }
        
     func addBordersToView(_ view: UIView, top: Bool, bottom: Bool, left: Bool, right: Bool, borderColor: UIColor, borderWidth: CGFloat) {
           let borderLayer = CALayer()

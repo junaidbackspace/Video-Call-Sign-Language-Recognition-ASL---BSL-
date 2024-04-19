@@ -9,66 +9,97 @@
 import UIKit
 import DropDown
 import Kingfisher
-import MobileCoreServices
-//import DKImagePickerController
 
-extension ProfileSettingsViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let pickedImage = info[.originalImage] as? UIImage {
-            // Do something with the picked image
-        }
-        picker.dismiss(animated: true, completion: nil)
+
+
+
+class ProfileSettingsViewController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
+    
+    
+    var serverWrapper = APIWrapper()
+        var imgPicker = UIImagePickerController()
+        var userid = UserDefaults.standard.integer(forKey: "userID")
+        var imageToUpload: URL?
+        
+        // MARK: - Image Picker Delegate Methods
+    
+    @objc func profilePicTapped() {
+    
+        print("Profile picture tapped!")
+        openImagePicker()
     }
+        
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true, completion: nil)
+        
+        // Check if the image was captured successfully
+        guard let img = info[.originalImage] as? UIImage else {
+            print("Failed to retrieve the image")
+            return
+        }
+       
+        self.profilepic.image = img
+        
+        // Save the captured image to the temporary directory
+        if let imageData = img.jpegData(compressionQuality: 1.0) {
+            let fileManager = FileManager.default
+            let tempDirURL = fileManager.temporaryDirectory
+            let fileName = "\(UUID().uuidString).jpg"
+            let fileURL = tempDirURL.appendingPathComponent(fileName)
+            
+            do {
+                try imageData.write(to: fileURL)
+                // Set the image URL to be uploaded
+                self.imageToUpload = fileURL
+                
+               
+                let Url = "\(Constants.serverURL)/user/uploadprofilepicture/\(userid)"
+                
+                // Call uploadImage function within a do-catch block
+                do {
+                    try self.serverWrapper.uploadImage(baseUrl: Url, imageURL: self.imageToUpload!)
+                    let toastView = ToastView(message: "Profile Picture updated successfully")
+                    toastView.show(in: self.view)
+                } catch {
+                    print("Error uploading image:", error)
+                    // Handle error uploading image
+                }
+            } catch {
+                print("Error saving image to temporary directory:", error)
+            }
+        }
+    }
+
 
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
-}
 
-class ProfileSettingsViewController: UIViewController {
-    
-    
-    var serverWrapper = APIWrapper()
-    var imgPicker =  UIImagePickerController()
-    var userid = UserDefaults.standard.integer(forKey: "userID")
-    var imageToUpload: URL?
-
-    
-    func pickImage() {
-        let imagePickerController = UIImagePickerController()
-        imagePickerController.delegate = self
-        imagePickerController.sourceType = .photoLibrary // or .camera for camera access
-        imagePickerController.mediaTypes = [kUTTypeImage as String]
-        present(imagePickerController, animated: true, completion: nil)
+    func openImagePicker() {
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        let cameraAction = UIAlertAction(title: "Take Photo", style: .default) { [weak self] (_) in
+            self?.imgPicker.sourceType = .camera
+            self?.present(self!.imgPicker, animated: true, completion: nil)
+        }
+        alertController.addAction(cameraAction)
+        
+        let photoLibraryAction = UIAlertAction(title: "Choose Photo", style: .default) { [weak self] (_) in
+            self?.imgPicker.sourceType = .photoLibrary
+            self?.present(self!.imgPicker, animated: true, completion: nil)
+        }
+        alertController.addAction(photoLibraryAction)
+        
+        let cancelAction = UIAlertAction(title: "Back", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        
+        present(alertController, animated: true, completion: nil)
     }
 
-    
-//    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any])
-//        {
-//        if let imageURL = info[.imageURL] as? URL {
-//
-//            imageToUpload = imageURL
-//        }
-//
-//            if let img = info[.originalImage] as? UIImage
-//            {
-//                self.profilepic.image = img
-//                let Url = "\(Constants.serverURL)/user/uploadprofilepicture/\(userid)"
-//
-//                // Call uploadImage function within a do-catch block
-//                do {
-//                    try self.serverWrapper.uploadImage(baseUrl: Url, imageURL: self.imageToUpload!)
-//                } catch {
-//                    print("Error uploading image:", error)
-//                    // Handle error uploading image
-//                }
-//                do {
-//                    let toastView = ToastView(message: "Profile Picture updated successfully")
-//                    toastView.show(in: self.view)
-//                }
-//            }
-//            imgPicker.dismiss(animated: true, completion: nil)
-//        }
+        
+        // MARK: - Other Methods
+        
+        
     
     var name = ""
     var currentpass = ""
@@ -130,6 +161,7 @@ class ProfileSettingsViewController: UIViewController {
         }
 
     }
+   
 
     
     @IBOutlet weak var txtConfirmPass: UITextField!
@@ -199,7 +231,7 @@ class ProfileSettingsViewController: UIViewController {
     @IBOutlet weak var lblabout: UILabel!
     
     @IBAction func btn_editProfile(_ sender: Any) {
-//        openImagePicker()
+       openImagePicker()
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -210,11 +242,17 @@ class ProfileSettingsViewController: UIViewController {
         lblabout?.text = About
         lblDisablity?.text = distype
         setup()
+        imgPicker.delegate = self
         
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profilePicTapped))
+           profilepic.addGestureRecognizer(tapGesture)
+           profilepic.isUserInteractionEnabled = true // Enable user interaction
     }
         
    func setup()
    {
+    
+    self.profilepic.layer.cornerRadius = 30
     //Setting ASL byDefault
     GetSignLang()
     

@@ -1,66 +1,11 @@
 PODS:
-  - CropViewController (2.6.1)
-  - DKCamera (1.6.7)
-  - DKImagePickerController (4.3.4):
-    - DKImagePickerController/Camera (= 4.3.4)
-    - DKImagePickerController/Core (= 4.3.4)
-    - DKImagePickerController/ImageDataManager (= 4.3.4)
-    - DKImagePickerController/InlineCamera (= 4.3.4)
-    - DKImagePickerController/PhotoEditor (= 4.3.4)
-    - DKImagePickerController/PhotoGallery (= 4.3.4)
-    - DKImagePickerController/Resource (= 4.3.4)
-  - DKImagePickerController/Camera (4.3.4):
-    - DKCamera
-    - DKImagePickerController/Core
-  - DKImagePickerController/Core (4.3.4):
-    - DKImagePickerController/ImageDataManager
-    - DKImagePickerController/Resource
-  - DKImagePickerController/ImageDataManager (4.3.4)
-  - DKImagePickerController/InlineCamera (4.3.4):
-    - DKCamera
-    - DKImagePickerController/Core
-  - DKImagePickerController/PhotoEditor (4.3.4):
-    - CropViewController (~> 2.5)
-    - DKImagePickerController/Core
-  - DKImagePickerController/PhotoGallery (4.3.4):
-    - DKImagePickerController/Core
-    - DKPhotoGallery
-  - DKImagePickerController/Resource (4.3.4)
-  - DKPhotoGallery (0.0.17):
-    - DKPhotoGallery/Core (= 0.0.17)
-    - DKPhotoGallery/Model (= 0.0.17)
-    - DKPhotoGallery/Preview (= 0.0.17)
-    - DKPhotoGallery/Resource (= 0.0.17)
-    - SDWebImage
-    - SwiftyGif
-  - DKPhotoGallery/Core (0.0.17):
-    - DKPhotoGallery/Model
-    - DKPhotoGallery/Preview
-    - SDWebImage
-    - SwiftyGif
-  - DKPhotoGallery/Model (0.0.17):
-    - SDWebImage
-    - SwiftyGif
-  - DKPhotoGallery/Preview (0.0.17):
-    - DKPhotoGallery/Model
-    - DKPhotoGallery/Resource
-    - SDWebImage
-    - SwiftyGif
-  - DKPhotoGallery/Resource (0.0.17):
-    - SDWebImage
-    - SwiftyGif
   - DropDown (2.3.13)
   - GoogleWebRTC (1.1.32000)
   - Kingfisher (7.10.1)
-  - SDWebImage (5.18.3):
-    - SDWebImage/Core (= 5.18.3)
-  - SDWebImage/Core (5.18.3)
   - Starscream (3.0.6)
   - SwiftGifOrigin (1.7.0)
-  - SwiftyGif (5.4.4)
 
 DEPENDENCIES:
-  - DKImagePickerController
   - DropDown
   - GoogleWebRTC
   - Kingfisher
@@ -69,31 +14,19 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - CropViewController
-    - DKCamera
-    - DKImagePickerController
-    - DKPhotoGallery
     - DropDown
     - GoogleWebRTC
     - Kingfisher
-    - SDWebImage
     - Starscream
     - SwiftGifOrigin
-    - SwiftyGif
 
 SPEC CHECKSUMS:
-  CropViewController: 58fb440f30dac788b129d2a1f24cffdcb102669c
-  DKCamera: a902b66921fca14b7a75266feb8c7568aa7caa71
-  DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
-  DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
   DropDown: 8a2116376c1981888557f72ec2ffc9a5e0e456ec
   GoogleWebRTC: 4d261187b30512efdb711d21fa961a6adf138717
   Kingfisher: bc5abe80a8e0144537ef1dd5a0b2621b04f7f439
-  SDWebImage: 96e0c18ef14010b7485210e92fac888587ebb958
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
   SwiftGifOrigin: fbd6cf37afcfcf97a5c3db996ddc0492e5c5c145
-  SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
 
-PODFILE CHECKSUM: 612789af2db3fe158cfcc8e6ddbd0a52e326b979
+PODFILE CHECKSUM: 328aca8f7ec7846407efcbf93de364a6ea0bea2b
 
 COCOAPODS: 1.13.0
