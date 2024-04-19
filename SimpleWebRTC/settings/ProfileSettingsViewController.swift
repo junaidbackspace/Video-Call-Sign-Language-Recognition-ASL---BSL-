@@ -10,7 +10,7 @@ import UIKit
 import DropDown
 import Kingfisher
 import MobileCoreServices
-//import DKImagePickerController
+import DKImagePickerController
 
 extension ProfileSettingsViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
