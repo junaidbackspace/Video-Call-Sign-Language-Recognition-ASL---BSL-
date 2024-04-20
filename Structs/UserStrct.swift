@@ -42,6 +42,7 @@ struct ContactsUser: Codable {
     let user_id: Int
     let user_name : String
     let is_blocked : Int
+    let disability : String
     
 }
 
@@ -79,6 +80,7 @@ struct CallLogs : Codable {
     let EndTime: String
     let StartTime: String
     let user_id: Int
+    let user_name : String
 }
 
 struct Lesson: Codable {

@@ -24,7 +24,8 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
     var contacts = [User]()
     var filteredContacts = [User]()
     var dumylist = [User]()
-
+    //used in scroll down refresh
+    var isFunctionCalled = false
    
     @IBAction func addFriend(_ sender: Any) {
         let controller = self.storyboard?.instantiateViewController(identifier: "addcontacts") 
@@ -145,7 +146,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
     
     
    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70
+        return 80
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         print("no of contacts are \(self.contacts.count)")
@@ -165,6 +166,11 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
             dumylist = contacts
             filteredContacts = contacts
              n += 1
+        }
+        
+        guard indexPath.row < contacts.count else {
+            print("Index out of bounds")
+            return cell!
         }
        
         cell?.name.text = contacts[indexPath.row].Fname+" "+contacts[indexPath.row].Lname
@@ -198,13 +204,26 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
                   }
 
         let base = "\(Constants.serverURL)\(contacts[indexPath.row].ProfilePicture)"
-        print("\n img url is: \(base)")
+
         if let url = URL(string: base) {
-            cell?.profilepic.kf.setImage(with: url, placeholder: UIImage(named: "No image found"))
-            cell?.profilepic?.layer.cornerRadius = 27
-            cell?.profilepic?.clipsToBounds = true
-              }
-      
+            // Attempt to load the image from the URL
+            cell?.profilepic.kf.setImage(with: url, placeholder: UIImage(named: "No image found"), completionHandler: { result in
+                switch result {
+                case .success:
+                    // Image loaded successfully, do nothing
+                    break
+                case .failure:
+                    // Image loading failed, set placeholder image
+                    let placeholderImage = UIImage(named: "noprofile", in: Bundle.main, compatibleWith: nil)
+                    cell?.profilepic.image = placeholderImage
+                    cell?.profilepic.layer.cornerRadius = 28
+                    cell?.profilepic.clipsToBounds = true
+                }
+            })
+            cell?.profilepic.layer.cornerRadius = 28
+            cell?.profilepic.clipsToBounds = true
+            
+        }
         return cell!
              
 }
@@ -222,10 +241,14 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
         controller.about = contacts[indexPath.row].BioStatus
         controller.distype = contacts[indexPath.row].UserType
         controller.contactid = contacts[indexPath.row].UserId
-        
+        controller.username = "@"+contacts[indexPath.row].Username
         let base = "\(Constants.serverURL)\(contacts[indexPath.row].ProfilePicture)"
         
         print("\nfor \(controller.name) \nProfilePic : \(base)")
+        
+        
+        if contacts[indexPath.row].ProfilePicture != "" {
+        
         if let url = URL(string: base) {
             
             KingfisherManager.shared.retrieveImage(with: url) { result in
@@ -237,8 +260,12 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
                     print("Error downloading image: \(error)")
                 }
             }
-        } else {
-            print("Invalid URL")
+         }
+           
+        }
+        else{
+            controller.img =  UIImage(named: "noprofile", in: Bundle.main, compatibleWith: nil)!
+            
         }
           
         controller.modalPresentationStyle = .fullScreen
@@ -455,6 +482,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
                 let userid = userObject.user_id
                 let isBlocked  = userObject.is_blocked
                 let usernam = userObject.user_name
+                let distype = userObject.disability
 
                 
                 if isBlocked != 1  {
@@ -467,6 +495,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
                 user.UserId = userid
                 user.IsBlocked = isBlocked
                 user.Username = usernam
+                user.UserType = distype
                 self.contacts.append(user)
                 }
             }
@@ -789,6 +818,7 @@ extension onlineContactsViewController: UITextFieldDelegate {
     
     @objc func refreshContacts() {
            print("Refreshing online contacts...")
+        showLoadingView()
         DispatchQueue.global().async {
             print("Refreshing data")
                 self.contacts = []
@@ -799,4 +829,21 @@ extension onlineContactsViewController: UITextFieldDelegate {
 }
 extension Notification.Name {
     static let RefreshOnlineContacts = Notification.Name("RefreshContactsNotification")
+}
+extension onlineContactsViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y < -100 && !isFunctionCalled {
+            isFunctionCalled = true
+            
+            refreshContacts()
+           
+                       
+           
+        } else if scrollView.contentOffset.y >= -100 && isFunctionCalled {
+            isFunctionCalled = false
+        }
+        
+        
+    }
 }

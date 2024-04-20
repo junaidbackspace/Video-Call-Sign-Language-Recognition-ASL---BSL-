@@ -10,7 +10,7 @@ class UserProfileViewController: UIViewController, UITableViewDataSource, UITabl
     func actionThatRequiresRefresh() {
            print("Calling for refresh contacts")
             NotificationCenter.default.post(name: .RefreshContacts, object: nil)
-            NotificationCenter.default.post(name: .RefreshOnlineContacts, object: nil)
+            
        }
    
     
@@ -24,6 +24,7 @@ class UserProfileViewController: UIViewController, UITableViewDataSource, UITabl
     
     @IBOutlet weak var tble: UITableView!
     @IBOutlet weak var lblname: UILabel!
+    @IBOutlet weak var lblUsername: UILabel!
     
     @IBAction func btnBack(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
@@ -117,6 +118,7 @@ class UserProfileViewController: UIViewController, UITableViewDataSource, UITabl
          }
     }
     var name = " "
+    var username = " "
     var about = " "
     var distype = " "
     var contactid = 0
@@ -128,9 +130,17 @@ class UserProfileViewController: UIViewController, UITableViewDataSource, UITabl
     override func viewDidLoad() {
         super.viewDidLoad()
         lblname.text = name
+        lblUsername.text = username
+        lblUsername.isUserInteractionEnabled = true
         lblabout.text = about
         profilepic.image = img
+        profilepic.layer.cornerRadius = 30
         contactidofprofile = contactid
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(labelTapped(_:)))
+        lblUsername.addGestureRecognizer(tapGesture)
+               
+        
         if isblocked == 1 {
            
             btn_block.setBackgroundImage(UIImage(named: "unblock_user"), for: .normal)
@@ -148,19 +158,23 @@ class UserProfileViewController: UIViewController, UITableViewDataSource, UITabl
             
         }
         
-        if distype == "deff"
+        if distype == "Deaf and Mute"
         {
             if let image = UIImage(named: "deff", in: Bundle.main, compatibleWith: nil) {
                 disabilityImg.image = image
                     }
             
         }
-        else if distype == "blind"
+        else if distype == "Blind"
         {
-            
+            if let image = UIImage(named: "blind", in: Bundle.main, compatibleWith: nil) {
+                disabilityImg.image = image
+                    }
         }
         else{
-            
+            if let image = UIImage(named: "normalperson", in: Bundle.main, compatibleWith: nil) {
+                disabilityImg.image = image
+                    }
         }
         
         DispatchQueue.global().async {
@@ -354,6 +368,8 @@ class UserProfileViewController: UIViewController, UITableViewDataSource, UITabl
                 let downloadedImage = value.image
                 controller.profilepic = downloadedImage
             case .failure(let error):
+                let placeholderImage = UIImage(named: "noprofile", in: Bundle.main, compatibleWith: nil)
+                controller.profilepic = placeholderImage!
                 print("Error downloading image: \(error)")
             }
         }
@@ -368,6 +384,21 @@ class UserProfileViewController: UIViewController, UITableViewDataSource, UITabl
            
 }
     
+    @objc func labelTapped(_ sender: UITapGestureRecognizer) {
+            if let label = sender.view as? UILabel {
+                // Remove "@" from username
+                var username = lblUsername.text ?? ""
+                username = username.replacingOccurrences(of: "@", with: "")
+                
+                // Copy modified username to clipboard
+                UIPasteboard.general.string = username
+                lblUsername.text = "Username copied"
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    self.lblUsername.text = self.username // Reset the label's text
+                }
+            }
+        }
     
     
 }

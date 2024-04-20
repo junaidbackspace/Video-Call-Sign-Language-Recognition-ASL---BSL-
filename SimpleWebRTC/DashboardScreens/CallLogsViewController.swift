@@ -145,7 +145,7 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
  
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70
+        return 80
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         print("no of callers are \(self.contacts.count)")
@@ -215,6 +215,7 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
         controller.about = contacts[indexPath.row].BioStatus
         controller.distype = contacts[indexPath.row].UserType
         controller.contactid = contacts[indexPath.row].UserId
+        controller.username = "@"+contacts[indexPath.row].Username
         
         let base = "\(Constants.serverURL)\(contacts[indexPath.row].ProfilePicture)"
         if let url = URL(string: base) {
@@ -364,6 +365,7 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
                 let startTime = userObject.StartTime
                 let endTime = userObject.EndTime
                 let userid = userObject.user_id
+                let username = userObject.user_name
 
                 // Now you can use these properties as needed
                 print("Call id : \(call_id), Fname: \(firstName), OnlineStatus: \(onlineStatus), IScaller: \(iscaller), ProfilePic: \(profilePicture)")
@@ -381,6 +383,7 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
                 user.Call_StartTime = startTime
                 user.Call_EndTime = endTime
                 user.UserId = userid
+                user.Username = username
                 self.contacts.append(user)
             }
         

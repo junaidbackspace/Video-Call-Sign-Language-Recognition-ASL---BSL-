@@ -421,6 +421,7 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
                 let userid = userObject.user_id
                 let username  = userObject.user_name
                 let isBlocked  = userObject.is_blocked
+                let distype = userObject.disability
                 // Now you can use these properties as needed
              
 
@@ -434,6 +435,7 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
                 user.UserId = userid
                 user.Username = username
                 user.IsBlocked = isBlocked
+                user.UserType = distype
                 self.contacts.append(user)
             }
         
@@ -498,6 +500,7 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
             
         cell.name.text = contacts[indexPath.row].Fname+" "+contacts[indexPath.row].Lname
         cell.about.text = contacts[indexPath.row].BioStatus
+            
         if contacts[indexPath.row].OnlineStatus == 1{
         if let image = UIImage(named: "online", in: Bundle.main, compatibleWith: nil) {
             cell.isActive?.image = image
@@ -506,15 +509,28 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
         cell.call?.tag = indexPath.row
         cell.call?.addTarget(self, action: #selector(btn_call(_:)), for: .touchUpInside)
         
-            
-        let base = "\(Constants.serverURL)\(contacts[indexPath.row].ProfilePicture)"
-        
-        if let url = URL(string: base) {
-            cell.profilepic.kf.setImage(with: url, placeholder: UIImage(named: "No image found"))
-            cell.profilepic?.layer.cornerRadius = 28
-            cell.profilepic?.clipsToBounds = true
-              }
+            let base = "\(Constants.serverURL)\(contacts[indexPath.row].ProfilePicture)"
+
+            if let url = URL(string: base) {
+                // Attempt to load the image from the URL
+                cell.profilepic.kf.setImage(with: url, placeholder: UIImage(named: "No image found"), completionHandler: { result in
+                    switch result {
+                    case .success:
+                        // Image loaded successfully, do nothing
+                        break
+                    case .failure:
+                        // Image loading failed, set placeholder image
+                        let placeholderImage = UIImage(named: "noprofile", in: Bundle.main, compatibleWith: nil)
+                        cell.profilepic.image = placeholderImage
+                        cell.profilepic.layer.cornerRadius = 28
+                        cell.profilepic.clipsToBounds = true
+                    }
+                })
+                cell.profilepic.layer.cornerRadius = 28
+                cell.profilepic.clipsToBounds = true
                 
+            }
+            
       if let image = UIImage(named: "pin", in: Bundle.main, compatibleWith: nil) {
         if pinned_contacts.contains(contacts[indexPath.row].Username){
             print("username \(pinned_contacts) == \(contacts[indexPath.row].Username)")
@@ -596,8 +612,7 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
         let cell = tble.cellForRow(at: indexPath)
                cell?.backgroundColor = .white
         
-        let profilepic = contacts[indexPath.row].ProfilePicture
-          
+       
         let controller = self.storyboard?.instantiateViewController(identifier: "userdetails") as! UserProfileViewController
       
         
@@ -605,22 +620,30 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
             controller.about = contacts[indexPath.row].BioStatus
             controller.distype = contacts[indexPath.row].UserType
             controller.contactid = contacts[indexPath.row].UserId
-        
-            if contacts[indexPath.row].IsBlocked == 0 {
-        let base = "\(Constants.serverURL)\(contacts[indexPath.row].ProfilePicture)"
-        if let url = URL(string: base) {
+            controller.username = "@"+contacts[indexPath.row].Username
             
-            KingfisherManager.shared.retrieveImage(with: url) { result in
-                switch result {
-                case .success(let value):
-                    let downloadedImage = value.image
-                    controller.img = downloadedImage
-                case .failure(let error):
-                    print("Error downloading image: \(error)")
-                }
+            let base = "\(Constants.serverURL)\(contacts[indexPath.row].ProfilePicture)"
+            
+            if contacts[indexPath.row].IsBlocked == 0 {
+                if contacts[indexPath.row].ProfilePicture != "" {
+                
+                if let url = URL(string: base) {
+                    
+                    KingfisherManager.shared.retrieveImage(with: url) { result in
+                        switch result {
+                        case .success(let value):
+                            let downloadedImage = value.image
+                            controller.img = downloadedImage
+                        case .failure(let error):
+                            print("Error downloading image: \(error)")
+                        }
+                    }
+                } 
             }
-        } else {
-            print("Invalid URL")
+                //profile pic not set by user
+                else{
+                    controller.img =  UIImage(named: "noprofile", in: Bundle.main, compatibleWith: nil)!
+                    
                 }
         }
             //user is blocked
@@ -668,14 +691,14 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
     var isFunctionCalled = false
   
     func scrollDownRefresh(){
-           
-            print("Refreshing  contacts...")
+        
+            showLoadingView()
+            
          DispatchQueue.global().async {
              print("Refreshing data")
                  self.contacts = []
                 self.fetchContactsData()
-                
-             
+    
            }
        }
     
@@ -733,7 +756,7 @@ extension ContactsViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y < -100 && !isFunctionCalled {
             isFunctionCalled = true
-            showLoadingView()
+            
             scrollDownRefresh()
            
                        
