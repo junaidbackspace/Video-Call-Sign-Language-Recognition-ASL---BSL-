@@ -37,13 +37,20 @@ class UserProfileViewController: UIViewController, UITableViewDataSource, UITabl
     
     @IBAction func btncall(_ sender: Any) {
         
-           let controller = self.storyboard?.instantiateViewController(identifier: "callerscreen") //as! CallerViewController
-//        controller.name =  lblname.text!
-//        controller.isringing = "Calling"
-//        controller.profilepic = profilepic.image!
-        controller?.modalPresentationStyle = .fullScreen
-        controller?.hidesBottomBarWhenPushed = true
-        self.navigationController?.pushViewController(controller!, animated: true)
+        var userid = UserDefaults.standard.integer(forKey: "userID")
+            let controller = self.storyboard?.instantiateViewController(identifier: "callerscreen") as! CallerViewController
+        
+        controller.callerid = userid
+        controller.recieverid = contactid
+        controller.name =  name
+        controller.isringing = "Calling"
+        controller.profilepic = img
+               
+            
+       
+        controller.modalPresentationStyle = .fullScreen
+        controller.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(controller, animated: true)
     }
     
     @IBAction func btnBlock(_ sender: Any) {

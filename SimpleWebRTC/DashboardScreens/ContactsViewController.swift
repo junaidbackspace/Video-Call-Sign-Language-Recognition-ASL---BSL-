@@ -661,10 +661,14 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
     @objc func btn_call(_ sender:UIButton)
     {
         
+        var userid = UserDefaults.standard.integer(forKey: "userID")
             let controller = self.storyboard?.instantiateViewController(identifier: "callerscreen") as! CallerViewController
+        
+        controller.callerid = userid
+        controller.recieverid = contacts[sender.tag].UserId
         controller.name =  contacts[sender.tag].Fname+" "+contacts[sender.tag].Lname
         controller.isringing = "Calling"
-        
+        if contacts[sender.tag].ProfilePicture != "" {
         let base = "\(Constants.serverURL)\(contacts[sender.tag].ProfilePicture)"
         if let url = URL(string: base) {
             
@@ -677,14 +681,17 @@ class ContactsViewController: UIViewController ,UITableViewDataSource, UITableVi
                     print("Error downloading image: \(error)")
                 }
             }
-        } else {
-            print("Invalid URL")
         }
-        
+            }
+        else{
+            controller.profilepic =  UIImage(named: "noprofile", in: Bundle.main, compatibleWith: nil)!
+            
+        }
+            
        
-            controller.modalPresentationStyle = .fullScreen
-            controller.hidesBottomBarWhenPushed = true
-            self.navigationController?.pushViewController(controller, animated: true)
+        controller.modalPresentationStyle = .fullScreen
+        controller.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(controller, animated: true)
                
     }
     

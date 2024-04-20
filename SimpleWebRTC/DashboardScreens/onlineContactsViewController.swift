@@ -12,7 +12,8 @@ import Kingfisher
 
 class onlineContactsViewController: UIViewController,UITableViewDataSource, UITableViewDelegate {
     
-    
+    @IBOutlet weak var protectview: UIView!
+    @IBOutlet weak var circleview: UIView!
     var pinned_contacts = [String]()
     var muted_contacts = [String]()
     var longPressGesture: UILongPressGestureRecognizer!
@@ -30,6 +31,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
     @IBAction func addFriend(_ sender: Any) {
         let controller = self.storyboard?.instantiateViewController(identifier: "addcontacts") 
         controller?.modalPresentationStyle = .fullScreen
+        controller?.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(controller!, animated: true)
         
     }
@@ -42,18 +44,43 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
     }
     
     @IBAction func btnplus(_ sender: Any) {
-        if btncontactOutlet.isHidden{
-        btncontactOutlet.isHidden = false
+        if btncontactOutlet.isHidden {
+            // If the button is hidden, animate showing the view
+            UIView.animate(withDuration: 0, animations: {
+               
+                let screenWidth = UIScreen.main.bounds.width
+                let screenHeight = UIScreen.main.bounds.height
+                self.protectview.transform = CGAffineTransform(translationX: 0.8, y:0.8)
+
+                self.protectview.transform = .identity // Reset transform
+                self.protectview.alpha = 0.8 // Make view fully visible
+            }) { (finished) in
+                // After animation completion, show the button and view
+                self.protectview.isHidden = false
+                self.btncontactOutlet.isHidden = false
+            }
+        } else {
+            // If the button is visible, animate hiding the view
+            UIView.animate(withDuration: 0.5, animations: {
+                // Gradually move the view back to its offscreen position
+                let screenWidth = UIScreen.main.bounds.width
+                let screenHeight = UIScreen.main.bounds.height
+                self.protectview.transform = CGAffineTransform(translationX: screenWidth - self.protectview.frame.origin.x, y: screenHeight - self.protectview.frame.origin.y)
+                self.protectview.alpha = 0.0 // Make view fully transparent
+            }) { (finished) in
+                // After animation completion, hide the button and view
+                self.protectview.isHidden = true
+                self.btncontactOutlet.isHidden = true
+            }
         }
-        else{
-        btncontactOutlet.isHidden = true
-        }
+
     }
  
     @IBOutlet weak var btncontactOutlet: UIButton!
     @IBAction func btncontact(_ sender: Any) {
 
-        
+        protectview.isHidden = true
+        btncontactOutlet.isHidden = true
         let controller = self.storyboard?.instantiateViewController(identifier: "Contacts") as! ContactsViewController
         controller.modalPresentationStyle = .fullScreen
         controller.hidesBottomBarWhenPushed = true
@@ -229,7 +256,11 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
 }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        if   actionbuttons_On {
+           
+            actionbuttons_On = false
+        }
+        else{
         let cell = tble.cellForRow(at: indexPath)
                cell?.backgroundColor = .white
         
@@ -272,7 +303,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
         controller.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(controller, animated: true)
            }
-    
+    }
     
     @objc func btn_call(_ sender:UIButton)
     {
@@ -283,7 +314,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
         controller.recieverid = contacts[sender.tag].UserId
         controller.name =  contacts[sender.tag].Fname+" "+contacts[sender.tag].Lname
         controller.isringing = "Calling"
-        
+        if contacts[sender.tag].ProfilePicture != "" {
         let base = "\(Constants.serverURL)\(contacts[sender.tag].ProfilePicture)"
         if let url = URL(string: base) {
             
@@ -296,9 +327,13 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
                     print("Error downloading image: \(error)")
                 }
             }
-        } else {
-            print("Invalid URL")
         }
+            }
+        else{
+            controller.profilepic =  UIImage(named: "noprofile", in: Bundle.main, compatibleWith: nil)!
+            
+        }
+            
        
         controller.modalPresentationStyle = .fullScreen
         controller.hidesBottomBarWhenPushed = true
@@ -381,6 +416,11 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        btncontactOutlet.alpha = 1
+        circleview.alpha = 1
+        circleview.layer.cornerRadius = 44
+        
+        protectview.isHidden = true
         //for update list after block /unblock from user profile
         NotificationCenter.default.addObserver(self, selector: #selector(refreshContacts), name: .RefreshOnlineContacts, object: nil)
 
@@ -573,7 +613,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
                   customView.addSubview(blockButton)
                   
                   // Make sure customView is not already added somewhere else
-                  customView.removeFromSuperview()
+//                  customView.removeFromSuperview()
                   
                   
                   let cellRect = cell.convert(cell.bounds, to: view)
@@ -595,8 +635,9 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
   
       
       @objc func pinButtonTapped() {
-         
-           customView.isHidden = true
+        
+            customView.removeFromSuperview()
+            customView.isHidden = true
             actionbuttons_On = false // Assuming you want to reset this flag
           print("\n\n\nselected row is : \(selectedrow)")
           
@@ -645,6 +686,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
   
   
       @objc func muteButtonTapped() {
+        customView.removeFromSuperview()
           customView.isHidden = true
            actionbuttons_On = false // Assuming you want to reset this flag
           
@@ -667,6 +709,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
   
   
       @objc func blockButtonTapped() {
+        customView.removeFromSuperview()
           customView.isHidden = true
            actionbuttons_On = false // Assuming you want to reset this flag
           

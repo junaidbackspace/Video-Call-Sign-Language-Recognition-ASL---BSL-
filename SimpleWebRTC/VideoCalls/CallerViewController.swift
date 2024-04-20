@@ -67,7 +67,7 @@ class CallerViewController: UIViewController {
         
         setupCamera()
         imgview.image = profilepic
-        imgview.layer.cornerRadius = 30
+        imgview.layer.cornerRadius = 35
         imgview.clipsToBounds = true
         lblname.text = name
         lbl_is_ringing.text = isringing
