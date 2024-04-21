@@ -92,6 +92,7 @@ class expertlevelViewController: UIViewController {
     
 
     @IBAction func btn_Phrases(_ sender: Any) {
+        if lessonstrct.count > 0 {
         let controller = self.storyboard?.instantiateViewController(identifier: "LessonsGallery") as! LessonsListViewController
         controller.trainingname = "Phrases"
         controller.lesson_level = "Expert"
@@ -100,8 +101,19 @@ class expertlevelViewController: UIViewController {
         controller.modalPresentationStyle = .fullScreen
         self.navigationController?.pushViewController(controller, animated: true)
     }
+    else {
+            // Show an alert controller indicating the error
+            let alertController = UIAlertController(title: "Error", message: "Network is Required", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alertController.addAction(okAction)
+            self.present(alertController, animated: true, completion: nil)
+            return
+
+        }
+    }
     
     @IBAction func btn_Numbers(_ sender: Any) {
+        if lessonstrct.count > 0 {
         let controller = self.storyboard?.instantiateViewController(identifier: "LessonsGallery") as! LessonsListViewController
         controller.trainingname = "Numbers"
         controller.lesson_level = "Expert"
@@ -109,8 +121,19 @@ class expertlevelViewController: UIViewController {
         controller.hidesBottomBarWhenPushed = true
         controller.modalPresentationStyle = .fullScreen
         self.navigationController?.pushViewController(controller, animated: true)
+        }
+        else {
+                // Show an alert controller indicating the error
+                let alertController = UIAlertController(title: "Error", message: "Network is Required", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+                return
+
+            }
     }
     @IBAction func btn_Alphabets(_ sender: Any) {
+        if lessonstrct.count > 0 {
         let controller = self.storyboard?.instantiateViewController(identifier: "LessonsGallery") as! LessonsListViewController
         controller.trainingname = "Alphbets"
         controller.lesson_level = "Expert"
@@ -118,6 +141,16 @@ class expertlevelViewController: UIViewController {
         controller.hidesBottomBarWhenPushed = true
         controller.modalPresentationStyle = .fullScreen
         self.navigationController?.pushViewController(controller, animated: true)
+    }
+    else {
+        // Show an alert controller indicating the error
+        let alertController = UIAlertController(title: "Error", message: "Network is Required", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
+        return
+
+    }
     }
 
 }

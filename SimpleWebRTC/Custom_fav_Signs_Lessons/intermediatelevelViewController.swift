@@ -99,7 +99,7 @@ class intermediatelevelViewController: UIViewController {
 
     @IBAction func btn_Numbers(_ sender: Any) {
         
-       
+        if lessonstrct.count > 0 {
         let controller = self.storyboard?.instantiateViewController(identifier: "LessonsGallery") as! LessonsListViewController
         controller.trainingname = "Numbers"
         controller.lesson_level = "Intermediate"
@@ -107,11 +107,20 @@ class intermediatelevelViewController: UIViewController {
         controller.hidesBottomBarWhenPushed = true
         controller.modalPresentationStyle = .fullScreen
         self.navigationController?.pushViewController(controller, animated: true)
+    } else {
+        // Show an alert controller indicating the error
+        let alertController = UIAlertController(title: "Error", message: "Network is Required", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
+        return
+
+    }
     }
  
     @IBAction func btn_Grammers(_ sender: Any) {
         
-       
+        if lessonstrct.count > 0 {
         let controller = self.storyboard?.instantiateViewController(identifier: "LessonsGallery") as! LessonsListViewController
         controller.trainingname = "Grammer"
         controller.lesson_level = "Intermediate"
@@ -120,10 +129,21 @@ class intermediatelevelViewController: UIViewController {
         controller.modalPresentationStyle = .fullScreen
         self.navigationController?.pushViewController(controller, animated: true)
     }
+        else {
+            // Show an alert controller indicating the error
+            let alertController = UIAlertController(title: "Error", message: "Network is Required", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alertController.addAction(okAction)
+            self.present(alertController, animated: true, completion: nil)
+            return
+
+        }
+        
+    }
  
     @IBAction func btn_Vocab(_ sender: Any) {
         
-       
+        if lessonstrct.count > 0 {
         let controller = self.storyboard?.instantiateViewController(identifier: "LessonsGallery") as! LessonsListViewController
         controller.trainingname = "Vocabuary"
         controller.lesson_level = "Intermediate"
@@ -131,11 +151,22 @@ class intermediatelevelViewController: UIViewController {
         controller.hidesBottomBarWhenPushed = true
         controller.modalPresentationStyle = .fullScreen
         self.navigationController?.pushViewController(controller, animated: true)
+        
+        }
+        else {
+            // Show an alert controller indicating the error
+            let alertController = UIAlertController(title: "Error", message: "Network is Required", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alertController.addAction(okAction)
+            self.present(alertController, animated: true, completion: nil)
+            return
+
+        }
     }
  
     @IBAction func btn_Expressions(_ sender: Any) {
         
-       
+        if lessonstrct.count > 0 {
         let controller = self.storyboard?.instantiateViewController(identifier: "LessonsGallery") as! LessonsListViewController
         controller.trainingname = "Expressions"
         controller.lesson_level = "Intermediate"
@@ -143,6 +174,16 @@ class intermediatelevelViewController: UIViewController {
         controller.hidesBottomBarWhenPushed = true
         controller.modalPresentationStyle = .fullScreen
         self.navigationController?.pushViewController(controller, animated: true)
+    }
+    else {
+        // Show an alert controller indicating the error
+        let alertController = UIAlertController(title: "Error", message: "Network is Required", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
+        return
+
+    }
     }
  
 
