@@ -17,6 +17,7 @@
 		652C0AEE2BBC0A0C00D89A57 /* lessonsStrct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652C0AED2BBC0A0C00D89A57 /* lessonsStrct.swift */; };
 		656168BB2B724FA70006E5D2 /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656168BA2B724FA70006E5D2 /* ContactsViewController.swift */; };
 		656168BF2B72A80B0006E5D2 /* DetailedContactsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656168BE2B72A80B0006E5D2 /* DetailedContactsTableViewCell.swift */; };
+		65736E5A2BD6C914001D7418 /* webSockets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65736E592BD6C914001D7418 /* webSockets.swift */; };
 		6573B4772B716AAE000DD658 /* onlineContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6573B4762B716AAE000DD658 /* onlineContactsViewController.swift */; };
 		6573B4812B716DFA000DD658 /* ContactTableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6573B4802B716DFA000DD658 /* ContactTableTableViewCell.swift */; };
 		6574CA852B8F197000B80C11 /* intermediatelevelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6574CA842B8F197000B80C11 /* intermediatelevelViewController.swift */; };
@@ -118,6 +119,7 @@
 		652C0AED2BBC0A0C00D89A57 /* lessonsStrct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lessonsStrct.swift; sourceTree = "<group>"; };
 		656168BA2B724FA70006E5D2 /* ContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
 		656168BE2B72A80B0006E5D2 /* DetailedContactsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedContactsTableViewCell.swift; sourceTree = "<group>"; };
+		65736E592BD6C914001D7418 /* webSockets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = webSockets.swift; sourceTree = "<group>"; };
 		6573B4762B716AAE000DD658 /* onlineContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = onlineContactsViewController.swift; sourceTree = "<group>"; };
 		6573B4802B716DFA000DD658 /* ContactTableTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactTableTableViewCell.swift; sourceTree = "<group>"; };
 		6574CA842B8F197000B80C11 /* intermediatelevelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = intermediatelevelViewController.swift; sourceTree = "<group>"; };
@@ -463,6 +465,7 @@
 				AF90A8DF220CF07A0083687C /* RTCCustomFrameCapture.swift */,
 				AF60113F24547E7B00E6E407 /* RTCSimulatorVideoDecoderFactory.swift */,
 				AF601141245481FC00E6E407 /* RTCSimluatorVideoEncoderFactory.swift */,
+				65736E592BD6C914001D7418 /* webSockets.swift */,
 			);
 			path = WebRTC;
 			sourceTree = "<group>";
@@ -706,6 +709,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				378B38D82365C2A8002C5E8B /* CameraFilter.swift in Sources */,
+				65736E5A2BD6C914001D7418 /* webSockets.swift in Sources */,
 				65A986FC2B7CF10B0011753C /* CallerViewController.swift in Sources */,
 				AF15C0B721E54EB1005B4ED6 /* SignalingCandidate.swift in Sources */,
 				65A986E72B7C9CA40011753C /* NotificationsViewController.swift in Sources */,

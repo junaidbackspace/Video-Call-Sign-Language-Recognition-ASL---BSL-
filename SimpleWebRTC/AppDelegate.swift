@@ -10,17 +10,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WebSocketDelegate {
     var webRTCClient: WebRTCClient!
     var socket: WebSocket!
     var backgroundTask: UIBackgroundTaskIdentifier = .invalid
-    let ipAddress: String = "192.168.31.105"
-
+    let ipAddress: String = Constants.nodeserverIP
+    let userID = UserDefaults.standard.string(forKey: "userID")
+    
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         webRTCClient = WebRTCClient()
-        socket = WebSocket(url: URL(string: "ws://" + ipAddress + ":8080/")!)
+        socket = WebSocket(url: URL(string: "ws://" + ipAddress + ":8080")!)
         socket.delegate = self
         socket.connect()
-        var online = onlineContactsViewController()
-        print("termination app, turning offline status")
-        online.getOnlineStatus(status: 0)
+        
         
 
         return true
@@ -28,6 +28,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WebSocketDelegate {
 
     func applicationDidEnterBackground(_ application: UIApplication) {
         
+        let online = onlineContactsViewController()
+        print("termination app, turning offline status")
+        online.getOnlineStatus(status: 0)
        
         backgroundTask = application.beginBackgroundTask {
             // End background task if time expires
@@ -39,9 +42,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WebSocketDelegate {
             while true {
                 if !self.socket.isConnected {
                     self.socket.connect()
-                    print("Connected in background")
+                    print("Connecting in background")
                 }
-                print("trying to connect in background")
+                else{
+                print(" connected in background")
+                    break
+                }
                 Thread.sleep(forTimeInterval: 2) // Adjust interval as needed
             }
         }
@@ -54,6 +60,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WebSocketDelegate {
 
     func websocketDidConnect(socket: WebSocketClient) {
         print("-- WebSocket did connect --")
+        
+        // Perform authentication
+                let authData: [String: Any] = ["userId": userID]
+                do {
+                    let jsonData = try JSONSerialization.data(withJSONObject: authData, options: [])
+                    socket.write(data: jsonData)
+                } catch {
+                    print("Error serializing authentication data: \(error)")
+                }
     }
 
     func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
@@ -64,11 +79,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WebSocketDelegate {
     }
 
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
-        // Handle received message
+        
+        print("Received message: \(text)")
     }
 
     func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
-        // Handle received data
+        print("Received data: \(data)")
     }
     
     

@@ -80,6 +80,12 @@ class CallerViewController: UIViewController {
         lbl_is_ringing.layer.zPosition = 1
         imgview.layer.zPosition = 1
         
+        let websoc = sockets()
+        
+        let friendid = String(recieverid)
+        print("here is reciver id  : \(friendid)")
+        
+        websoc.initiateCall(with: friendid)
         CallAPI(caller: callerid, reciver: recieverid)
        }
        
