@@ -1,27 +1,26 @@
 
 import UIKit
 import WebRTC
-import Starscream
+
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, WebSocketDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate{
 
     var window: UIWindow?
-    var webRTCClient: WebRTCClient!
-    var socket: WebSocket!
+
     var backgroundTask: UIBackgroundTaskIdentifier = .invalid
-    let ipAddress: String = Constants.nodeserverIP
-    let userID = UserDefaults.standard.string(forKey: "userID")
+    let socketObj = socketsClass()
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        webRTCClient = WebRTCClient()
-        socket = WebSocket(url: URL(string: "ws://" + ipAddress + ":8080")!)
-        socket.delegate = self
-        socket.connect()
-        
-        
+//        webRTCClient = WebRTCClient()
+//        socket = WebSocket(url: URL(string: "ws://" + ipAddress + ":8080")!)
+//        socket.delegate = self
+//        socket.connect()
+//
+    
+        socketObj.connectSocket()
 
         return true
     }
@@ -40,8 +39,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WebSocketDelegate {
         
         DispatchQueue.global().async {
             while true {
-                if !self.socket.isConnected {
-                    self.socket.connect()
+                if !self.socketObj.socket.isConnected {
+                    self.socketObj.socket.connect()
                     print("Connecting in background")
                 }
                 else{
@@ -58,35 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WebSocketDelegate {
         backgroundTask = .invalid
     }
 
-    func websocketDidConnect(socket: WebSocketClient) {
-        print("-- WebSocket did connect --")
-        
-        // Perform authentication
-                let authData: [String: Any] = ["userId": userID]
-                do {
-                    let jsonData = try JSONSerialization.data(withJSONObject: authData, options: [])
-                    socket.write(data: jsonData)
-                } catch {
-                    print("Error serializing authentication data: \(error)")
-                }
-    }
-
-    func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
-        print("-- WebSocket did disconnect --")
-        if let error = error {
-            print("Error: \(error)")
-        }
-    }
-
-    func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
-        
-        print("Received message: \(text)")
-    }
-
-    func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
-        print("Received data: \(data)")
-    }
-    
+   
     
 }
 

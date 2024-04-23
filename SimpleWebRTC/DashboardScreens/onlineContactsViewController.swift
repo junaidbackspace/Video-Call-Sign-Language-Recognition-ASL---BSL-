@@ -10,7 +10,16 @@ import UIKit
 import Kingfisher
 
 
-class onlineContactsViewController: UIViewController,UITableViewDataSource, UITableViewDelegate {
+class onlineContactsViewController: UIViewController,UITableViewDataSource, UITableViewDelegate ,IncomingCallDelegate {
+    func presentIncomingCallScreen(isRecieving: Bool) {
+        print("\nrecieveing \(isRecieving)")
+        
+        
+    }
+    
+
+    
+    
     
     @IBOutlet weak var protectview: UIView!
     @IBOutlet weak var circleview: UIView!
@@ -213,7 +222,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
         if let image = UIImage(named: "pin", in: Bundle.main, compatibleWith: nil) {
             
           if pinned_contacts.contains(contacts[indexPath.row].Username){
-              print("username \(pinned_contacts) == \(contacts[indexPath.row].Username)")
+//              print("username \(pinned_contacts) == \(contacts[indexPath.row].Username)")
             
               cell?.pin?.image = image
                   }
@@ -415,6 +424,16 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(openViewController(_:)), name: .openViewControllerNotification, object: nil)
+         
+        let sharedSockets = socketsClass.shared
+            sharedSockets.incomingCallDelegate = self
+            
+            // Set the active view controller
+            sharedSockets.activeViewController = self
+            
+            // Simulate receiving an incoming call
+            sharedSockets.receiveIncomingCall()
         
         btncontactOutlet.alpha = 1
         circleview.alpha = 1
@@ -471,7 +490,20 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
         swipeDown.direction = .down
              view.addGestureRecognizer(swipeDown)
       }
-    
+    deinit {
+            // Unsubscribe from the notification
+            NotificationCenter.default.removeObserver(self, name: .openViewControllerNotification, object: nil)
+        }
+    @objc func openViewController(_ notification: Notification) {
+          
+        if let value = notification.userInfo?["callerid"] as? String {
+            
+        let callReceiverVC = storyboard?.instantiateViewController(withIdentifier: "callRecieverscreen") as! CallRecieverViewController
+        callReceiverVC.hidesBottomBarWhenPushed = true
+            callReceiverVC.calllerid = value
+        navigationController?.pushViewController(callReceiverVC, animated: true)
+        }
+       }
     @objc func swipedDown(_ gesture: UISwipeGestureRecognizer) {
            if gesture.direction == .down {
             //Displaying Refreshing
@@ -495,7 +527,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
         }
         
         let Url = "\(Constants.serverURL)/contacts/\(userID)/online-contacts"
-        print("URL: "+Url)
+        
       
         let url = URL(string: Url)!
         serverWrapper.fetchData(baseUrl: url, structure: [ContactsUser].self) { contactsUsers, error in

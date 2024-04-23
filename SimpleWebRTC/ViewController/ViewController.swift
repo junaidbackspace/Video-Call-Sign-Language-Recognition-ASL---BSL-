@@ -122,7 +122,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
 //            self.socket.connect()
 //        })
         if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                   socket = appDelegate.socket
+            socket = appDelegate.socketObj.socket
                     
                 } else {
                     print("Unable to access AppDelegate")

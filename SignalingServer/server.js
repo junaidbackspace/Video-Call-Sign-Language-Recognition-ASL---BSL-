@@ -73,15 +73,20 @@ wsServer.on('connection', function (ws) {
 function handleCall(from, to) {
     // Check if the recipient (to) is connected
     if (clients.has(to)) {
-        const recipient = clients.get(to);
+        const recipient = clients.get(to); //friend
+        const caller = clients.get(from); // user
         // Send call initiation message to the recipient
+
+        caller.send(JSON.stringify({ type: 'ringing', to: to }));
         recipient.send(JSON.stringify({ type: 'incoming_call', from: from }));
         console.log(`Initiating call from '${from}' to '${to}'`);
         return `Initiating call from '${from}' to '${to}'`;
     } else {
         console.log(`User '${to}' is not connected.`);
-        return `User '${to}' is not connected.`;
         // Optionally, you can send a message back to the caller indicating that the recipient is not available
+        const caller = clients.get(from);
+        caller.send(JSON.stringify({ type: 'recipient_not_available', to: to }));
+        return `User '${to}' is not connected.`;
     }
 }
 

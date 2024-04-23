@@ -10,11 +10,13 @@ import UIKit
 import AVFoundation
 class CallRecieverViewController: UIViewController {
     
-    var name = ""
-    var img = UIImage()
-       var captureSession: AVCaptureSession?
-       var videoPreviewLayer: AVCaptureVideoPreviewLayer?
-    
+
+  
+    var captureSession: AVCaptureSession?
+    var videoPreviewLayer: AVCaptureVideoPreviewLayer?
+    var user = User()
+    var serverWrapper = APIWrapper()
+    var calllerid = ""
     @IBOutlet weak var lblrecievingCall: UILabel!
     @IBOutlet weak var lblname: UILabel!
     @IBOutlet weak var profilePic: UIImageView!
@@ -32,8 +34,10 @@ class CallRecieverViewController: UIViewController {
 
          override func viewDidLoad() {
              super.viewDidLoad()
-            lblname.text = name
-            profilePic.image = img
+            
+            
+            
+          fetchUserData(callerId: calllerid)
             startCamera()
             acceptButton.layer.zPosition = 1
             rejectButton.layer.zPosition = 1
@@ -154,7 +158,7 @@ class CallRecieverViewController: UIViewController {
         
         func rejectCall() {
             print("Rejected call")
-            
+            self.navigationController?.popViewController(animated: true)
             captureSession?.stopRunning()
         }
     
@@ -191,5 +195,53 @@ class CallRecieverViewController: UIViewController {
            super.viewDidLayoutSubviews()
            videoPreviewLayer?.frame = videoView.bounds
        }
+    
 
+   
+
+    func fetchUserData(callerId : String) {
+       
+        let userID = String(callerId)
+        let Url = "\(Constants.serverURL)/user/userdetails/\(userID)"
+        print("URL: "+Url)
+      
+        let url = URL(string: Url)!
+        
+        self.serverWrapper.fetchUserInfo(baseUrl: url, structure: singleUserInfo.self) { userInfo, error in
+            if let error = error {
+                print("inner URL: \(Url)")
+                print("Error in receiving:", error.localizedDescription)
+            } else if let userObject = userInfo {
+                print("JSON Data:", userObject)
+                self.processContactsData(userObject)
+            } else {
+                print("No data received from the server")
+            }
+        }
+    }
+
+    func processContactsData(_ userObject: singleUserInfo) {
+        print("Processing user data")
+        user.Fname = userObject.fname
+        user.Lname = userObject.lname
+        user.ProfilePicture = userObject.profile_picture
+        
+        lblname.text = user.Fname+" "+user.Lname
+        
+        let group = DispatchGroup()
+          group.enter()
+
+        let urlString = "\(Constants.serverURL)\(user.ProfilePicture)"
+
+        if let url = URL(string: urlString) {
+            profilePic.kf.setImage(with: url, placeholder: UIImage(named: "No image found"))
+        } else {
+            // Handle invalid URL
+            print("Invalid URL:", urlString)
+        }
+        
+        group.leave()
+    }
+    
+   
 }

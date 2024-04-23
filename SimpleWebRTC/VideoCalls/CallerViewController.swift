@@ -60,10 +60,21 @@ class CallerViewController: UIViewController {
 
         }
     }
+    @objc func handleNotification(_ notification: Notification) {
+            if let text = notification.userInfo?["text"] as? String {
+                lbl_is_ringing.text = text
+            }
+        }
+
+        // Don't forget to remove observer when the ViewController is deallocated
+        deinit {
+            NotificationCenter.default.removeObserver(self)
+        }
     
        override func viewDidLoad() {
            super.viewDidLoad()
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotification(_:)), name: Notification.Name("UpdateLabelNotification"), object: nil)
+           
         
         setupCamera()
         imgview.image = profilepic
@@ -80,7 +91,7 @@ class CallerViewController: UIViewController {
         lbl_is_ringing.layer.zPosition = 1
         imgview.layer.zPosition = 1
         
-        let websoc = sockets()
+        let websoc = socketsClass()
         
         let friendid = String(recieverid)
         print("here is reciver id  : \(friendid)")

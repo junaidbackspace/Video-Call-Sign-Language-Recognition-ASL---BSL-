@@ -9,7 +9,21 @@ import WebRTC
 import Starscream
 import Foundation
 
-class sockets: WebSocketDelegate{
+protocol IncomingCallDelegate: AnyObject {
+    func presentIncomingCallScreen(isRecieving : Bool)
+}
+
+class socketsClass: WebSocketDelegate{
+    
+    // Singleton instance
+       static let shared = socketsClass()
+
+       // Weak reference to the current active view controller
+       weak var activeViewController: UIViewController?
+       
+       // Delegate to notify about incoming calls
+       weak var incomingCallDelegate: IncomingCallDelegate?
+
     
 var webRTCClient = WebRTCClient()
 var  socket : WebSocket!
@@ -63,10 +77,65 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
     }
 }
 
-func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
-    
-    print("Received message: \(text)")
-}
+    func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
+       
+
+//        let receivedMessage = text
+
+        let jsonString = text
+
+        // Remove curly braces and split by comma
+        let components = jsonString
+            .replacingOccurrences(of: "{", with: "")
+            .replacingOccurrences(of: "}", with: "")
+            .components(separatedBy: ",")
+
+        // Iterate over key-value pairs
+        var type: String?
+        var from: String?
+
+        
+        for component in components {
+            // Split each component by colon
+            let keyValue = component.components(separatedBy: ":")
+            if keyValue.count == 2 {
+               
+                // Remove surrounding quotes and whitespace
+                let key = keyValue[0].trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\"", with: "")
+                let value = keyValue[1].trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\"", with: "")
+                
+                // Store key-value pair in variables
+                switch key {
+                case "type":
+                    type = value
+                case "from":
+                    from = value
+                case "to":
+                    from = value
+                default:
+                    break
+                }
+            }
+        }
+
+        if type == "incoming_call"{
+           
+            print("incoming call From: \(from)")
+            callerid = from!
+            receiveIncomingCall()
+           
+        }
+        if type == "ringing" {
+            print("user \(from) is ringing ")
+            NotificationCenter.default.post(name: Notification.Name("UpdateLabelNotification"), object: nil, userInfo: ["text": "Ringing..."])
+              
+        }
+        // Print variables
+       
+    }
+
+var callerid = ""
+
 
 func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
     print("Received data: \(data)")
@@ -89,5 +158,26 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
 
 
 
+    func receiveIncomingCall() {
+       
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            // Ensure that the delegate is set and the function is implemented
+            guard let delegate = self.incomingCallDelegate else {
+                print("Incoming call delegate not set")
+                
+                NotificationCenter.default.post(name: .openViewControllerNotification, object: nil,  userInfo: ["callerid": self.callerid])
+                   
+                return
+            }
+            
+            
+           
+            }
 
+        }
+    
+
+}
+extension Notification.Name {
+    static let openViewControllerNotification = Notification.Name("openViewControllerNotification")
 }
