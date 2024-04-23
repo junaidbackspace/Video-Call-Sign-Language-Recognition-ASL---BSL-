@@ -298,7 +298,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         }
     }
     
-    // MARK: - Private functions
+    // MARK:- Private functions
     // MARK: - Setup
     private func setupPeerConnection() -> RTCPeerConnection{
         let rtcConf = RTCConfiguration()

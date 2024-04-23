@@ -111,22 +111,25 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
             self.cameraFilter = CameraFilter()
         }
         
-//        socket = WebSocket(url: URL(string: "ws://" + ipAddress + ":8080/")!)
-//        socket.delegate = self
-//
-//        tryToConnectWebSocket = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { (timer) in
+        
+         let ipAddress = Constants.nodeserverIP
+       self.socket = WebSocket(url: URL(string: "ws://" + ipAddress + ":8080")!)
+       socket.delegate = self
+
+//      let  tryToConnectWebSocket = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { (timer) in
 //            if self.webRTCClient.isConnected || self.socket.isConnected {
 //                return
-//            }
-//
-//            self.socket.connect()
-//        })
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            socket = appDelegate.socketObj.socket
-                    
-                } else {
-                    print("Unable to access AppDelegate")
-                }
+//            }  })
+    self.socket.connect()
+       
+     
+        
+//        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+//            socket = appDelegate.socketObj.socket
+//                    
+//                } else {
+//                    print("Unable to access AppDelegate")
+//                }
         
         // Do any additional setup after loading the view, typically from a nib.
         
@@ -224,10 +227,22 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         
         if !webRTCClient.isConnected {
             print("call Tapped")
+//            let message = ["type": "call_accept"] // Construct the message indicating call acceptance
+//                guard let jsonData = try? JSONSerialization.data(withJSONObject: message) else {
+//                    print("Error creating JSON data for call acceptance message")
+//                    return
+//                }
+//                guard let jsonString = String(data: jsonData, encoding: .utf8) else {
+//                    print("Error converting JSON data to string")
+//                    return
+//                }
+//
+//                // Send the JSON string to the WebSocket server
+//            socket.write(string: jsonString)
             webRTCClient.connect(onSuccess: { (offerSDP: RTCSessionDescription) -> Void in
                 self.sendSDP(sessionDescription: offerSDP)
             })
-            webRTCClient.startCaptureFrames()
+//            webRTCClient.startCaptureFrames()
             
         }
     }
@@ -314,7 +329,16 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
 extension ViewController {
     
     func websocketDidConnect(socket: WebSocketClient) {
+        let userID = UserDefaults.standard.string(forKey: "userID")!
+          
         print("-- websocket did connect --")
+        let authData: [String: Any] = ["userId": userID]
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: authData, options: [])
+            socket.write(data: jsonData)
+        } catch {
+            print("Error serializing authentication data: \(error)")
+        }
 //        wsStatusLabel.text = wsStatusMessageBase + "connected"
 //        wsStatusLabel.textColor = .green
         print("\nWebSocket Connected\n")

@@ -23,7 +23,7 @@ wsServer.on('connection', function (ws) {
                 return;
             }
             if (clients.has(userId)) {
-                ws.close();
+                // ws.close();
                 console.log(`Connection closed: User ID '${userId}' is already in use.`);
                 return;
             }
@@ -67,7 +67,46 @@ wsServer.on('connection', function (ws) {
     ws.on('error', function (error) {
         console.error('WebSocket error:', error);
     });
+    ws.on('message', function (message) {
+        console.log('-- message received --');
+        try {
+            const data = JSON.parse(message);
+            const { type, from, to, sdp, candidate } = data; // Extract necessary fields from the received message
+            
+            if (type === 'call') {
+                if (!userConnections.has(from) && !userConnections.has(to)) {
+                    // Store the WebSocket connections associated with the sender and recipient user IDs
+                    userConnections.set(from, ws);
+                    userConnections.set(to, ws);
+                    console.log(`User IDs '${from}' and '${to}' saved for video call.`);
+                    
+                    // Notify the recipient about the call initiation
+                    const recipient = userConnections.get(to);
+                    recipient.send(message); // Forward the call initiation message to the recipient
+                } else {
+                    console.log(`User IDs '${from}' and '${to}' are already associated with a video call.`);
+                }
+            } else if (type === 'sdp' || type === 'candidate') {
+                // Forward SDP or ICE candidate messages to the appropriate recipient
+                if (userConnections.has(to)) {
+                    const recipient = userConnections.get(to);
+                    recipient.send(message);
+                } else {
+                    console.log(`User '${to}' is not connected.`);
+                }
+            } else {
+                // Handle other types of messages (if any)
+            }
+        } catch (error) {
+            console.error('Error handling message:', error);
+        }
+    });
+    
 });
+function isSame(ws1, ws2) {
+    // -- compare object --
+    return (ws1 === ws2);
+}
 
 // Function to handle call initiation
 function handleCall(from, to) {

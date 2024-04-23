@@ -26,7 +26,7 @@ class socketsClass: WebSocketDelegate{
 
     
 var webRTCClient = WebRTCClient()
-var  socket : WebSocket!
+public var  socket : WebSocket!
 var backgroundTask: UIBackgroundTaskIdentifier = .invalid
 var ipAddress: String
 var userID = ""
@@ -54,7 +54,7 @@ func connectSocket(){
         }
     
 
-
+    
 
 
 func websocketDidConnect(socket: WebSocketClient) {
@@ -129,6 +129,13 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
             print("user \(from) is ringing ")
             NotificationCenter.default.post(name: Notification.Name("UpdateLabelNotification"), object: nil, userInfo: ["text": "Ringing..."])
               
+        }
+        if type == "call_accept"{
+           
+            print("call acepted by user")
+            NotificationCenter.default.post(name: NSNotification.Name("callacepted"), object: nil)
+
+           
         }
         // Print variables
        

@@ -17,6 +17,7 @@ class CallRecieverViewController: UIViewController {
     var user = User()
     var serverWrapper = APIWrapper()
     var calllerid = ""
+    var userid = UserDefaults.standard.integer(forKey: "userID")
     @IBOutlet weak var lblrecievingCall: UILabel!
     @IBOutlet weak var lblname: UILabel!
     @IBOutlet weak var profilePic: UIImageView!
@@ -32,9 +33,12 @@ class CallRecieverViewController: UIViewController {
          var rejectButtonDragging = false
          let maxButtonTranslation: CGFloat = 100 // Adjust the maximum translation as needed
 
+    
+    let socketObj = socketsClass()
+    
          override func viewDidLoad() {
              super.viewDidLoad()
-            
+            socketObj.socket.connect()
             
             
           fetchUserData(callerId: calllerid)
@@ -48,8 +52,19 @@ class CallRecieverViewController: UIViewController {
              // Add pan gesture recognizer for drag-up interaction
              let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
              self.view.addGestureRecognizer(panGesture)
-         }
+            NotificationCenter.default.addObserver(self, selector: #selector(handleCallNotification(_:)), name: NSNotification.Name("callacepted"), object: nil)
 
+         }
+    
+    
+    
+    @objc func handleCallNotification(_ notification: Notification) {
+        let controller = (self.storyboard?.instantiateViewController(identifier: "videoCallscreen"))! as ViewController
+        controller.modalPresentationStyle = .fullScreen
+          self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    
          @objc func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
              let translation = gesture.translation(in: self.view)
              let velocity = gesture.velocity(in: self.view)
@@ -152,8 +167,20 @@ class CallRecieverViewController: UIViewController {
 
 
     func acceptCall() {
+        
             print("Accepted call")
-            // Implement the logic to accept the call here
+        let callData = ["type": "call", "from": String(userid), "to": calllerid]
+               if let jsonData = try? JSONSerialization.data(withJSONObject: callData) {
+                   if let jsonString = String(data: jsonData, encoding: .utf8) {
+                    socketObj.socket.write(string: jsonString)
+                   }
+               }
+            
+            // Send the JSON string to the WebSocket server
+       
+        let controller = (self.storyboard?.instantiateViewController(identifier: "videoCallscreen"))! as ViewController
+        controller.modalPresentationStyle = .fullScreen
+          self.navigationController?.pushViewController(controller, animated: true)
         }
         
         func rejectCall() {
