@@ -68,7 +68,9 @@ wsServer.on('connection', function (ws) {
         console.error('WebSocket error:', error);
     });
     ws.on('message', function (message) {
+
         console.log('-- message received --');
+        console.log(message)
         try {
             const data = JSON.parse(message);
             const { type, from, to, sdp, candidate } = data; // Extract necessary fields from the received message
