@@ -158,7 +158,7 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
         
         //To take orignallist
         if n < 1{
-            print(" Copying orignal contacts")
+            print(" Copying orignal Callers")
             dumylist = contacts
             filteredContacts = contacts
              n += 1
@@ -339,10 +339,10 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
         let url = URL(string: Url)!
         serverWrapper.fetchData(baseUrl: url, structure: [CallLogs].self) { UserCallHistory, error in
             if let error = error {
-                print("Error:", error.localizedDescription)
+                print("Call History Error:", error.localizedDescription)
                
             } else if let jsonData = UserCallHistory {
-                print("JSON Data:", jsonData)
+                print("Call History Data:", jsonData)
                
                 self.processContactsData(jsonData)
             } else {
@@ -381,7 +381,14 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
                 user.OnlineStatus = onlineStatus
                 user.isCaller = iscaller
                 user.Call_StartTime = startTime
-                user.Call_EndTime = endTime
+                if let endtime = user.Call_EndTime {
+                    
+                    user.Call_EndTime = endtime
+                }
+
+                else{
+                    user.Call_EndTime = "not ended"
+                }
                 user.UserId = userid
                 user.Username = username
                 self.contacts.append(user)

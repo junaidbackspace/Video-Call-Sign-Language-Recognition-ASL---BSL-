@@ -44,7 +44,7 @@ func connectSocket(){
             if !socket.isConnected {
                 
                 socket.delegate = self
-                socket.connect()
+                self.socket.connect()
                 print("Connecting in background")
             }
             else{
@@ -130,7 +130,7 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
             NotificationCenter.default.post(name: Notification.Name("UpdateLabelNotification"), object: nil, userInfo: ["text": "Ringing..."])
               
         }
-        if type == "call_accept"{
+        if type == "call_accepted"{
            
             print("call acepted by user")
             NotificationCenter.default.post(name: NSNotification.Name("callacepted"), object: nil)

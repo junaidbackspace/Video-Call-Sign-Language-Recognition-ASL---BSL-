@@ -34,7 +34,7 @@ class CallerViewController: UIViewController {
   
     var callerid = 0
     var recieverid = 0
-    
+
     func CallAPI(caller : Int ,reciver : Int )
     {
         let Url = "\(Constants.serverURL)/video-call/start"
@@ -43,29 +43,35 @@ class CallerViewController: UIViewController {
             "caller_id": caller,
               "receiver_id": reciver ]
 
-        serverWrapper.insertData(baseUrl: Url,  userDictionary: Dic) { responseString, error in
-            if let error = error {
-                print("\n\nError:", error)
-               }
-            
-            if let responseString = responseString {
-                print("w response:", responseString)
-                
-                guard let responseData = responseString.data(using: .utf8) else {
-                    print("Error converting response data to UTF-8")
-                    return
-                }
-                
-            }
-
-        }
+//        serverWrapper.insertData(baseUrl: Url,  userDictionary: Dic) { responseString, error in
+//            if let error = error {
+//                print("\n\nError:", error)
+//               }
+//
+//            if let responseString = responseString {
+//                print("w response:", responseString)
+//
+//                guard let responseData = responseString.data(using: .utf8) else {
+//                    print("Error converting response data to UTF-8")
+//                    return
+//                }
+//
+//           }
+//
+//        }
     }
     @objc func handleNotification(_ notification: Notification) {
             if let text = notification.userInfo?["text"] as? String {
                 lbl_is_ringing.text = text
             }
         }
-
+    @objc func handleCallNotification(_ notification: Notification) {
+        let controller = (self.storyboard?.instantiateViewController(identifier: "videoCallscreen"))! as ViewController
+        controller.reciver = recieverid
+        controller.modalPresentationStyle = .fullScreen
+          self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
         // Don't forget to remove observer when the ViewController is deallocated
         deinit {
             NotificationCenter.default.removeObserver(self)
@@ -74,7 +80,7 @@ class CallerViewController: UIViewController {
        override func viewDidLoad() {
            super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(handleNotification(_:)), name: Notification.Name("UpdateLabelNotification"), object: nil)
-           
+        NotificationCenter.default.addObserver(self, selector: #selector(handleCallNotification(_:)), name: NSNotification.Name("callacepted"), object: nil)
         
         setupCamera()
         imgview.image = profilepic
@@ -92,7 +98,7 @@ class CallerViewController: UIViewController {
         imgview.layer.zPosition = 1
         
         let websoc = socketsClass()
-        
+     
         let friendid = String(recieverid)
         print("here is reciver id  : \(friendid)")
         

@@ -19,7 +19,8 @@ struct User : Codable {
     var isfriend = false
     var UserId = 0
     var Call_StartTime = ""
-    var Call_EndTime = ""
+    var Call_EndTime: String? = nil
+
     var CallId = 0
     var isCaller = 0
     var Callparticipant_Id = 0
@@ -77,10 +78,11 @@ struct CallLogs : Codable {
     let OnlineStatus: Int
     let AccountStatus: String
     let isCaller: Int
-    let EndTime: String
+    let EndTime: String?
     let StartTime: String
     let user_id: Int
     let user_name : String
+   
 }
 
 struct Lesson: Codable {

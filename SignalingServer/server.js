@@ -10,7 +10,7 @@ console.log('websocket server start.' + ' ipaddress = ' + ip.address() + ' port 
 const clients = new Map();
 
 wsServer.on('connection', function (ws) {
-    console.log('-- websocket connected --');
+   
 
     // Handle incoming authentication message
     ws.once('message', function (message) {
@@ -32,24 +32,11 @@ wsServer.on('connection', function (ws) {
             console.log(`User '${userId}' authenticated and connected.`);
         } catch (error) {
             ws.close();
-            console.error('Error handling authentication message:', error);
+            console.error('Error handling authentication message: user not found', error);
         }
     });
 
-    // Handle incoming messages
-    ws.on('message', function (message) {
-        console.log('-- message received --');
-        try {
-            const data = JSON.parse(message);
-            if (data.type === 'call') {
-                handleCall(data.from, data.to);
-            } else {
-                // Handle other types of messages (if any)
-            }
-        } catch (error) {
-            console.error('Error handling message:', error);
-        }
-    });
+  
 
     // Handle disconnection
     ws.on('close', function () {
@@ -69,38 +56,57 @@ wsServer.on('connection', function (ws) {
     });
     ws.on('message', function (message) {
 
-        console.log('-- message received --');
-        console.log(message)
+       
         try {
             const data = JSON.parse(message);
             const { type, from, to, sdp, candidate } = data; // Extract necessary fields from the received message
             
-            if (type === 'call') {
-                if (!userConnections.has(from) && !userConnections.has(to)) {
+            //call initiated
+            if (data.type === 'call') {
+                handleCall(data.from, data.to);
+            }
+            //on call accepted
+            if (type === 'call_accept') {
+                console.log('call is accepted by ',from ,'caller is : ',to)
+                if (clients.has(from) && clients.has(to)) {
                     // Store the WebSocket connections associated with the sender and recipient user IDs
-                    userConnections.set(from, ws);
-                    userConnections.set(to, ws);
+                    // clients.set(from, ws);
+                    // clients.set(to, ws);
                     console.log(`User IDs '${from}' and '${to}' saved for video call.`);
                     
                     // Notify the recipient about the call initiation
-                    const recipient = userConnections.get(to);
-                    recipient.send(message); // Forward the call initiation message to the recipient
+                    const recipient = clients.get(to);
+                    console.log(JSON.stringify({ type: 'call_accepted' }))
+                    recipient.send(JSON.stringify({ type: 'call_accepted' })); // Forward the call initiation message to the recipient
                 } else {
                     console.log(`User IDs '${from}' and '${to}' are already associated with a video call.`);
                 }
-            } else if (type === 'sdp' || type === 'candidate') {
+            } else if (type === 'sdp' || type === 'candidate' || type === 'offer') {
                 // Forward SDP or ICE candidate messages to the appropriate recipient
-                if (userConnections.has(to)) {
-                    const recipient = userConnections.get(to);
+                if (clients.has(to)) {
+                    const recipient = clients.get(to);
                     recipient.send(message);
                 } else {
+                    console.Console('message: ',data)
                     console.log(`User '${to}' is not connected.`);
                 }
             } else {
                 // Handle other types of messages (if any)
             }
         } catch (error) {
-            console.error('Error handling message:', error);
+            const json = JSON.parse(message.toString());
+
+        wsServer.clients.forEach(function each(client) {
+            if (isSame(ws, client)) {
+                console.log('skip sender');
+            }
+            else {
+                client.send(message);
+                console.log("sharing hand")
+            }
+        });
+            // console.log(message)
+            // console.error('Error handling message: in', error);
         }
     });
     

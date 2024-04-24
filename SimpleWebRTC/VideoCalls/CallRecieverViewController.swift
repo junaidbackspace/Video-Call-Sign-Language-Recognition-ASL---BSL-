@@ -38,7 +38,7 @@ class CallRecieverViewController: UIViewController {
     
          override func viewDidLoad() {
              super.viewDidLoad()
-            socketObj.socket.connect()
+            socketObj.connectSocket()
             
             
           fetchUserData(callerId: calllerid)
@@ -52,17 +52,13 @@ class CallRecieverViewController: UIViewController {
              // Add pan gesture recognizer for drag-up interaction
              let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
              self.view.addGestureRecognizer(panGesture)
-            NotificationCenter.default.addObserver(self, selector: #selector(handleCallNotification(_:)), name: NSNotification.Name("callacepted"), object: nil)
+            
 
          }
     
     
     
-    @objc func handleCallNotification(_ notification: Notification) {
-        let controller = (self.storyboard?.instantiateViewController(identifier: "videoCallscreen"))! as ViewController
-        controller.modalPresentationStyle = .fullScreen
-          self.navigationController?.pushViewController(controller, animated: true)
-    }
+   
     
     
          @objc func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
@@ -169,18 +165,20 @@ class CallRecieverViewController: UIViewController {
     func acceptCall() {
         
             print("Accepted call")
-        let callData = ["type": "call", "from": String(userid), "to": calllerid]
+        let callData = ["type": "call_accept", "from": String(userid), "to": calllerid]
                if let jsonData = try? JSONSerialization.data(withJSONObject: callData) {
                    if let jsonString = String(data: jsonData, encoding: .utf8) {
                     socketObj.socket.write(string: jsonString)
+                    print("call is accepted , caller is: \(calllerid)")
                    }
                }
             
             // Send the JSON string to the WebSocket server
-       
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
         let controller = (self.storyboard?.instantiateViewController(identifier: "videoCallscreen"))! as ViewController
         controller.modalPresentationStyle = .fullScreen
           self.navigationController?.pushViewController(controller, animated: true)
+        }
         }
         
         func rejectCall() {

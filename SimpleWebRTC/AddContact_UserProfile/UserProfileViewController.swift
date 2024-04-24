@@ -243,7 +243,14 @@ class UserProfileViewController: UIViewController, UITableViewDataSource, UITabl
                 user.OnlineStatus = onlineStatus
                 user.isCaller = iscaller
                 user.Call_StartTime = startTime
-                user.Call_EndTime = endTime
+                if let endtime = user.Call_EndTime {
+                    
+                    user.Call_EndTime = endtime
+                }
+
+                else{
+                    user.Call_EndTime = "not ended"
+                }
                 self.contacts.append(user)
             }
         

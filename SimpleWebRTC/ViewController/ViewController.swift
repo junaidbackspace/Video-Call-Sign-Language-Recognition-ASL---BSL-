@@ -71,6 +71,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     }
     //MARK: - Properties
     var webRTCClient: WebRTCClient!
+    let socketObj = socketsClass()
     var socket: WebSocket!
     
     var cameraSession: CameraSession?
@@ -88,6 +89,9 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
   
     //MARK: - ViewController Override Methods ----------------------------
+    
+   let userID = UserDefaults.standard.string(forKey: "userID")!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -120,8 +124,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
 //            if self.webRTCClient.isConnected || self.socket.isConnected {
 //                return
 //            }  })
-    self.socket.connect()
-       
+        socket.connect()
      
         
 //        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
@@ -221,24 +224,30 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         msgview_with_Btns.addSubview(OutLetFreshMsg)
         print("\n\nAll IS Setuped")
     }
+    var reciver = 0
     
     // MARK: - UI Events
     @objc func callButtonTapped(){
-        
+        let recieverid = String(reciver)
         if !webRTCClient.isConnected {
             print("call Tapped")
-//            let message = ["type": "call_accept"] // Construct the message indicating call acceptance
-//                guard let jsonData = try? JSONSerialization.data(withJSONObject: message) else {
-//                    print("Error creating JSON data for call acceptance message")
-//                    return
-//                }
-//                guard let jsonString = String(data: jsonData, encoding: .utf8) else {
-//                    print("Error converting JSON data to string")
-//                    return
-//                }
-//
-//                // Send the JSON string to the WebSocket server
-//            socket.write(string: jsonString)
+            let message: [String: Any] = [
+                "type": "call_accept",
+                "from": "\(userID)",
+                "to": "\(recieverid)"
+            ] // Construct the message indicating call acceptance
+            print("sending call msg: \(message)")
+                guard let jsonData = try? JSONSerialization.data(withJSONObject: message) else {
+                    print("Error creating JSON data for call acceptance message")
+                    return
+                }
+                guard let jsonString = String(data: jsonData, encoding: .utf8) else {
+                    print("Error converting JSON data to string")
+                    return
+                }
+
+                // Send the JSON string to the WebSocket server
+            socket.write(string: jsonString)
             webRTCClient.connect(onSuccess: { (offerSDP: RTCSessionDescription) -> Void in
                 self.sendSDP(sessionDescription: offerSDP)
             })
@@ -249,15 +258,14 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
     @objc func hangupButtonTapped(){
         if webRTCClient.isConnected {
-//            webRTCClient.disconnect()
-//           print("hangup Tapped")
+            webRTCClient.disconnect()
+           print("hangup Tapped")
+            self.navigationController?.popViewController(animated: false)
+            self.navigationController?.popViewController(animated: false)
          //   webRTCClient.stopCaptureFrames()
         }
-        webRTCClient.disconnect()
-        webRTCClient.stopCaptureFrames()
-        print("hangup Tapped")
-        
-        self.navigationController?.popViewController(animated: true)
+        self.navigationController?.popViewController(animated: false)
+        self.navigationController?.popViewController(animated: false)
     }
     
     @objc func sendMessageButtonTapped(_ sender: UIButton){
@@ -331,7 +339,7 @@ extension ViewController {
     func websocketDidConnect(socket: WebSocketClient) {
         let userID = UserDefaults.standard.string(forKey: "userID")!
           
-        print("-- websocket did connect --")
+        print("-- in call websocket did connect --\(userID)")
         let authData: [String: Any] = ["userId": userID]
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: authData, options: [])
