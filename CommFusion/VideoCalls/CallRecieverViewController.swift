@@ -174,8 +174,10 @@ class CallRecieverViewController: UIViewController {
                }
             
             // Send the JSON string to the WebSocket server
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
         let controller = (self.storyboard?.instantiateViewController(identifier: "videoCallscreen"))! as ViewController
+            controller.isReciever = 1
+            controller.callFriendId = self.calllerid
         controller.modalPresentationStyle = .fullScreen
           self.navigationController?.pushViewController(controller, animated: true)
         }

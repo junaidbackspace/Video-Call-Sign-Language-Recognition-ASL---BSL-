@@ -19,8 +19,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     let font_sizeDefault = UserDefaults.standard
     let caption_opacityDefault = UserDefaults.standard
     
-   
-    
+   var isReciever = 0
+    var callFriendId = ""
     enum messageType {
         case greet
         case introduce
@@ -144,7 +144,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         msgview_with_Btns.layer.zPosition = 1
         OutLetSwitchCam.layer.zPosition = 1
        
-        
+        callButtonTapped()
       
     }
     
@@ -231,41 +231,42 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         let recieverid = String(reciver)
         if !webRTCClient.isConnected {
             print("call Tapped")
-            let message: [String: Any] = [
-                "type": "call_accept",
-                "from": "\(userID)",
-                "to": "\(recieverid)"
-            ] // Construct the message indicating call acceptance
-            print("sending call msg: \(message)")
-                guard let jsonData = try? JSONSerialization.data(withJSONObject: message) else {
-                    print("Error creating JSON data for call acceptance message")
-                    return
-                }
-                guard let jsonString = String(data: jsonData, encoding: .utf8) else {
-                    print("Error converting JSON data to string")
-                    return
-                }
-
-                // Send the JSON string to the WebSocket server
-            socket.write(string: jsonString)
+            if isReciever == 1{
             webRTCClient.connect(onSuccess: { (offerSDP: RTCSessionDescription) -> Void in
                 self.sendSDP(sessionDescription: offerSDP)
             })
 //            webRTCClient.startCaptureFrames()
-            
+            }
         }
     }
+    
     
     @objc func hangupButtonTapped(){
         if webRTCClient.isConnected {
             webRTCClient.disconnect()
            print("hangup Tapped")
-            self.navigationController?.popViewController(animated: false)
-            self.navigationController?.popViewController(animated: false)
+            
+//            let endCallData: [String: Any] = [
+//                "type": "call_ended",
+//                "callerID": callFriendId // Replace `callerID` with the actual caller ID
+//            ]
+//            do {
+//                print(endCallData)
+//                let jsonData = try JSONSerialization.data(withJSONObject: endCallData, options: [])
+//                socket.write(data: jsonData)
+//            } catch {
+//                print("Error serializing end call data: \(error)")
+//            }
+
+
+            self.navigationController?.popViewController(animated: true)
+            self.navigationController?.popViewController(animated: true)
          //   webRTCClient.stopCaptureFrames()
         }
+        else{
         self.navigationController?.popViewController(animated: false)
         self.navigationController?.popViewController(animated: false)
+        }
     }
     
     @objc func sendMessageButtonTapped(_ sender: UIButton){
@@ -364,14 +365,22 @@ extension ViewController {
         
         do{
             let signalingMessage = try JSONDecoder().decode(SignalingMessage.self, from: text.data(using: .utf8)!)
+            if signalingMessage.type == "call_ended"{
+                print("call ended by user")
+                hangupButtonTapped()    
+            }
             
             if signalingMessage.type == "offer" {
+                print("offer recieved")
                 webRTCClient.receiveOffer(offerSDP: RTCSessionDescription(type: .offer, sdp: (signalingMessage.sessionDescription?.sdp)!), onCreateAnswer: {(answerSDP: RTCSessionDescription) -> Void in
                     self.sendSDP(sessionDescription: answerSDP)
                 })
             }else if signalingMessage.type == "answer" {
+                print("Answer recieved")
                 webRTCClient.receiveAnswer(answerSDP: RTCSessionDescription(type: .answer, sdp: (signalingMessage.sessionDescription?.sdp)!))
             }else if signalingMessage.type == "candidate" {
+                print("Candidate recieved")
+                
                 let candidate = signalingMessage.candidate!
                 webRTCClient.receiveCandidate(candidate: RTCIceCandidate(sdp: candidate.sdp, sdpMLineIndex: candidate.sdpMLineIndex, sdpMid: candidate.sdpMid))
             }

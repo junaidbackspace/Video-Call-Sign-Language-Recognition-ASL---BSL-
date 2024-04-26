@@ -8,6 +8,7 @@ console.log('websocket server start.' + ' ipaddress = ' + ip.address() + ' port 
 
 // Map to store WebSocket connections with their IDs
 const clients = new Map();
+const callers = new Map();
 
 wsServer.on('connection', function (ws) {
    
@@ -54,6 +55,9 @@ wsServer.on('connection', function (ws) {
     ws.on('error', function (error) {
         console.error('WebSocket error:', error);
     });
+
+    let recieverWS;
+    let callerWS;
     ws.on('message', function (message) {
 
        
@@ -64,7 +68,9 @@ wsServer.on('connection', function (ws) {
             //call initiated
             if (data.type === 'call') {
                 handleCall(data.from, data.to);
+                
             }
+                    
             //on call accepted
             if (type === 'call_accept') {
                 console.log('call is accepted by ',from ,'caller is : ',to)
@@ -75,46 +81,63 @@ wsServer.on('connection', function (ws) {
                     console.log(`User IDs '${from}' and '${to}' saved for video call.`);
                     
                     // Notify the recipient about the call initiation
+                    
                     const recipient = clients.get(to);
                     console.log(JSON.stringify({ type: 'call_accepted' }))
                     recipient.send(JSON.stringify({ type: 'call_accepted' })); // Forward the call initiation message to the recipient
+                    recieverWS = clients.get(from);
+                     callerWS = clients.get(to);
+                     callers.set(from,recieverWS)
+                     callers.set(to,callerWS)
+                     console.log ('from ',from,'to ',to)
+                    
+
                 } else {
                     console.log(`User IDs '${from}' and '${to}' are already associated with a video call.`);
                 }
-            } else if (type === 'sdp' || type === 'candidate' || type === 'offer') {
-                // Forward SDP or ICE candidate messages to the appropriate recipient
-                if (clients.has(to)) {
-                    const recipient = clients.get(to);
-                    recipient.send(message);
-                } else {
-                    console.Console('message: ',data)
-                    console.log(`User '${to}' is not connected.`);
+                
+                    
+             } else if (type === 'sdp' || type === 'candidate' || type === 'offer' || type === 'answer') {
+                
+                
+                if (callers.size > 0) {
+                   
+                    wsServer.clients.forEach(function each(caller) {
+                        
+                        if (isSame(ws, recieverWS)) {
+                            
+                            console.log('skiping sender')
+                        } else {
+                            caller.send(message);
+                        }
+                    });
                 }
+            
+           } 
+           else if ( type === 'call_ended')
+           {
+            const callerID =  clients.get(data.callerID);
+            if (callerID) {
+                console.log("Caller ID:", callerID);
+                const recipient = clients.get(callerID);
+                recipient.send(JSON.stringify({ type: 'call_ended' }));
+                
             } else {
+                console.log("Caller ID not found or invalid type");
+            }
+           }
+            else {
                 // Handle other types of messages (if any)
             }
         } catch (error) {
             const json = JSON.parse(message.toString());
-
-        wsServer.clients.forEach(function each(client) {
-            if (isSame(ws, client)) {
-                console.log('skip sender');
-            }
-            else {
-                client.send(message);
-                console.log("sharing hand")
-            }
-        });
-            // console.log(message)
-            // console.error('Error handling message: in', error);
         }
+        
     });
+
     
 });
-function isSame(ws1, ws2) {
-    // -- compare object --
-    return (ws1 === ws2);
-}
+
 
 // Function to handle call initiation
 function handleCall(from, to) {
@@ -135,5 +158,10 @@ function handleCall(from, to) {
         caller.send(JSON.stringify({ type: 'recipient_not_available', to: to }));
         return `User '${to}' is not connected.`;
     }
+}
+
+function isSame(ws1, ws2) {
+    // -- compare object --
+    return (ws1 === ws2);
 }
 

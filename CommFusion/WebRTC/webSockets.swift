@@ -137,6 +137,7 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
 
            
         }
+        
         // Print variables
        
     }
@@ -167,7 +168,7 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
 
     func receiveIncomingCall() {
        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {
             // Ensure that the delegate is set and the function is implemented
             guard let delegate = self.incomingCallDelegate else {
                 print("Incoming call delegate not set")

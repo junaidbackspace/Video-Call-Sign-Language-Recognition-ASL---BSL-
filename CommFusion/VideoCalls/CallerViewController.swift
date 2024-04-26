@@ -68,6 +68,7 @@ class CallerViewController: UIViewController {
     @objc func handleCallNotification(_ notification: Notification) {
         let controller = (self.storyboard?.instantiateViewController(identifier: "videoCallscreen"))! as ViewController
         controller.reciver = recieverid
+        controller.callFriendId = String(recieverid)
         controller.modalPresentationStyle = .fullScreen
           self.navigationController?.pushViewController(controller, animated: true)
     }
