@@ -163,16 +163,16 @@
 		AF15C0B621E54EB1005B4ED6 /* SignalingCandidate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalingCandidate.swift; sourceTree = "<group>"; };
 		AF60113F24547E7B00E6E407 /* RTCSimulatorVideoDecoderFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTCSimulatorVideoDecoderFactory.swift; sourceTree = "<group>"; };
 		AF601141245481FC00E6E407 /* RTCSimluatorVideoEncoderFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTCSimluatorVideoEncoderFactory.swift; sourceTree = "<group>"; };
-		AF711AA121DFAD6C005CA4FA /* SimpleWebRTC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleWebRTC.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF711AA121DFAD6C005CA4FA /* CommFusion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CommFusion.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF711AA421DFAD6C005CA4FA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AF711AA621DFAD6C005CA4FA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		AF711AA921DFAD6C005CA4FA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		AF711AAE21DFAD6E005CA4FA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AF711AB021DFAD6E005CA4FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		AF711AB521DFAD6E005CA4FA /* SimpleWebRTCTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleWebRTCTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF711AB521DFAD6E005CA4FA /* CommFusionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CommFusionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF711AB921DFAD6E005CA4FA /* SimpleWebRTCTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleWebRTCTests.swift; sourceTree = "<group>"; };
 		AF711ABB21DFAD6E005CA4FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		AF711AC021DFAD6E005CA4FA /* SimpleWebRTCUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleWebRTCUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF711AC021DFAD6E005CA4FA /* CommFusionUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CommFusionUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF711AC421DFAD6E005CA4FA /* SimpleWebRTCUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleWebRTCUITests.swift; sourceTree = "<group>"; };
 		AF711AC621DFAD6E005CA4FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AF711AD921E1454E005CA4FA /* WebRTCClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebRTCClient.swift; sourceTree = "<group>"; };
@@ -386,7 +386,7 @@
 			children = (
 				650950652B945FA200035C85 /* Api */,
 				65AD61792B74DB6F00F23ADD /* Structs */,
-				AF711AA321DFAD6C005CA4FA /* SimpleWebRTC */,
+				AF711AA321DFAD6C005CA4FA /* CommFusion */,
 				AF711AB821DFAD6E005CA4FA /* SimpleWebRTCTests */,
 				AF711AC321DFAD6E005CA4FA /* SimpleWebRTCUITests */,
 				AF711AA221DFAD6C005CA4FA /* Products */,
@@ -398,14 +398,14 @@
 		AF711AA221DFAD6C005CA4FA /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				AF711AA121DFAD6C005CA4FA /* SimpleWebRTC.app */,
-				AF711AB521DFAD6E005CA4FA /* SimpleWebRTCTests.xctest */,
-				AF711AC021DFAD6E005CA4FA /* SimpleWebRTCUITests.xctest */,
+				AF711AA121DFAD6C005CA4FA /* CommFusion.app */,
+				AF711AB521DFAD6E005CA4FA /* CommFusionTests.xctest */,
+				AF711AC021DFAD6E005CA4FA /* CommFusionUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		AF711AA321DFAD6C005CA4FA /* SimpleWebRTC */ = {
+		AF711AA321DFAD6C005CA4FA /* CommFusion */ = {
 			isa = PBXGroup;
 			children = (
 				65A986FA2B7CF0DE0011753C /* VideoCalls */,
@@ -429,7 +429,7 @@
 				AF711AAD21DFAD6E005CA4FA /* LaunchScreen.storyboard */,
 				AF711AB021DFAD6E005CA4FA /* Info.plist */,
 			);
-			path = SimpleWebRTC;
+			path = CommFusion;
 			sourceTree = "<group>";
 		};
 		AF711AB821DFAD6E005CA4FA /* SimpleWebRTCTests */ = {
@@ -524,9 +524,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		AF711AA021DFAD6C005CA4FA /* SimpleWebRTC */ = {
+		AF711AA021DFAD6C005CA4FA /* CommFusion */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AF711AC921DFAD6E005CA4FA /* Build configuration list for PBXNativeTarget "SimpleWebRTC" */;
+			buildConfigurationList = AF711AC921DFAD6E005CA4FA /* Build configuration list for PBXNativeTarget "CommFusion" */;
 			buildPhases = (
 				1D17FB21E9F0753D420802C5 /* [CP] Check Pods Manifest.lock */,
 				AF711A9D21DFAD6C005CA4FA /* Sources */,
@@ -539,14 +539,14 @@
 			);
 			dependencies = (
 			);
-			name = SimpleWebRTC;
+			name = CommFusion;
 			productName = SimpleWebRTC;
-			productReference = AF711AA121DFAD6C005CA4FA /* SimpleWebRTC.app */;
+			productReference = AF711AA121DFAD6C005CA4FA /* CommFusion.app */;
 			productType = "com.apple.product-type.application";
 		};
-		AF711AB421DFAD6E005CA4FA /* SimpleWebRTCTests */ = {
+		AF711AB421DFAD6E005CA4FA /* CommFusionTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AF711ACC21DFAD6E005CA4FA /* Build configuration list for PBXNativeTarget "SimpleWebRTCTests" */;
+			buildConfigurationList = AF711ACC21DFAD6E005CA4FA /* Build configuration list for PBXNativeTarget "CommFusionTests" */;
 			buildPhases = (
 				AF711AB121DFAD6E005CA4FA /* Sources */,
 				AF711AB221DFAD6E005CA4FA /* Frameworks */,
@@ -557,14 +557,14 @@
 			dependencies = (
 				AF711AB721DFAD6E005CA4FA /* PBXTargetDependency */,
 			);
-			name = SimpleWebRTCTests;
+			name = CommFusionTests;
 			productName = SimpleWebRTCTests;
-			productReference = AF711AB521DFAD6E005CA4FA /* SimpleWebRTCTests.xctest */;
+			productReference = AF711AB521DFAD6E005CA4FA /* CommFusionTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		AF711ABF21DFAD6E005CA4FA /* SimpleWebRTCUITests */ = {
+		AF711ABF21DFAD6E005CA4FA /* CommFusionUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AF711ACF21DFAD6E005CA4FA /* Build configuration list for PBXNativeTarget "SimpleWebRTCUITests" */;
+			buildConfigurationList = AF711ACF21DFAD6E005CA4FA /* Build configuration list for PBXNativeTarget "CommFusionUITests" */;
 			buildPhases = (
 				AF711ABC21DFAD6E005CA4FA /* Sources */,
 				AF711ABD21DFAD6E005CA4FA /* Frameworks */,
@@ -575,9 +575,9 @@
 			dependencies = (
 				AF711AC221DFAD6E005CA4FA /* PBXTargetDependency */,
 			);
-			name = SimpleWebRTCUITests;
+			name = CommFusionUITests;
 			productName = SimpleWebRTCUITests;
-			productReference = AF711AC021DFAD6E005CA4FA /* SimpleWebRTCUITests.xctest */;
+			productReference = AF711AC021DFAD6E005CA4FA /* CommFusionUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -606,7 +606,7 @@
 					};
 				};
 			};
-			buildConfigurationList = AF711A9C21DFAD6C005CA4FA /* Build configuration list for PBXProject "SimpleWebRTC" */;
+			buildConfigurationList = AF711A9C21DFAD6C005CA4FA /* Build configuration list for PBXProject "CommFusion" */;
 			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -619,9 +619,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				AF711AA021DFAD6C005CA4FA /* SimpleWebRTC */,
-				AF711AB421DFAD6E005CA4FA /* SimpleWebRTCTests */,
-				AF711ABF21DFAD6E005CA4FA /* SimpleWebRTCUITests */,
+				AF711AA021DFAD6C005CA4FA /* CommFusion */,
+				AF711AB421DFAD6E005CA4FA /* CommFusionTests */,
+				AF711ABF21DFAD6E005CA4FA /* CommFusionUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -787,12 +787,12 @@
 /* Begin PBXTargetDependency section */
 		AF711AB721DFAD6E005CA4FA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = AF711AA021DFAD6C005CA4FA /* SimpleWebRTC */;
+			target = AF711AA021DFAD6C005CA4FA /* CommFusion */;
 			targetProxy = AF711AB621DFAD6E005CA4FA /* PBXContainerItemProxy */;
 		};
 		AF711AC221DFAD6E005CA4FA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = AF711AA021DFAD6C005CA4FA /* SimpleWebRTC */;
+			target = AF711AA021DFAD6C005CA4FA /* CommFusion */;
 			targetProxy = AF711AC121DFAD6E005CA4FA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1004,7 +1004,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SimpleWebRTC.app/SimpleWebRTC";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CommFusion.app/CommFusion";
 			};
 			name = Debug;
 		};
@@ -1025,7 +1025,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SimpleWebRTC.app/SimpleWebRTC";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CommFusion.app/CommFusion";
 			};
 			name = Release;
 		};
@@ -1072,7 +1072,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AF711A9C21DFAD6C005CA4FA /* Build configuration list for PBXProject "SimpleWebRTC" */ = {
+		AF711A9C21DFAD6C005CA4FA /* Build configuration list for PBXProject "CommFusion" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AF711AC721DFAD6E005CA4FA /* Debug */,
@@ -1081,7 +1081,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AF711AC921DFAD6E005CA4FA /* Build configuration list for PBXNativeTarget "SimpleWebRTC" */ = {
+		AF711AC921DFAD6E005CA4FA /* Build configuration list for PBXNativeTarget "CommFusion" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AF711ACA21DFAD6E005CA4FA /* Debug */,
@@ -1090,7 +1090,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AF711ACC21DFAD6E005CA4FA /* Build configuration list for PBXNativeTarget "SimpleWebRTCTests" */ = {
+		AF711ACC21DFAD6E005CA4FA /* Build configuration list for PBXNativeTarget "CommFusionTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AF711ACD21DFAD6E005CA4FA /* Debug */,
@@ -1099,7 +1099,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AF711ACF21DFAD6E005CA4FA /* Build configuration list for PBXNativeTarget "SimpleWebRTCUITests" */ = {
+		AF711ACF21DFAD6E005CA4FA /* Build configuration list for PBXNativeTarget "CommFusionUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AF711AD021DFAD6E005CA4FA /* Debug */,
