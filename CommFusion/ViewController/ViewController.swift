@@ -309,6 +309,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
             let message = String(data: data, encoding: String.Encoding.utf8)!
             
             if self.socket.isConnected {
+                print("\nwriting \(type) on socket")
                 self.socket.write(string: message)
             }
         }catch{
@@ -324,6 +325,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
             let message = String(data: data, encoding: String.Encoding.utf8)!
             
             if self.socket.isConnected {
+                print("\nwriting candidate on socket")
                 self.socket.write(string: message)
             }
         }catch{
