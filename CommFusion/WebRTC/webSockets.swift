@@ -35,7 +35,8 @@ init() {
           // Initialize ipAddress here or wherever appropriate in your code
           self.ipAddress = Constants.nodeserverIP
          self.socket = WebSocket(url: URL(string: "ws://" + ipAddress + ":8080")!)
-    self.userID = UserDefaults.standard.string(forKey: "userID")!
+     self.userID = String(UserDefaults.standard.integer(forKey: "userID"))
+    
 }
     
 

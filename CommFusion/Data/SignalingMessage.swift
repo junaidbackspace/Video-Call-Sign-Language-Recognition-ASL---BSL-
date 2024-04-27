@@ -22,6 +22,8 @@ struct SignalingMessage: Codable {
     let type: String
     let sessionDescription: SDP?
     let candidate: Candidate?
+    let from: String
+    let to: String
 }
 
 struct SDP: Codable {

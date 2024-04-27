@@ -20,6 +20,7 @@ protocol WebRTCClientDelegate {
     func didReceiveMessage(message: String)
     func didConnectWebRTC()
     func didDisconnectWebRTC()
+    func hunguptapedbyOtherCaller()
 }
 
 
@@ -66,7 +67,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         print("WebRTC Client Deinit")
         self.peerConnectionFactory = nil
         self.peerConnection = nil
-        
+    
     }
    
     
@@ -184,16 +185,20 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     
     // MARK:- Connect
     func connect(onSuccess: @escaping (RTCSessionDescription) -> Void){
+        print("creating peer  view")
         self.peerConnection = setupPeerConnection()
         self.peerConnection!.delegate = self
         
         if self.channels.video {
+            print("adding video in  peer")
             self.peerConnection!.add(localVideoTrack, streamIds: ["stream0"])
         }
         if self.channels.audio {
-            self.peerConnection!.add(localAudioTrack, streamIds: ["stream0"])
+            print("adding Audio in  peer")
+            self.peerConnection!.add(localAudioTrack, streamIds: ["stream1"])
         }
         if self.channels.datachannel {
+            print("Setting data Channel")
             self.dataChannel = self.setupDataChannel()
             self.dataChannel?.delegate = self
         }
@@ -227,7 +232,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
                 self.peerConnection!.add(localVideoTrack, streamIds: ["stream-0"])
             }
             if self.channels.audio {
-                self.peerConnection!.add(localAudioTrack, streamIds: ["stream-0"])
+                self.peerConnection!.add(localAudioTrack, streamIds: ["stream-1"])
             }
             if self.channels.datachannel {
                 self.dataChannel = self.setupDataChannel()
@@ -250,6 +255,22 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     }
     
     func receiveAnswer(answerSDP: RTCSessionDescription){
+        if(self.peerConnection == nil){
+            print("offer received, create peerconnection")
+            self.peerConnection = setupPeerConnection()
+            self.peerConnection!.delegate = self
+            if self.channels.video {
+                self.peerConnection!.add(localVideoTrack, streamIds: ["stream-0"])
+            }
+            if self.channels.audio {
+                self.peerConnection!.add(localAudioTrack, streamIds: ["stream-1"])
+            }
+            if self.channels.datachannel {
+                self.dataChannel = self.setupDataChannel()
+                self.dataChannel?.delegate = self
+            }
+            
+        }
         self.peerConnection!.setRemoteDescription(answerSDP) { (err) in
             if let error = err {
                 print("failed to set remote answer SDP")
@@ -260,7 +281,24 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     }
     
     func receiveCandidate(candidate: RTCIceCandidate){
+        if(self.peerConnection == nil){
+            print("offer received, create peerconnection")
+            self.peerConnection = setupPeerConnection()
+            self.peerConnection!.delegate = self
+            if self.channels.video {
+                self.peerConnection!.add(localVideoTrack, streamIds: ["stream-0"])
+            }
+            if self.channels.audio {
+                self.peerConnection!.add(localAudioTrack, streamIds: ["stream-1"])
+            }
+            if self.channels.datachannel {
+                self.dataChannel = self.setupDataChannel()
+                self.dataChannel?.delegate = self
+            }
+            
+        }
         self.peerConnection!.add(candidate)
+        
     }
     
     // MARK:- DataChannel Event
@@ -514,7 +552,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         }
     }
     
-    private func onDisConnected(){
+     func onDisConnected(){
         self.isConnected = false
         
         DispatchQueue.main.async {
@@ -538,6 +576,8 @@ extension WebRTCClient {
         
         if stateChanged == .closed{
             state = "closed"
+    
+            
         }
         
         print("signaling state changed: ", state)
@@ -554,7 +594,7 @@ extension WebRTCClient {
             }
         default:
             if self.isConnected{
-                self.onDisConnected()
+//                self.onDisConnected()
             }
         }
         
@@ -668,6 +708,7 @@ extension WebRTCClient {
             print("closed")
         case .closing:
             print("closing")
+            self.delegate?.hunguptapedbyOtherCaller()
         case .connecting:
             print("connecting")
         case .open:

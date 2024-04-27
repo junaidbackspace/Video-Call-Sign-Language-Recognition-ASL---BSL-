@@ -30,6 +30,7 @@ wsServer.on('connection', function (ws) {
             }
             // Save the WebSocket connection with the provided user ID
             clients.set(userId, ws);
+            
             console.log(`User '${userId}' authenticated and connected.`);
         } catch (error) {
             ws.close();
@@ -56,8 +57,7 @@ wsServer.on('connection', function (ws) {
         console.error('WebSocket error:', error);
     });
 
-    let recieverWS;
-    let callerWS;
+    
     ws.on('message', function (message) {
 
        
@@ -85,11 +85,7 @@ wsServer.on('connection', function (ws) {
                     const recipient = clients.get(to);
                     console.log(JSON.stringify({ type: 'call_accepted' }))
                     recipient.send(JSON.stringify({ type: 'call_accepted' })); // Forward the call initiation message to the recipient
-                    recieverWS = clients.get(from);
-                     callerWS = clients.get(to);
-                     callers.set(from,recieverWS)
-                     callers.set(to,callerWS)
-                     console.log ('from ',from,'to ',to)
+                  
                     
 
                 } else {
@@ -98,27 +94,69 @@ wsServer.on('connection', function (ws) {
                 
                     
              } else if (type === 'sdp' || type === 'candidate' || type === 'offer' || type === 'answer') {
-                
-                
-                if (callers.size > 0) {
-                   
-                    wsServer.clients.forEach(function each(caller) {
-                        
-                        if (isSame(ws, recieverWS)) {
-                            
-                            console.log('skiping sender')
-                        } else {
-                            caller.send(message);
+                if (clients.has(from) && clients.has(to)) {
+                    // Store caller and recipient WebSocket connections
+                    callers.set(from, clients.get(from));
+                    callers.set(to, clients.get(to));
+            
+                    // const callInitiator = clients.get(to);
+                    // const callReceiver = clients.get(from);
+            
+                    // console.log('from: ', from, ' to: ', to, ' type: ', type);
+                    
+                    // Iterate over callers and send offer to the caller
+
+                    wsServer.clients.forEach(function each(client) {
+                        if (isSame(ws, client)) {
+                            console.log('skip sender:',type);
+                        }
+                        else {
+                            client.send(message);
                         }
                     });
-                }
-            
-           } 
+                    
+                //     callers.forEach(function each(client, clientId) {
+                //         console.log('within loop type: ',type)
+                //         if ( type === 'offer'){
+                // console.log('entered in offer')
+                //             if (clientId === from) {
+                //             // Send offer to the caller
+                //             client.send(message);
+                //             console.log('Offer: ',type)
+                //         } 
+                //     }
+                //     else if ( type=== 'answer'){
+                //  console.log('entered in Answer')
+                //         if (clientId === to) {
+                //             // Send answer to the call Reciever
+                //             client.send(message);
+                //             console.log('Answer: ',type)
+                //         } 
+
+                //     }
+                //     else{
+                //         callers.forEach(function each(client) {
+                //             if (isSame(ws, client)) {
+                //                 console.log('skip sender');
+                //             }
+                //             else {
+                //                 client.send(message);
+                //             }
+                //         });
+                    
+                //     }
+                //     });
+                
+                // } else {
+                //     console.log(`Caller or recipient not found`);
+                // }
+            }
+        }     
            else if ( type === 'call_ended')
            {
             const callerID =  clients.get(data.callerID);
             if (callerID) {
-                console.log("Caller ID:", callerID);
+                console.log("sending call ending msg to user ID:", data.callerID);
                 const recipient = clients.get(callerID);
                 recipient.send(JSON.stringify({ type: 'call_ended' }));
                 
@@ -138,6 +176,10 @@ wsServer.on('connection', function (ws) {
     
 });
 
+function isSame(ws1, ws2) {
+    // -- compare object --
+    return (ws1 === ws2);
+}
 
 // Function to handle call initiation
 function handleCall(from, to) {
@@ -160,8 +202,5 @@ function handleCall(from, to) {
     }
 }
 
-function isSame(ws1, ws2) {
-    // -- compare object --
-    return (ws1 === ws2);
-}
+
 

@@ -232,6 +232,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         if !webRTCClient.isConnected {
             print("call Tapped")
             if isReciever == 1{
+                print("\n Reciever : \(isReciever)")
             webRTCClient.connect(onSuccess: { (offerSDP: RTCSessionDescription) -> Void in
                 self.sendSDP(sessionDescription: offerSDP)
             })
@@ -244,27 +245,26 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     @objc func hangupButtonTapped(){
         if webRTCClient.isConnected {
             webRTCClient.disconnect()
+           
            print("hangup Tapped")
-            
-//            let endCallData: [String: Any] = [
-//                "type": "call_ended",
-//                "callerID": callFriendId // Replace `callerID` with the actual caller ID
-//            ]
-//            do {
-//                print(endCallData)
-//                let jsonData = try JSONSerialization.data(withJSONObject: endCallData, options: [])
-//                socket.write(data: jsonData)
-//            } catch {
-//                print("Error serializing end call data: \(error)")
-//            }
-
+            let endCallData: [String: Any] = [
+                "type": "call_ended",
+                "callerID": callFriendId // Replace `callerID` with the actual caller ID
+            ]
+            do {
+                print(endCallData)
+                let jsonData = try JSONSerialization.data(withJSONObject: endCallData, options: [])
+                socket.write(data: jsonData)
+            } catch {
+                print("Error serializing end call data: \(error)")
+            }
 
             self.navigationController?.popViewController(animated: true)
             self.navigationController?.popViewController(animated: true)
          //   webRTCClient.stopCaptureFrames()
         }
         else{
-        self.navigationController?.popViewController(animated: false)
+        
         self.navigationController?.popViewController(animated: false)
         }
     }
@@ -292,7 +292,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         webRTCClient.switchCameraPosition()
     }
 
-    
+    var userid = String(UserDefaults.standard.integer(forKey: "userID"))
     
     // MARK: - WebRTC Signaling
     private func sendSDP(sessionDescription: RTCSessionDescription){
@@ -302,31 +302,50 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         }else if sessionDescription.type == .answer {
             type = "answer"
         }
-        
-        let sdp = SDP.init(sdp: sessionDescription.sdp)
-        let signalingMessage = SignalingMessage.init(type: type, sessionDescription: sdp, candidate: nil)
-        do {
-            let data = try JSONEncoder().encode(signalingMessage)
-            let message = String(data: data, encoding: String.Encoding.utf8)!
-            
-            if self.socket.isConnected {
-                print("\nwriting \(type) on socket")
-                self.socket.write(string: message)
+        //if call recieved
+        if isReciever == 1 {
+        let sdp = SDP(sdp: sessionDescription.sdp)
+            let signalingMessage = SignalingMessage(type: type, sessionDescription: sdp, candidate: nil, from: callFriendId, to:userid )
+            do {
+                let data = try JSONEncoder().encode(signalingMessage)
+                let message = String(data: data, encoding: .utf8)!
+                
+                if self.socket.isConnected {
+                    print("\nwriting \(type) on socket")
+                    self.socket.write(string: message)
+                }
+            } catch {
+                print(error)
             }
-        }catch{
-            print(error)
+        }
+        //if call initiated
+        else{
+            let sdp = SDP(sdp: sessionDescription.sdp)
+                let signalingMessage = SignalingMessage(type: type, sessionDescription: sdp, candidate: nil, from:userid , to:callFriendId )
+                do {
+                    let data = try JSONEncoder().encode(signalingMessage)
+                    let message = String(data: data, encoding: .utf8)!
+                    
+                    if self.socket.isConnected {
+                        print("\nwriting \(type) on socket")
+                        self.socket.write(string: message)
+                    }
+                } catch {
+                    print(error)
+                }
+            
         }
     }
     
     private func sendCandidate(iceCandidate: RTCIceCandidate){
         let candidate = Candidate.init(sdp: iceCandidate.sdp, sdpMLineIndex: iceCandidate.sdpMLineIndex, sdpMid: iceCandidate.sdpMid!)
-        let signalingMessage = SignalingMessage.init(type: "candidate", sessionDescription: nil, candidate: candidate)
+        let signalingMessage = SignalingMessage.init(type: "candidate", sessionDescription: nil, candidate: candidate, from: callFriendId, to: userid)
         do {
             let data = try JSONEncoder().encode(signalingMessage)
             let message = String(data: data, encoding: String.Encoding.utf8)!
             
             if self.socket.isConnected {
-                print("\nwriting candidate on socket")
+                print("\nwriting candidate on socketttt")
                 self.socket.write(string: message)
             }
         }catch{
@@ -423,10 +442,11 @@ extension ViewController {
         //self.webRTCStatusLabel.text = self.webRTCStatusMesasgeBase + state
     }
     
+    
     func didConnectWebRTC() {
        // self.webRTCStatusLabel.textColor = .green
         // MARK: Disconnect websocket
-        self.socket.disconnect()
+//        self.socket.disconnect()
     }
     
     func didDisconnectWebRTC() {
@@ -447,6 +467,11 @@ extension ViewController {
     
     func didReceiveMessage(message: String) {
         self.lblmsg.text = message
+    }
+    
+    func hunguptapedbyOtherCaller(){
+        print("closing due to freind end call")
+        hangupButtonTapped()
     }
 }
 
