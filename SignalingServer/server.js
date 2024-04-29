@@ -10,6 +10,7 @@ console.log('websocket server start.' + ' ipaddress = ' + ip.address() + ' port 
 const clients = new Map();
 const callers = new Map();
 
+
 wsServer.on('connection', function (ws) {
    
 
@@ -76,8 +77,8 @@ wsServer.on('connection', function (ws) {
                 console.log('call is accepted by ',from ,'caller is : ',to)
                 if (clients.has(from) && clients.has(to)) {
                     // Store the WebSocket connections associated with the sender and recipient user IDs
-                    // clients.set(from, ws);
-                    // clients.set(to, ws);
+                    callers.set(from, ws);
+                    callers.set(to, ws);
                     console.log(`User IDs '${from}' and '${to}' saved for video call.`);
                     
                     // Notify the recipient about the call initiation
@@ -96,8 +97,8 @@ wsServer.on('connection', function (ws) {
              } else if (type === 'sdp' || type === 'candidate' || type === 'offer' || type === 'answer') {
                 if (clients.has(from) && clients.has(to)) {
                     // Store caller and recipient WebSocket connections
-                    callers.set(from, clients.get(from));
-                    callers.set(to, clients.get(to));
+                    // callers.set(from, clients.get(from));
+                    // callers.set(to, clients.get(to));
             
                     // const callInitiator = clients.get(to);
                     // const callReceiver = clients.get(from);
@@ -106,14 +107,29 @@ wsServer.on('connection', function (ws) {
                     
                     // Iterate over callers and send offer to the caller
 
-                    wsServer.clients.forEach(function each(client) {
-                        if (isSame(ws, client)) {
-                            console.log('skip sender:',type);
-                        }
-                        else {
-                            client.send(message);
-                        }
-                    });
+                    // Iterate over the wsServer.clients
+            wsServer.clients.forEach(function each(client) {
+    // Iterate over the callers map
+          for (const [userId, ws] of callers) {
+        // Check if the WebSocket instance matches the WebSocket instance in the loop
+               if (isSame(ws, client)) {
+                   console.log('Skip sender:', type, 'WebSocket ID: ',userId);
+                      } else {
+            // Send message to WebSocket client
+                           client.send(message);
+                              }
+    }
+});
+
+                    // wsServer.clients.forEach(function each(client) {
+                    //     if (isSame(ws, client)) {
+
+                    //         console.log('skip sender:',type,'ws id ');
+                    //     }
+                    //     else {
+                    //         client.send(message);
+                    //     }
+                    // });
                     
                 //     callers.forEach(function each(client, clientId) {
                 //         console.log('within loop type: ',type)

@@ -243,6 +243,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
     
     @objc func hangupButtonTapped(){
+       
         if webRTCClient.isConnected {
             webRTCClient.disconnect()
            
@@ -259,14 +260,16 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
                 print("Error serializing end call data: \(error)")
             }
 
-            self.navigationController?.popViewController(animated: true)
-            self.navigationController?.popViewController(animated: true)
+            navigationController?.popViewController(animated: true)
+            navigationController?.popViewController(animated: true)
          //   webRTCClient.stopCaptureFrames()
         }
         else{
         
         self.navigationController?.popViewController(animated: false)
         }
+        socket.disconnect()
+        socket.connect()
     }
     
     @objc func sendMessageButtonTapped(_ sender: UIButton){
