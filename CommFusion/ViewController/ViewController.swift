@@ -73,6 +73,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     var webRTCClient: WebRTCClient!
     let socketObj = socketsClass()
     var socket: WebSocket!
+//    var socket: WebSocket!
     
     var cameraSession: CameraSession?
     
@@ -116,25 +117,14 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         }
         
         
-         let ipAddress = Constants.nodeserverIP
-       self.socket = WebSocket(url: URL(string: "ws://" + ipAddress + ":8080")!)
-       socket.delegate = self
-
-//      let  tryToConnectWebSocket = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { (timer) in
-//            if self.webRTCClient.isConnected || self.socket.isConnected {
-//                return
-//            }  })
+        socket = self.socketObj.getSocket()
+//         let ipAddress = Constants.nodeserverIP
+//       self.socket = WebSocket(url: URL(string: "ws://" + ipAddress + ":8080")!)
+//       socket.delegate = self
         socket.connect()
      
         
-//        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-//            socket = appDelegate.socketObj.socket
-//                    
-//                } else {
-//                    print("Unable to access AppDelegate")
-//                }
-        
-        // Do any additional setup after loading the view, typically from a nib.
+
         
         OutLetCall.layer.zPosition = 1
         OutLetHangUp .layer.zPosition = 1
@@ -144,7 +134,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         msgview_with_Btns.layer.zPosition = 1
         OutLetSwitchCam.layer.zPosition = 1
        
-        callButtonTapped()
+        self.callButtonTapped()
       
     }
     
@@ -156,9 +146,9 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         lblmsg.font = lblmsg.font.withSize(currentFontSize+CGFloat(size))
         
         let currentHeight = msgview_with_Btns.frame.size.height
-        print("Curren view hight : \(currentHeight)")
+       
         msgview_with_Btns.frame.size.height = currentHeight + CGFloat(size)
-        print("Curren view hight : \(msgview_with_Btns.frame.size.height)")
+       
         
         if let color = UserDefaults.standard.color(forKey: "color") {
             
@@ -222,7 +212,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
 
         remoteVideoViewContainter.addSubview(msgview_with_Btns)
         msgview_with_Btns.addSubview(OutLetFreshMsg)
-        print("\n\nAll IS Setuped")
+        
     }
     var reciver = 0
     
@@ -242,9 +232,13 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     }
     
     
+  
+
+    
     @objc func hangupButtonTapped(){
        
         if webRTCClient.isConnected {
+            
             webRTCClient.disconnect()
            
            print("hangup Tapped")
@@ -259,14 +253,19 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
             } catch {
                 print("Error serializing end call data: \(error)")
             }
-
-            navigationController?.popViewController(animated: true)
-            navigationController?.popViewController(animated: true)
+            
+            DispatchQueue.main.async {
+                       self.navigationController?.popViewController(animated: true)
+                       self.navigationController?.popViewController(animated: true)
+                   }
          //   webRTCClient.stopCaptureFrames()
         }
         else{
-        
-        self.navigationController?.popViewController(animated: false)
+            DispatchQueue.main.async {
+                   
+                       self.navigationController?.popViewController(animated: true)
+                       self.navigationController?.popViewController(animated: true)
+                   }
         }
         socket.disconnect()
         socket.connect()
@@ -388,11 +387,11 @@ extension ViewController {
         do{
             let signalingMessage = try JSONDecoder().decode(SignalingMessage.self, from: text.data(using: .utf8)!)
             if signalingMessage.type == "call_ended"{
-                print("call ended by user")
-                hangupButtonTapped()    
+                print("call ended by user in viewcontroller")
+                self.hangupButtonTapped()
             }
             
-            if signalingMessage.type == "offer" {
+            else if signalingMessage.type == "offer" {
                 print("offer recieved")
                 webRTCClient.receiveOffer(offerSDP: RTCSessionDescription(type: .offer, sdp: (signalingMessage.sessionDescription?.sdp)!), onCreateAnswer: {(answerSDP: RTCSessionDescription) -> Void in
                     self.sendSDP(sessionDescription: answerSDP)
@@ -473,8 +472,12 @@ extension ViewController {
     }
     
     func hunguptapedbyOtherCaller(){
-        print("closing due to freind end call")
-        hangupButtonTapped()
+        print("closing due to freind end call func hunguptapedbyOtherCaller()")
+        webRTCClient.disconnect()
+        DispatchQueue.main.async {
+                   self.navigationController?.popViewController(animated: true)
+                   self.navigationController?.popViewController(animated: true)
+               }
     }
 }
 

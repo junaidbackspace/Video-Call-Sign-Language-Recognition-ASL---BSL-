@@ -424,9 +424,11 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(openViewController(_:)), name: .openViewControllerNotification, object: nil)
          
         let sharedSockets = socketsClass.shared
+            sharedSockets.connectSocket()
             sharedSockets.incomingCallDelegate = self
             
             // Set the active view controller

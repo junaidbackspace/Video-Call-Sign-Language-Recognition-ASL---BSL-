@@ -9,11 +9,15 @@ import WebRTC
 import Starscream
 import Foundation
 
+
 protocol IncomingCallDelegate: AnyObject {
     func presentIncomingCallScreen(isRecieving : Bool)
 }
 
 class socketsClass: WebSocketDelegate{
+    
+    
+      
     
     // Singleton instance
        static let shared = socketsClass()
@@ -39,11 +43,14 @@ init() {
     
 }
     
-
+    func getSocket() -> WebSocket? {
+           return socket
+       }
     
-func connectSocket(){
+public func connectSocket(){
             if !socket.isConnected {
-                
+                //Because on first time userid not set
+                self.userID = String(UserDefaults.standard.integer(forKey: "userID"))
                 socket.delegate = self
                 self.socket.connect()
                 print("Connecting in background")

@@ -48,6 +48,13 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     var delegate: WebRTCClientDelegate?
     public private(set) var isConnected: Bool = false
     
+    
+    
+
+
+
+
+    
     func localVideoView() -> UIView {
         return localView
     }
@@ -210,17 +217,16 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     // MARK:- HangUp
     func disconnect(){
         if self.peerConnection != nil{
-            self.peerConnection?.close()
-            
-         
+            onDisConnected()
             
         }
         stopCaptureLocalVideo()
         print("\n------disconecting all thing-----\n")
-        
+
     }
     
-   
+    
+
     
     // MARK: -Signaling Event
     func receiveOffer(offerSDP: RTCSessionDescription, onCreateAnswer: @escaping (RTCSessionDescription) -> Void){
@@ -570,20 +576,25 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
 extension WebRTCClient {
     func peerConnection(_ peerConnection: RTCPeerConnection, didChange stateChanged: RTCSignalingState) {
         var state = ""
-        if stateChanged == .stable{
-            state = "stable"
+        switch stateChanged {
+        case .stable:
+            state = "Stable"
+        case .haveLocalOffer:
+            state = "Have Local Offer"
+        case .haveRemoteOffer:
+            state = "Have Remote Offer"
+        case .haveLocalPrAnswer:
+            state = "Have Local PrAnswer"
+        case .haveRemotePrAnswer:
+            state = "Have Remote PrAnswer"
+        case .closed:
+            state = "Closed"
+        @unknown default:
+            state = "Unknown"
         }
-        
-        if stateChanged == .closed{
-            state = "closed"
-    
-            
-        }
-        
-        print("signaling state changed: ", state)
-        
+        print("Signaling state changed: \(state)")
     }
-    
+
     func peerConnection(_ peerConnection: RTCPeerConnection, didChange newState: RTCIceConnectionState) {
         
         switch newState {
