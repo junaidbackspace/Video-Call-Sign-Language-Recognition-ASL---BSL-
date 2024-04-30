@@ -69,6 +69,8 @@ func websocketDidConnect(socket: WebSocketClient) {
     print("-- WebSocket did connect --")
     
     // Perform authentication
+    
+    userID = String(UserDefaults.standard.integer(forKey: "userID"))
             let authData: [String: Any] = ["userId": userID]
             do {
                 let jsonData = try JSONSerialization.data(withJSONObject: authData, options: [])
