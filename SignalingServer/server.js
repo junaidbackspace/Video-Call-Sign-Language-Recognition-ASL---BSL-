@@ -120,61 +120,20 @@ wsServer.on('connection', function (ws) {
     }
 });
 
-                    // wsServer.clients.forEach(function each(client) {
-                    //     if (isSame(ws, client)) {
-
-                    //         console.log('skip sender:',type,'ws id ');
-                    //     }
-                    //     else {
-                    //         client.send(message);
-                    //     }
-                    // });
-                    
-                //     callers.forEach(function each(client, clientId) {
-                //         console.log('within loop type: ',type)
-                //         if ( type === 'offer'){
-                // console.log('entered in offer')
-                //             if (clientId === from) {
-                //             // Send offer to the caller
-                //             client.send(message);
-                //             console.log('Offer: ',type)
-                //         } 
-                //     }
-                //     else if ( type=== 'answer'){
-                //  console.log('entered in Answer')
-                //         if (clientId === to) {
-                //             // Send answer to the call Reciever
-                //             client.send(message);
-                //             console.log('Answer: ',type)
-                //         } 
-
-                //     }
-                //     else{
-                //         callers.forEach(function each(client) {
-                //             if (isSame(ws, client)) {
-                //                 console.log('skip sender');
-                //             }
-                //             else {
-                //                 client.send(message);
-                //             }
-                //         });
-                    
-                //     }
-                //     });
-                
-                // } else {
-                //     console.log(`Caller or recipient not found`);
-                // }
+                   
             }
         }     
            else if ( type === 'call_ended')
            {
             const callerID =  clients.get(data.callerID);
+            const callenderID = clients.get(data.callenderID);
             if (callerID) {
-                console.log("sending call ending msg to user ID:", data.callerID);
-                const recipient = clients.get(callerID);
-                recipient.send(JSON.stringify({ type: 'call_ended' }));
                 
+                console.log("sending call ending msg to user ID:", data.callerID);
+                
+                callenderID.send(JSON.stringify({ type: 'call_ended' }));
+                // clients.delete(data.callerID);
+                // clients.delete(data.callenderID)
             } else {
                 console.log("Caller ID not found or invalid type");
             }

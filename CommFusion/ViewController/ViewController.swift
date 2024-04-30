@@ -117,10 +117,10 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         }
         
         
-        socket = self.socketObj.getSocket()
-//         let ipAddress = Constants.nodeserverIP
-//       self.socket = WebSocket(url: URL(string: "ws://" + ipAddress + ":8080")!)
-//       socket.delegate = self
+        
+         let ipAddress = Constants.nodeserverIP
+       self.socket = WebSocket(url: URL(string: "ws://" + ipAddress + ":8080")!)
+       socket.delegate = self
         socket.connect()
      
         
@@ -236,23 +236,25 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
 
     
     @objc func hangupButtonTapped(){
+        print("hangup Tapped")
+         let endCallData: [String: Any] = [
+             "type": "call_ended",
+             "callerID": callFriendId,
+             "callenderID": userID
+         ]
+         do {
+             print(endCallData)
+             let jsonData = try JSONSerialization.data(withJSONObject: endCallData, options: [])
+             socket.write(data: jsonData)
+         } catch {
+             print("Error serializing end call data: \(error)")
+         }
        
         if webRTCClient.isConnected {
             
             webRTCClient.disconnect()
            
-           print("hangup Tapped")
-            let endCallData: [String: Any] = [
-                "type": "call_ended",
-                "callerID": callFriendId // Replace `callerID` with the actual caller ID
-            ]
-            do {
-                print(endCallData)
-                let jsonData = try JSONSerialization.data(withJSONObject: endCallData, options: [])
-                socket.write(data: jsonData)
-            } catch {
-                print("Error serializing end call data: \(error)")
-            }
+           
             
             DispatchQueue.main.async {
                        self.navigationController?.popViewController(animated: true)
@@ -267,7 +269,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
                        self.navigationController?.popViewController(animated: true)
                    }
         }
-        socket.disconnect()
+       
         socket.connect()
     }
     
