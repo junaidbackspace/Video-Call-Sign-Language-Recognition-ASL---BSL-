@@ -38,11 +38,11 @@ class CallerViewController: UIViewController {
     func CallAPI(caller : Int ,reciver : Int )
     {
         let Url = "\(Constants.serverURL)/video-call/start"
-        print("calling : \(Url)")
+        
         let Dic: [String: Any] = [
             "caller_id": caller,
               "receiver_id": reciver ]
-
+        print("calling : \(Dic)")
 //        serverWrapper.insertData(baseUrl: Url,  userDictionary: Dic) { responseString, error in
 //            if let error = error {
 //                print("\n\nError:", error)
@@ -67,6 +67,7 @@ class CallerViewController: UIViewController {
         }
     @objc func handleCallNotification(_ notification: Notification) {
         let controller = (self.storyboard?.instantiateViewController(identifier: "videoCallscreen"))! as ViewController
+        controller.isReciever = 0
         controller.reciver = recieverid
         controller.callFriendId = String(recieverid)
         controller.modalPresentationStyle = .fullScreen

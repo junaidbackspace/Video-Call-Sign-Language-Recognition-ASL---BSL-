@@ -563,8 +563,14 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         
         DispatchQueue.main.async {
             print("--- on dis connected ---")
-            self.peerConnection!.close()
-            self.peerConnection = nil
+            if let peerConnection = self.peerConnection {
+                self.peerConnection?.close()
+                self.peerConnection = nil
+            } else {
+                // Handle the case when peerConnection is nil
+                print("peerConnection is nil")
+            }
+           
             self.remoteRenderView?.isHidden = true
             self.dataChannel = nil
             self.delegate?.didDisconnectWebRTC()

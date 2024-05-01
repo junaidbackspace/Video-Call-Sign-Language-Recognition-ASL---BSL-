@@ -12,13 +12,15 @@ import Foundation
 
 protocol IncomingCallDelegate: AnyObject {
     func presentIncomingCallScreen(isRecieving : Bool)
+   
 }
+
+
 
 class socketsClass: WebSocketDelegate{
     
-    
-      
-    
+      var endCallClosure: (() -> Void)?
+
     // Singleton instance
        static let shared = socketsClass()
 
@@ -29,16 +31,18 @@ class socketsClass: WebSocketDelegate{
        weak var incomingCallDelegate: IncomingCallDelegate?
 
     
-var webRTCClient = WebRTCClient()
+
 public var  socket : WebSocket!
 var backgroundTask: UIBackgroundTaskIdentifier = .invalid
 var ipAddress: String
 var userID = ""
 
+    
+    
 init() {
           // Initialize ipAddress here or wherever appropriate in your code
           self.ipAddress = Constants.nodeserverIP
-         self.socket = WebSocket(url: URL(string: "ws://" + ipAddress + ":8080")!)
+         self.socket = WebSocket(url: URL(string: "ws://" + ipAddress + ":8081")!)
      self.userID = String(UserDefaults.standard.integer(forKey: "userID"))
     
 }
@@ -46,6 +50,9 @@ init() {
     func getSocket() -> WebSocket? {
            return socket
        }
+    
+    
+     
     
 public func connectSocket(){
             if !socket.isConnected {
@@ -147,6 +154,12 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
 
            
         }
+        if type == "call_ended"{
+            print("within sockets call ended by user in viewcontroller")
+            NotificationCenter.default.post(name: Notification.Name("CallEndedNotification"), object: nil)
+
+
+        }
         
         // Print variables
        
@@ -162,13 +175,14 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
     
     func initiateCall(with friendId: String) {
        
-         self.connectSocket()
-        
+        self.connectSocket()
+       userID = String(UserDefaults.standard.integer(forKey: "userID"))
         // Send call initiation message
         let callData: [String: Any] = ["type": "call", "from": userID, "to": friendId]
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: callData, options: [])
             socket.write(data: jsonData)
+            print("local side initiating call")
         } catch {
             print("Error serializing call initiation data: \(error)")
         }
@@ -178,7 +192,7 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
 
     func receiveIncomingCall() {
        
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
             // Ensure that the delegate is set and the function is implemented
             guard let delegate = self.incomingCallDelegate else {
                 print("Incoming call delegate not set")

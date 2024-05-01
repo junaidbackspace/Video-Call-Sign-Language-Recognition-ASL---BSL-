@@ -15,11 +15,19 @@ import UIKit
 
 
 
-class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate, CameraSessionDelegate {
+class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate, CameraSessionDelegate{
+   
+    
+    
+    
+    
+    
     let font_sizeDefault = UserDefaults.standard
     let caption_opacityDefault = UserDefaults.standard
     
-   var isReciever = 0
+    
+
+    var isReciever = 0
     var callFriendId = ""
     enum messageType {
         case greet
@@ -71,9 +79,9 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     }
     //MARK: - Properties
     var webRTCClient: WebRTCClient!
-    let socketObj = socketsClass()
+    
     var socket: WebSocket!
-//    var socket: WebSocket!
+
     
     var cameraSession: CameraSession?
     
@@ -82,10 +90,6 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     var useCustomCapturer: Bool = false
     var cameraFilter: CameraFilter?
     
-    // Constants
-    // MARK: Change this ip address in your case
-
-  
     
     
   
@@ -93,8 +97,27 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
    let userID = UserDefaults.standard.string(forKey: "userID")!
     
+   
+   
+    @objc func endCall() {
+            print("\nNOW IN VIEWCONTROLLER TO END CALL")
+            webRTCClient.disconnect()
+            DispatchQueue.main.async {
+                self.navigationController?.popViewController(animated: true)
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
+        
+        deinit {
+            NotificationCenter.default.removeObserver(self)
+        }
+    var websockt = socketsClass()
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(endCall), name: Notification.Name("CallEndedNotification"), object: nil)
+           
         
         
         #if targetEnvironment(simulator)
@@ -119,9 +142,10 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         
         
          let ipAddress = Constants.nodeserverIP
-       self.socket = WebSocket(url: URL(string: "ws://" + ipAddress + ":8080")!)
+       self.socket = WebSocket(url: URL(string: "ws://" + ipAddress + ":8081")!)
        socket.delegate = self
-        socket.connect()
+        self.socket.connect()
+        
      
         
 
@@ -218,9 +242,10 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
     // MARK: - UI Events
     @objc func callButtonTapped(){
-        let recieverid = String(reciver)
+        
         if !webRTCClient.isConnected {
-            print("call Tapped")
+            
+            print("Reciever side initiating call ...")
             if isReciever == 1{
                 print("\n Reciever : \(isReciever)")
             webRTCClient.connect(onSuccess: { (offerSDP: RTCSessionDescription) -> Void in
@@ -253,9 +278,6 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         if webRTCClient.isConnected {
             
             webRTCClient.disconnect()
-           
-           
-            
             DispatchQueue.main.async {
                        self.navigationController?.popViewController(animated: true)
                        self.navigationController?.popViewController(animated: true)
@@ -270,7 +292,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
                    }
         }
        
-        socket.connect()
+//        socket.connect()
     }
     
     @objc func sendMessageButtonTapped(_ sender: UIButton){
@@ -303,27 +325,21 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         var type = ""
         if sessionDescription.type == .offer {
             type = "offer"
+            let sdp = SDP(sdp: sessionDescription.sdp)
+                let signalingMessage = SignalingMessage(type: type, sessionDescription: sdp, candidate: nil, from: callFriendId, to:userid )
+                do {
+                    let data = try JSONEncoder().encode(signalingMessage)
+                    let message = String(data: data, encoding: .utf8)!
+                    
+                    if self.socket.isConnected {
+                        print("now reciever offering sdp to caller")
+                        self.socket.write(string: message)
+                    }
+                } catch {
+                    print(error)
+                }
         }else if sessionDescription.type == .answer {
             type = "answer"
-        }
-        //if call recieved
-        if isReciever == 1 {
-        let sdp = SDP(sdp: sessionDescription.sdp)
-            let signalingMessage = SignalingMessage(type: type, sessionDescription: sdp, candidate: nil, from: callFriendId, to:userid )
-            do {
-                let data = try JSONEncoder().encode(signalingMessage)
-                let message = String(data: data, encoding: .utf8)!
-                
-                if self.socket.isConnected {
-                    print("\nwriting \(type) on socket")
-                    self.socket.write(string: message)
-                }
-            } catch {
-                print(error)
-            }
-        }
-        //if call initiated
-        else{
             let sdp = SDP(sdp: sessionDescription.sdp)
                 let signalingMessage = SignalingMessage(type: type, sessionDescription: sdp, candidate: nil, from:userid , to:callFriendId )
                 do {
@@ -331,14 +347,15 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
                     let message = String(data: data, encoding: .utf8)!
                     
                     if self.socket.isConnected {
-                        print("\nwriting \(type) on socket")
+                        print("now caller answering sdp to caller")
                         self.socket.write(string: message)
                     }
                 } catch {
                     print(error)
                 }
-            
         }
+       
+        
     }
     
     private func sendCandidate(iceCandidate: RTCIceCandidate){
@@ -373,9 +390,7 @@ extension ViewController {
         } catch {
             print("Error serializing authentication data: \(error)")
         }
-//        wsStatusLabel.text = wsStatusMessageBase + "connected"
-//        wsStatusLabel.textColor = .green
-        print("\nWebSocket Connected\n")
+
     }
     
     func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
@@ -390,7 +405,7 @@ extension ViewController {
             let signalingMessage = try JSONDecoder().decode(SignalingMessage.self, from: text.data(using: .utf8)!)
             if signalingMessage.type == "call_ended"{
                 print("call ended by user in viewcontroller")
-                self.hangupButtonTapped()
+                self.hunguptapedbyOtherCaller()
             }
             
             else if signalingMessage.type == "offer" {
@@ -474,7 +489,7 @@ extension ViewController {
     }
     
     func hunguptapedbyOtherCaller(){
-        print("closing due to freind end call func hunguptapedbyOtherCaller()")
+        
         webRTCClient.disconnect()
         DispatchQueue.main.async {
                    self.navigationController?.popViewController(animated: true)

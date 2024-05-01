@@ -1,7 +1,7 @@
 "use strict";
 
 let WebSocketServer = require('ws').Server;
-let port = 8080;
+let port = 8081;
 let wsServer = new WebSocketServer({ port: port });
 const ip = require('ip');
 console.log('websocket server start.' + ' ipaddress = ' + ip.address() + ' port = ' + port);
@@ -107,7 +107,7 @@ wsServer.on('connection', function (ws) {
                     
 
                    
-            wsServer.clients.forEach(function each(client) {
+         wsServer.clients.forEach(function each(client) {
    
           for (const [userId, ws] of callers) {
        
@@ -131,9 +131,10 @@ wsServer.on('connection', function (ws) {
                 
                 console.log("sending call ending msg to user ID:", data.callerID);
                 
-                callenderID.send(JSON.stringify({ type: 'call_ended' }));
-                // clients.delete(data.callerID);
-                // clients.delete(data.callenderID)
+                callerID.send(JSON.stringify({ type: 'call_ended' }));
+                
+                callers.delete(data.callerID);
+                callers.delete(data.callenderID);
             } else {
                 console.log("Caller ID not found or invalid type");
             }

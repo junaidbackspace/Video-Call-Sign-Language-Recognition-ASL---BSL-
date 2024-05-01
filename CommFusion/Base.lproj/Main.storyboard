@@ -13,7 +13,7 @@
         <!--Login View Controller-->
         <scene sceneID="PmA-63-98h">
             <objects>
-                <viewController storyboardIdentifier="firstscreen" id="yWQ-aq-8mo" customClass="loginViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="firstscreen" id="yWQ-aq-8mo" customClass="loginViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="uWO-dZ-vQh">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -173,7 +173,7 @@
         <!--Login To Account View Controller-->
         <scene sceneID="vJ2-Rn-Mpf">
             <objects>
-                <viewController storyboardIdentifier="loginscreen" id="djE-O6-xxx" customClass="LoginToAccountViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="loginscreen" id="djE-O6-xxx" customClass="LoginToAccountViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="roZ-MJ-sQ8">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -307,7 +307,7 @@
         <!--Sign Up View Controller-->
         <scene sceneID="eCh-nQ-xbI">
             <objects>
-                <viewController storyboardIdentifier="signupscreen" id="OFn-Vj-P9m" customClass="SignUpViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="signupscreen" id="OFn-Vj-P9m" customClass="SignUpViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" ambiguous="YES" id="1w1-FW-uC5">
                         <rect key="frame" x="0.0" y="0.0" width="828" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -727,7 +727,7 @@
         <!--Call Transcription View Controller-->
         <scene sceneID="sSD-h7-CYW">
             <objects>
-                <viewController storyboardIdentifier="CallTranscriptionScreen" id="HGz-IK-c5e" customClass="CallTranscriptionViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CallTranscriptionScreen" id="HGz-IK-c5e" customClass="CallTranscriptionViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="7VX-Qx-64c">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -736,7 +736,7 @@
                                 <rect key="frame" x="0.0" y="50" width="414" height="429"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="c1" rowHeight="96" id="hEL-v7-99S" customClass="CallTranscriptionTableViewCell" customModule="SimpleWebRTC" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="c1" rowHeight="96" id="hEL-v7-99S" customClass="CallTranscriptionTableViewCell" customModule="CommFusion" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="96"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="hEL-v7-99S" id="zId-Ig-bDo">
@@ -921,7 +921,7 @@
         <!--User Profile View Controller-->
         <scene sceneID="Ln6-ln-jII">
             <objects>
-                <viewController storyboardIdentifier="userdetails" id="EOZ-HN-w0I" customClass="UserProfileViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="userdetails" id="EOZ-HN-w0I" customClass="UserProfileViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="OSQ-Dr-bRt">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1006,7 +1006,7 @@
                                 <rect key="frame" x="0.0" y="474" width="415" height="272"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="c11" rowHeight="83" id="Xbx-RC-511" customClass="CallLogsTableTableViewCell" customModule="SimpleWebRTC" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="c11" rowHeight="83" id="Xbx-RC-511" customClass="CallLogsTableTableViewCell" customModule="CommFusion" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="415" height="83"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Xbx-RC-511" id="s7f-QV-rTi">
@@ -1146,7 +1146,7 @@
         <!--First-->
         <scene sceneID="Zgj-XX-Eg1">
             <objects>
-                <viewController storyboardIdentifier="onlineContacts" id="4IP-lI-sSI" customClass="onlineContactsViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="onlineContacts" id="4IP-lI-sSI" customClass="onlineContactsViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="96r-BP-89Q">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1161,7 +1161,7 @@
                                 <rect key="frame" x="0.0" y="99" width="414" height="543"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="c1" rowHeight="83" id="bGI-WT-w9L" customClass="ContactTableTableViewCell" customModule="SimpleWebRTC" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="c1" rowHeight="83" id="bGI-WT-w9L" customClass="ContactTableTableViewCell" customModule="CommFusion" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="83"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="bGI-WT-w9L" id="KWh-8G-C3m">
@@ -1368,7 +1368,7 @@
         <!--Caller View Controller-->
         <scene sceneID="lc9-H0-KzJ">
             <objects>
-                <viewController storyboardIdentifier="callerscreen" id="PDn-Lx-ijW" customClass="CallerViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="callerscreen" id="PDn-Lx-ijW" customClass="CallerViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="rRw-DQ-pHN">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1452,7 +1452,7 @@
         <!--Contacts View Controller-->
         <scene sceneID="zPA-0b-h33">
             <objects>
-                <viewController storyboardIdentifier="Contacts" id="47f-yr-yc6" customClass="ContactsViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Contacts" id="47f-yr-yc6" customClass="ContactsViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jdH-eM-QDR">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1468,7 +1468,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="c2" rowHeight="80" id="54c-Hc-FFO" customClass="DetailedContactsTableViewCell" customModule="SimpleWebRTC" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="c2" rowHeight="80" id="54c-Hc-FFO" customClass="DetailedContactsTableViewCell" customModule="CommFusion" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="54c-Hc-FFO" id="AlT-Et-VMz">
@@ -1661,7 +1661,7 @@
         <!--Settings View Controller-->
         <scene sceneID="mlB-VU-ncB">
             <objects>
-                <viewController storyboardIdentifier="settings" id="30W-8P-gvm" customClass="settingsViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="settings" id="30W-8P-gvm" customClass="settingsViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hol-Dr-LyI">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1807,7 +1807,7 @@
         <!--Profile Settings View Controller-->
         <scene sceneID="zPq-uy-VkO">
             <objects>
-                <viewController storyboardIdentifier="profilesettingsScreen" id="K7Z-Vh-RAa" customClass="ProfileSettingsViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="profilesettingsScreen" id="K7Z-Vh-RAa" customClass="ProfileSettingsViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="n1f-oW-XYb">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2052,7 +2052,7 @@
         <!--General Settings View Controller-->
         <scene sceneID="gwF-Hx-TjR">
             <objects>
-                <viewController storyboardIdentifier="GerenalSettingsScreen" id="IST-Eo-vbW" customClass="GeneralSettingsViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="GerenalSettingsScreen" id="IST-Eo-vbW" customClass="GeneralSettingsViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="RhE-AH-Xdh">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2218,7 +2218,7 @@
         <!--About App View Controller-->
         <scene sceneID="6hj-4z-xBo">
             <objects>
-                <viewController storyboardIdentifier="aboutscreen" id="fod-Ld-lKE" customClass="aboutAppViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="aboutscreen" id="fod-Ld-lKE" customClass="aboutAppViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="STn-fV-MAt">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2287,15 +2287,15 @@
         <!--Terms Condition View Controller-->
         <scene sceneID="KxS-R2-bg1">
             <objects>
-                <viewController storyboardIdentifier="termsconditions" id="6pY-0x-mis" customClass="termsConditionViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="IkY-Jv-J3B">
+                <viewController storyboardIdentifier="termsconditions" id="6pY-0x-mis" customClass="termsConditionViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="IkY-Jv-J3B">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vfm-PR-29H">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vfm-PR-29H">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4WX-Ji-1Zt">
+                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4WX-Ji-1Zt">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="3400"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" lineBreakMode="wordWrap" numberOfLines="150" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9cu-2A-9BU">
@@ -2415,7 +2415,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
         <!--Notifications View Controller-->
         <scene sceneID="z6W-fY-Bsr">
             <objects>
-                <viewController storyboardIdentifier="notifications" id="d3m-Rr-tpn" customClass="NotificationsViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="notifications" id="d3m-Rr-tpn" customClass="NotificationsViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="F0F-Xq-o2i">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2509,7 +2509,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
         <!--Add Contact View Controller-->
         <scene sceneID="RQZ-c2-GaV">
             <objects>
-                <viewController storyboardIdentifier="addcontacts" id="q3X-FC-WsT" customClass="AddContactViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="addcontacts" id="q3X-FC-WsT" customClass="AddContactViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="nQr-Sj-wZm">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2579,7 +2579,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                 <rect key="frame" x="0.0" y="239" width="414" height="497"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="c1" rowHeight="80" id="Bnx-8c-Y7s" customClass="AddFriendTableViewCell" customModule="SimpleWebRTC" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="c1" rowHeight="80" id="Bnx-8c-Y7s" customClass="AddFriendTableViewCell" customModule="CommFusion" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Bnx-8c-Y7s" id="Kvl-Hj-Gs0">
@@ -2695,7 +2695,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
         <!--Player Lessons View Controller-->
         <scene sceneID="Wr7-9d-02a">
             <objects>
-                <viewController storyboardIdentifier="playerController" hidesBottomBarWhenPushed="YES" id="8hF-Et-3gG" customClass="PlayerLessonsViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="playerController" hidesBottomBarWhenPushed="YES" id="8hF-Et-3gG" customClass="PlayerLessonsViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="WZm-hd-wR4">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2871,7 +2871,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
         <!--Add Custom Signs View Controller-->
         <scene sceneID="Gim-bh-Hsd">
             <objects>
-                <viewController storyboardIdentifier="addCustomSigns" id="qqZ-g3-BLQ" customClass="AddCustomSignsViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="addCustomSigns" id="qqZ-g3-BLQ" customClass="AddCustomSignsViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="iN5-AT-JjO">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2886,7 +2886,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
         <!--Upload Captured Image View Controller-->
         <scene sceneID="mCb-0x-vh4">
             <objects>
-                <viewController storyboardIdentifier="UploadCustomimages" id="cvb-Tz-0gZ" customClass="UploadCapturedImageViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="UploadCustomimages" id="cvb-Tz-0gZ" customClass="UploadCapturedImageViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="pEI-NG-sOR">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2901,7 +2901,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
         <!--Second-->
         <scene sceneID="U6a-8R-sS4">
             <objects>
-                <viewController storyboardIdentifier="calllogs" id="kEN-Qn-sKS" customClass="CallLogsViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="calllogs" id="kEN-Qn-sKS" customClass="CallLogsViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5Mc-WH-bDe">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2945,7 +2945,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                 <rect key="frame" x="0.0" y="63" width="414" height="624"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="c11" rowHeight="83" id="cec-NT-kf4" customClass="CallLogsTableTableViewCell" customModule="SimpleWebRTC" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="c11" rowHeight="83" id="cec-NT-kf4" customClass="CallLogsTableTableViewCell" customModule="CommFusion" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="83"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="cec-NT-kf4" id="h1n-GP-hw6">
@@ -3052,7 +3052,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
         <!--third-->
         <scene sceneID="cHr-zu-PHC">
             <objects>
-                <viewController storyboardIdentifier="leassonsDashbaord" id="ZJ7-uP-IR1" customClass="leassonsViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="leassonsDashbaord" id="ZJ7-uP-IR1" customClass="leassonsViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="BGJ-5v-qT9">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3419,7 +3419,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
         <!--Favorite Lecture View Controller-->
         <scene sceneID="bgC-R4-2Ke">
             <objects>
-                <viewController storyboardIdentifier="favoriteSigns" id="lpB-wx-4cb" customClass="FavoriteLectureViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="favoriteSigns" id="lpB-wx-4cb" customClass="FavoriteLectureViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4Hu-ba-9nU">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3457,7 +3457,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                     <constraint firstAttribute="height" constant="643" id="GlN-sQ-QMg"/>
                                 </constraints>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="c1" rowHeight="80" id="G5U-fO-Hmh" customClass="FavoriteSignsTableViewCell" customModule="SimpleWebRTC" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="c1" rowHeight="80" id="G5U-fO-Hmh" customClass="FavoriteSignsTableViewCell" customModule="CommFusion" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="G5U-fO-Hmh" id="otr-5c-dqx">
@@ -3526,7 +3526,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController storyboardIdentifier="videoCallscreen" id="BYZ-38-t0r" customClass="ViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="videoCallscreen" id="BYZ-38-t0r" customClass="ViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3579,7 +3579,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MhY-XV-PtI">
-                                <rect key="frame" x="244" y="646" width="65" height="53"/>
+                                <rect key="frame" x="250" y="646" width="65" height="53"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="54.329999999999998" id="wxw-Ky-9rU"/>
                                 </constraints>
@@ -3590,7 +3590,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Gl-h1-HgE">
-                                <rect key="frame" x="93" y="647" width="58" height="45"/>
+                                <rect key="frame" x="88" y="647" width="58" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="58" id="8bi-d9-XEd"/>
                                     <constraint firstAttribute="height" constant="47.329999999999998" id="w5C-m1-pdS"/>
@@ -3619,16 +3619,16 @@ By using the Application, you acknowledge that you have read, understood, and ag
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="MhY-XV-PtI" firstAttribute="top" secondItem="ukj-JL-nzc" secondAttribute="top" id="2i7-Je-Iyy"/>
-                            <constraint firstItem="ukj-JL-nzc" firstAttribute="leading" secondItem="0Gl-h1-HgE" secondAttribute="trailing" constant="16" id="5cy-Lk-ZgR"/>
+                            <constraint firstItem="ukj-JL-nzc" firstAttribute="leading" secondItem="0Gl-h1-HgE" secondAttribute="trailing" constant="21" id="5cy-Lk-ZgR"/>
                             <constraint firstItem="MhY-XV-PtI" firstAttribute="baseline" secondItem="ukj-JL-nzc" secondAttribute="baseline" id="6k7-AY-M7S"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="RmB-Fn-1fb" secondAttribute="trailing" id="BTa-2b-Dg0"/>
                             <constraint firstItem="RmB-Fn-1fb" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="600" id="HJT-0f-rz0"/>
                             <constraint firstItem="MhY-XV-PtI" firstAttribute="firstBaseline" secondItem="ukj-JL-nzc" secondAttribute="firstBaseline" id="JX0-gr-g6t"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="MhY-XV-PtI" secondAttribute="trailing" constant="105" id="LCi-nZ-yjW"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="MhY-XV-PtI" secondAttribute="trailing" constant="99" id="LCi-nZ-yjW"/>
                             <constraint firstItem="RmB-Fn-1fb" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-24" id="SA0-KS-tzW"/>
                             <constraint firstItem="ukj-JL-nzc" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="167" id="Tgz-PD-3B1"/>
                             <constraint firstItem="ukj-JL-nzc" firstAttribute="top" secondItem="RmB-Fn-1fb" secondAttribute="bottom" constant="8" symbolic="YES" id="knv-dk-OrC"/>
-                            <constraint firstItem="MhY-XV-PtI" firstAttribute="leading" secondItem="ukj-JL-nzc" secondAttribute="trailing" constant="15" id="qbc-PA-brC"/>
+                            <constraint firstItem="MhY-XV-PtI" firstAttribute="leading" secondItem="ukj-JL-nzc" secondAttribute="trailing" constant="21" id="qbc-PA-brC"/>
                             <constraint firstItem="0Gl-h1-HgE" firstAttribute="top" secondItem="RmB-Fn-1fb" secondAttribute="bottom" constant="9" id="wwX-Zt-kLC"/>
                         </constraints>
                     </view>
@@ -3699,7 +3699,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
         <!--Custom Signs View Controller-->
         <scene sceneID="znI-NY-c3L">
             <objects>
-                <viewController storyboardIdentifier="CustomSignsList" id="Jxy-Fw-SQ5" customClass="CustomSignsViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CustomSignsList" id="Jxy-Fw-SQ5" customClass="CustomSignsViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jET-ku-gwb">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3737,7 +3737,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                     <constraint firstAttribute="height" constant="643" id="Yqs-7Q-szH"/>
                                 </constraints>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="c1" rowHeight="80" id="b2f-ae-4Rv" customClass="CustomSignsTableViewCell" customModule="SimpleWebRTC" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="c1" rowHeight="80" id="b2f-ae-4Rv" customClass="CustomSignsTableViewCell" customModule="CommFusion" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="b2f-ae-4Rv" id="joW-CC-IVP">
@@ -3797,7 +3797,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
         <!--Call Reciever View Controller-->
         <scene sceneID="Dhc-63-042">
             <objects>
-                <viewController storyboardIdentifier="callRecieverscreen" id="g66-lv-QzO" customClass="CallRecieverViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="callRecieverscreen" id="g66-lv-QzO" customClass="CallRecieverViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="2G2-lZ-jxy">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3865,7 +3865,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
         <!--third-->
         <scene sceneID="ylh-Ko-Ahl">
             <objects>
-                <viewController storyboardIdentifier="beginerLevelScreen" id="rLd-4b-ho9" customClass="Lessons_LevelsViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="beginerLevelScreen" id="rLd-4b-ho9" customClass="Lessons_LevelsViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="VNa-Pb-xxW">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -4198,7 +4198,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
         <!--third-->
         <scene sceneID="OXS-KT-Cjp">
             <objects>
-                <viewController storyboardIdentifier="intermediateLevelScreen" id="OSW-50-DQq" customClass="intermediatelevelViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="intermediateLevelScreen" id="OSW-50-DQq" customClass="intermediatelevelViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="oA7-sJ-Rgq">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -4394,7 +4394,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
         <!--third-->
         <scene sceneID="TUY-ra-ZBO">
             <objects>
-                <viewController storyboardIdentifier="expertLevelScreen" id="rRf-UX-HMn" customClass="expertlevelViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="expertLevelScreen" id="rRf-UX-HMn" customClass="expertlevelViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ZhO-yG-NL5">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -4583,7 +4583,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
         <!--third-->
         <scene sceneID="scF-HC-7eG">
             <objects>
-                <viewController storyboardIdentifier="LessonsGallery" id="mBn-Dk-3b4" customClass="LessonsListViewController" customModule="SimpleWebRTC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LessonsGallery" id="mBn-Dk-3b4" customClass="LessonsListViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="u0a-tI-Zkq">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -4624,7 +4624,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell" id="XUv-aM-4Zg" customClass="Custom_LessonsListCollectionViewCell" customModule="SimpleWebRTC" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell" id="XUv-aM-4Zg" customClass="Custom_LessonsListCollectionViewCell" customModule="CommFusion" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="193" height="226"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="rrW-bi-QUe">
