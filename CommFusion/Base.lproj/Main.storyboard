@@ -308,11 +308,11 @@
         <scene sceneID="eCh-nQ-xbI">
             <objects>
                 <viewController storyboardIdentifier="signupscreen" id="OFn-Vj-P9m" customClass="SignUpViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="1w1-FW-uC5">
+                    <view key="view" contentMode="scaleToFill" id="1w1-FW-uC5">
                         <rect key="frame" x="0.0" y="0.0" width="828" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nqL-Fh-3wM">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nqL-Fh-3wM">
                                 <rect key="frame" x="0.0" y="0.0" width="828" height="736"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XLo-Oe-pFd">
@@ -383,6 +383,9 @@
                                                     <constraint firstAttribute="width" constant="37" id="eB4-OX-J3o"/>
                                                 </constraints>
                                                 <state key="normal" backgroundImage="arrow.backward" catalog="system"/>
+                                                <connections>
+                                                    <action selector="backbtn:" destination="OFn-Vj-P9m" eventType="touchUpInside" id="InO-1v-Etf"/>
+                                                </connections>
                                             </button>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="iX7-d4-GZU">
                                                 <rect key="frame" x="57" y="281" width="300" height="60"/>
@@ -558,7 +561,6 @@
                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="default"/>
                                         </state>
                                         <connections>
-                                            <action selector="backSignUp:" destination="OFn-Vj-P9m" eventType="touchUpInside" id="O49-IS-2Ra"/>
                                             <action selector="btnSignup:" destination="OFn-Vj-P9m" eventType="touchUpInside" id="y77-XG-8Ho"/>
                                         </connections>
                                     </button>
@@ -573,7 +575,7 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" backgroundImage="arrow.backward" catalog="system"/>
                                         <connections>
-                                            <action selector="backbtn:" destination="OFn-Vj-P9m" eventType="touchUpInside" id="pe4-Lm-Wmo"/>
+                                            <action selector="backSignUp:" destination="OFn-Vj-P9m" eventType="touchUpInside" id="lPa-wK-kDR"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sign Up" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z8f-QK-P7r">

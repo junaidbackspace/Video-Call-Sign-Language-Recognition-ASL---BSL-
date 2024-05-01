@@ -47,21 +47,28 @@ class AddContactViewController: UIViewController ,UITableViewDataSource, UITable
     
     @IBAction func btnSearch(_ sender: Any) {
         //on again click
-      
+        showLoadingView()
+        
         contacts.removeAll()
         self.tble.reloadData()
       
-            if self.rdemail.isSelected{
-                self.fetchContactsData(Url:
-                                        "\(Constants.serverURL)/user/search?user_id=\(userID)&search_Email=\(txtsearch.text!)")
-            //http://192.168.31.106:8000/user/search?user_id=2&search_username=umer123
-                print("Entered in Email Selected: \(self.txtsearch.text!)")
+        if self.rdemail.isSelected {
+            // Encode the email address to handle special characters such as spaces
+            if let searchText = self.txtsearch.text?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+                let urlString = "\(Constants.serverURL)/user/search?user_id=\(userID)&search_Email=\(searchText)"
+                self.fetchContactsData(Url: urlString)
+                print("Entered in Email Selected: \(searchText)")
             }
-            else if self.rdusername.isSelected {
-                self.fetchContactsData(Url: "\(Constants.serverURL)/user/search?user_id=\(userID)&search_username=\(txtsearch.text!)")
-                print("Entered in username Selected: \(self.txtsearch.text!)")
-                
+        }
+
+        if self.rdusername.isSelected {
+            if let searchText = self.txtsearch.text?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+                let urlString = "\(Constants.serverURL)/user/search?user_id=\(userID)&search_username=\(searchText)"
+                self.fetchContactsData(Url: urlString)
+                print("Entered in username Selected: \(searchText)")
             }
+        }
+
            
     }
     func fetchContactsData(Url : String) {
@@ -82,6 +89,7 @@ class AddContactViewController: UIViewController ,UITableViewDataSource, UITable
             if let error = error {
                 print("URL: \(Url)")
                 print("Error in recieving :", error.localizedDescription)
+                self.hideLoadingView()
                
             } else if let jsonData = addUser {
                 print("JSON Data:", jsonData)
@@ -116,6 +124,7 @@ class AddContactViewController: UIViewController ,UITableViewDataSource, UITable
 
         
         DispatchQueue.main.async {
+            self.hideLoadingView()
             self.tble.dataSource = self
             self.tble.delegate = self
             self.tble.reloadData()
@@ -216,5 +225,49 @@ class AddContactViewController: UIViewController ,UITableViewDataSource, UITable
 
     }
 
-
+    var loadingView: UIView!
+    var activityIndicator: UIActivityIndicatorView!
+    var loadingLabel: UILabel!
+    
+    func showLoadingView() {
+        setupLoading()
+        view.addSubview(loadingView)
+       
+    }
+    
+    // Function to hide loading view
+    func hideLoadingView() {
+        loadingView.removeFromSuperview()
+    }
+    func setupLoading(){
+        // Create loading view
+        loadingView = UIView(frame: CGRect(x: 0, y: 0, width: 150, height: 100))
+        loadingView.center = view.center
+        loadingView.backgroundColor = UIColor.black.withAlphaComponent(0.7)
+        loadingView.clipsToBounds = true
+        loadingView.layer.cornerRadius = 10
+        view.addSubview(loadingView)
+        
+        // Add activity indicator
+        activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
+        activityIndicator.center = CGPoint(x: loadingView.frame.size.width / 2, y: loadingView.frame.size.height / 3)
+        loadingView.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+        
+        // Add loading label
+        loadingLabel = UILabel(frame: CGRect(x: 0, y: activityIndicator.frame.origin.y + activityIndicator.frame.size.height + 10, width: loadingView.frame.size.width, height: 20))
+        loadingLabel.text = "Refreshing..."
+        loadingLabel.textColor = UIColor.white
+        loadingLabel.textAlignment = .center
+        loadingLabel.font = UIFont.systemFont(ofSize: 16)
+        loadingView.addSubview(loadingLabel)
+        
+        // Rotate animation for the activity indicator
+        let rotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
+        rotateAnimation.fromValue = 0.0
+        rotateAnimation.toValue = CGFloat(Double.pi * 2.0)
+        rotateAnimation.duration = 1.0
+        rotateAnimation.repeatCount = .infinity
+        activityIndicator.layer.add(rotateAnimation, forKey: nil)
+    }
 }

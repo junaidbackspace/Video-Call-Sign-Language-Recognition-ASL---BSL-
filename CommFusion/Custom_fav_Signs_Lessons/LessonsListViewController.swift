@@ -12,13 +12,11 @@ class LessonsListViewController: UIViewController, UICollectionViewDataSource, U
    
     var serverWrapper = APIWrapper()
     var content  = [User]()
-    var trainingname = ""
+    var trainingname = "alphabets"
     var lesson_level = ""
     var les_id = 0
    
-    let ContentName =  ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-
-    let Content = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+   
     
     @IBOutlet weak var lblLeasonName : UILabel?
     

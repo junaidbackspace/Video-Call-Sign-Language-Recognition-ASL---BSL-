@@ -93,7 +93,7 @@ class FavoriteLectureViewController: UIViewController, UITableViewDelegate, UITa
                cell?.backgroundColor = .white
         //let selectedRow = indexPath.row
         let controller = self.storyboard?.instantiateViewController(identifier: "playerController") as! PlayerLessonsViewController
-        controller.trainingname = "Favorite Sign"
+        controller.trainingname = "alphabets"
         controller.lesson_level = " "
         controller.signtext = content[indexPath.row].Les_Des
         controller.lesson_id = content[indexPath.row].Les_id

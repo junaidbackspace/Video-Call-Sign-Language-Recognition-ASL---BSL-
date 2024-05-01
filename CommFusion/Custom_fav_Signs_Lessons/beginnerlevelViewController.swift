@@ -104,29 +104,6 @@ class Lessons_LevelsViewController: UIViewController {
 
     
     @IBAction func btn_Alphabets(_ sender: Any) {
-    
-        let controller = self.storyboard?.instantiateViewController(identifier: "LessonsGallery") as! LessonsListViewController
-        controller.trainingname = "Words"
-        controller.lesson_level = "Beginner"
-      
-            if lessonstrct.count > 1 {
-        controller.les_id = lessonstrct[0].Les_id
-        controller.hidesBottomBarWhenPushed = true
-        controller.modalPresentationStyle = .fullScreen
-        self.navigationController?.pushViewController(controller, animated: true)
-            
-        } else {
-            // Show an alert controller indicating the error
-            let alertController = UIAlertController(title: "Error", message: "Network is Required", preferredStyle: .alert)
-            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-            alertController.addAction(okAction)
-            self.present(alertController, animated: true, completion: nil)
-            return
- 
-        }
-    }
-    @IBAction func btn_Numbers(_ sender: Any) {
-        
         if lessonstrct.count > 1 {
         let controller = self.storyboard?.instantiateViewController(identifier: "LessonsGallery") as! LessonsListViewController
         controller.trainingname = "Alphabets"
@@ -146,32 +123,9 @@ class Lessons_LevelsViewController: UIViewController {
             
                    }
     
-       
-    }
- 
-    @IBAction func btn_Words(_ sender: Any) {
         
-        if lessonstrct.count > 1 {
-        let controller = self.storyboard?.instantiateViewController(identifier: "LessonsGallery") as! LessonsListViewController
-        controller.trainingname = "Greetings"
-        controller.lesson_level = "Beginner"
-        
-        controller.les_id = lessonstrct[2].Les_id
-        controller.hidesBottomBarWhenPushed = true
-        controller.modalPresentationStyle = .fullScreen
-        self.navigationController?.pushViewController(controller, animated: true)
-        }
-            else {
-                // Show an alert controller indicating the error
-                let alertController = UIAlertController(title: "Error", message: "Network is Required", preferredStyle: .alert)
-                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                alertController.addAction(okAction)
-                self.present(alertController, animated: true, completion: nil)
-                return
-     
-            }
     }
-    @IBAction func btn_Greetings(_ sender: Any) {
+    @IBAction func btn_Numbers(_ sender: Any) {
         
         if lessonstrct.count > 1 {
         let controller = self.storyboard?.instantiateViewController(identifier: "LessonsGallery") as! LessonsListViewController
@@ -191,6 +145,54 @@ class Lessons_LevelsViewController: UIViewController {
                 return
      
             }
+       
+    }
+ 
+    @IBAction func btn_Words(_ sender: Any) {
+        
+        let controller = self.storyboard?.instantiateViewController(identifier: "LessonsGallery") as! LessonsListViewController
+        controller.trainingname = "Words"
+        controller.lesson_level = "Beginner"
+      
+            if lessonstrct.count > 1 {
+        controller.les_id = lessonstrct[0].Les_id
+        controller.hidesBottomBarWhenPushed = true
+        controller.modalPresentationStyle = .fullScreen
+        self.navigationController?.pushViewController(controller, animated: true)
+            
+        } else {
+            // Show an alert controller indicating the error
+            let alertController = UIAlertController(title: "Error", message: "Network is Required", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alertController.addAction(okAction)
+            self.present(alertController, animated: true, completion: nil)
+            return
+ 
+        }
+        
+        
+    }
+    @IBAction func btn_Greetings(_ sender: Any) {
+        if lessonstrct.count > 1 {
+        let controller = self.storyboard?.instantiateViewController(identifier: "LessonsGallery") as! LessonsListViewController
+        controller.trainingname = "Greetings"
+        controller.lesson_level = "Beginner"
+        
+        controller.les_id = lessonstrct[2].Les_id
+        controller.hidesBottomBarWhenPushed = true
+        controller.modalPresentationStyle = .fullScreen
+        self.navigationController?.pushViewController(controller, animated: true)
+        }
+            else {
+                // Show an alert controller indicating the error
+                let alertController = UIAlertController(title: "Error", message: "Network is Required", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+                return
+     
+            }
+        
     }
    
     

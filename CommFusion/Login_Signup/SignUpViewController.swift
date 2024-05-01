@@ -28,14 +28,6 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
     @IBOutlet weak var imgabout: UIImageView!
     
     @IBAction func backSignUp(_ sender: Any) {
-        
-        let controller = self.storyboard!.instantiateViewController(identifier: "firstscreen")
-        controller.modalPresentationStyle = .fullScreen
-          self.navigationController?.pushViewController(controller, animated: true)
-       
-    }
-    @IBAction func backbtn(_ sender: Any) {
-        
         firstScreen.isHidden = false
         SecondScreen.isHidden = true
         imgview.isHidden = true
@@ -43,6 +35,15 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
         outletBtnBack.isHidden = true
         btnsignupOutlet.isHidden = true
         imgabout.isHidden = true
+       
+    }
+    @IBAction func backbtn(_ sender: Any) {
+        
+        
+        let controller = self.storyboard!.instantiateViewController(identifier: "firstscreen")
+        controller.modalPresentationStyle = .fullScreen
+          self.navigationController?.pushViewController(controller, animated: true)
+        
        
     }
     
@@ -85,36 +86,33 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
  
     @IBAction func btnNext(_ sender: Any) {
         
-        firstScreen.isHidden = true
-        SecondScreen.isHidden = false
+       var check = true
         
-        imgview.isHidden = false
-        txtAbout.isHidden = false
-        outletBtnBack.isHidden = false
-        btnsignupOutlet.isHidden = false
-        imgabout.isHidden = false
-        
-        self.view.addSubview(imgview)
-        self.view.addSubview(txtAbout)
-        self.view.addSubview(outletBtnBack)
-        self.view.addSubview(btnsignupOutlet)
-        self.view.addSubview(imgabout)
+       
         
         if txtName.text != ""{
+            
         if let fullName = txtName.text {
             let fullNameComponents = fullName.components(separatedBy: " ")
             if let firstName = fullNameComponents.first {
                
                 u.Fname = firstName
             }
-            if fullNameComponents.count >= 2 {
+            if fullNameComponents.count == 2 {
                 let lastName = fullNameComponents.dropFirst().joined(separator: " ")
                         
                 u.Lname = lastName
             }
+            else{
+                txtName.layer.borderColor = CGColor.init(red: 1, green: 0, blue: 0, alpha: 1)
+                txtName.text = ""
+                txtName.placeholder = "FirstName & LastName is Invalid!"
+                check = false
+            }
         }
         }
         else{
+            check = false
             txtName.layer.borderColor = CGColor.init(red: 1, green: 0, blue: 0, alpha: 1)
         }
         
@@ -124,11 +122,13 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
             u.Password = txtpassword.text!
         }
         else{
+            check = false
             txtpassword.layer.borderColor = CGColor.init(red: 1, green: 0, blue: 0, alpha: 1)
             txtconfirmPassword.layer.borderColor = CGColor.init(red: 1, green: 0, blue: 0, alpha: 1)
         }
         }
         else{
+            check = false
             txtpassword.layer.borderColor = CGColor.init(red: 1, green: 0, blue: 0, alpha: 1)
             txtconfirmPassword.layer.borderColor = CGColor.init(red: 1, green: 0, blue: 0, alpha: 1)
         }
@@ -136,6 +136,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
        
         
         if txtemail.text == ""{
+            check = false
             txtemail.layer.borderColor = CGColor.init(red: 1, green: 0, blue: 0, alpha: 1)
         }
         else{
@@ -152,21 +153,28 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
             u.Email = txtemail.text!
         }
        
-        if lbldropdown.text != "Disability Type"
+        if lbldropdown.text != "Disablity Type"
         {
             u.UserType = lbldropdown.text!
         }
         else{
-            lbldropdown.layer.borderColor = CGColor.init(red: 1, green: 0, blue: 0, alpha: 1)
+            check = false
+            drpdownView.layer.borderColor = CGColor.init(red: 1, green: 0, blue: 0, alpha: 1)
         }
        
         
         if(formattedDate != nil)
         {
-       
+       print("DOB is valid")
         u.DateOfBirth = formattedDate
         }
+        else{
+            check = false
+        }
         
+        if !DOBCheck{
+            viewDOB.layer.borderColor = CGColor.init(red: 1, green: 0, blue: 0, alpha: 1)
+        }
         
         let currentDate = Date()
         let calendar = Calendar.current
@@ -174,6 +182,26 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
 
         u.RegistrationDate = calendar.date(from: components)!
         u.OnlineStatus = 1
+        
+        if check && DOBCheck{
+            print("check is true going to second screen")
+            imgview.isHidden = false
+            txtAbout.isHidden = false
+            outletBtnBack.isHidden = false
+            btnsignupOutlet.isHidden = false
+            imgabout.isHidden = false
+            
+            self.view.addSubview(imgview)
+            self.view.addSubview(txtAbout)
+            self.view.addSubview(outletBtnBack)
+            self.view.addSubview(btnsignupOutlet)
+            self.view.addSubview(imgabout)
+            
+            firstScreen.isHidden = true
+            SecondScreen.isHidden = false
+        }
+        
+          
         
     }
     
@@ -346,9 +374,10 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
             self.view.endEditing(true)
         }
     
-    
+    var DOBCheck = false
     
     @objc func datePickerValueChanged(_ sender: UIDatePicker) {
+        DOBCheck = true
         let selectedDate = sender.date
 
        
