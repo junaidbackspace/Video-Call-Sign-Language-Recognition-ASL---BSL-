@@ -107,23 +107,38 @@ wsServer.on('connection', function (ws) {
                     
                 
                    
-         wsServer.clients.forEach(function each(client) {
+//          wsServer.clients.forEach(function each(client) {
    
-          for (const [userId, ws] of callers) {
+//           for (const [userId, ws] of callers) {
        
-               if (isSame(ws, client)) {
-                //    console.log('Skip sender:', type, 'WebSocket ID: ',userId);
-                      } else {
-                         console.log('sending  message:', type, 'to : ',userId);
-                           client.send(message);
-                           break;
-                              }
-
-    } break;
-});
-
+//                if (isSame(ws, client)) {
                    
-            }
+//                 //    console.log('Skip sender:', type, 'WebSocket ID: ',userId);
+//                       } else {
+//                         console.log('sending  message:', type, 'to : ',userId);
+//                         client.send(message);
+//                         break;
+//                               }
+
+//     } 
+   
+// });
+                wsServer.clients.forEach(function each(client) {
+                     if (isSame(ws, client)) {
+                           console.log('skip sender');
+                             }
+                          else {
+                            client.send(message);
+                            }
+                        });
+                }
+                
+        function isSame(ws1, ws2) {
+         // -- compare object --
+        return (ws1 === ws2);
+        }   
+                   
+            
         }     
            else if ( type === 'call_ended')
            {
@@ -153,10 +168,7 @@ wsServer.on('connection', function (ws) {
     
 });
 
-function isSame(ws1, ws2) {
-    // -- compare object --
-    return (ws1 === ws2);
-}
+
 
 // Function to handle call initiation
 function handleCall(from, to) {
