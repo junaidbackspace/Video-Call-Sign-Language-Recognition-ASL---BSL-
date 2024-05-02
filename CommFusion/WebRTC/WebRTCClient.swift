@@ -513,10 +513,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
                         print(error)
                         return
                     }
-                    
-                    
-                    
-                    print("succeed to set local offer SDP")
+                     print("succeed to set local offer SDP")
                     onSuccess(offerSDP)
                 })
             }

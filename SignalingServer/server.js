@@ -105,7 +105,7 @@ wsServer.on('connection', function (ws) {
             
                     // console.log('from: ', from, ' to: ', to, ' type: ', type);
                     
-
+                
                    
          wsServer.clients.forEach(function each(client) {
    
@@ -116,8 +116,10 @@ wsServer.on('connection', function (ws) {
                       } else {
                          console.log('sending  message:', type, 'to : ',userId);
                            client.send(message);
+                           break;
                               }
-    }
+
+    } break;
 });
 
                    

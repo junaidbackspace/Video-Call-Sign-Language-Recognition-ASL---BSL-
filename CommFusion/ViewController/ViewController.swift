@@ -340,6 +340,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
                         self.socket.write(string: message)
                     }
                 } catch {
+                    print("\nFailled to offer SDP")
                     print(error)
                 }
         }else if sessionDescription.type == .answer {
@@ -355,6 +356,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
                         self.socket.write(string: message)
                     }
                 } catch {
+                    print("\nFailled to Answer SDP")
                     print(error)
                 }
         }
@@ -413,15 +415,15 @@ extension ViewController {
             }
             
             else if signalingMessage.type == "offer" {
-                print("offer recieved")
+                print("offer recieved: \(signalingMessage.type) ")
                 webRTCClient.receiveOffer(offerSDP: RTCSessionDescription(type: .offer, sdp: (signalingMessage.sessionDescription?.sdp)!), onCreateAnswer: {(answerSDP: RTCSessionDescription) -> Void in
                     self.sendSDP(sessionDescription: answerSDP)
                 })
             }else if signalingMessage.type == "answer" {
-                print("Answer recieved")
+                print("Answer recieved: \(signalingMessage.type) ")
                 webRTCClient.receiveAnswer(answerSDP: RTCSessionDescription(type: .answer, sdp: (signalingMessage.sessionDescription?.sdp)!))
             }else if signalingMessage.type == "candidate" {
-                print("Candidate recieved")
+                print("Candidate recieved: \(signalingMessage.type) ")
                 
                 let candidate = signalingMessage.candidate!
                 webRTCClient.receiveCandidate(candidate: RTCIceCandidate(sdp: candidate.sdp, sdpMLineIndex: candidate.sdpMLineIndex, sdpMid: candidate.sdpMid))
