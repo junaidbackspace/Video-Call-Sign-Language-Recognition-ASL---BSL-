@@ -272,6 +272,7 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         DispatchQueue.global().async {
+            self.showLoadingView()
                self.fetchCallHistory()
         }
         
@@ -340,12 +341,14 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
         serverWrapper.fetchData(baseUrl: url, structure: [CallLogs].self) { UserCallHistory, error in
             if let error = error {
                 print("Call History Error:", error.localizedDescription)
+                self.hideLoadingView()
                
             } else if let jsonData = UserCallHistory {
                 print("Call History Data:", jsonData)
-               
+                self.hideLoadingView()
                 self.processContactsData(jsonData)
             } else {
+                self.hideLoadingView() 
                 print("No data received from the server")
             }
         }
@@ -401,6 +404,51 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
             self.tble.delegate = self
             self.tble.reloadData()
         }
+    }
+    var loadingView: UIView!
+    var activityIndicator: UIActivityIndicatorView!
+    var loadingLabel: UILabel!
+    
+    func showLoadingView() {
+        setupLoading()
+        view.addSubview(loadingView)
+     
+    }
+    
+    // Function to hide loading view
+    func hideLoadingView() {
+        loadingView.removeFromSuperview()
+    }
+    func setupLoading(){
+        // Create loading view
+        loadingView = UIView(frame: CGRect(x: 0, y: 0, width: 150, height: 100))
+        loadingView.center = view.center
+        loadingView.backgroundColor = UIColor.black.withAlphaComponent(0.7)
+        loadingView.clipsToBounds = true
+        loadingView.layer.cornerRadius = 10
+        view.addSubview(loadingView)
+        
+        // Add activity indicator
+        activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
+        activityIndicator.center = CGPoint(x: loadingView.frame.size.width / 2, y: loadingView.frame.size.height / 3)
+        loadingView.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+        
+        // Add loading label
+        loadingLabel = UILabel(frame: CGRect(x: 0, y: activityIndicator.frame.origin.y + activityIndicator.frame.size.height + 10, width: loadingView.frame.size.width, height: 20))
+        loadingLabel.text = "Refreshing..."
+        loadingLabel.textColor = UIColor.white
+        loadingLabel.textAlignment = .center
+        loadingLabel.font = UIFont.systemFont(ofSize: 16)
+        loadingView.addSubview(loadingLabel)
+        
+        // Rotate animation for the activity indicator
+        let rotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
+        rotateAnimation.fromValue = 0.0
+        rotateAnimation.toValue = CGFloat(Double.pi * 2.0)
+        rotateAnimation.duration = 1.0
+        rotateAnimation.repeatCount = .infinity
+        activityIndicator.layer.add(rotateAnimation, forKey: nil)
     }
 }
 extension CallLogsViewController: UITextFieldDelegate {

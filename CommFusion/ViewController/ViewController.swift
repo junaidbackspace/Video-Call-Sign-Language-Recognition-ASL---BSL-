@@ -262,38 +262,42 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
     @objc func hangupButtonTapped(){
         print("hangup Tapped")
-         let endCallData: [String: Any] = [
-             "type": "call_ended",
-             "callerID": callFriendId,
-             "callenderID": userID
-         ]
-         do {
-             print(endCallData)
-             let jsonData = try JSONSerialization.data(withJSONObject: endCallData, options: [])
-             socket.write(data: jsonData)
-         } catch {
-             print("Error serializing end call data: \(error)")
-         }
-       
-        if webRTCClient.isConnected {
-            
-            webRTCClient.disconnect()
-            DispatchQueue.main.async {
-                       self.navigationController?.popViewController(animated: true)
-                       self.navigationController?.popViewController(animated: true)
-                   }
-         //   webRTCClient.stopCaptureFrames()
+
+        let endCallData: [String: Any] = [
+            "type": "call_ended",
+            "callerID": callFriendId,
+            "callenderID": userID
+        ]
+
+        do {
+            print(endCallData)
+            let jsonData = try JSONSerialization.data(withJSONObject: endCallData, options: [])
+            socket.write(data: jsonData) { [weak self] in
+                guard let self = self else { return }
+                self.disconnectWebRTC()
+            }
+        } catch {
+            print("Error serializing end call data: \(error)")
         }
-        else{
-            DispatchQueue.main.async {
-                   
-                       self.navigationController?.popViewController(animated: true)
-                       self.navigationController?.popViewController(animated: true)
-                   }
-        }
-       
-//        socket.connect()
     }
+        func disconnectWebRTC() {
+            if webRTCClient.isConnected {
+                webRTCClient.disconnect()
+                DispatchQueue.main.async {
+                    self.navigationController?.popViewController(animated: true)
+                    self.navigationController?.popViewController(animated: true)
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.navigationController?.popViewController(animated: true)
+                    self.navigationController?.popViewController(animated: true)
+                }
+            }
+        }
+
+
+//        socket.connect()
+    
     
     @objc func sendMessageButtonTapped(_ sender: UIButton){
 //        webRTCClient.sendMessge(message: (sender.titleLabel?.text!)!)
