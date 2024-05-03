@@ -247,7 +247,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
             
         }
         
-        print("set remote description")
+        print("set remote description",offerSDP)
         self.peerConnection!.setRemoteDescription(offerSDP) { (err) in
             if let error = err {
                 print("failed to set remote offer SDP")
@@ -622,7 +622,7 @@ extension WebRTCClient {
     
     func peerConnection(_ peerConnection: RTCPeerConnection, didAdd stream: RTCMediaStream) {
         print("did add stream")
-        self.remoteStream = stream
+//        self.remoteStream = stream
         
         if let track = stream.videoTracks.first {
             print("video track found")
