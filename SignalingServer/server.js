@@ -105,13 +105,25 @@ wsServer.on('connection', function (ws) {
             
                     // console.log('from: ', from, ' to: ', to, ' type: ', type);
                     
-                
+
                    
 //          wsServer.clients.forEach(function each(client) {
    
 //           for (const [userId, ws] of callers) {
        
+<<<<<<< HEAD
 //                if (isSame(ws, client)) {
+=======
+               if (isSame(ws, client)) {
+                //    console.log('Skip sender:', type, 'WebSocket ID: ',userId);
+                      } else {
+                         console.log('sending  message:', type, 'to : ',userId);
+                           client.send(message);
+                              }
+    }
+});
+
+>>>>>>> parent of 7722d41 (again testing call)
                    
 //                 //    console.log('Skip sender:', type, 'WebSocket ID: ',userId);
 //                       } else {
