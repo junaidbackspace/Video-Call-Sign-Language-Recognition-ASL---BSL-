@@ -58,7 +58,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     @IBAction func btnCall(_ sender: Any) {
         print("Entered in CallUp")
       
-//        callButtonTapped()
+        callButtonTapped()
     }
     
     @IBAction func btnHangupCall(_ sender: Any) {
@@ -241,26 +241,20 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     var reciver = 0
     
     // MARK: - UI Events
-    @objc func callButtonTapped() {
-        // Create a serial dispatch queue for synchronization
-        let syncQueue = DispatchQueue(label: "com.example.webRTCClient.syncQueue")
+    @objc func callButtonTapped(){
         
-        // Execute the code inside the dispatch queue
-        syncQueue.async {
-            if !self.webRTCClient.isConnected {
-                if self.isReciever == 1 {
-                    print("Receiver side initiating call ...")
-                    
-                    self.webRTCClient.connect { (offerSDP: RTCSessionDescription) in
-                        // Send the offer session description
-                        self.sendSDP(sessionDescription: offerSDP)
-                    }
-                    // webRTCClient.startCaptureFrames()  // Uncomment this line if needed
-                }
+        if !webRTCClient.isConnected {
+            
+            print("Reciever side initiating call ...")
+            if isReciever == 1{
+                print("\n Reciever : \(isReciever)")
+            webRTCClient.connect(onSuccess: { (offerSDP: RTCSessionDescription) -> Void in
+                self.sendSDP(sessionDescription: offerSDP)
+            })
+//            webRTCClient.startCaptureFrames()
             }
         }
     }
-
     
     
   

@@ -217,7 +217,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     // MARK:- HangUp
     func disconnect(){
         if self.peerConnection != nil{
-            
+            onDisConnected()
             
         }
         stopCaptureLocalVideo()
@@ -554,8 +554,6 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         print("\n OnConnected  :- webRTC connected here\n")
         DispatchQueue.main.async {
             self.remoteRenderView?.isHidden = false
-            self.localAudioTrack?.isEnabled = false
-            self.localVideoTrack?.isEnabled = false
             self.delegate?.didConnectWebRTC()
         }
     }
@@ -572,8 +570,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
                 // Handle the case when peerConnection is nil
                 print("peerConnection is nil")
             }
-            self.localAudioTrack?.isEnabled = false
-            self.localVideoTrack?.isEnabled = false
+           
             self.remoteRenderView?.isHidden = true
             self.dataChannel = nil
             self.delegate?.didDisconnectWebRTC()
@@ -614,7 +611,7 @@ extension WebRTCClient {
             }
         default:
             if self.isConnected{
-                self.onDisConnected()
+//                self.onDisConnected()
             }
         }
         

@@ -193,7 +193,7 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
         
         
         let base = "\(Constants.serverURL)\(contacts[indexPath.row].ProfilePicture)"
-       
+        print("\n url is: \(base)")
         if let url = URL(string: base) {
             cell?.profilepic.kf.setImage(with: url, placeholder: UIImage(named: "No image found"))
             cell?.profilepic?.layer.cornerRadius = 28
@@ -271,9 +271,8 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.showLoadingView()
         DispatchQueue.global().async {
-            
+            self.showLoadingView()
                self.fetchCallHistory()
         }
         
@@ -437,7 +436,7 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
         
         // Add loading label
         loadingLabel = UILabel(frame: CGRect(x: 0, y: activityIndicator.frame.origin.y + activityIndicator.frame.size.height + 10, width: loadingView.frame.size.width, height: 20))
-        loadingLabel.text = "Please Wait..."
+        loadingLabel.text = "Refreshing..."
         loadingLabel.textColor = UIColor.white
         loadingLabel.textAlignment = .center
         loadingLabel.font = UIFont.systemFont(ofSize: 16)

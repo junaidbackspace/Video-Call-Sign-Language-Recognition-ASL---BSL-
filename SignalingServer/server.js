@@ -110,6 +110,7 @@ wsServer.on('connection', function (ws) {
          wsServer.clients.forEach(function each(client) {
    
           for (const [userId, ws] of callers) {
+<<<<<<< HEAD
              if (isSame(ws, client)) {
                    console.log('Skip sender:', type, 'WebSocket ID: ',userId);
                       } else {
@@ -144,8 +145,22 @@ wsServer.on('connection', function (ws) {
          // -- compare object --
         return (ws1 === ws2);
         }   
+=======
+       
+               if (isSame(ws, client)) {
+                //    console.log('Skip sender:', type, 'WebSocket ID: ',userId);
+                      } else {
+                         console.log('sending  message:', type, 'to : ',userId);
+                           client.send(message);
+                           break;
+                              }
+
+    } break;
+});
+
+>>>>>>> parent of 93ebc35 (again try for video call bugs)
                    
-            
+            }
         }     
            else if ( type === 'call_ended')
            {
@@ -175,7 +190,10 @@ wsServer.on('connection', function (ws) {
     
 });
 
-
+function isSame(ws1, ws2) {
+    // -- compare object --
+    return (ws1 === ws2);
+}
 
 // Function to handle call initiation
 function handleCall(from, to) {
