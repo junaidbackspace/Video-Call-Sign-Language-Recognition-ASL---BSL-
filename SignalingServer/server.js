@@ -107,23 +107,18 @@ wsServer.on('connection', function (ws) {
                     
 
                    
-//          wsServer.clients.forEach(function each(client) {
+         wsServer.clients.forEach(function each(client) {
    
-//           for (const [userId, ws] of callers) {
-       
-<<<<<<< HEAD
-//                if (isSame(ws, client)) {
-=======
-               if (isSame(ws, client)) {
-                //    console.log('Skip sender:', type, 'WebSocket ID: ',userId);
+          for (const [userId, ws] of callers) {
+             if (isSame(ws, client)) {
+                   console.log('Skip sender:', type, 'WebSocket ID: ',userId);
                       } else {
                          console.log('sending  message:', type, 'to : ',userId);
                            client.send(message);
                               }
     }
 });
-
->>>>>>> parent of 7722d41 (again testing call)
+   }
                    
 //                 //    console.log('Skip sender:', type, 'WebSocket ID: ',userId);
 //                       } else {
@@ -135,15 +130,15 @@ wsServer.on('connection', function (ws) {
 //     } 
    
 // });
-                wsServer.clients.forEach(function each(client) {
-                     if (isSame(ws, client)) {
-                           console.log('skip sender');
-                             }
-                          else {
-                            client.send(message);
-                            }
-                        });
-                }
+                // wsServer.clients.forEach(function each(client) {
+                //      if (isSame(ws, client)) {
+                //            console.log('skip sender');
+                //              }
+                //           else {
+                //             client.send(message);
+                //             }
+                //         });
+                // }
                 
         function isSame(ws1, ws2) {
          // -- compare object --
