@@ -217,8 +217,8 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     // MARK:- HangUp
     func disconnect(){
         if self.peerConnection != nil{
-            onDisConnected()
-            
+//            onDisConnected()
+            self.peerConnection!.close()
         }
         stopCaptureLocalVideo()
         print("\n------disconecting all thing-----\n")
@@ -247,7 +247,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
             
         }
         
-        print("set remote description",offerSDP)
+        print("set remote description")
         self.peerConnection!.setRemoteDescription(offerSDP) { (err) in
             if let error = err {
                 print("failed to set remote offer SDP")
@@ -261,22 +261,6 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     }
     
     func receiveAnswer(answerSDP: RTCSessionDescription){
-        if(self.peerConnection == nil){
-            print("offer received, create peerconnection")
-            self.peerConnection = setupPeerConnection()
-            self.peerConnection!.delegate = self
-            if self.channels.video {
-                self.peerConnection!.add(localVideoTrack, streamIds: ["stream-0"])
-            }
-            if self.channels.audio {
-                self.peerConnection!.add(localAudioTrack, streamIds: ["stream-0"])
-            }
-            if self.channels.datachannel {
-                self.dataChannel = self.setupDataChannel()
-                self.dataChannel?.delegate = self
-            }
-            
-        }
         self.peerConnection!.setRemoteDescription(answerSDP) { (err) in
             if let error = err {
                 print("failed to set remote answer SDP")
@@ -285,29 +269,15 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
             }
         }
     }
-    
+
     func receiveCandidate(candidate: RTCIceCandidate){
-        if(self.peerConnection == nil){
-            print("offer received, create peerconnection")
-            self.peerConnection = setupPeerConnection()
-            self.peerConnection!.delegate = self
-            if self.channels.video {
-                self.peerConnection!.add(localVideoTrack, streamIds: ["stream-0"])
-            }
-            if self.channels.audio {
-                self.peerConnection!.add(localAudioTrack, streamIds: ["stream-0"])
-            }
-            if self.channels.datachannel {
-                self.dataChannel = self.setupDataChannel()
-                self.dataChannel?.delegate = self
-            }
-            
-        }
         self.peerConnection!.add(candidate)
-        
     }
     
+
+
     // MARK:- DataChannel Event
+    
     func sendMessge(message: String){
         if let _dataChannel = self.remoteDataChannel {
             if _dataChannel.readyState == .open {
@@ -431,9 +401,11 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     private func stopCaptureLocalVideo() {
         if let capturer = self.videoCapturer as? RTCCameraVideoCapturer {
             capturer.stopCapture()
+            print("\t,,,,,Stoping capturer")
         } else if let capturer = self.videoCapturer as? RTCFileVideoCapturer {
-            
+            print("\t,,,,,failedStoping capturer")
             localVideoTrack?.isEnabled = false
+            
         }
     }
 
@@ -611,7 +583,7 @@ extension WebRTCClient {
             }
         default:
             if self.isConnected{
-//                self.onDisConnected()
+                self.onDisConnected()
             }
         }
         
@@ -622,19 +594,19 @@ extension WebRTCClient {
     
     func peerConnection(_ peerConnection: RTCPeerConnection, didAdd stream: RTCMediaStream) {
         print("did add stream")
-//        self.remoteStream = stream
+        self.remoteStream = stream
         
         if let track = stream.videoTracks.first {
-            print("video track found")
+            print("video track faund")
             track.add(remoteRenderView!)
         }
         
         if let audioTrack = stream.audioTracks.first{
-            print("audio track found")
-            audioTrack.source.volume = 10
-            
+            print("audio track faund")
+            audioTrack.source.volume = 1.0
         }
     }
+    
     
     func peerConnection(_ peerConnection: RTCPeerConnection, didGenerate candidate: RTCIceCandidate) {
         self.delegate?.didGenerateCandidate(iceCandidate: candidate)

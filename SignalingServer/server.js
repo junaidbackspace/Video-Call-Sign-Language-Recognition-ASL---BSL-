@@ -26,7 +26,7 @@ wsServer.on('connection', function (ws) {
             }
             if (clients.has(userId)) {
                 // ws.close();
-                console.log(`Connection closed: User ID '${userId}' is already in use.`);
+                console.log(`Connection for: User ID '${userId}' is already in use.`);
                 return;
             }
             // Save the WebSocket connection with the provided user ID
