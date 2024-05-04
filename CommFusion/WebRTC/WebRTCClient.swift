@@ -202,7 +202,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         }
         if self.channels.audio {
             print("adding Audio in  peer")
-            self.peerConnection!.add(localAudioTrack, streamIds: ["stream1"])
+            self.peerConnection!.add(localAudioTrack, streamIds: ["stream0"])
         }
         if self.channels.datachannel {
             print("Setting data Channel")
@@ -238,7 +238,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
                 self.peerConnection!.add(localVideoTrack, streamIds: ["stream-0"])
             }
             if self.channels.audio {
-                self.peerConnection!.add(localAudioTrack, streamIds: ["stream-1"])
+                self.peerConnection!.add(localAudioTrack, streamIds: ["stream-0"])
             }
             if self.channels.datachannel {
                 self.dataChannel = self.setupDataChannel()
@@ -269,7 +269,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
                 self.peerConnection!.add(localVideoTrack, streamIds: ["stream-0"])
             }
             if self.channels.audio {
-                self.peerConnection!.add(localAudioTrack, streamIds: ["stream-1"])
+                self.peerConnection!.add(localAudioTrack, streamIds: ["stream-0"])
             }
             if self.channels.datachannel {
                 self.dataChannel = self.setupDataChannel()
@@ -295,7 +295,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
                 self.peerConnection!.add(localVideoTrack, streamIds: ["stream-0"])
             }
             if self.channels.audio {
-                self.peerConnection!.add(localAudioTrack, streamIds: ["stream-1"])
+                self.peerConnection!.add(localAudioTrack, streamIds: ["stream-0"])
             }
             if self.channels.datachannel {
                 self.dataChannel = self.setupDataChannel()
