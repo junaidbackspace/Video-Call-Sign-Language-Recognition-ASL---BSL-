@@ -13,13 +13,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-//        webRTCClient = WebRTCClient()
-//        socket = WebSocket(url: URL(string: "ws://" + ipAddress + ":8080")!)
-//        socket.delegate = self
-//        socket.connect()
-//
-    
+        
+//        Thread.sleep(forTimeInterval:2)
+//        let window = UIWindow(frame: UIScreen.main.bounds)
+//            self.window = window
+//            
+//        if UserDefaults.standard.integer(forKey: "userID") != 0{
+//                // User is logged in, navigate to Dashboard
+//                print("Navigating to Dashboard")
+//                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//                let dashboardViewController = storyboard.instantiateViewController(withIdentifier: "dashboard")
+//                let navigationController = UINavigationController(rootViewController: dashboardViewController)
+//                window.rootViewController = navigationController
+//            } else {
+//                // User is not logged in, navigate to Login
+//                print("Navigating to Login")
+//                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//                let loginViewController = storyboard.instantiateViewController(withIdentifier: "LoginViewController")
+//                let navigationController = UINavigationController(rootViewController: loginViewController)
+//                window.rootViewController = navigationController
+//            }
+//            
+//            window.makeKeyAndVisible()
+        
         socketObj.connectSocket()
 
         return true

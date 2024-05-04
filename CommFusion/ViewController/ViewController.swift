@@ -58,7 +58,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     @IBAction func btnCall(_ sender: Any) {
         print("Entered in CallUp")
       
-        callButtonTapped()
+//        callButtonTapped()
     }
     
     @IBAction func btnHangupCall(_ sender: Any) {
@@ -130,6 +130,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
        
         webRTCClient.setup(videoTrack: true, audioTrack: true, dataChannel: true, customFrameCapturer: useCustomCapturer)
         
+        
         if useCustomCapturer {
             print("--- use custom capturer ---")
             self.cameraSession = CameraSession()
@@ -146,6 +147,9 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
        socket.delegate = self
         self.socket.connect()
         
+        if isReciever == 1{
+        self.callButtonTapped()
+        }
      
         
 
@@ -157,8 +161,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         lblmsg.layer.zPosition = 1
         msgview_with_Btns.layer.zPosition = 1
         OutLetSwitchCam.layer.zPosition = 1
-       
-        self.callButtonTapped()
+        
+        
       
     }
     
@@ -246,13 +250,13 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         if !webRTCClient.isConnected {
             
             print("Reciever side initiating call ...")
-            if isReciever == 1{
-                print("\n Reciever : \(isReciever)")
+           
+               
             webRTCClient.connect(onSuccess: { (offerSDP: RTCSessionDescription) -> Void in
                 self.sendSDP(sessionDescription: offerSDP)
             })
 //            webRTCClient.startCaptureFrames()
-            }
+            
         }
     }
     

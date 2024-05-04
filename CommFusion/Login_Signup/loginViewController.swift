@@ -24,8 +24,9 @@ class loginViewController: UIViewController {
         controller.modalPresentationStyle = .fullScreen
           self.navigationController?.pushViewController(controller, animated: true)
     }
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
         if UserDefaults.standard.integer(forKey: "userID") != 0{
             let controller = self.storyboard!.instantiateViewController(identifier: "dashboard")
             controller.modalPresentationStyle = .fullScreen

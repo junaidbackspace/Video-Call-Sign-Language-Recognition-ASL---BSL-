@@ -230,6 +230,13 @@
 			path = Api;
 			sourceTree = "<group>";
 		};
+		6527CD1B2BE67CB5005CFE96 /* SplashScreen */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = SplashScreen;
+			sourceTree = "<group>";
+		};
 		656168B32B724EE40006E5D2 /* DashboardScreens */ = {
 			isa = PBXGroup;
 			children = (
@@ -384,6 +391,7 @@
 		AF711A9821DFAD6C005CA4FA = {
 			isa = PBXGroup;
 			children = (
+				6527CD1B2BE67CB5005CFE96 /* SplashScreen */,
 				650950652B945FA200035C85 /* Api */,
 				65AD61792B74DB6F00F23ADD /* Structs */,
 				AF711AA321DFAD6C005CA4FA /* CommFusion */,
