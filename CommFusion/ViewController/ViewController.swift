@@ -266,6 +266,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
     @objc func hangupButtonTapped(){
         print("hangup Tapped")
+        
 
         let endCallData: [String: Any] = [
             "type": "call_ended",

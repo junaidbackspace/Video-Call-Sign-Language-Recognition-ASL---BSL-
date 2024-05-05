@@ -94,19 +94,10 @@ wsServer.on('connection', function (ws) {
                 }
                 
                     
-             } else if (type === 'sdp' || type === 'candidate' || type === 'offer' || type === 'answer') {
+             } 
+    else if (type === 'sdp' || type === 'candidate' || type === 'offer' || type === 'answer') {
                 if (clients.has(from) && clients.has(to)) {
-                    // Store caller and recipient WebSocket connections
-                    // callers.set(from, clients.get(from));
-                    // callers.set(to, clients.get(to));
-            
-                    // const callInitiator = clients.get(to);
-                    // const callReceiver = clients.get(from);
-            
-                    // console.log('from: ', from, ' to: ', to, ' type: ', type);
                     
-
-                   
          wsServer.clients.forEach(function each(client) {
    
           for (const [userId, ws] of callers) {
@@ -120,26 +111,6 @@ wsServer.on('connection', function (ws) {
     }
 });
    }
-                   
-//                 //    console.log('Skip sender:', type, 'WebSocket ID: ',userId);
-//                       } else {
-//                         console.log('sending  message:', type, 'to : ',userId);
-//                         client.send(message);
-//                         break;
-//                               }
-
-//     } 
-   
-// });
-                // wsServer.clients.forEach(function each(client) {
-                //      if (isSame(ws, client)) {
-                //            console.log('skip sender');
-                //              }
-                //           else {
-                //             client.send(message);
-                //             }
-                //         });
-                // }
          
          
         }     
@@ -159,6 +130,21 @@ wsServer.on('connection', function (ws) {
                 console.log("Caller ID not found or invalid type");
             }
            }
+           else if ( type === 'cancellcall')
+           {
+            const callerID =  clients.get(data.from);
+            const callenderID = clients.get(data.to);
+            if (callenderID) {
+                
+                console.log("sending call Cancell msg to user ID:", data.to);
+                
+                callenderID.send(JSON.stringify({ type: 'call_cancell' }));
+                
+                
+            } else {
+                console.log("Caller ID not found or invalid type");
+            }
+           }
             else {
                 // Handle other types of messages (if any)
             }
@@ -167,6 +153,7 @@ wsServer.on('connection', function (ws) {
         }
         
     });
+    
 
     
 });

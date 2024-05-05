@@ -94,6 +94,7 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
     }
 }
 
+    var checkReciever = 0
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
        
 
@@ -136,7 +137,7 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         }
 
         if type == "incoming_call"{
-           
+            checkReciever = 1
             print("incoming call From: \(from)")
             callerid = from!
             receiveIncomingCall()
@@ -159,6 +160,16 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
             NotificationCenter.default.post(name: Notification.Name("CallEndedNotification"), object: nil)
 
 
+        }
+        if type == "call_cancell"{
+//            if checkReciever == 1{
+            print("within Reciver call cancelled by user")
+            NotificationCenter.default.post(name: Notification.Name("CallCancelledFromCallerNotification"), object: nil)
+//            }
+//            else{
+                print("within Caller call cancelled by user")
+                NotificationCenter.default.post(name: Notification.Name("CallCancelledFromReciverNotification"), object: nil)
+//            }
         }
         
         // Print variables
@@ -207,6 +218,21 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
             }
 
         }
+    func CancellCall(with friendId: String) {
+       
+        self.connectSocket()
+       userID = String(UserDefaults.standard.integer(forKey: "userID"))
+        // Send call initiation message
+        let callData: [String: Any] = ["type": "cancellcall", "from": userID, "to": friendId]
+        do {
+            print("\n \(callData)")
+            let jsonData = try JSONSerialization.data(withJSONObject: callData, options: [])
+            socket.write(data: jsonData)
+            print("canceling call...")
+        } catch {
+            print("Error serializing call canceling data: \(error)")
+        }
+    }
     
 
 }

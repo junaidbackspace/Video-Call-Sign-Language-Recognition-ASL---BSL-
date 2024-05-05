@@ -83,7 +83,8 @@ class CallerViewController: UIViewController {
            super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(handleNotification(_:)), name: Notification.Name("UpdateLabelNotification"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleCallNotification(_:)), name: NSNotification.Name("callacepted"), object: nil)
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(callcenlled), name: Notification.Name("CallCancelledFromCallerNotification"), object: nil)
+           
         setupCamera()
         imgview.image = profilepic
         imgview.layer.cornerRadius = 35
@@ -108,6 +109,20 @@ class CallerViewController: UIViewController {
         CallAPI(caller: callerid, reciver: recieverid)
        }
        
+    @objc func callcenlled(){
+        let websoc = socketsClass()
+     
+        let friendid = String(recieverid)
+        print("here is Friend id  : \(friendid)")
+        
+        websoc.CancellCall(with: friendid)
+        print(" call cancelled")
+        captureSession?.stopRunning()
+        self.navigationController?.popViewController(animated: true)
+       
+    }
+   
+    
        func setupCamera() {
            captureSession = AVCaptureSession()
            guard let captureSession = captureSession else { return }
@@ -138,6 +153,12 @@ class CallerViewController: UIViewController {
        }
        
        @IBAction func endCallTapped(_ sender: UIButton) {
+        let websoc = socketsClass()
+     
+        let friendid = String(recieverid)
+        print("here is Friend id  : \(friendid)")
+        
+        websoc.CancellCall(with: friendid)
         captureSession?.stopRunning()
         self.navigationController?.popViewController(animated: true)
            dismiss(animated: true, completion: nil)

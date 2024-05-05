@@ -272,8 +272,10 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         DispatchQueue.global().async {
-            self.showLoadingView()
-               self.fetchCallHistory()
+            DispatchQueue.main.async {
+                self.showLoadingView()
+            }
+            self.fetchCallHistory()
         }
         
         searchbtnSetup()

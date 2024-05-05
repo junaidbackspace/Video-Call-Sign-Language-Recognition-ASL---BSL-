@@ -21,6 +21,7 @@ protocol WebRTCClientDelegate {
     func didConnectWebRTC()
     func didDisconnectWebRTC()
     func hunguptapedbyOtherCaller()
+  
 }
 
 
@@ -271,6 +272,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     }
 
     func receiveCandidate(candidate: RTCIceCandidate){
+        print("\n\tCandidate: \(candidate)")
         self.peerConnection!.add(candidate)
     }
     
@@ -401,10 +403,13 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     private func stopCaptureLocalVideo() {
         if let capturer = self.videoCapturer as? RTCCameraVideoCapturer {
             capturer.stopCapture()
+            self.localAudioTrack?.isEnabled = false
             print("\t,,,,,Stoping capturer")
         } else if let capturer = self.videoCapturer as? RTCFileVideoCapturer {
             print("\t,,,,,failedStoping capturer")
-            localVideoTrack?.isEnabled = false
+            capturer.stopCapture()
+            self.localAudioTrack?.isEnabled = false
+//            localVideoTrack?.isEnabled = false
             
         }
     }
@@ -486,8 +491,8 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
                         return
                     }
                     
-                    
-                    
+                    // ICE gathering is complete, send all candidates
+                   
                     print("succeed to set local offer SDP")
                     onSuccess(offerSDP)
                 })

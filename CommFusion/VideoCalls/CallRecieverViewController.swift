@@ -39,7 +39,8 @@ class CallRecieverViewController: UIViewController {
          override func viewDidLoad() {
              super.viewDidLoad()
             socketObj.connectSocket()
-            
+            NotificationCenter.default.addObserver(self, selector: #selector(callcenlled), name: Notification.Name("CallCancelledFromReciverNotification"), object: nil)
+               
             
           fetchUserData(callerId: calllerid)
             startCamera()
@@ -57,7 +58,19 @@ class CallRecieverViewController: UIViewController {
          }
     
     
-    
+    @objc func callcenlled(){
+        let websoc = socketsClass()
+     
+        let friendid = String(calllerid)
+        print("here is Friend id  : \(friendid)")
+        
+        websoc.CancellCall(with: friendid)
+       
+        print(" call cancelled")
+        captureSession?.stopRunning()
+        self.navigationController?.popViewController(animated: true)
+       
+    }
    
     
     
@@ -184,6 +197,7 @@ class CallRecieverViewController: UIViewController {
         }
         
         func rejectCall() {
+            socketObj.CancellCall(with: calllerid)
             print("Rejected call")
             self.navigationController?.popViewController(animated: true)
             captureSession?.stopRunning()
@@ -269,6 +283,8 @@ class CallRecieverViewController: UIViewController {
         
         group.leave()
     }
-    
+    deinit {
+           NotificationCenter.default.removeObserver(self)
+       }
    
 }
