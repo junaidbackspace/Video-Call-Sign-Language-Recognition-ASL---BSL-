@@ -272,7 +272,12 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     }
 
     func receiveCandidate(candidate: RTCIceCandidate){
-        print("\n\tCandidate: \(candidate)")
+       
+        if self.peerConnection == nil{
+            self.connect(onSuccess: { (offerSDP: RTCSessionDescription) -> Void in
+//                self.sendSDP(sessionDescription: offerSDP)
+            })
+        }
         self.peerConnection!.add(candidate)
     }
     

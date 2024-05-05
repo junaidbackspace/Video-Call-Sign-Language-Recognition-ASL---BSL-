@@ -95,18 +95,20 @@ wsServer.on('connection', function (ws) {
                 
                     
              } 
-    else if (type === 'sdp' || type === 'candidate' || type === 'offer' || type === 'answer') {
+    else if (type === 'sdp' || type === 'candidate' || type === 'offer' || type === 'answer') 
+    {
                 if (clients.has(from) && clients.has(to)) {
                     
          wsServer.clients.forEach(function each(client) {
    
-          for (const [userId, ws] of callers) {
+          for (const [userId, wss] of callers) {
 
-             if (isSame(ws, client)) {
+             if (isSame(wss, client)) {
                    console.log('Skip sender:', type, 'WebSocket ID: ',userId);
                       } else {
                          console.log('sending  message:', type, 'to : ',userId);
                            client.send(message);
+                          
                               }
     }
 });

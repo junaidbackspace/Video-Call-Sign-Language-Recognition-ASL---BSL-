@@ -110,6 +110,9 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         
         deinit {
             NotificationCenter.default.removeObserver(self)
+            webRTCClient.delegate = nil // Remove delegate
+            webRTCClient.disconnect()
+            isReciever = 0
         }
     var websockt = socketsClass()
     override func viewDidLoad() {
