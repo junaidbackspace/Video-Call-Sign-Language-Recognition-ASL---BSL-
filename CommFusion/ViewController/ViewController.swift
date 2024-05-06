@@ -113,6 +113,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
             webRTCClient.delegate = nil // Remove delegate
             webRTCClient.disconnect()
             isReciever = 0
+            socket.delegate = nil
+            socket.disconnect()
         }
     var websockt = socketsClass()
     override func viewDidLoad() {
@@ -246,10 +248,12 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         
     }
     var reciver = 0
+
     
     // MARK: - UI Events
     @objc func callButtonTapped(){
        
+     
         if !webRTCClient.isConnected {
             
             print("Reciever side initiating call ...")
@@ -260,6 +264,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
             })
 //            webRTCClient.startCaptureFrames()
             
+        
         }
     }
     
@@ -333,7 +338,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     var userid = String(UserDefaults.standard.integer(forKey: "userID"))
     
     // MARK: - WebRTC Signaling
-    private func sendSDP(sessionDescription: RTCSessionDescription){
+    public func sendSDP(sessionDescription: RTCSessionDescription){
         var type = ""
         if sessionDescription.type == .offer {
             type = "offer"
@@ -343,9 +348,22 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
                     let data = try JSONEncoder().encode(signalingMessage)
                     let message = String(data: data, encoding: .utf8)!
                     
-                    if self.socket.isConnected {
-                        print("now reciever offering sdp to caller")
-                        self.socket.write(string: message)
+                    if socketsClass.shared.isConnected() {
+                        print("\nnow reciever offering sdp to caller")
+                        socketsClass.shared.socket.write(string: message)
+                    }
+                    else{
+                        DispatchQueue.main.asyncAfter(deadline: .now()+0.2)
+                        {
+                       
+                            socketsClass.shared.socket.connect()
+                            socketsClass.shared.socket.write(string: message)
+                        }
+                        print(">>>>>>>>socket reconecting...")
+                        if socketsClass.shared.isConnected() {
+                        print("\n===>in offer , socket reconnected")
+                            socketsClass.shared.socket.write(string: message)
+                        }
                     }
                 } catch {
                     print(error)
@@ -353,14 +371,21 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         }else if sessionDescription.type == .answer {
             type = "answer"
             let sdp = SDP(sdp: sessionDescription.sdp)
-                let signalingMessage = SignalingMessage(type: type, sessionDescription: sdp, candidate: nil, from:userid , to:callFriendId )
+            let signalingMessage = SignalingMessage(type: type, sessionDescription: sdp, candidate: nil, from:self.userid , to:self.callFriendId )
                 do {
                     let data = try JSONEncoder().encode(signalingMessage)
                     let message = String(data: data, encoding: .utf8)!
                     
-                    if self.socket.isConnected {
-                        print("now caller answering sdp to caller")
-                        self.socket.write(string: message)
+                    if socketsClass.shared.isConnected() {
+                        print("\nnow caller answering sdp to caller \(message)")
+                        socketsClass.shared.socket.write(string: message)
+                    }
+                    else{
+//
+                        socketsClass.shared.connectSocket()
+                        
+                        print("\n===>in Answer , socket reconnected")
+                        socketsClass.shared.socket.write(string: message)
                     }
                 } catch {
                     print(error)
@@ -370,16 +395,16 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         
     }
     
-    private func sendCandidate(iceCandidate: RTCIceCandidate){
+    public func sendCandidate(iceCandidate: RTCIceCandidate){
         let candidate = Candidate.init(sdp: iceCandidate.sdp, sdpMLineIndex: iceCandidate.sdpMLineIndex, sdpMid: iceCandidate.sdpMid!)
         let signalingMessage = SignalingMessage.init(type: "candidate", sessionDescription: nil, candidate: candidate, from: callFriendId, to: userid)
         do {
             let data = try JSONEncoder().encode(signalingMessage)
             let message = String(data: data, encoding: String.Encoding.utf8)!
             
-            if self.socket.isConnected {
+            if socketsClass.shared.isConnected() {
                 print("\nwriting candidate on socketttt")
-                self.socket.write(string: message)
+                socketsClass.shared.socket.write(string: message)
             }
         }catch{
             print(error)
@@ -426,13 +451,18 @@ extension ViewController {
                     self.sendSDP(sessionDescription: answerSDP)
                 })
             }else if signalingMessage.type == "answer" {
-                print("Answer recieved")
-                webRTCClient.receiveAnswer(answerSDP: RTCSessionDescription(type: .answer, sdp: (signalingMessage.sessionDescription?.sdp)!))
+                print("Answer recieved:")
+                print("Meess:\(signalingMessage)\n\n")
+                print("\(signalingMessage.sessionDescription?.sdp)")
+//                webRTCClient.receiveAnswer(answerSDP: RTCSessionDescription(type: .answer, sdp: (signalingMessage.sessionDescription?.sdp)!))
             }else if signalingMessage.type == "candidate" {
                 print("Candidate recieved")
                 
                 let candidate = signalingMessage.candidate!
                 webRTCClient.receiveCandidate(candidate: RTCIceCandidate(sdp: candidate.sdp, sdpMLineIndex: candidate.sdpMLineIndex, sdpMid: candidate.sdpMid))
+            }
+            else{
+                print("something revieved:\n\(signalingMessage)")
             }
         }catch{
             print(error)
@@ -446,7 +476,7 @@ extension ViewController {
 // MARK: - WebRTCClient Delegate
 extension ViewController {
     func didGenerateCandidate(iceCandidate: RTCIceCandidate) {
-        self.sendCandidate(iceCandidate: iceCandidate)
+//        self.sendCandidate(iceCandidate: iceCandidate)
     }
     
     func didIceConnectionStateChanged(iceConnectionState: RTCIceConnectionState) {
@@ -497,7 +527,8 @@ extension ViewController {
     }
     
     func didReceiveMessage(message: String) {
-        self.lblmsg.text = message
+        print("viewController message recieved : \(message)")
+//        self.lblmsg.text = message
     }
     
     func hunguptapedbyOtherCaller(){

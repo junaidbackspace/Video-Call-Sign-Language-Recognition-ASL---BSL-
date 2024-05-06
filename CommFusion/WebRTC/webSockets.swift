@@ -15,9 +15,61 @@ protocol IncomingCallDelegate: AnyObject {
    
 }
 
+var controller = ViewController()
 
-
-class socketsClass: WebSocketDelegate{
+class socketsClass: WebSocketDelegate, WebRTCClientDelegate{
+    func didGenerateCandidate(iceCandidate: RTCIceCandidate) {
+//        controller.sendCandidate(iceCandidate: iceCandidate)
+        
+    }
+    
+    func didIceConnectionStateChanged(iceConnectionState: RTCIceConnectionState) {
+        var state = ""
+        
+        switch iceConnectionState {
+        case .checking:
+            state = "checking..."
+        case .closed:
+            state = "closed"
+        case .completed:
+            state = "completed"
+        case .connected:
+            state = "connected"
+        case .count:
+            state = "count..."
+        case .disconnected:
+            state = "disconnected"
+        case .failed:
+            state = "failed"
+        case .new:
+            state = "new..."
+        }
+    }
+    
+    func didOpenDataChannel() {
+        
+    }
+    
+    func didReceiveData(data: Data) {
+        
+    }
+    
+    func didReceiveMessage(message: String) {
+        
+    }
+    
+    func didConnectWebRTC() {
+        
+    }
+    
+    func didDisconnectWebRTC() {
+        
+    }
+    
+    func hunguptapedbyOtherCaller() {
+        
+    }
+    
     
       var endCallClosure: (() -> Void)?
 
@@ -37,13 +89,18 @@ var backgroundTask: UIBackgroundTaskIdentifier = .invalid
 var ipAddress: String
 var userID = ""
 
-    
+    var useCustomCapturer: Bool = false
+    var webRTCClient: WebRTCClient!
     
 init() {
           // Initialize ipAddress here or wherever appropriate in your code
           self.ipAddress = Constants.nodeserverIP
          self.socket = WebSocket(url: URL(string: "ws://" + ipAddress + ":8081")!)
      self.userID = String(UserDefaults.standard.integer(forKey: "userID"))
+    webRTCClient = WebRTCClient()
+    webRTCClient.delegate = self
+    webRTCClient.setup(videoTrack: true, audioTrack: true, dataChannel: true, customFrameCapturer: useCustomCapturer)
+    
     
 }
     
@@ -52,7 +109,9 @@ init() {
        }
     
     
-     
+    func isConnected() -> Bool {
+            return socket.isConnected
+        }
     
 public func connectSocket(){
             if !socket.isConnected {
@@ -68,7 +127,11 @@ public func connectSocket(){
             Thread.sleep(forTimeInterval: 2) // Adjust interval as needed
         }
     
-
+    func disconnect() {
+            if socket.isConnected {
+//                socket.disconnect()
+            }
+        }
     
 
 
@@ -130,6 +193,8 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
                     from = value
                 case "to":
                     from = value
+                case "sessionDescription":
+                    from = value
                 default:
                     break
                 }
@@ -172,10 +237,51 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
 //            }
         }
         
+        else{
+
+            
+            do{
+                let signalingMessage = try JSONDecoder().decode(SignalingMessage.self, from: jsonString.data(using: .utf8)!)
+                if signalingMessage.type == "call_ended"{
+                    print("call ended by user in viewcontroller")
+                    self.hunguptapedbyOtherCaller()
+                }
+                
+                else if signalingMessage.type == "offer" {
+                    print("offer recieved")
+                    webRTCClient.receiveOffer(offerSDP: RTCSessionDescription(type: .offer, sdp: (signalingMessage.sessionDescription?.sdp)!), onCreateAnswer: {(answerSDP: RTCSessionDescription) -> Void in
+                        print("from : \(signalingMessage.from), to : \(signalingMessage.to)")
+                        controller.callFriendId = signalingMessage.to
+                        controller.sendSDP(sessionDescription: answerSDP)
+                    })
+                    
+                }
+                else if signalingMessage.type == "answer" {
+                   
+                    
+                    webRTCClient.receiveAnswer(answerSDP: RTCSessionDescription(type: .answer, sdp: (signalingMessage.sessionDescription?.sdp)!))
+                    
+                }else if signalingMessage.type == "candidate" {
+                    print("Candidate recieved")
+                    
+                    let candidate = signalingMessage.candidate!
+                    webRTCClient.receiveCandidate(candidate: RTCIceCandidate(sdp: candidate.sdp, sdpMLineIndex: candidate.sdpMLineIndex, sdpMid: candidate.sdpMid))
+                }
+                else{
+                    print("something revieved:\n\(signalingMessage)")
+                }
+            }catch{
+                print(error)
+            }
+            }
+        
+        
         // Print variables
        
     }
 
+    
+        
 var callerid = ""
 
 

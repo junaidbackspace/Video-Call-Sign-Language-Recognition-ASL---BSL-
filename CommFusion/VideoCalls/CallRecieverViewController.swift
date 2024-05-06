@@ -191,6 +191,7 @@ class CallRecieverViewController: UIViewController {
         let controller = (self.storyboard?.instantiateViewController(identifier: "videoCallscreen"))! as ViewController
             controller.isReciever = 1
             controller.callFriendId = self.calllerid
+            print("call friend id : \(self.calllerid)")
         controller.modalPresentationStyle = .fullScreen
           self.navigationController?.pushViewController(controller, animated: true)
         }

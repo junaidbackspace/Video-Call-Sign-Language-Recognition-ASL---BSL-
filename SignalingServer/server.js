@@ -25,7 +25,7 @@ wsServer.on('connection', function (ws) {
                 return;
             }
             if (clients.has(userId)) {
-                // ws.close();
+            //    ws.close();
                 console.log(`Connection for: User ID '${userId}' is already in use.`);
                 return;
             }
@@ -41,17 +41,19 @@ wsServer.on('connection', function (ws) {
 
   
 
-    // Handle disconnection
-    ws.on('close', function () {
-        // Remove the WebSocket connection from the clients map
-        for (const [userId, client] of clients) {
-            if (client === ws) {
-                clients.delete(userId);
-                console.log(`User '${userId}' disconnected.`);
-                break;
-            }
+   // Handle disconnection
+ws.on('close', function () {
+   
+    // Iterate over clients to find the disconnected client
+    clients.forEach((client, userId) => {
+        if (client === ws) {
+            clients.delete(userId);
+            console.log(`User '${userId}' disconnected.`);
+            return;
         }
     });
+});
+
 
     // Handle errors
     ws.on('error', function (error) {
@@ -64,7 +66,7 @@ wsServer.on('connection', function (ws) {
        
         try {
             const data = JSON.parse(message);
-            const { type, from, to, sdp, candidate } = data; // Extract necessary fields from the received message
+            const { type, from, to, sessionDescription, candidate } = data; // Extract necessary fields from the received message
             
             //call initiated
             if (data.type === 'call') {
@@ -73,7 +75,7 @@ wsServer.on('connection', function (ws) {
             }
                     
             //on call accepted
-            if (type === 'call_accept') {
+           else if (type === 'call_accept') {
                 console.log('call is accepted by ',from ,'caller is : ',to)
                 if (clients.has(from) && clients.has(to)) {
                     // Store the WebSocket connections associated with the sender and recipient user IDs
@@ -97,21 +99,32 @@ wsServer.on('connection', function (ws) {
              } 
     else if (type === 'sdp' || type === 'candidate' || type === 'offer' || type === 'answer') 
     {
-                if (clients.has(from) && clients.has(to)) {
+        var loopcheck = true;
+        console.log('Hand shake msg Recieved');
+        if (clients.has(from) && clients.has(to)) {
                     
          wsServer.clients.forEach(function each(client) {
-   
+            if (loopcheck === true){
           for (const [userId, wss] of callers) {
 
-             if (isSame(wss, client)) {
-                   console.log('Skip sender:', type, 'WebSocket ID: ',userId);
-                      } else {
-                         console.log('sending  message:', type, 'to : ',userId);
-                           client.send(message);
-                          
-                              }
+             if (to === userId) {
+                // console.log('Skip sender:', type, 'WebSocket ID: ',userId);
+                   
+                      }
+                else {
+                   
+                    console.log('\n: ',message);
+                    // console.log('sending  message:', type, 'to : ',userId);
+                    var user = clients.get(userId);
+                    user.send(message);
+                     loopcheck = false;
+                     break;
+                   
+                    }
     }
+}
 });
+                    
    }
          
          
@@ -126,6 +139,7 @@ wsServer.on('connection', function (ws) {
                 
                 callerID.send(JSON.stringify({ type: 'call_ended' }));
                 
+               
                 callers.delete(data.callerID);
                 callers.delete(data.callenderID);
             } else {
@@ -160,10 +174,7 @@ wsServer.on('connection', function (ws) {
     
 });
 
-function isSame(ws1, ws2) {
-    // -- compare object --
-    return (ws1 === ws2);
-}
+
 
 // Function to handle call initiation
 function handleCall(from, to) {

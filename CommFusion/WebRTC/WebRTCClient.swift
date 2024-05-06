@@ -249,7 +249,8 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         }
         
         print("set remote description")
-        self.peerConnection!.setRemoteDescription(offerSDP) { (err) in
+        //changed to optional
+        self.peerConnection?.setRemoteDescription(offerSDP) { (err) in
             if let error = err {
                 print("failed to set remote offer SDP")
                 print(error)
@@ -262,7 +263,8 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     }
     
     func receiveAnswer(answerSDP: RTCSessionDescription){
-        self.peerConnection!.setRemoteDescription(answerSDP) { (err) in
+        //change to optional
+        self.peerConnection?.setRemoteDescription(answerSDP) { (err) in
             if let error = err {
                 print("failed to set remote answer SDP")
                 print(error)
@@ -534,10 +536,10 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     private func onConnected(){
         self.isConnected = true
         print("\n OnConnected  :- webRTC connected here\n")
-        DispatchQueue.main.async {
+        
             self.remoteRenderView?.isHidden = false
             self.delegate?.didConnectWebRTC()
-        }
+        
     }
     
      func onDisConnected(){

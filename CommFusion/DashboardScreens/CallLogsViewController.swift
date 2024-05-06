@@ -438,7 +438,7 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
         
         // Add loading label
         loadingLabel = UILabel(frame: CGRect(x: 0, y: activityIndicator.frame.origin.y + activityIndicator.frame.size.height + 10, width: loadingView.frame.size.width, height: 20))
-        loadingLabel.text = "Refreshing..."
+        loadingLabel.text = "Please Wait..."
         loadingLabel.textColor = UIColor.white
         loadingLabel.textAlignment = .center
         loadingLabel.font = UIFont.systemFont(ofSize: 16)
