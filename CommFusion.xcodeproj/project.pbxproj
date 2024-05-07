@@ -10,6 +10,7 @@
 		378B38D82365C2A8002C5E8B /* CameraFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378B38D72365C2A8002C5E8B /* CameraFilter.swift */; };
 		650950672B945FC400035C85 /* APIWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650950662B945FC400035C85 /* APIWrapper.swift */; };
 		6509506B2B9488AD00035C85 /* UserStrct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6509506A2B9488AD00035C85 /* UserStrct.swift */; };
+		650E24632BEAAC8A00A4533C /* CallObserverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650E24622BEAAC8A00A4533C /* CallObserverViewController.swift */; };
 		65182F312B8DFC3000199D36 /* beginnerlevelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65182F302B8DFC3000199D36 /* beginnerlevelViewController.swift */; };
 		651AD82C2B7B49E800D94D1B /* GeneralSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651AD82B2B7B49E800D94D1B /* GeneralSettingsViewController.swift */; };
 		651E5C002BA4609C005DB71C /* CallTranscriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651E5BFF2BA4609C005DB71C /* CallTranscriptionViewController.swift */; };
@@ -112,6 +113,7 @@
 		378B38D72365C2A8002C5E8B /* CameraFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFilter.swift; sourceTree = "<group>"; };
 		650950662B945FC400035C85 /* APIWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIWrapper.swift; sourceTree = "<group>"; };
 		6509506A2B9488AD00035C85 /* UserStrct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStrct.swift; sourceTree = "<group>"; };
+		650E24622BEAAC8A00A4533C /* CallObserverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallObserverViewController.swift; sourceTree = "<group>"; };
 		65182F302B8DFC3000199D36 /* beginnerlevelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = beginnerlevelViewController.swift; sourceTree = "<group>"; };
 		651AD82B2B7B49E800D94D1B /* GeneralSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsViewController.swift; sourceTree = "<group>"; };
 		651E5BFF2BA4609C005DB71C /* CallTranscriptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallTranscriptionViewController.swift; sourceTree = "<group>"; };
@@ -244,6 +246,7 @@
 				656168BA2B724FA70006E5D2 /* ContactsViewController.swift */,
 				65E207812B73F9FC00978CAC /* CallLogsViewController.swift */,
 				65E207852B73FA3100978CAC /* leassonsViewController.swift */,
+				650E24622BEAAC8A00A4533C /* CallObserverViewController.swift */,
 			);
 			path = DashboardScreens;
 			sourceTree = "<group>";
@@ -736,6 +739,7 @@
 				651AD82C2B7B49E800D94D1B /* GeneralSettingsViewController.swift in Sources */,
 				6573B4812B716DFA000DD658 /* ContactTableTableViewCell.swift in Sources */,
 				65182F312B8DFC3000199D36 /* beginnerlevelViewController.swift in Sources */,
+				650E24632BEAAC8A00A4533C /* CallObserverViewController.swift in Sources */,
 				AF711ADD21E14DDC005CA4FA /* ScreenSizeUtil.swift in Sources */,
 				AF60114024547E7B00E6E407 /* RTCSimulatorVideoDecoderFactory.swift in Sources */,
 				656168BB2B724FA70006E5D2 /* ContactsViewController.swift in Sources */,

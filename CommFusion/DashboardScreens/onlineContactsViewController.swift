@@ -10,12 +10,12 @@ import UIKit
 import Kingfisher
 
 
-class onlineContactsViewController: UIViewController,UITableViewDataSource, UITableViewDelegate ,IncomingCallDelegate {
-    func presentIncomingCallScreen(isRecieving: Bool) {
-        print("\nrecieveing \(isRecieving)")
-        
-        
-    }
+class onlineContactsViewController: UIViewController,UITableViewDataSource, UITableViewDelegate  {
+//    func presentIncomingCallScreen(isRecieving: Bool) {
+//        print("\nrecieveing \(isRecieving)")
+//        
+//        
+//    }
     
 
     
@@ -425,17 +425,17 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(openViewController(_:)), name: .openViewControllerNotification, object: nil)
-         
-        let sharedSockets = socketsClass.shared
-            sharedSockets.connectSocket()
-            sharedSockets.incomingCallDelegate = self
-            
-            // Set the active view controller
-            sharedSockets.activeViewController = self
-            
-            // Simulate receiving an incoming call
-            sharedSockets.receiveIncomingCall()
+//        NotificationCenter.default.addObserver(self, selector: #selector(openViewController(_:)), name: .openViewControllerNotification, object: nil)
+//
+//        let sharedSockets = socketsClass.shared
+//            sharedSockets.connectSocket()
+//            sharedSockets.incomingCallDelegate = self
+//
+//            // Set the active view controller
+//            sharedSockets.activeViewController = self
+//
+//            // Simulate receiving an incoming call
+//            sharedSockets.receiveIncomingCall()
         
         btncontactOutlet.alpha = 1
         circleview.alpha = 1
@@ -496,16 +496,16 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
             // Unsubscribe from the notification
             NotificationCenter.default.removeObserver(self, name: .openViewControllerNotification, object: nil)
         }
-    @objc func openViewController(_ notification: Notification) {
-          
-        if let value = notification.userInfo?["callerid"] as? String {
-            
-        let callReceiverVC = storyboard?.instantiateViewController(withIdentifier: "callRecieverscreen") as! CallRecieverViewController
-        callReceiverVC.hidesBottomBarWhenPushed = true
-            callReceiverVC.calllerid = value
-        navigationController?.pushViewController(callReceiverVC, animated: true)
-        }
-       }
+//    @objc func openViewController(_ notification: Notification) {
+//
+//        if let value = notification.userInfo?["callerid"] as? String {
+//
+//        let callReceiverVC = storyboard?.instantiateViewController(withIdentifier: "callRecieverscreen") as! CallRecieverViewController
+//        callReceiverVC.hidesBottomBarWhenPushed = true
+//            callReceiverVC.calllerid = value
+//        navigationController?.pushViewController(callReceiverVC, animated: true)
+//        }
+//       }
     @objc func swipedDown(_ gesture: UISwipeGestureRecognizer) {
            if gesture.direction == .down {
             //Displaying Refreshing

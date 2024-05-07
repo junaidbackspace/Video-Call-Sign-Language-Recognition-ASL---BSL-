@@ -243,7 +243,8 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
         let controller = self.storyboard?.instantiateViewController(identifier: "callerscreen") as! CallerViewController
     controller.name =  contacts[sender.tag].Fname+" "+contacts[sender.tag].Lname
     controller.isringing = "Calling"
-    
+        controller.recieverid = contacts[sender.tag].UserId
+        controller.callerid =  UserDefaults.standard.integer(forKey: "userID")
     let base = "\(Constants.serverURL)\(contacts[sender.tag].ProfilePicture)"
     if let url = URL(string: base) {
         
@@ -373,7 +374,7 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
                 let username = userObject.user_name
 
                 // Now you can use these properties as needed
-                print("Call id : \(call_id), Fname: \(firstName), OnlineStatus: \(onlineStatus), IScaller: \(iscaller), ProfilePic: \(profilePicture)")
+                print("user id : \(userid), Fname: \(firstName), OnlineStatus: \(onlineStatus), IScaller: \(iscaller), ProfilePic: \(profilePicture)")
 
             
                 
@@ -386,6 +387,7 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
                 user.OnlineStatus = onlineStatus
                 user.isCaller = iscaller
                 user.Call_StartTime = startTime
+               
                 if let endtime = user.Call_EndTime {
                     
                     user.Call_EndTime = endtime
