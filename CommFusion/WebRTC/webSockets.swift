@@ -200,7 +200,7 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
                 
                 else if signalingMessage.type == "offer" {
                     var controller = ViewController()
-                    print("offer recieved")
+                   
                     let messageTuple: (WebSocketClient, String) = (socket, text)
                     NotificationCenter.default.post(name: .didReceiveMessage, object: nil, userInfo: ["messageTuple": messageTuple])
                         

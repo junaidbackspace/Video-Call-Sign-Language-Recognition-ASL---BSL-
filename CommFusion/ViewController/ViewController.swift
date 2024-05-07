@@ -107,7 +107,9 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         deinit {
             NotificationCenter.default.removeObserver(self, name: .didReceiveMessage, object: nil)
                
-//            NotificationCenter.default.removeObserver(self)
+            NotificationCenter.default.removeObserver(self)
+            
+            //shifted in hangupcall
 //            webRTCClient.delegate = nil // Remove delegate
 //            webRTCClient.disconnect()
 //            isReciever = 0
@@ -116,11 +118,9 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         }
     @objc func handleMessage(_ notification: Notification) {
             guard let messageTuple = notification.userInfo?["messageTuple"] as? (WebSocketClient, String) else { return }
-            
             let (socket, text) = messageTuple
-          
-        self.websocketDidReceiveMessage(socket: socket, text: text)
-            print("Received message: \(text) from \(socket)")
+           self.websocketDidReceiveMessage(socket: socket, text: text)
+           
         }
     
   
@@ -298,7 +298,10 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
             let jsonData = try JSONSerialization.data(withJSONObject: endCallData, options: [])
             socket.write(data: jsonData) { [weak self] in
                 guard let self = self else { return }
+                self.webRTCClient.delegate = nil // Remove delegate
+                self.isReciever = 0
                 self.disconnectWebRTC()
+                
             }
         } catch {
             print("Error serializing end call data: \(error)")
@@ -364,7 +367,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
                         socketsClass.shared.socket.write(string: message)
                     }
                     else{
-                        DispatchQueue.main.asyncAfter(deadline: .now()+0.2)
+                        DispatchQueue.main.asyncAfter(deadline: .now()+0.1)
                         {
                        
                             socketsClass.shared.socket.connect()
@@ -374,6 +377,14 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
                         if socketsClass.shared.isConnected() {
                         print("\n===>in offer , socket reconnected")
                             socketsClass.shared.socket.write(string: message)
+                        }
+                        else{
+                            DispatchQueue.main.asyncAfter(deadline: .now()+0.1)
+                            {print("\n<<<====== else in offer , socket reconnected")
+                           
+                                socketsClass.shared.socket.connect()
+                                socketsClass.shared.socket.write(string: message)
+                            }
                         }
                     }
                 } catch {
@@ -388,7 +399,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
                     let message = String(data: data, encoding: .utf8)!
                     
                     if socketsClass.shared.isConnected() {
-                        print("\nnow caller answering sdp to caller \(message)")
+                        print("\nnow Reciever answering sdp to caller ")
                         socketsClass.shared.socket.write(string: message)
                     }
                     else{
@@ -463,9 +474,7 @@ extension ViewController {
                 })
             }else if signalingMessage.type == "answer" {
                 print("Answer recieved:")
-                print("Meess:\(signalingMessage)\n\n")
-                print("\(signalingMessage.sessionDescription?.sdp)")
-                
+             
                 webRTCClient.receiveAnswer(answerSDP: RTCSessionDescription(type: .answer, sdp: (signalingMessage.sessionDescription?.sdp)!))
                 
             }else if signalingMessage.type == "candidate" {

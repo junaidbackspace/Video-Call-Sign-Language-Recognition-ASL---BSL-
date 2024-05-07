@@ -100,7 +100,7 @@ ws.on('close', function () {
     else if (type === 'sdp' || type === 'candidate' || type === 'offer' || type === 'answer') 
     {
         var loopcheck = true;
-        console.log('Hand shake msg Recieved');
+       
         if (clients.has(from) && clients.has(to)) {
                     
          wsServer.clients.forEach(function each(client) {
@@ -113,7 +113,7 @@ ws.on('close', function () {
                       }
                 else {
                    
-                    console.log('\n: ',message);
+                    console.log('\n: ',type);
                     // console.log('sending  message:', type, 'to : ',userId);
                     var user = clients.get(userId);
                     user.send(message);
