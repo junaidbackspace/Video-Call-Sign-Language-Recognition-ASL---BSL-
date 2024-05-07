@@ -66,8 +66,10 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     
     override init() {
         super.init()
-        localView = UIView()
-        localView.isOpaque = true
+        
+            self.localView = UIView()
+            self.localView.isOpaque = true
+        
         print("WebRTC Client initialize")
     }
     

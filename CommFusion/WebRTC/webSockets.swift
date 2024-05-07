@@ -15,64 +15,17 @@ protocol IncomingCallDelegate: AnyObject {
    
 }
 
-var controller = ViewController()
 
-class socketsClass: WebSocketDelegate, WebRTCClientDelegate{
-    func didGenerateCandidate(iceCandidate: RTCIceCandidate) {
-//        controller.sendCandidate(iceCandidate: iceCandidate)
-        
-    }
+class socketsClass: WebSocketDelegate{
     
-    func didIceConnectionStateChanged(iceConnectionState: RTCIceConnectionState) {
-        var state = ""
-        
-        switch iceConnectionState {
-        case .checking:
-            state = "checking..."
-        case .closed:
-            state = "closed"
-        case .completed:
-            state = "completed"
-        case .connected:
-            state = "connected"
-        case .count:
-            state = "count..."
-        case .disconnected:
-            state = "disconnected"
-        case .failed:
-            state = "failed"
-        case .new:
-            state = "new..."
-        }
-    }
-    
-    func didOpenDataChannel() {
-        
-    }
-    
-    func didReceiveData(data: Data) {
-        
-    }
-    
-    func didReceiveMessage(message: String) {
-        
-    }
-    
-    func didConnectWebRTC() {
-        
-    }
-    
-    func didDisconnectWebRTC() {
-        
-    }
     
     func hunguptapedbyOtherCaller() {
         
     }
     
-    
+    //callbacks
       var endCallClosure: (() -> Void)?
-
+   
     // Singleton instance
        static let shared = socketsClass()
 
@@ -82,24 +35,22 @@ class socketsClass: WebSocketDelegate, WebRTCClientDelegate{
        // Delegate to notify about incoming calls
        weak var incomingCallDelegate: IncomingCallDelegate?
 
-    
+        
+        
 
 public var  socket : WebSocket!
 var backgroundTask: UIBackgroundTaskIdentifier = .invalid
 var ipAddress: String
 var userID = ""
 
-    var useCustomCapturer: Bool = false
-    var webRTCClient: WebRTCClient!
+   
     
 init() {
           // Initialize ipAddress here or wherever appropriate in your code
           self.ipAddress = Constants.nodeserverIP
          self.socket = WebSocket(url: URL(string: "ws://" + ipAddress + ":8081")!)
      self.userID = String(UserDefaults.standard.integer(forKey: "userID"))
-    webRTCClient = WebRTCClient()
-    webRTCClient.delegate = self
-    webRTCClient.setup(videoTrack: true, audioTrack: true, dataChannel: true, customFrameCapturer: useCustomCapturer)
+ 
     
     
 }
@@ -248,24 +199,25 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
                 }
                 
                 else if signalingMessage.type == "offer" {
+                    var controller = ViewController()
                     print("offer recieved")
-                    webRTCClient.receiveOffer(offerSDP: RTCSessionDescription(type: .offer, sdp: (signalingMessage.sessionDescription?.sdp)!), onCreateAnswer: {(answerSDP: RTCSessionDescription) -> Void in
-                        print("from : \(signalingMessage.from), to : \(signalingMessage.to)")
-                        controller.callFriendId = signalingMessage.to
-                        controller.sendSDP(sessionDescription: answerSDP)
-                    })
-                    
+                    let messageTuple: (WebSocketClient, String) = (socket, text)
+                    NotificationCenter.default.post(name: .didReceiveMessage, object: nil, userInfo: ["messageTuple": messageTuple])
+                        
+                  
                 }
                 else if signalingMessage.type == "answer" {
                    
-                    
-                    webRTCClient.receiveAnswer(answerSDP: RTCSessionDescription(type: .answer, sdp: (signalingMessage.sessionDescription?.sdp)!))
+                    let messageTuple: (WebSocketClient, String) = (socket, text)
+                    NotificationCenter.default.post(name: .didReceiveMessage, object: nil, userInfo: ["messageTuple": messageTuple])
+                        
                     
                 }else if signalingMessage.type == "candidate" {
                     print("Candidate recieved")
                     
-                    let candidate = signalingMessage.candidate!
-                    webRTCClient.receiveCandidate(candidate: RTCIceCandidate(sdp: candidate.sdp, sdpMLineIndex: candidate.sdpMLineIndex, sdpMid: candidate.sdpMid))
+                    let messageTuple: (WebSocketClient, String) = (socket, text)
+                    NotificationCenter.default.post(name: .didReceiveMessage, object: nil, userInfo: ["messageTuple": messageTuple])
+                        
                 }
                 else{
                     print("something revieved:\n\(signalingMessage)")
@@ -344,4 +296,6 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
 }
 extension Notification.Name {
     static let openViewControllerNotification = Notification.Name("openViewControllerNotification")
+    static let didReceiveMessage = Notification.Name("didReceiveMessage")
+    
 }

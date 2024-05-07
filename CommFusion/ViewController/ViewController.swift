@@ -15,12 +15,8 @@ import UIKit
 
 
 
-class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate, CameraSessionDelegate{
-   
-    
-    
-    
-    
+class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate, CameraSessionDelegate {
+  
     
     let font_sizeDefault = UserDefaults.standard
     let caption_opacityDefault = UserDefaults.standard
@@ -95,7 +91,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
   
     //MARK: - ViewController Override Methods ----------------------------
     
-   let userID = UserDefaults.standard.string(forKey: "userID")!
+   var userID = ""
     
    
    
@@ -109,17 +105,32 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         }
         
         deinit {
-            NotificationCenter.default.removeObserver(self)
-            webRTCClient.delegate = nil // Remove delegate
-            webRTCClient.disconnect()
-            isReciever = 0
-            socket.delegate = nil
-            socket.disconnect()
+            NotificationCenter.default.removeObserver(self, name: .didReceiveMessage, object: nil)
+               
+//            NotificationCenter.default.removeObserver(self)
+//            webRTCClient.delegate = nil // Remove delegate
+//            webRTCClient.disconnect()
+//            isReciever = 0
+//            socket.delegate = nil
+//            socket.disconnect()
         }
-    var websockt = socketsClass()
+    @objc func handleMessage(_ notification: Notification) {
+            guard let messageTuple = notification.userInfo?["messageTuple"] as? (WebSocketClient, String) else { return }
+            
+            let (socket, text) = messageTuple
+          
+        self.websocketDidReceiveMessage(socket: socket, text: text)
+            print("Received message: \(text) from \(socket)")
+        }
+    
+  
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+         userID = UserDefaults.standard.string(forKey: "userID")!
         
+        NotificationCenter.default.addObserver(self, selector: #selector(handleMessage(_:)), name: .didReceiveMessage, object: nil)
+            
         
         NotificationCenter.default.addObserver(self, selector: #selector(endCall), name: Notification.Name("CallEndedNotification"), object: nil)
            
@@ -152,7 +163,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
        socket.delegate = self
         self.socket.connect()
         
-        if isReciever == 1{
+        if isReciever == 0{
         self.callButtonTapped()
         }
      
@@ -338,18 +349,18 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     var userid = String(UserDefaults.standard.integer(forKey: "userID"))
     
     // MARK: - WebRTC Signaling
-    public func sendSDP(sessionDescription: RTCSessionDescription){
+     func sendSDP(sessionDescription: RTCSessionDescription){
         var type = ""
         if sessionDescription.type == .offer {
             type = "offer"
             let sdp = SDP(sdp: sessionDescription.sdp)
-                let signalingMessage = SignalingMessage(type: type, sessionDescription: sdp, candidate: nil, from: callFriendId, to:userid )
+                let signalingMessage = SignalingMessage(type: type, sessionDescription: sdp, candidate: nil, from:callFriendId , to:userid)
                 do {
                     let data = try JSONEncoder().encode(signalingMessage)
                     let message = String(data: data, encoding: .utf8)!
                     
                     if socketsClass.shared.isConnected() {
-                        print("\nnow reciever offering sdp to caller")
+                        print("\nnow caller offering sdp to caller")
                         socketsClass.shared.socket.write(string: message)
                     }
                     else{
@@ -371,7 +382,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         }else if sessionDescription.type == .answer {
             type = "answer"
             let sdp = SDP(sdp: sessionDescription.sdp)
-            let signalingMessage = SignalingMessage(type: type, sessionDescription: sdp, candidate: nil, from:self.userid , to:self.callFriendId )
+            let signalingMessage = SignalingMessage(type: type, sessionDescription: sdp, candidate: nil, from:self.callFriendId  , to:self.userid )
                 do {
                     let data = try JSONEncoder().encode(signalingMessage)
                     let message = String(data: data, encoding: .utf8)!
@@ -446,7 +457,7 @@ extension ViewController {
             }
             
             else if signalingMessage.type == "offer" {
-                print("offer recieved")
+                print("offer recieved in view controller")
                 webRTCClient.receiveOffer(offerSDP: RTCSessionDescription(type: .offer, sdp: (signalingMessage.sessionDescription?.sdp)!), onCreateAnswer: {(answerSDP: RTCSessionDescription) -> Void in
                     self.sendSDP(sessionDescription: answerSDP)
                 })
@@ -454,7 +465,9 @@ extension ViewController {
                 print("Answer recieved:")
                 print("Meess:\(signalingMessage)\n\n")
                 print("\(signalingMessage.sessionDescription?.sdp)")
-//                webRTCClient.receiveAnswer(answerSDP: RTCSessionDescription(type: .answer, sdp: (signalingMessage.sessionDescription?.sdp)!))
+                
+                webRTCClient.receiveAnswer(answerSDP: RTCSessionDescription(type: .answer, sdp: (signalingMessage.sessionDescription?.sdp)!))
+                
             }else if signalingMessage.type == "candidate" {
                 print("Candidate recieved")
                 
@@ -476,7 +489,7 @@ extension ViewController {
 // MARK: - WebRTCClient Delegate
 extension ViewController {
     func didGenerateCandidate(iceCandidate: RTCIceCandidate) {
-//        self.sendCandidate(iceCandidate: iceCandidate)
+        self.sendCandidate(iceCandidate: iceCandidate)
     }
     
     func didIceConnectionStateChanged(iceConnectionState: RTCIceConnectionState) {
