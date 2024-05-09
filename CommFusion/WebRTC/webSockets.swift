@@ -65,22 +65,34 @@ init() {
         }
     
 public func connectSocket(){
-            if !socket.isConnected {
+    
+    if self.socket == nil {
+        
+        
+        self.ipAddress = Constants.nodeserverIP
+        self.socket = WebSocket(url: URL(string: "ws://" + ipAddress + ":8081")!)
+        self.userID = String(UserDefaults.standard.integer(forKey: "userID"))
+        socket.delegate = self
+        self.socket.connect()
+    }
+    if !self.socket.isConnected {
                 //Because on first time userid not set
                 self.userID = String(UserDefaults.standard.integer(forKey: "userID"))
                 socket.delegate = self
                 self.socket.connect()
-                print("Connecting in background")
+                print("Connecting in webSocket")
             }
             else{
-            print(" connected in background")
+            print(" already connected in websockets")
             }
             Thread.sleep(forTimeInterval: 2) // Adjust interval as needed
         }
     
     func disconnect() {
-            if socket.isConnected {
-//                socket.disconnect()
+        if self.socket.isConnected {
+                print("Disconnecting sockets")
+                self.socket.disconnect()
+                self.socket = nil
             }
         }
     
@@ -164,6 +176,11 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
             NotificationCenter.default.post(name: Notification.Name("UpdateLabelNotification"), object: nil, userInfo: ["text": "Ringing..."])
               
         }
+        if type == "busy" {
+            print("user \(from) is busy")
+            NotificationCenter.default.post(name: Notification.Name("UpdateLabelNotification"), object: nil, userInfo: ["text": "Busy in other call..."])
+              
+        }
         if type == "call_accepted"{
            
             print("call acepted by user")
@@ -178,14 +195,13 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
 
         }
         if type == "call_cancell"{
-//            if checkReciever == 1{
+
             print("within Reciver call cancelled by user")
             NotificationCenter.default.post(name: Notification.Name("CallCancelledFromCallerNotification"), object: nil)
-//            }
-//            else{
+
                 print("within Caller call cancelled by user")
                 NotificationCenter.default.post(name: Notification.Name("CallCancelledFromReciverNotification"), object: nil)
-//            }
+
         }
         
         else{

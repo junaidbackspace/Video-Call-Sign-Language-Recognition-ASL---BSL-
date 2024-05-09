@@ -110,6 +110,7 @@ class CallerViewController: UIViewController {
        }
        
     @objc func callcenlled(){
+     
         let websoc = socketsClass()
      
         let friendid = String(recieverid)
@@ -119,7 +120,7 @@ class CallerViewController: UIViewController {
         print(" call cancelled")
         captureSession?.stopRunning()
         self.navigationController?.popViewController(animated: true)
-       
+        
     }
    
     
@@ -153,7 +154,15 @@ class CallerViewController: UIViewController {
        }
        
        @IBAction func endCallTapped(_ sender: UIButton) {
-        let websoc = socketsClass()
+        if lbl_is_ringing.text! == "Busy in other call..."{
+            print("User is Busy")
+            print("==>",lbl_is_ringing.text)
+            captureSession?.stopRunning()
+            self.navigationController?.popViewController(animated: true)
+        }
+        else{
+           
+            let websoc = socketsClass.shared
      
         let friendid = String(recieverid)
         print("here is Friend id  : \(friendid)")
@@ -162,6 +171,7 @@ class CallerViewController: UIViewController {
         captureSession?.stopRunning()
         self.navigationController?.popViewController(animated: true)
            dismiss(animated: true, completion: nil)
+        }
        }
     
     @IBAction func Mute_Audio(_ sender: UIButton) {

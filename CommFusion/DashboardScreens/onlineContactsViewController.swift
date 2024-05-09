@@ -424,19 +424,13 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-//        NotificationCenter.default.addObserver(self, selector: #selector(openViewController(_:)), name: .openViewControllerNotification, object: nil)
-//
-//        let sharedSockets = socketsClass.shared
-//            sharedSockets.connectSocket()
-//            sharedSockets.incomingCallDelegate = self
-//
-//            // Set the active view controller
-//            sharedSockets.activeViewController = self
-//
-//            // Simulate receiving an incoming call
-//            sharedSockets.receiveIncomingCall()
-        
+    
+        if socketsClass.shared.isConnected(){
+            
+        }
+        else{
+            socketsClass.shared.connectSocket()
+        }
         btncontactOutlet.alpha = 1
         circleview.alpha = 1
         circleview.layer.cornerRadius = 44
@@ -461,6 +455,15 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
         if UserDefaults.standard.object(forKey: "SignType") == nil {
             
             UserDefaults.standard.set("ASL", forKey: "SignType")
+        }
+        if UserDefaults.standard.object(forKey: "SignType") == nil {
+            
+            UserDefaults.standard.set("ASL", forKey: "SignType")
+        }
+        
+        if UserDefaults.standard.object(forKey: "rigntones") == nil {
+            UserDefaults.standard.setValue("default", forKey: "rigntones")
+            
         }
         
         DispatchQueue.global().async {

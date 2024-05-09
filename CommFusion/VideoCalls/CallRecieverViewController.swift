@@ -8,9 +8,10 @@
 
 import UIKit
 import AVFoundation
-class CallRecieverViewController: UIViewController {
+class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
     
-
+    var musicPlayer: AVAudioPlayer?
+    
   
     var captureSession: AVCaptureSession?
     var videoPreviewLayer: AVCaptureVideoPreviewLayer?
@@ -34,11 +35,23 @@ class CallRecieverViewController: UIViewController {
          let maxButtonTranslation: CGFloat = 100 // Adjust the maximum translation as needed
 
     
-    let socketObj = socketsClass()
+   
     
          override func viewDidLoad() {
              super.viewDidLoad()
-            socketObj.connectSocket()
+            
+            if UserDefaults.standard.object(forKey: "rigntones") == nil {
+                UserDefaults.standard.setValue("default", forKey: "rigntones")
+                
+                playMusic(fileName: "default")
+            }
+            else {
+                
+                playMusic(fileName: UserDefaults.standard.string(forKey: "rigntones")! as String)
+            }
+            if !socketsClass.shared.isConnected(){
+                socketsClass.shared.connectSocket()
+            }
             NotificationCenter.default.addObserver(self, selector: #selector(callcenlled), name: Notification.Name("CallCancelledFromReciverNotification"), object: nil)
                
             
@@ -56,7 +69,36 @@ class CallRecieverViewController: UIViewController {
             
 
          }
-    
+    func playMusic(fileName: String) {
+            guard let path = Bundle.main.path(forResource: fileName, ofType: "mp3") else {
+                print("File not found")
+                return
+            }
+
+            let url = URL(fileURLWithPath: path)
+
+            do {
+                musicPlayer = try AVAudioPlayer(contentsOf: url)
+                musicPlayer?.delegate = self
+                musicPlayer?.prepareToPlay()
+                musicPlayer?.volume = 1.0
+                musicPlayer?.play()
+                
+            } catch {
+                print("Error playing music: \(error.localizedDescription)")
+            }
+        }
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+          if flag {
+              // Playback finished successfully, restart the music
+              player.currentTime = 0
+              player.play()
+          } else {
+              // Playback finished with an error
+              print("Playback finished with an error")
+          }
+      }
+  
     
     @objc func callcenlled(){
         let websoc = socketsClass()
@@ -176,12 +218,12 @@ class CallRecieverViewController: UIViewController {
 
 
     func acceptCall() {
-        
+        musicPlayer?.stop()
             print("Accepted call")
         let callData = ["type": "call_accept", "from": String(userid), "to": calllerid]
                if let jsonData = try? JSONSerialization.data(withJSONObject: callData) {
                    if let jsonString = String(data: jsonData, encoding: .utf8) {
-                    socketObj.socket.write(string: jsonString)
+                    socketsClass.shared.socket.write(string: jsonString)
                     print("call is accepted , caller is: \(calllerid)")
                    }
                }
@@ -198,7 +240,7 @@ class CallRecieverViewController: UIViewController {
         }
         
         func rejectCall() {
-            socketObj.CancellCall(with: calllerid)
+            socketsClass.shared.CancellCall(with: calllerid)
             print("Rejected call")
             self.navigationController?.popViewController(animated: true)
             captureSession?.stopRunning()

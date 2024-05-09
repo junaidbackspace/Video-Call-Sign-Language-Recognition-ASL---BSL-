@@ -183,11 +183,16 @@ function handleCall(from, to) {
         const recipient = clients.get(to); //friend
         const caller = clients.get(from); // user
         // Send call initiation message to the recipient
-
+        if (callers.has(to)) {
+            caller.send(JSON.stringify({ type: 'busy', to: to }));
+            console.log(`User  '${to}' is busy on other call '${to}'`);
+            return;
+        }else{
         caller.send(JSON.stringify({ type: 'ringing', to: to }));
         recipient.send(JSON.stringify({ type: 'incoming_call', from: from }));
         console.log(`Initiating call from '${from}' to '${to}'`);
         return `Initiating call from '${from}' to '${to}'`;
+        }
     } else {
         console.log(`User '${to}' is not connected.`);
         // Optionally, you can send a message back to the caller indicating that the recipient is not available

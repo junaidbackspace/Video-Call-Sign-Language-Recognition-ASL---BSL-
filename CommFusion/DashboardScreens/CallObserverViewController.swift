@@ -20,19 +20,18 @@ class CallObserverViewController: UITabBarController, IncomingCallDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(openViewController(_:)), name: .openViewControllerNotification, object: nil)
          
         let sharedSockets = socketsClass.shared
+     
+            print("--->Conecting sockets..\n")
             sharedSockets.connectSocket()
             sharedSockets.incomingCallDelegate = self
-            
-            // Set the active view controller
             sharedSockets.activeViewController = self
-            
-            // Simulate receiving an incoming call
             sharedSockets.receiveIncomingCall()
         // Do any additional setup after loading the view.
+    
     }
     
     @objc func openViewController(_ notification: Notification) {
-          
+         print("opening recieving call screen")
         if let value = notification.userInfo?["callerid"] as? String {
             
         let callReceiverVC = storyboard?.instantiateViewController(withIdentifier: "callRecieverscreen") as! CallRecieverViewController

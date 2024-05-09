@@ -13,8 +13,8 @@ class NotificationsViewController: UIViewController {
 
     var musicPlayer: AVAudioPlayer?
        
-       let names = ["Loser", "Perfect", "Baby"] // Add your music options here
-       let musicFiles = ["loser", "perfect", "baby"] // Corresponding music file names
+       let names = ["Default","Glow","Smooth", "Shape of you", "Looser"] // Add your music options here
+       let musicFiles = ["default","glow", "smooth","shapeofyou","loser"] // Corresponding music file names
        
     @IBAction func btnback(_ sender: Any) {
         navigationController?.popViewController(animated: true)
@@ -32,15 +32,26 @@ class NotificationsViewController: UIViewController {
         dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
             self.lblrigntone.text = "\(item)"
             
-            if ( item == "Loser")
+            if ( item == "Default")
             {
+                UserDefaults.standard.setValue("default", forKey: "rigntones")
                 playMusic(fileName: musicFiles[index])
             }
         
-        else if ( item == "Perfect") {
+        else if ( item == "Glow") {
+            UserDefaults.standard.setValue("glow", forKey: "rigntones")
             playMusic(fileName: musicFiles[index])
             }
-        else{
+        else if ( item == "Smooth" ){
+            UserDefaults.standard.setValue("smooth", forKey: "rigntones")
+            playMusic(fileName: musicFiles[index])
+        }
+        else if ( item == "Shape of you" ){
+            UserDefaults.standard.setValue("shapeofyou", forKey: "rigntones")
+            playMusic(fileName: musicFiles[index])
+        }
+        else {
+            UserDefaults.standard.setValue("loser", forKey: "rigntones")
             playMusic(fileName: musicFiles[index])
         }
             
@@ -52,8 +63,15 @@ class NotificationsViewController: UIViewController {
     @IBOutlet weak var ringtoneView: UIView!
     override func viewDidLoad() {
         super.viewDidLoad()
-
+//        UserDefaults.standard.setValue(0, forKey: "userID")
         // Do any additional setup after loading the view.
+        if UserDefaults.standard.object(forKey: "rigntones") == nil {
+            UserDefaults.standard.setValue("default", forKey: "rigntones")
+            lblrigntone.text = "Default"
+        }
+        else {
+            lblrigntone.text = UserDefaults.standard.string(forKey: "rigntones")! as String
+        }
     }
     func playMusic(fileName: String) {
             guard let path = Bundle.main.path(forResource: fileName, ofType: "mp3") else {

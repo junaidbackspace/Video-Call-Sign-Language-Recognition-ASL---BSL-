@@ -64,11 +64,14 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
     var testmsg = "1"
     @IBAction func btnFreshmsg(_ sender: Any) {
-        print("sendind data")
-        let data = testmsg.data(using: String.Encoding.utf8)
-        print(testmsg)
+        print("sendind Message")
+//        let data = testmsg.data(using: String.Encoding.utf8)
+//        print(testmsg)
+//        testmsg = String(Int(testmsg)!+1)
+//        webRTCClient.sendData(data: data!)
+        
         testmsg = String(Int(testmsg)!+1)
-        webRTCClient.sendData(data: data!)
+        webRTCClient.sendMessge(message:   testmsg)
     }
     
     @IBAction func btnOldMsg(_ sender: Any) {
@@ -545,12 +548,14 @@ extension ViewController {
             if let Message = String(data: data, encoding: .utf8) {
             lblmsg.text = Message
             }
+            print("String Message : \(data)")
         }
     }
     
     func didReceiveMessage(message: String) {
         print("viewController message recieved : \(message)")
-//        self.lblmsg.text = message
+        self.lblmsg.text = message
+        
     }
     
     func hunguptapedbyOtherCaller(){

@@ -205,7 +205,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         }
         if self.channels.audio {
             print("adding Audio in  peer")
-            self.peerConnection!.add(localAudioTrack, streamIds: ["stream0"])
+            self.peerConnection!.add(localAudioTrack, streamIds: ["stream1"])
         }
         if self.channels.datachannel {
             print("Setting data Channel")
@@ -241,7 +241,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
                 self.peerConnection!.add(localVideoTrack, streamIds: ["stream-0"])
             }
             if self.channels.audio {
-                self.peerConnection!.add(localAudioTrack, streamIds: ["stream-0"])
+                self.peerConnection!.add(localAudioTrack, streamIds: ["stream-1"])
             }
             if self.channels.datachannel {
                 self.dataChannel = self.setupDataChannel()
@@ -361,7 +361,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     private func createAudioTrack() -> RTCAudioTrack {
         let audioConstraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
         let audioSource = peerConnectionFactory.audioSource(with: audioConstraints)
-        let audioTrack = peerConnectionFactory.audioTrack(with: audioSource, trackId: "audio0")
+        let audioTrack = peerConnectionFactory.audioTrack(with: audioSource, trackId: "audio01")
 
         // Set audio session category to allow playback through the loudspeaker
         do {
@@ -369,7 +369,8 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
             try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .videoChat, options: [.allowBluetooth, .allowBluetoothA2DP, .defaultToSpeaker])
             
             // Set the audio session active
-            try AVAudioSession.sharedInstance().setActive(true)
+//            try AVAudioSession.sharedInstance().setActive(true)
+            try AVAudioSession.sharedInstance().overrideOutputAudioPort(.speaker)
            
         } catch {
             print("Error setting up audio session: \(error.localizedDescription)")
@@ -658,7 +659,7 @@ extension WebRTCClient{
         
         if videoView.isEqual(remoteRenderView!){
             //Setting to loud speaker after call connected
-            setAudioToLoudSpeaker()
+            
             print("remote video size changed to: ", size)
             renderView = remoteRenderView
             parentView = remoteView
