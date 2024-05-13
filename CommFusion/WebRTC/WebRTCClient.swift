@@ -370,7 +370,9 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
             
             // Set the audio session active
 //            try AVAudioSession.sharedInstance().setActive(true)
-            try AVAudioSession.sharedInstance().overrideOutputAudioPort(.speaker)
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+            try AVAudioSession.sharedInstance().setActive(true)
+//            try AVAudioSession.sharedInstance().overrideOutputAudioPort(.speaker)
            
         } catch {
             print("Error setting up audio session: \(error.localizedDescription)")

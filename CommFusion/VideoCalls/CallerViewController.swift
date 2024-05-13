@@ -34,6 +34,7 @@ class CallerViewController: UIViewController {
   
     var callerid = 0
     var recieverid = 0
+    var videocall_id = 0
 
     func CallAPI(caller : Int ,reciver : Int )
     {
@@ -42,23 +43,30 @@ class CallerViewController: UIViewController {
         let Dic: [String: Any] = [
             "caller_id": caller,
               "receiver_id": reciver ]
-        print("calling : \(Dic)")
-//        serverWrapper.insertData(baseUrl: Url,  userDictionary: Dic) { responseString, error in
-//            if let error = error {
-//                print("\n\nError:", error)
-//               }
-//
-//            if let responseString = responseString {
-//                print("w response:", responseString)
-//
-//                guard let responseData = responseString.data(using: .utf8) else {
-//                    print("Error converting response data to UTF-8")
-//                    return
-//                }
-//
-//           }
-//
-//        }
+    
+        serverWrapper.insertData(baseUrl: Url,  userDictionary: Dic) { responseString, error in
+            if let error = error {
+                print("\n\nError:", error)
+               }
+
+            if let responseString = responseString {
+                print("response:", responseString)
+                if let responsedata = responseString.data(using : .utf8) , let jsonresponse = try? JSONSerialization.jsonObject(with: responsedata, options: []) as? [String:Any]{
+                    
+                    if let videocallid = jsonresponse["video_call_id"] as? Int {
+                        print("Video call ID: \(videocallid)")
+                        self.videocall_id = videocallid
+                    }
+                }
+                
+                guard let responseData = responseString.data(using: .utf8) else {
+                    print("Error converting response data to UTF-8")
+                    return
+                }
+
+           }
+
+        }
     }
     @objc func handleNotification(_ notification: Notification) {
             if let text = notification.userInfo?["text"] as? String {

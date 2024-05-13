@@ -78,6 +78,8 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
             let url = URL(fileURLWithPath: path)
 
             do {
+                try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+                try AVAudioSession.sharedInstance().setActive(true)
                 musicPlayer = try AVAudioPlayer(contentsOf: url)
                 musicPlayer?.delegate = self
                 musicPlayer?.prepareToPlay()

@@ -21,8 +21,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     let font_sizeDefault = UserDefaults.standard
     let caption_opacityDefault = UserDefaults.standard
     
-    
-
+    let CalingViewController = CallerViewController()
+    var serverWrapper = APIWrapper()
     var isReciever = 0
     var callFriendId = ""
     enum messageType {
@@ -169,6 +169,10 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         if isReciever == 0{
         self.callButtonTapped()
         }
+        //call reciever accepted call
+        else{
+            
+        }
      
         
 
@@ -303,13 +307,46 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
                 guard let self = self else { return }
                 self.webRTCClient.delegate = nil // Remove delegate
                 self.isReciever = 0
+                let v_id = self.CalingViewController.videocall_id
+                self.CallEnd_API(vid: v_id, userid: Int(self.userID)!)
                 self.disconnectWebRTC()
                 
             }
         } catch {
             print("Error serializing end call data: \(error)")
         }
+       
+       
     }
+    
+    
+    func CallEnd_API(vid : Int ,userid : Int )
+    {
+        let Url = "\(Constants.serverURL)/video-call/end-call"
+        
+        let Dic: [String: Any] = [
+            "video_call_id": vid,
+              "user_id": userid ]
+    
+        serverWrapper.insertData(baseUrl: Url,  userDictionary: Dic) { responseString, error in
+            if let error = error {
+                print("\n\nError:", error)
+               }
+
+            if let responseString = responseString {
+                print("response:", responseString)
+                
+                
+                guard let responseData = responseString.data(using: .utf8) else {
+                    print("Error converting response data to UTF-8")
+                    return
+                }
+
+           }
+
+        }
+    }
+    
         func disconnectWebRTC() {
             if webRTCClient.isConnected {
                 webRTCClient.disconnect()
