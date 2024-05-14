@@ -11,6 +11,7 @@ import AVFoundation
 
 class CallerViewController: UIViewController {
     
+    static let shared = CallerViewController()
     var profilepic = UIImage()
     var name = " "
     var isringing = " "
@@ -36,7 +37,7 @@ class CallerViewController: UIViewController {
     var recieverid = 0
     var videocall_id = 0
 
-    func CallAPI(caller : Int ,reciver : Int )
+    func Call_StartAPI(caller : Int ,reciver : Int )
     {
         let Url = "\(Constants.serverURL)/video-call/start"
         
@@ -78,6 +79,7 @@ class CallerViewController: UIViewController {
         controller.isReciever = 0
         controller.reciver = recieverid
         controller.callFriendId = String(recieverid)
+        controller.v_id = videocall_id
         controller.modalPresentationStyle = .fullScreen
           self.navigationController?.pushViewController(controller, animated: true)
     }
@@ -93,6 +95,8 @@ class CallerViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(handleCallNotification(_:)), name: NSNotification.Name("callacepted"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(callcenlled), name: Notification.Name("CallCancelledFromCallerNotification"), object: nil)
            
+       
+        
         setupCamera()
         imgview.image = profilepic
         imgview.layer.cornerRadius = 35
@@ -108,19 +112,32 @@ class CallerViewController: UIViewController {
         lbl_is_ringing.layer.zPosition = 1
         imgview.layer.zPosition = 1
         
-        let websoc = socketsClass()
-     
-        let friendid = String(recieverid)
-        print("here is reciver id  : \(friendid)")
         
-        websoc.initiateCall(with: friendid)
-        CallAPI(caller: callerid, reciver: recieverid)
+//        response: {"message":"Video call started successfully","video_call_id":300}
+//        Video call ID: 300
+//        here is reciver id  : 2
+//        Connecting in webSocket
+//        local side initiating call: ["type": "call", "from": "1", "to": "2", "videocallid": "300"]
+        
+//        MARK:-
+        //calling api's then sockets
+        DispatchQueue.global().async { [self] in
+            Call_StartAPI(caller: callerid, reciver: recieverid)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                
+                let friendid = String(recieverid)
+                print("here is reciver id  : \(friendid)")
+                socketsClass.shared.initiateCall(with: friendid , videocall_id : videocall_id)
+            }
+        }
+        
+        
+       
        }
        
     @objc func callcenlled(){
      
         let websoc = socketsClass()
-     
         let friendid = String(recieverid)
         print("here is Friend id  : \(friendid)")
         

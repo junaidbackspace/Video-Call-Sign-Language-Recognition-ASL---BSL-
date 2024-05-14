@@ -66,7 +66,7 @@ ws.on('close', function () {
        
         try {
             const data = JSON.parse(message);
-            const { type, from, to, sessionDescription, candidate } = data; // Extract necessary fields from the received message
+            const { type, from, to, sessionDescription, candidate,videocallid } = data; // Extract necessary fields from the received message
             
             //call initiated
             if (data.type === 'call') {
@@ -190,7 +190,7 @@ function handleCall(from, to) {
         }else{
         caller.send(JSON.stringify({ type: 'ringing', to: to }));
         recipient.send(JSON.stringify({ type: 'incoming_call', from: from }));
-        console.log(`Initiating call from '${from}' to '${to}'`);
+        console.log(`Initiating call from '${from}' to '${to}' videocall id : '${videocallid}'`);
         return `Initiating call from '${from}' to '${to}'`;
         }
     } else {

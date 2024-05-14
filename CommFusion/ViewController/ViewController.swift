@@ -20,8 +20,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
     let font_sizeDefault = UserDefaults.standard
     let caption_opacityDefault = UserDefaults.standard
-    
-    let CalingViewController = CallerViewController()
+   
     var serverWrapper = APIWrapper()
     var isReciever = 0
     var callFriendId = ""
@@ -100,6 +99,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
    
     @objc func endCall() {
             print("\nNOW IN VIEWCONTROLLER TO END CALL")
+        CallEnd_API(vid: self.v_id, userid: Int(self.userID)!)
             webRTCClient.disconnect()
             DispatchQueue.main.async {
                 self.navigationController?.popViewController(animated: true)
@@ -126,11 +126,59 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
            
         }
     
-  
+    func CallAccept_API(vid : Int ,userid : Int )
+    {
+        print("======> within call accept")
+        let Url = "\(Constants.serverURL)/video-call/accept"
+        
+        let Dic: [String: Any] = [
+            "video_call_id": vid,
+              "user_id": userid ]
     
+        serverWrapper.insertData(baseUrl: Url,  userDictionary: Dic) { responseString, error in
+            if let error = error {
+                print("===>Error:", error)
+               }
+
+            if let responseString = responseString {
+                print("======> within call accept response \n")
+                print("response:", responseString)
+              
+           }
+            print("DIC : \(Dic)")
+        }
+    }
+    func CallEnd_API(vid : Int ,userid : Int )
+    {
+        print("======> within call end")
+        let Url = "\(Constants.serverURL)/video-call/end-call"
+        
+        let Dic: [String: Any] = [
+            "video_call_id": vid,
+              "user_id": userid ]
+    
+        serverWrapper.insertData(baseUrl: Url,  userDictionary: Dic) { responseString, error in
+            if let error = error {
+                print("===>call end Error:", error)
+               }
+
+            if let responseString = responseString {
+                print("======> within call end response \n")
+                print("response:", responseString)
+              
+           }
+            print("DIC : \(Dic)")
+        }
+    }
+    var v_id = 0
     override func viewDidLoad() {
         super.viewDidLoad()
+        
          userID = UserDefaults.standard.string(forKey: "userID")!
+        v_id = UserDefaults.standard.integer(forKey: "vid")
+        
+        print("====>>> shared socket id \(v_id)")
+        self.CallAccept_API(vid: v_id, userid: Int(self.userID)!)
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleMessage(_:)), name: .didReceiveMessage, object: nil)
             
@@ -185,7 +233,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         msgview_with_Btns.layer.zPosition = 1
         OutLetSwitchCam.layer.zPosition = 1
         
-        
+       
+       
       
     }
     
@@ -292,7 +341,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
     @objc func hangupButtonTapped(){
         print("hangup Tapped")
-        
+      CallEnd_API(vid: self.v_id, userid: Int(self.userID)!)
 
         let endCallData: [String: Any] = [
             "type": "call_ended",
@@ -307,8 +356,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
                 guard let self = self else { return }
                 self.webRTCClient.delegate = nil // Remove delegate
                 self.isReciever = 0
-                let v_id = self.CalingViewController.videocall_id
-                self.CallEnd_API(vid: v_id, userid: Int(self.userID)!)
+                
+               
                 self.disconnectWebRTC()
                 
             }
@@ -320,32 +369,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     }
     
     
-    func CallEnd_API(vid : Int ,userid : Int )
-    {
-        let Url = "\(Constants.serverURL)/video-call/end-call"
-        
-        let Dic: [String: Any] = [
-            "video_call_id": vid,
-              "user_id": userid ]
-    
-        serverWrapper.insertData(baseUrl: Url,  userDictionary: Dic) { responseString, error in
-            if let error = error {
-                print("\n\nError:", error)
-               }
-
-            if let responseString = responseString {
-                print("response:", responseString)
-                
-                
-                guard let responseData = responseString.data(using: .utf8) else {
-                    print("Error converting response data to UTF-8")
-                    return
-                }
-
-           }
-
-        }
-    }
+   
     
         func disconnectWebRTC() {
             if webRTCClient.isConnected {

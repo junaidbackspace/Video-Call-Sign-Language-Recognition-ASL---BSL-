@@ -120,6 +120,9 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
     }
 }
 
+    var type: String?
+    var from: String?
+    var vid : Int?
     var checkReciever = 0
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
        
@@ -135,9 +138,7 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
             .components(separatedBy: ",")
 
         // Iterate over key-value pairs
-        var type: String?
-        var from: String?
-
+        
         
         for component in components {
             // Split each component by colon
@@ -162,12 +163,38 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
                     break
                 }
             }
+            else {
+               
+                // Remove surrounding quotes and whitespace
+                let key = keyValue[0].trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\"", with: "")
+                let value = keyValue[1].trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\"", with: "")
+                let videocallID = keyValue[2].trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\"", with: "")
+                
+                // Store key-value pair in variables
+                switch key {
+                case "type":
+                    type = value
+                case "from":
+                    from = value
+                case "to":
+                    from = value
+                case "sessionDescription":
+                    from = value
+                case "vid":
+                    vid = Int(videocallID)
+                    UserDefaults.standard.setValue(vid, forKey: "vid")
+                default:
+                    break
+                }
+            }
         }
+        print("\n Json String : \(jsonString)")
 
         if type == "incoming_call"{
             checkReciever = 1
             print("incoming call From: \(from)")
             callerid = from!
+            
             receiveIncomingCall()
            
         }
@@ -251,23 +278,26 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
     
         
 var callerid = ""
-
+var videocallid = 0
 
 func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
     print("Received data: \(data)")
 }
     
     
-    func initiateCall(with friendId: String) {
-       
+    func initiateCall(with friendId: String , videocall_id : Int) {
+        if !self.socket.isConnected{
         self.connectSocket()
+        }
        userID = String(UserDefaults.standard.integer(forKey: "userID"))
         // Send call initiation message
-        let callData: [String: Any] = ["type": "call", "from": userID, "to": friendId]
+        let callData: [String: Any] = ["type": "call", "from": userID, "to": friendId , "videocallid": String(videocall_id)]
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: callData, options: [])
             socket.write(data: jsonData)
-            print("local side initiating call")
+            videocallid = Int(videocallid)
+            print("local side initiating call: \(callData)")
+            
         } catch {
             print("Error serializing call initiation data: \(error)")
         }
