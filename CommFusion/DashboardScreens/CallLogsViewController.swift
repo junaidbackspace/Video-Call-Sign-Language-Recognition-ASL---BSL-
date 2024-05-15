@@ -122,7 +122,7 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
         var imageName = ""
         var tintColor: UIColor = .blue // Default tint color
 
-        if iscaller == 0 {
+        if iscaller != 0 {
             print("\n\nin red color")
             imageName = "arrow.up.backward"
             tintColor = .red
@@ -148,9 +148,10 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
         return 80
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("no of callers are \(self.contacts.count)")
+        print("no of calls are \(self.contacts.count)")
         return self.contacts.count
     }
+    
     
     var n = 0
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -178,9 +179,7 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
         }
         
-        let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "MMM dd, h:mm a"
-            let formattedDate = dateFormatter.string(from: Date())
+        
         
         cell?.callTime.text = contacts[indexPath.row].Call_StartTime
         
@@ -193,7 +192,7 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
         
         
         let base = "\(Constants.serverURL)\(contacts[indexPath.row].ProfilePicture)"
-        print("\n url is: \(base)")
+        
         if let url = URL(string: base) {
             cell?.profilepic.kf.setImage(with: url, placeholder: UIImage(named: "No image found"))
             cell?.profilepic?.layer.cornerRadius = 28
@@ -268,10 +267,28 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
            
 }
                
-    
+    @objc func swipedDown(_ gesture: UISwipeGestureRecognizer) {
+           if gesture.direction == .down {
+            //Displaying Refreshing
+            showLoadingView()
+            print("Refreshing online contacts...")
+         DispatchQueue.global().async {
+             
+                 self.contacts = []
+                self.fetchCallHistory()
+                
+         }
+            
+           }
+       }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(swipedDown(_:)))
+        swipeDown.direction = .down
+             view.addGestureRecognizer(swipeDown)
+        
         DispatchQueue.global().async {
             DispatchQueue.main.async {
                 self.showLoadingView()
@@ -338,7 +355,7 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         
         let Url = "\(Constants.serverURL)/videocallparticipants/\(userID)/calls"
-        print("URL: "+Url)
+        
       
         let url = URL(string: Url)!
         serverWrapper.fetchData(baseUrl: url, structure: [CallLogs].self) { UserCallHistory, error in
@@ -347,7 +364,7 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
                 self.hideLoadingView()
                
             } else if let jsonData = UserCallHistory {
-                print("Call History Data:", jsonData)
+                
                 self.hideLoadingView()
                 self.processContactsData(jsonData)
             } else {
@@ -360,6 +377,16 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     
     func processContactsData(_ jsonArray: [CallLogs]) {
+        
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        inputFormatter.timeZone = TimeZone(abbreviation: "UTC")
+
+        // Date Formatter to output the user-friendly date strings
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateFormat = "MMM d, yyyy 'at' h:mm a"
+        outputFormatter.timeZone = TimeZone.current
+        
             for userObject in jsonArray {
                 
                 let call_id = userObject.VideoCallId
@@ -368,15 +395,34 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
                 let lastName = userObject.OtherParticipantLname
                 let profilePicture = userObject.ProfilePicture
                 let iscaller = userObject.isCaller
-                let startTime = userObject.StartTime
-                let endTime = userObject.EndTime
+               
                 let userid = userObject.user_id
                 let username = userObject.user_name
+                var  start_Time = ""
+                var  end_Time = ""
+                if let startTime = inputFormatter.date(from: userObject.StartTime){
+                   
+                    let startUserFriendlyString = outputFormatter.string(from: startTime)
+                    
+                    
+                     start_Time = startUserFriendlyString
+//                     end_Time = startUserFriendlyString
+                    
+//                    print("End Time: \(startUserFriendlyString)")
+                } else {
+                    let inputFormatter = DateFormatter()
+                    inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
+                    inputFormatter.timeZone = TimeZone(abbreviation: "UTC")
+                    if let startTime = inputFormatter.date(from: userObject.StartTime){
+                       
+                        let startUserFriendlyString = outputFormatter.string(from: startTime)
+                         start_Time = startUserFriendlyString
+                    
+                    }
+                   
+                }
 
-                // Now you can use these properties as needed
-                print("user id : \(userid), Fname: \(firstName), OnlineStatus: \(onlineStatus), IScaller: \(iscaller), ProfilePic: \(profilePicture)")
-
-            
+                
                 
                 // Optionally, you can create a User object and append it to contacts array
                 var user = User()
@@ -386,7 +432,7 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
                 user.ProfilePicture = profilePicture
                 user.OnlineStatus = onlineStatus
                 user.isCaller = iscaller
-                user.Call_StartTime = startTime
+                user.Call_StartTime = start_Time
                
                 if let endtime = user.Call_EndTime {
                     

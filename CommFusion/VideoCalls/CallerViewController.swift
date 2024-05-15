@@ -45,6 +45,7 @@ class CallerViewController: UIViewController {
             "caller_id": caller,
               "receiver_id": reciver ]
     
+        print("\n\t\t----> \(Dic)")
         serverWrapper.insertData(baseUrl: Url,  userDictionary: Dic) { responseString, error in
             if let error = error {
                 print("\n\nError:", error)
@@ -123,7 +124,7 @@ class CallerViewController: UIViewController {
         //calling api's then sockets
         DispatchQueue.global().async { [self] in
             Call_StartAPI(caller: callerid, reciver: recieverid)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 
                 let friendid = String(recieverid)
                 print("here is reciver id  : \(friendid)")

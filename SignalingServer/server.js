@@ -70,7 +70,7 @@ ws.on('close', function () {
             
             //call initiated
             if (data.type === 'call') {
-                handleCall(data.from, data.to);
+                handleCall(data.from, data.to , data.videocallid);
                 
             }
                     
@@ -177,7 +177,7 @@ ws.on('close', function () {
 
 
 // Function to handle call initiation
-function handleCall(from, to) {
+function handleCall(from, to,vid) {
     // Check if the recipient (to) is connected
     if (clients.has(to)) {
         const recipient = clients.get(to); //friend
@@ -189,8 +189,8 @@ function handleCall(from, to) {
             return;
         }else{
         caller.send(JSON.stringify({ type: 'ringing', to: to }));
-        recipient.send(JSON.stringify({ type: 'incoming_call', from: from }));
-        console.log(`Initiating call from '${from}' to '${to}' videocall id : '${videocallid}'`);
+        recipient.send(JSON.stringify({ type: 'incoming_call', from: from , vid: vid}));
+        console.log(`Initiating call from '${from}' to '${to}' videocall id : '${vid}'`);
         return `Initiating call from '${from}' to '${to}'`;
         }
     } else {

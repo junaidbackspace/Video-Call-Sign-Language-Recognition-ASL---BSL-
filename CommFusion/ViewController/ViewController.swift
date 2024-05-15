@@ -39,7 +39,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     }
     
    
-    @IBOutlet weak var OutLetCall: UIButton!
+    @IBOutlet weak var OutLetMute: UIButton!
     @IBOutlet weak var OutLetHangUp: UIButton!
     @IBOutlet weak var OutLetFreshMsg: UIButton!
     @IBOutlet weak var OutLetSwitchCam: UIButton!
@@ -50,10 +50,19 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     @IBAction func btn_SwitchCamera(_ sender: Any) {
         webRTCClient.switchCameraPosition()
     }
-    @IBAction func btnCall(_ sender: Any) {
-        print("Entered in CallUp")
-      
-//        callButtonTapped()
+    var ismute = true
+    @IBAction func btnMute(_ sender: Any) {
+        print("Entered in Mute")
+        webRTCClient.toggleAudioMute(muted: ismute)
+        ismute = !ismute
+        if ismute{
+            OutLetMute.setBackgroundImage(UIImage(systemName: "speaker.slash.fill") , for: .normal)
+        }
+        else{
+            OutLetMute.setBackgroundImage(UIImage(systemName: "speaker.wave.2.fill") , for: .normal)
+        }
+        print("is mute : \(ismute)")
+
     }
     
     @IBAction func btnHangupCall(_ sender: Any) {
@@ -128,7 +137,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
     func CallAccept_API(vid : Int ,userid : Int )
     {
-        print("======> within call accept")
+      
         let Url = "\(Constants.serverURL)/video-call/accept"
         
         let Dic: [String: Any] = [
@@ -141,7 +150,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
                }
 
             if let responseString = responseString {
-                print("======> within call accept response \n")
+              
                 print("response:", responseString)
               
            }
@@ -150,7 +159,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     }
     func CallEnd_API(vid : Int ,userid : Int )
     {
-        print("======> within call end")
+       
         let Url = "\(Constants.serverURL)/video-call/end-call"
         
         let Dic: [String: Any] = [
@@ -163,7 +172,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
                }
 
             if let responseString = responseString {
-                print("======> within call end response \n")
+                
                 print("response:", responseString)
               
            }
@@ -175,10 +184,9 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         super.viewDidLoad()
         
          userID = UserDefaults.standard.string(forKey: "userID")!
-        v_id = UserDefaults.standard.integer(forKey: "vid")
+    
         
-        print("====>>> shared socket id \(v_id)")
-        self.CallAccept_API(vid: v_id, userid: Int(self.userID)!)
+       
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleMessage(_:)), name: .didReceiveMessage, object: nil)
             
@@ -215,7 +223,11 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         self.socket.connect()
         
         if isReciever == 0{
+            
         self.callButtonTapped()
+            print("====>>> shared socket id \(v_id) , Friend id : \(callFriendId)")
+            self.CallAccept_API(vid: v_id, userid: Int(self.userID)!)
+            self.CallAccept_API(vid: v_id, userid: Int(self.callFriendId)!)
         }
         //call reciever accepted call
         else{
@@ -225,7 +237,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         
 
         
-        OutLetCall.layer.zPosition = 1
+        OutLetMute.layer.zPosition = 1
         OutLetHangUp .layer.zPosition = 1
         OutLetOldMsg.layer.zPosition = 1
         OutLetFreshMsg.layer.zPosition = 1
@@ -306,7 +318,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         localVideoView.addSubview(localVideoViewButton)
         
      
-        remoteVideoViewContainter.addSubview(OutLetCall)
+        remoteVideoViewContainter.addSubview(OutLetMute)
         remoteVideoViewContainter.addSubview(OutLetHangUp)
         remoteVideoViewContainter.addSubview(OutLetSwitchCam)
 

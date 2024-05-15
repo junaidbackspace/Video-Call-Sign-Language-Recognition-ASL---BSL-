@@ -182,13 +182,13 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
                     from = value
                 case "vid":
                     vid = Int(videocallID)
-                    UserDefaults.standard.setValue(vid, forKey: "vid")
+                    
                 default:
                     break
                 }
             }
         }
-        print("\n Json String : \(jsonString)")
+       
 
         if type == "incoming_call"{
             checkReciever = 1
@@ -296,6 +296,7 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
             let jsonData = try JSONSerialization.data(withJSONObject: callData, options: [])
             socket.write(data: jsonData)
             videocallid = Int(videocallid)
+            
             print("local side initiating call: \(callData)")
             
         } catch {

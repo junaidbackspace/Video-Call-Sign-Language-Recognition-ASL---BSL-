@@ -365,14 +365,16 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
 
         // Set audio session category to allow playback through the loudspeaker
         do {
-            // Set the appropriate AVAudioSession category and mode for video chat
+//             Set the appropriate AVAudioSession category and mode for video chat
             try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .videoChat, options: [.allowBluetooth, .allowBluetoothA2DP, .defaultToSpeaker])
             
             // Set the audio session active
 //            try AVAudioSession.sharedInstance().setActive(true)
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
-            try AVAudioSession.sharedInstance().setActive(true)
+            
 //            try AVAudioSession.sharedInstance().overrideOutputAudioPort(.speaker)
+//            try AVAudioSession.sharedInstance().setActive(true)
+            try AVAudioSession.sharedInstance().overrideOutputAudioPort(.speaker)
+            try AVAudioSession.sharedInstance().setActive(true)
            
         } catch {
             print("Error setting up audio session: \(error.localizedDescription)")
@@ -381,7 +383,14 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         return audioTrack
     }
 
-    
+    func toggleAudioMute(muted: Bool) {
+       
+print("\n\noutside audiotrack to mute")
+        
+            print("\n\n====> inside audiotrack to mute")
+        self.localAudioTrack.isEnabled = !muted
+        
+    }
 
 
     // Function to set audio to loudspeaker
