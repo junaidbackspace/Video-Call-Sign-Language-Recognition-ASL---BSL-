@@ -238,10 +238,10 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
             self.peerConnection = setupPeerConnection()
             self.peerConnection!.delegate = self
             if self.channels.video {
-                self.peerConnection!.add(localVideoTrack, streamIds: ["stream0"])
+                self.peerConnection!.add(localVideoTrack, streamIds: ["stream-0"])
             }
             if self.channels.audio {
-                self.peerConnection!.add(localAudioTrack, streamIds: ["stream0"])
+                self.peerConnection!.add(localAudioTrack, streamIds: ["stream-0"])
             }
             if self.channels.datachannel {
                 self.dataChannel = self.setupDataChannel()
@@ -364,7 +364,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         
         // Create the audio source and audio track
         let audioSource = peerConnectionFactory.audioSource(with: audioConstraints)
-        let audioTrack = peerConnectionFactory.audioTrack(with: audioSource, trackId: "audio01")
+        let audioTrack = peerConnectionFactory.audioTrack(with: audioSource, trackId: "audio\(UserDefaults.standard.string(forKey: "userID")!)")
         
         // Set up the audio session to ensure the use of the loudspeaker
         do {
@@ -376,14 +376,27 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
                     try audioSession.setActive(true)
                     
             
-           
+            if let bottomMic = audioSession.availableInputs?.first(where: { $0.portType == .builtInMic }) {
+                // Bottom microphone is available, set it as the preferred input
+                do {
+                    try audioSession.setPreferredInput(bottomMic)
+                } catch {
+                    // Handle error setting preferred input
+                    print("Error setting preferred input: \(error.localizedDescription)")
+                }
+            } else {
+                // Bottom microphone is not available, provide fallback behavior
+                print("Bottom microphone is not available. Using default audio input.")
+            }
             // Force audio routing multiple times to ensure it is applied
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                         do {
                             if let bottomMic = audioSession.availableInputs?.first(where: { $0.portType == .builtInMic }) {
                                        try audioSession.setPreferredInput(bottomMic)
-                                    try audioSession.overrideOutputAudioPort(.speaker)
+                                        try audioSession.overrideOutputAudioPort(.speaker)
+                                   
                                    }
+                            
                             self.debugAudioRouting()
                         } catch {
                             print("Error forcing audio output: \(error.localizedDescription)")
