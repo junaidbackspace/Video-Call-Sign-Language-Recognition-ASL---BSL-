@@ -205,7 +205,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         }
         if self.channels.audio {
             print("adding Audio in  peer")
-            self.peerConnection!.add(localAudioTrack, streamIds: ["stream1"])
+            self.peerConnection!.add(localAudioTrack, streamIds: ["stream0"])
         }
         if self.channels.datachannel {
             print("Setting data Channel")
@@ -238,10 +238,10 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
             self.peerConnection = setupPeerConnection()
             self.peerConnection!.delegate = self
             if self.channels.video {
-                self.peerConnection!.add(localVideoTrack, streamIds: ["stream-0"])
+                self.peerConnection!.add(localVideoTrack, streamIds: ["stream0"])
             }
             if self.channels.audio {
-                self.peerConnection!.add(localAudioTrack, streamIds: ["stream-1"])
+                self.peerConnection!.add(localAudioTrack, streamIds: ["stream0"])
             }
             if self.channels.datachannel {
                 self.dataChannel = self.setupDataChannel()
@@ -359,33 +359,62 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     
    
     private func createAudioTrack() -> RTCAudioTrack {
+        // Initialize the audio constraints
         let audioConstraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
+        
+        // Create the audio source and audio track
         let audioSource = peerConnectionFactory.audioSource(with: audioConstraints)
         let audioTrack = peerConnectionFactory.audioTrack(with: audioSource, trackId: "audio01")
-
-        // Set audio session category to allow playback through the loudspeaker
+        
+        // Set up the audio session to ensure the use of the loudspeaker
         do {
-//             Set the appropriate AVAudioSession category and mode for video chat
-            try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .videoChat, options: [.allowBluetooth, .allowBluetoothA2DP, .defaultToSpeaker])
+            let audioSession = AVAudioSession.sharedInstance()
+                    
+                    // Configure the audio session category, mode, and options
+                    try audioSession.setCategory(.playAndRecord, mode: .videoChat, options: [.defaultToSpeaker, .allowBluetooth, .allowBluetoothA2DP, .mixWithOthers])
+                   
+                    try audioSession.setActive(true)
+                    
             
-            // Set the audio session active
-//            try AVAudioSession.sharedInstance().setActive(true)
-            
-//            try AVAudioSession.sharedInstance().overrideOutputAudioPort(.speaker)
-//            try AVAudioSession.sharedInstance().setActive(true)
-            try AVAudioSession.sharedInstance().overrideOutputAudioPort(.speaker)
-            try AVAudioSession.sharedInstance().setActive(true)
            
+            // Force audio routing multiple times to ensure it is applied
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        do {
+                            if let bottomMic = audioSession.availableInputs?.first(where: { $0.portType == .builtInMic }) {
+                                       try audioSession.setPreferredInput(bottomMic)
+                                    try audioSession.overrideOutputAudioPort(.speaker)
+                                   }
+                            self.debugAudioRouting()
+                        } catch {
+                            print("Error forcing audio output: \(error.localizedDescription)")
+                        }
+                    }
+                    // Debug print to verify the audio route
+                    print("Audio session configured successfully.")
+            debugAudioRouting()
+            
         } catch {
+            // Handle any errors during audio session configuration
             print("Error setting up audio session: \(error.localizedDescription)")
         }
-
+        
         return audioTrack
+    }
+
+    
+    private func debugAudioRouting() {
+        let audioSession = AVAudioSession.sharedInstance()
+        
+        // Print the current audio route information
+        let currentRoute = audioSession.currentRoute
+        for output in currentRoute.outputs {
+            print("Current audio output: \(output.portType.rawValue) - \(output.portName)")
+        }
     }
 
     func toggleAudioMute(muted: Bool) {
        
-print("\n\noutside audiotrack to mute")
+        print("\n\noutside audiotrack to mute")
         
             print("\n\n====> inside audiotrack to mute")
         self.localAudioTrack.isEnabled = !muted

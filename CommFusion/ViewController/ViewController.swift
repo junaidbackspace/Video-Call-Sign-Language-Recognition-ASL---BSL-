@@ -17,7 +17,8 @@ import UIKit
 
 class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate, CameraSessionDelegate {
   
-    
+    var isAutoLockEnabledBeforeCall: Bool = true
+
     let font_sizeDefault = UserDefaults.standard
     let caption_opacityDefault = UserDefaults.standard
    
@@ -118,6 +119,9 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         }
         
         deinit {
+            
+           //Screen lock release
+         restoreAutoLock()
             NotificationCenter.default.removeObserver(self, name: .didReceiveMessage, object: nil)
                
             NotificationCenter.default.removeObserver(self)
@@ -180,10 +184,27 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
             print("DIC : \(Dic)")
         }
     }
+    
+    func disableAutoLock() {
+           // Save the current auto-lock state
+           isAutoLockEnabledBeforeCall = UIApplication.shared.isIdleTimerDisabled
+           
+           // Disable auto-lock
+           UIApplication.shared.isIdleTimerDisabled = true
+       }
+       
+       func restoreAutoLock() {
+           // Restore auto-lock to its previous state
+           UIApplication.shared.isIdleTimerDisabled = isAutoLockEnabledBeforeCall
+       }
+    
     var v_id = 0
+    
+  
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        disableAutoLock()
          userID = UserDefaults.standard.string(forKey: "userID")!
     
         
