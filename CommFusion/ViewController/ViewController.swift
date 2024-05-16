@@ -39,6 +39,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     }
     
    
+    
     @IBOutlet weak var OutLetMute: UIButton!
     @IBOutlet weak var OutLetHangUp: UIButton!
     @IBOutlet weak var OutLetFreshMsg: UIButton!
@@ -46,7 +47,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     @IBOutlet weak var OutLetOldMsg: UIButton!
     @IBOutlet weak var lblmsg: UILabel!
     @IBOutlet weak var msgview_with_Btns: UIView!
-    
+   
     @IBAction func btn_SwitchCamera(_ sender: Any) {
         webRTCClient.switchCameraPosition()
     }
@@ -246,9 +247,21 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         OutLetSwitchCam.layer.zPosition = 1
         
        
-       
+        
       
     }
+    
+    @objc func dragview(_ gestureRecognizer: UIPanGestureRecognizer) {
+            guard let draggedView = gestureRecognizer.view else { return }
+            
+            let translation = gestureRecognizer.translation(in: self.view)
+            
+            if gestureRecognizer.state == .changed {
+                draggedView.center = CGPoint(x: draggedView.center.x + translation.x,
+                                              y: draggedView.center.y + translation.y)
+                gestureRecognizer.setTranslation(CGPoint.zero, in: self.view)
+            }
+        }
     
     override func viewDidAppear(_ animated: Bool) {
         self.setupUI()
@@ -294,7 +307,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
        
         
         let remoteVideoViewContainter = UIView(frame: CGRect(x: 0, y: 0, width: ScreenSizeUtil.width(), height: ScreenSizeUtil.height()))
-        remoteVideoViewContainter.backgroundColor = .gray
+        remoteVideoViewContainter.backgroundColor = .white
         self.view.addSubview(remoteVideoViewContainter)
         
         let remoteVideoView = webRTCClient.remoteVideoView()
@@ -324,6 +337,10 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
 
         remoteVideoViewContainter.addSubview(msgview_with_Btns)
         msgview_with_Btns.addSubview(OutLetFreshMsg)
+        
+        //Adding drag Gesture in local video view
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(dragview(_:)))
+        localVideoView.addGestureRecognizer(panGesture)
         
     }
     var reciver = 0
