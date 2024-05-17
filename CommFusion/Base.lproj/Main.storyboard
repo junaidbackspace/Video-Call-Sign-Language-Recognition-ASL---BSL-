@@ -1465,9 +1465,8 @@
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ofz-vU-WE4">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ofz-vU-WE4">
                                 <rect key="frame" x="0.0" y="50" width="414" height="686"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="c2" rowHeight="80" id="54c-Hc-FFO" customClass="DetailedContactsTableViewCell" customModule="CommFusion" customModuleProvider="target">
@@ -1543,7 +1542,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1oF-dX-7u3">
-                                <rect key="frame" x="265" y="16" width="36" height="41"/>
+                                <rect key="frame" x="265" y="16" width="36" height="39"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" backgroundImage="addcontact"/>
                                 <connections>
@@ -1560,7 +1559,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5OT-KI-bsv">
-                                <rect key="frame" x="362" y="22.333333333333485" width="27" height="27.000000000000011"/>
+                                <rect key="frame" x="362" y="22" width="27" height="26"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" backgroundImage="gearshape" catalog="system"/>
@@ -1571,9 +1570,16 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="MgG-hG-BmK"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="ofz-vU-WE4" firstAttribute="top" secondItem="MgG-hG-BmK" secondAttribute="top" constant="50" id="0qj-AP-Vy1"/>
+                            <constraint firstItem="ofz-vU-WE4" firstAttribute="centerX" secondItem="jdH-eM-QDR" secondAttribute="centerX" id="3ee-bq-2u0"/>
+                            <constraint firstItem="ofz-vU-WE4" firstAttribute="leading" secondItem="MgG-hG-BmK" secondAttribute="leading" id="QBE-kF-AhO"/>
+                            <constraint firstItem="ofz-vU-WE4" firstAttribute="bottom" secondItem="MgG-hG-BmK" secondAttribute="bottom" id="k9j-hD-cxe"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="tx3-rZ-R32"/>
                     <connections>
+                        <outlet property="tableViewTopConstraint" destination="0qj-AP-Vy1" id="IVs-oZ-sWt"/>
                         <outlet property="tble" destination="ofz-vU-WE4" id="QVV-Cq-tGD"/>
                     </connections>
                 </viewController>
