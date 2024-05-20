@@ -218,43 +218,77 @@ class UserProfileViewController: UIViewController, UITableViewDataSource, UITabl
 
     
     func processContactsData(_ jsonArray: [CallLogs]) {
-            for userObject in jsonArray {
-                
-                let call_id = userObject.VideoCallId
-                let onlineStatus = userObject.OnlineStatus
-                let firstName = userObject.OtherParticipantFname
-                let lastName = userObject.OtherParticipantLname
-                let profilePicture = userObject.ProfilePicture
-                let iscaller = userObject.isCaller
-                let startTime = userObject.StartTime
-                let endTime = userObject.EndTime
-
-                // Now you can use these properties as needed
-                print("Call id : \(call_id), Fname: \(firstName), OnlineStatus: \(onlineStatus), IScaller: \(iscaller), ProfilePic: \(profilePicture)")
-
             
                 
-                // Optionally, you can create a User object and append it to contacts array
-                var user = User()
-                user.CallId = call_id
-                user.Fname = firstName
-                user.Lname = lastName
-                user.ProfilePicture = profilePicture
-                user.OnlineStatus = onlineStatus
-                user.isCaller = iscaller
-                user.Call_StartTime = startTime
-                if let endtime = user.Call_EndTime {
-                    
-                    user.Call_EndTime = endtime
-                }
+                let inputFormatter = DateFormatter()
+                inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+                inputFormatter.timeZone = TimeZone(abbreviation: "UTC")
 
-                else{
-                    user.Call_EndTime = "not ended"
-                }
-                self.contacts.append(user)
-            }
+                // Date Formatter to output the user-friendly date strings
+                let outputFormatter = DateFormatter()
+                outputFormatter.dateFormat = "MMM d, yyyy 'at' h:mm a"
+                outputFormatter.timeZone = TimeZone.current
+                
+                    for userObject in jsonArray {
+                        
+                        let call_id = userObject.VideoCallId
+                        let onlineStatus = userObject.OnlineStatus
+                        let firstName = userObject.OtherParticipantFname
+                        let lastName = userObject.OtherParticipantLname
+                        let profilePicture = userObject.ProfilePicture
+                        let iscaller = userObject.isCaller
+                       
+                        let userid = userObject.user_id
+                        let username = userObject.user_name
+                        var  start_Time = ""
+                        var  end_Time = ""
+                        if let startTime = inputFormatter.date(from: userObject.StartTime){
+                           
+                            let startUserFriendlyString = outputFormatter.string(from: startTime)
+                            
+                            
+                             start_Time = startUserFriendlyString
+        //                     end_Time = startUserFriendlyString
+                            
+        //                    print("End Time: \(startUserFriendlyString)")
+                        } else {
+                            let inputFormatter = DateFormatter()
+                            inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
+                            inputFormatter.timeZone = TimeZone(abbreviation: "UTC")
+                            if let startTime = inputFormatter.date(from: userObject.StartTime){
+                               
+                                let startUserFriendlyString = outputFormatter.string(from: startTime)
+                                 start_Time = startUserFriendlyString
+                            
+                            }
+                           
+                        }
+
+                        
+                        
+                        // Optionally, you can create a User object and append it to contacts array
+                        var user = User()
+                        user.CallId = call_id
+                        user.Fname = firstName
+                        user.Lname = lastName
+                        user.ProfilePicture = profilePicture
+                        user.OnlineStatus = onlineStatus
+                        user.isCaller = iscaller
+                        user.Call_StartTime = start_Time
+                       
+                        if let endtime = user.Call_EndTime {
+                            
+                            user.Call_EndTime = endtime
+                        }
+
+                        else{
+                            user.Call_EndTime = "not ended"
+                        }
+                        user.UserId = userid
+                        user.Username = username
+                        self.contacts.append(user)
         
-
+                    }
         
         DispatchQueue.main.async {
             self.tble.dataSource = self

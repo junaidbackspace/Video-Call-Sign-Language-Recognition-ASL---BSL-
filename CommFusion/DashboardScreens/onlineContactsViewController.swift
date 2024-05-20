@@ -363,7 +363,9 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
     
     serverWrapper.putRequest(urlString: Url, requestBody: requestBody) { data, response, error in
         if let error = error {
-                print("Error: \(error)")
+                print("Error>>>>>> \(error)")
+            self.noFriendsLabel.text = "Network Problem..."
+            self.noFriendsLabel.isHidden = false
                 return
             }
 
@@ -494,7 +496,31 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
         let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(swipedDown(_:)))
         swipeDown.direction = .down
              view.addGestureRecognizer(swipeDown)
+        
+        
+        
+                noFriendsLabel.text = "You don't have any friends yet."
+                noFriendsLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+                noFriendsLabel.textColor = .gray
+                noFriendsLabel.textAlignment = .center
+                noFriendsLabel.numberOfLines = 0
+                
+                // Add the label to the view
+                noFriendsLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(noFriendsLabel)
+        
+                
+                // Center the label in the view
+                NSLayoutConstraint.activate([
+                    noFriendsLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+                    noFriendsLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+                    noFriendsLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+                    noFriendsLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20)
+                ])
       }
+    
+    let noFriendsLabel = UILabel()
+    
     deinit {
             // Unsubscribe from the notification
             NotificationCenter.default.removeObserver(self, name: .openViewControllerNotification, object: nil)
@@ -530,17 +556,18 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
             print("User ID not found")
             return
         }
-        
+        self.noFriendsLabel.isHidden = true
         let Url = "\(Constants.serverURL)/contacts/\(userID)/online-contacts"
         
       
         let url = URL(string: Url)!
         serverWrapper.fetchData(baseUrl: url, structure: [ContactsUser].self) { contactsUsers, error in
             if let error = error {
-                print("Error:", error.localizedDescription)
+                print("Error-------", error.localizedDescription)
+                
                
             } else if let jsonData = contactsUsers {
-               
+                
                 self.processContactsData(jsonData)
             } else {
                 print("No data received from the server")
@@ -551,6 +578,9 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
 
     func processContactsData(_ jsonArray: [ContactsUser]) {
             for userObject in jsonArray {
+                
+                self.noFriendsLabel.isHidden = true
+                
                 let bioStatus = userObject.bio_status
                 let onlineStatus = userObject.online_status
                 let firstName = userObject.fname
@@ -583,7 +613,14 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
             self.tble.dataSource = self
             self.tble.delegate = self
             self.contacts = self.sortContactsByPinned(contacts: self.contacts, pinned: self.pinned_contacts)
-            
+            if self.contacts.count == 0 {
+                
+                self.noFriendsLabel.isHidden = false
+                self.noFriendsLabel.text = "You don't have any friends yet."
+            }
+            else{
+                self.noFriendsLabel.isHidden = true
+            }
             self.tble.reloadData()
         }
     }
@@ -768,7 +805,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
            
            serverWrapper.putRequest(urlString: Url, requestBody: requestBody) { data, response, error in
                if let error = error {
-                       print("Error: \(error)")
+                       print("Error++++++ \(error)")
                        return
                    }
 
