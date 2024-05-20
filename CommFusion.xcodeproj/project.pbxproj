@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1428C7EA43EFCE25046F621F /* Pods_CommFusion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11D5D81FAF37FF45D59EF100 /* Pods_CommFusion.framework */; };
 		378B38D82365C2A8002C5E8B /* CameraFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378B38D72365C2A8002C5E8B /* CameraFilter.swift */; };
 		650950672B945FC400035C85 /* APIWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650950662B945FC400035C85 /* APIWrapper.swift */; };
 		6509506B2B9488AD00035C85 /* UserStrct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6509506A2B9488AD00035C85 /* UserStrct.swift */; };
@@ -58,7 +59,6 @@
 		65E207862B73FA3100978CAC /* leassonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E207852B73FA3100978CAC /* leassonsViewController.swift */; };
 		65E2078A2B74061100978CAC /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E207892B74061000978CAC /* UserProfileViewController.swift */; };
 		65E813A72B98C726006424B6 /* ServerIP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E813A62B98C726006424B6 /* ServerIP.swift */; };
-		A288D7A59A6949D373F59DA6 /* Pods_SimpleWebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB3CB6A59558C3702A6AE546 /* Pods_SimpleWebRTC.framework */; };
 		AF15C0B221E422D9005B4ED6 /* UIViewExtention.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF15C0B121E422D9005B4ED6 /* UIViewExtention.swift */; };
 		AF15C0B521E4F1F7005B4ED6 /* SignalingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF15C0B421E4F1F7005B4ED6 /* SignalingMessage.swift */; };
 		AF15C0B721E54EB1005B4ED6 /* SignalingCandidate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF15C0B621E54EB1005B4ED6 /* SignalingCandidate.swift */; };
@@ -112,6 +112,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		11D5D81FAF37FF45D59EF100 /* Pods_CommFusion.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CommFusion.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		378B38D72365C2A8002C5E8B /* CameraFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFilter.swift; sourceTree = "<group>"; };
 		650950662B945FC400035C85 /* APIWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIWrapper.swift; sourceTree = "<group>"; };
 		6509506A2B9488AD00035C85 /* UserStrct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStrct.swift; sourceTree = "<group>"; };
@@ -164,6 +165,8 @@
 		65E207892B74061000978CAC /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		65E813A62B98C726006424B6 /* ServerIP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerIP.swift; sourceTree = "<group>"; };
 		7F4274DC71E55AEEBAA4537D /* Pods-SimpleWebRTC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleWebRTC.release.xcconfig"; path = "Target Support Files/Pods-SimpleWebRTC/Pods-SimpleWebRTC.release.xcconfig"; sourceTree = "<group>"; };
+		8B9B9136542F7B503D4B4F31 /* Pods-CommFusion.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CommFusion.debug.xcconfig"; path = "Target Support Files/Pods-CommFusion/Pods-CommFusion.debug.xcconfig"; sourceTree = "<group>"; };
+		A2D8DC91A89459132F7F4038 /* Pods-CommFusion.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CommFusion.release.xcconfig"; path = "Target Support Files/Pods-CommFusion/Pods-CommFusion.release.xcconfig"; sourceTree = "<group>"; };
 		AF15C0B121E422D9005B4ED6 /* UIViewExtention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtention.swift; sourceTree = "<group>"; };
 		AF15C0B421E4F1F7005B4ED6 /* SignalingMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalingMessage.swift; sourceTree = "<group>"; };
 		AF15C0B621E54EB1005B4ED6 /* SignalingCandidate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalingCandidate.swift; sourceTree = "<group>"; };
@@ -191,7 +194,6 @@
 		AFBCD53521E8F63A00694C14 /* like_border.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = like_border.png; sourceTree = "<group>"; };
 		AFF1031B21E569B60011C1FC /* sample.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = sample.mp4; sourceTree = "<group>"; };
 		B5DACD71B3184D32AC0E6486 /* Pods-SimpleWebRTC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleWebRTC.debug.xcconfig"; path = "Target Support Files/Pods-SimpleWebRTC/Pods-SimpleWebRTC.debug.xcconfig"; sourceTree = "<group>"; };
-		EB3CB6A59558C3702A6AE546 /* Pods_SimpleWebRTC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleWebRTC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -199,7 +201,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A288D7A59A6949D373F59DA6 /* Pods_SimpleWebRTC.framework in Frameworks */,
+				1428C7EA43EFCE25046F621F /* Pods_CommFusion.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -373,7 +375,7 @@
 		A81C006118146DBF4BE7369C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				EB3CB6A59558C3702A6AE546 /* Pods_SimpleWebRTC.framework */,
+				11D5D81FAF37FF45D59EF100 /* Pods_CommFusion.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -534,6 +536,8 @@
 			children = (
 				B5DACD71B3184D32AC0E6486 /* Pods-SimpleWebRTC.debug.xcconfig */,
 				7F4274DC71E55AEEBAA4537D /* Pods-SimpleWebRTC.release.xcconfig */,
+				8B9B9136542F7B503D4B4F31 /* Pods-CommFusion.debug.xcconfig */,
+				A2D8DC91A89459132F7F4038 /* Pods-CommFusion.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -696,7 +700,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-SimpleWebRTC-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-CommFusion-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -709,15 +713,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SimpleWebRTC/Pods-SimpleWebRTC-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-CommFusion/Pods-CommFusion-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SimpleWebRTC/Pods-SimpleWebRTC-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-CommFusion/Pods-CommFusion-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SimpleWebRTC/Pods-SimpleWebRTC-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CommFusion/Pods-CommFusion-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -953,7 +957,7 @@
 		};
 		AF711ACA21DFAD6E005CA4FA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B5DACD71B3184D32AC0E6486 /* Pods-SimpleWebRTC.debug.xcconfig */;
+			baseConfigurationReference = 8B9B9136542F7B503D4B4F31 /* Pods-CommFusion.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_USE_OPTIMIZATION_PROFILE = NO;
@@ -983,7 +987,7 @@
 		};
 		AF711ACB21DFAD6E005CA4FA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7F4274DC71E55AEEBAA4537D /* Pods-SimpleWebRTC.release.xcconfig */;
+			baseConfigurationReference = A2D8DC91A89459132F7F4038 /* Pods-CommFusion.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_USE_OPTIMIZATION_PROFILE = NO;

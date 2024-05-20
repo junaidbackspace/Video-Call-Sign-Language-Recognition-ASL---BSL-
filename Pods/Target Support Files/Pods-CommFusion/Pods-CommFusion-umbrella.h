@@ -11,6 +11,6 @@
 #endif
 
 
-FOUNDATION_EXPORT double Pods_SimpleWebRTCVersionNumber;
-FOUNDATION_EXPORT const unsigned char Pods_SimpleWebRTCVersionString[];
+FOUNDATION_EXPORT double Pods_CommFusionVersionNumber;
+FOUNDATION_EXPORT const unsigned char Pods_CommFusionVersionString[];
 

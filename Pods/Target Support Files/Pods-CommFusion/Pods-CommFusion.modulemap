@@ -1,0 +1,6 @@
+framework module Pods_CommFusion {
+  umbrella header "Pods-CommFusion-umbrella.h"
+
+  export *
+  module * { export * }
+}

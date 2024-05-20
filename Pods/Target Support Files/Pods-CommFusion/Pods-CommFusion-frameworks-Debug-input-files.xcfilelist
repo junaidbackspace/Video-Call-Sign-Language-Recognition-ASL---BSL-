@@ -1,4 +1,4 @@
-${PODS_ROOT}/Target Support Files/Pods-SimpleWebRTC/Pods-SimpleWebRTC-frameworks.sh
+${PODS_ROOT}/Target Support Files/Pods-CommFusion/Pods-CommFusion-frameworks.sh
 ${BUILT_PRODUCTS_DIR}/DropDown/DropDown.framework
 ${PODS_ROOT}/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework
 ${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework

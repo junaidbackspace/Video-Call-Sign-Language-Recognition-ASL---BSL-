@@ -1,5 +1,5 @@
 
-target 'SimpleWebRTC' do
+target 'CommFusion' do
    use_frameworks!
 
  
