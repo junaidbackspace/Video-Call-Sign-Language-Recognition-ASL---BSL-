@@ -149,10 +149,12 @@ class settingsViewController: UIViewController {
        }
     
     
+    let emptyArray: [Int] = []
     @IBAction func btn_Logout(_ sender: Any) {
         socketsClass.shared.disconnect()
         UserDefaults.standard.setValue(0, forKey: "userID")
-        
+        UserDefaults.standard.setValue(self.emptyArray, forKey: "fav_Les")
+
         self.navigationController?.popViewController(animated: true)
         let controller = self.storyboard!.instantiateViewController(identifier: "firstscreen")
         controller.hidesBottomBarWhenPushed = true

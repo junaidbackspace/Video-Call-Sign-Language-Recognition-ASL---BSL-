@@ -186,6 +186,10 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         print("no of contacts are \(self.contacts.count)")
+        if self.contacts.count>0{
+            self.noFriendsLabel.isHidden = true
+            
+        }
         return self.contacts.count
     }
     

@@ -35,12 +35,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
 //            }
 //            
 //            window.makeKeyAndVisible()
-        
+        if let userID = UserDefaults.standard.string(forKey: "userID"){
+        if Int(userID) != 0 {
         socketObj.connectSocket()
-
+        }
+        }
         return true
     }
 
+    
     func applicationDidEnterBackground(_ application: UIApplication) {
         
         let online = onlineContactsViewController()
