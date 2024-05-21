@@ -31,8 +31,8 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     private var peerConnectionFactory: RTCPeerConnectionFactory!
     private var peerConnection: RTCPeerConnection?
     private var videoCapturer: RTCVideoCapturer!
-    private var localVideoTrack: RTCVideoTrack!
-    private var localAudioTrack: RTCAudioTrack!
+    public var localVideoTrack: RTCVideoTrack!
+    public var localAudioTrack: RTCAudioTrack!
     private var localRenderView: RTCEAGLVideoView?
     var captureSession: AVCaptureSession?
     private var localView: UIView!
@@ -432,6 +432,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
             print("\n\n====> inside audiotrack to mute")
         self.localAudioTrack.isEnabled = !muted
         
+        
     }
 
 
@@ -716,6 +717,10 @@ extension WebRTCClient{
             print("remote video size changed to: ", size)
             renderView = remoteRenderView
             parentView = remoteView
+            
+//             sending disable user type
+            let LangType = UserDefaults.standard.string(forKey: "disability_Type")!
+            self.sendMessge(message:  LangType)
         }
         
         guard let _renderView = renderView, let _parentView = parentView else {

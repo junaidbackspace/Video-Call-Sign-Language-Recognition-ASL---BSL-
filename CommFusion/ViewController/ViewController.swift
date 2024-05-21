@@ -665,7 +665,17 @@ extension ViewController {
     
     func didReceiveMessage(message: String) {
         print("viewController message recieved : \(message)")
+        
+        if message == "blind" {
+            let LangType = UserDefaults.standard.string(forKey: "disability_Type")!
+            if LangType == "blind"
+            {
+            webRTCClient.localVideoTrack.isEnabled = false
+            }
+        }
+        else{
         self.lblmsg.text = message
+        }
         
     }
     

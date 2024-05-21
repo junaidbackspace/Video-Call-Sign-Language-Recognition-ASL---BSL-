@@ -467,6 +467,20 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
             UserDefaults.standard.set("ASL", forKey: "SignType")
         }
         
+        if UserDefaults.standard.object(forKey: "disability_Type") == nil {
+            let setting =  settingsViewController()
+            setting.fetchUserDisability()
+            
+            print("USer disablity is nil so : \(UserDefaults.standard.stringArray(forKey: "disability_Type"))")
+            
+          
+        }
+        else{
+            print("User disablity is : \(UserDefaults.standard.stringArray(forKey: "disability_Type"))")
+        }
+            
+            
+            
         if UserDefaults.standard.object(forKey: "rigntones") == nil {
             UserDefaults.standard.setValue("default", forKey: "rigntones")
             

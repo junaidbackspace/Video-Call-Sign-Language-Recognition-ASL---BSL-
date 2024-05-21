@@ -62,7 +62,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
     @IBAction func btndrpdown(_ sender: Any) {
         let dropDown = DropDown()
         dropDown.anchorView = drpdownView
-        dropDown.dataSource = ["Normal","Deff & Mute ","Blind"]
+        dropDown.dataSource = ["Normal","Deaf & Mute ","Blind"]
         dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
             self.lbldropdown.text = "\(item)"
             
@@ -88,7 +88,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate & 
         
        var check = true
         
-       
+        UserDefaults.standard.setValue(lbldropdown.text, forKey: "disability_Type")
         
         if txtName.text != ""{
             

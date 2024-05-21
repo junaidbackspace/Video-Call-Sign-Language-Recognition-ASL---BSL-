@@ -205,15 +205,19 @@ class ProfileSettingsViewController: UIViewController, UIImagePickerControllerDe
             self.lblDisablity.text = "\(item)"
             
             if item == "Normal" {
+                UserDefaults.standard.set("normal", forKey: "disability_Type")
+                
                 if let image = UIImage(named: "normalperson", in: Bundle.main, compatibleWith: nil) {
                     print("Normal Entered")
                     imgdisablity.image = image
                 }
             } else if item == "Blind" {
+                UserDefaults.standard.set("blind", forKey: "disability_Type")
                 if let image = UIImage(named: "blind", in: Bundle.main, compatibleWith: nil) {
                     imgdisablity.image = image
                 }
-            } else { 
+            } else {
+                UserDefaults.standard.set("deaf", forKey: "disability_Type")
                 if let image = UIImage(named: "deff", in: Bundle.main, compatibleWith: nil) {
                     imgdisablity.image = image
                 }

@@ -54,7 +54,8 @@ class settingsViewController: UIViewController {
             user.BioStatus = userObject.bio_status
             user.OnlineStatus = userObject.online_status
             lblname.text = user.Fname+" "+user.Lname
-            
+            UserDefaults.standard.setValue(user.UserType, forKey: "disability_Type")
+            print("\nDisablity ssaved  : \(user.UserType)\n")
             let group = DispatchGroup()
               group.enter()
 
@@ -69,6 +70,42 @@ class settingsViewController: UIViewController {
             
             group.leave()
         }
+    
+    func fetchUserDisability() {
+            guard let userID = UserDefaults.standard.string(forKey: "userID") else {
+                print("User ID not found")
+                return
+            }
+            
+            let Url = "\(Constants.serverURL)/user/userdetails/\(userID)"
+            print("URL: "+Url)
+          
+            let url = URL(string: Url)!
+            
+            self.serverWrapper.fetchUserInfo(baseUrl: url, structure: singleUserInfo.self) { userInfo, error in
+                if let error = error {
+                    print("inner URL: \(Url)")
+                    print("Error in receiving:", error.localizedDescription)
+                } else if let userObject = userInfo {
+                    print("JSON Data:", userObject)
+                    self.processUserDisablity(userObject)
+                } else {
+                    print("No data received from the server")
+                }
+            }
+        }
+
+        func processUserDisablity(_ userObject: singleUserInfo) {
+            print("Processing user disability")
+          
+            user.UserType = userObject.disability_type
+          
+            UserDefaults.standard.setValue(user.UserType, forKey: "disability_Type")
+            print("\nDisablity ssaved  : \(user.UserType)\n")
+           
+        }
+    
+    
 
     
        override func viewDidLoad() {
@@ -142,7 +179,7 @@ class settingsViewController: UIViewController {
         controller.currentpass = userKey!
         controller.profile = user.ProfilePicture
         controller.distype = user.UserType
-        
+        UserDefaults.standard.setValue(user.Username, forKey: "disability_Type")
        
         controller.modalPresentationStyle = .fullScreen
           self.navigationController?.pushViewController(controller, animated: true)
