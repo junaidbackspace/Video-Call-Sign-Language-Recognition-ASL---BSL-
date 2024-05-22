@@ -308,11 +308,11 @@
         <scene sceneID="eCh-nQ-xbI">
             <objects>
                 <viewController storyboardIdentifier="signupscreen" id="OFn-Vj-P9m" customClass="SignUpViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="1w1-FW-uC5">
+                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="1w1-FW-uC5">
                         <rect key="frame" x="0.0" y="0.0" width="828" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nqL-Fh-3wM">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nqL-Fh-3wM">
                                 <rect key="frame" x="0.0" y="0.0" width="828" height="736"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XLo-Oe-pFd">
@@ -1420,7 +1420,7 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eW9-Bc-JxB">
                                         <rect key="frame" x="23" y="210" width="368" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <color key="textColor" red="0.128163687" green="0.3438212873" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -2296,14 +2296,14 @@
         <scene sceneID="KxS-R2-bg1">
             <objects>
                 <viewController storyboardIdentifier="termsconditions" id="6pY-0x-mis" customClass="termsConditionViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="IkY-Jv-J3B">
+                    <view key="view" contentMode="scaleToFill" id="IkY-Jv-J3B">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vfm-PR-29H">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vfm-PR-29H">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4WX-Ji-1Zt">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4WX-Ji-1Zt">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="3400"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" lineBreakMode="wordWrap" numberOfLines="150" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9cu-2A-9BU">
@@ -3619,7 +3619,18 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" backgroundImage="speaker.slash.fill" catalog="system"/>
                                 <connections>
-                                    <action selector="btnMute:" destination="BYZ-38-t0r" eventType="touchUpInside" id="AI2-DF-Hc3"/>
+                                    <action selector="btn_Speaker_Mute:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Ywi-Dp-WKM"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Zf-IW-vs7">
+                                <rect key="frame" x="316" y="655" width="45" height="38"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="38.333333333333258" id="6tb-oy-hNp"/>
+                                </constraints>
+                                <color key="tintColor" systemColor="linkColor"/>
+                                <state key="normal" backgroundImage="mic.slash.fill" catalog="system"/>
+                                <connections>
+                                    <action selector="btn_Mic_Mute:" destination="BYZ-38-t0r" eventType="touchUpInside" id="i7i-dx-DVF"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -3629,6 +3640,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                             <constraint firstItem="MhY-XV-PtI" firstAttribute="top" secondItem="ukj-JL-nzc" secondAttribute="top" constant="7.9999999999998863" id="2i7-Je-Iyy"/>
                             <constraint firstItem="ukj-JL-nzc" firstAttribute="leading" secondItem="0Gl-h1-HgE" secondAttribute="trailing" constant="21" id="5cy-Lk-ZgR"/>
                             <constraint firstItem="MhY-XV-PtI" firstAttribute="baseline" secondItem="ukj-JL-nzc" secondAttribute="baseline" constant="8.6666666666664014" id="6k7-AY-M7S"/>
+                            <constraint firstItem="6Zf-IW-vs7" firstAttribute="leading" secondItem="MhY-XV-PtI" secondAttribute="trailing" constant="20" id="9mZ-9A-c1z"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="RmB-Fn-1fb" secondAttribute="trailing" id="BTa-2b-Dg0"/>
                             <constraint firstItem="RmB-Fn-1fb" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="600" id="HJT-0f-rz0"/>
                             <constraint firstItem="MhY-XV-PtI" firstAttribute="firstBaseline" secondItem="ukj-JL-nzc" secondAttribute="firstBaseline" constant="7.3333333333331439" id="JX0-gr-g6t"/>
@@ -3636,7 +3648,9 @@ By using the Application, you acknowledge that you have read, understood, and ag
                             <constraint firstItem="RmB-Fn-1fb" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-24" id="SA0-KS-tzW"/>
                             <constraint firstItem="ukj-JL-nzc" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="167" id="Tgz-PD-3B1"/>
                             <constraint firstItem="ukj-JL-nzc" firstAttribute="top" secondItem="RmB-Fn-1fb" secondAttribute="bottom" constant="8" symbolic="YES" id="knv-dk-OrC"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="6Zf-IW-vs7" secondAttribute="trailing" constant="53" id="m5i-DK-kdZ"/>
                             <constraint firstItem="MhY-XV-PtI" firstAttribute="leading" secondItem="ukj-JL-nzc" secondAttribute="trailing" constant="22" id="qbc-PA-brC"/>
+                            <constraint firstItem="6Zf-IW-vs7" firstAttribute="top" secondItem="RmB-Fn-1fb" secondAttribute="bottom" constant="18.333333333333371" id="qqf-0j-bz4"/>
                             <constraint firstItem="0Gl-h1-HgE" firstAttribute="top" secondItem="RmB-Fn-1fb" secondAttribute="bottom" constant="9" id="wwX-Zt-kLC"/>
                         </constraints>
                     </view>
@@ -3644,9 +3658,10 @@ By using the Application, you acknowledge that you have read, understood, and ag
                     <connections>
                         <outlet property="OutLetFreshMsg" destination="5II-DH-ZBP" id="JIj-0d-h5T"/>
                         <outlet property="OutLetHangUp" destination="ukj-JL-nzc" id="KOb-Qg-boO"/>
-                        <outlet property="OutLetMute" destination="MhY-XV-PtI" id="IOZ-3t-Y0n"/>
                         <outlet property="OutLetOldMsg" destination="6aV-84-YSj" id="rPP-wb-G4O"/>
                         <outlet property="OutLetSwitchCam" destination="0Gl-h1-HgE" id="24u-4U-93N"/>
+                        <outlet property="OutLet_Mic_Mute" destination="6Zf-IW-vs7" id="hnq-dS-ppp"/>
+                        <outlet property="OutLet_speaker_Mute" destination="MhY-XV-PtI" id="l17-RU-TDt"/>
                         <outlet property="lblmsg" destination="mO7-aV-qkW" id="tPX-wA-VsE"/>
                         <outlet property="msgview_with_Btns" destination="RmB-Fn-1fb" id="OMR-nc-Q6w"/>
                     </connections>
@@ -3810,8 +3825,9 @@ By using the Application, you acknowledge that you have read, understood, and ag
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9j1-5i-r3A">
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9j1-5i-r3A">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oaU-eM-Czw">
                                         <rect key="frame" x="84" y="613" width="65" height="61"/>
@@ -3833,7 +3849,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Recieving Call" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0qb-If-P1I">
                                         <rect key="frame" x="147" y="211" width="122" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <color key="textColor" red="0.128163687" green="0.3438212873" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -3843,22 +3859,35 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                         <color key="tintColor" systemColor="systemGreenColor"/>
                                         <state key="normal" backgroundImage="phone.down.circle.fill" catalog="system"/>
                                     </button>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="chevron.up" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="ADI-H0-oFv">
+                                        <rect key="frame" x="277" y="591.66666666666652" width="33" height="23"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="tintColor" systemColor="systemGreenColor"/>
+                                    </imageView>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.59999999999999998" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="chevron.up" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="eZh-15-NVw">
+                                        <rect key="frame" x="282" y="580.66666666666652" width="22" height="14"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="tintColor" systemColor="systemGreenColor"/>
+                                    </imageView>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="chevron.up" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="fsx-oj-2Ys">
+                                        <rect key="frame" x="100" y="592" width="33" height="23"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="tintColor" systemColor="systemRedColor"/>
+                                    </imageView>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="chevron.up" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="e7o-5y-4WZ">
+                                        <rect key="frame" x="105" y="581" width="22" height="14"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="tintColor" systemColor="systemRedColor"/>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="a67-0E-zfd"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="9j1-5i-r3A" firstAttribute="top" secondItem="a67-0E-zfd" secondAttribute="top" id="3Hh-hG-b2t"/>
-                            <constraint firstItem="9j1-5i-r3A" firstAttribute="trailing" secondItem="a67-0E-zfd" secondAttribute="trailing" id="Q8k-t6-oIc"/>
-                            <constraint firstItem="9j1-5i-r3A" firstAttribute="leading" secondItem="a67-0E-zfd" secondAttribute="leading" id="Uqu-fc-tik"/>
-                            <constraint firstItem="9j1-5i-r3A" firstAttribute="bottom" secondItem="a67-0E-zfd" secondAttribute="bottom" id="rYs-pL-s2Y"/>
-                        </constraints>
                     </view>
                     <connections>
                         <outlet property="acceptButton" destination="3PC-Pn-zai" id="XzG-tR-GG2"/>
-                        <outlet property="bottomButtonViewBottomConstraint" destination="rYs-pL-s2Y" id="PPQ-e0-sfc"/>
                         <outlet property="lblname" destination="Qfw-rP-Fm8" id="vj0-Sq-jbp"/>
                         <outlet property="lblrecievingCall" destination="0qb-If-P1I" id="vgO-KA-Nas"/>
                         <outlet property="profilePic" destination="ERH-Os-VnF" id="fvt-ah-KMA"/>
@@ -4744,6 +4773,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
         <image name="backward.end.fill" catalog="system" width="128" height="102"/>
         <image name="call_Black" width="36" height="20"/>
         <image name="chevron.right" catalog="system" width="96" height="128"/>
+        <image name="chevron.up" catalog="system" width="128" height="72"/>
         <image name="circle" catalog="system" width="128" height="121"/>
         <image name="circle.fill" catalog="system" width="128" height="121"/>
         <image name="contacts" width="24" height="31"/>
@@ -4759,6 +4789,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
         <image name="lessons_TAB" width="32" height="32"/>
         <image name="logo" width="386" height="386"/>
         <image name="magnifyingglass" catalog="system" width="128" height="115"/>
+        <image name="mic.slash.fill" catalog="system" width="108" height="128"/>
         <image name="minus" catalog="system" width="128" height="24"/>
         <image name="name" width="31" height="31"/>
         <image name="password" width="24" height="29"/>

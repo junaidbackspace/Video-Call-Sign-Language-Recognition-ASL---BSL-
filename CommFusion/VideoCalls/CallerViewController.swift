@@ -9,7 +9,8 @@
 import UIKit
 import AVFoundation
 
-class CallerViewController: UIViewController {
+class CallerViewController: UIViewController, AVAudioPlayerDelegate {
+    var musicPlayer: AVAudioPlayer?
     
     static let shared = CallerViewController()
     var profilepic = UIImage()
@@ -73,6 +74,8 @@ class CallerViewController: UIViewController {
     @objc func handleNotification(_ notification: Notification) {
             if let text = notification.userInfo?["text"] as? String {
                 lbl_is_ringing.text = text
+                print("=====>rigining now")
+                self.playMusic(fileName: "onhold")
             }
         }
     @objc func handleCallNotification(_ notification: Notification) {
@@ -97,7 +100,7 @@ class CallerViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(callcenlled), name: Notification.Name("CallCancelledFromCallerNotification"), object: nil)
            
        
-        
+       
         setupCamera()
         imgview.image = profilepic
         imgview.layer.cornerRadius = 35
@@ -217,4 +220,37 @@ class CallerViewController: UIViewController {
                print("Error setting audio session: \(error.localizedDescription)")
            }
     }
+    
+    func playMusic(fileName: String) {
+            guard let path = Bundle.main.path(forResource: fileName, ofType: "wav") else {
+                print("File not found")
+                return
+            }
+
+            let url = URL(fileURLWithPath: path)
+
+            do {
+                try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+                try AVAudioSession.sharedInstance().setActive(true)
+                musicPlayer = try AVAudioPlayer(contentsOf: url)
+                musicPlayer?.delegate = self
+                musicPlayer?.prepareToPlay()
+                musicPlayer?.volume = 1.0
+                musicPlayer?.play()
+                print("\nplaying tune....\n")
+                
+            } catch {
+                print("Error playing music: \(error.localizedDescription)")
+            }
+        }
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+          if flag {
+              // Playback finished successfully, restart the music
+              player.currentTime = 0
+              player.play()
+          } else {
+              // Playback finished with an error
+              print("Playback finished with an error")
+          }
+      }
 }

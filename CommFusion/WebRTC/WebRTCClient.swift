@@ -46,6 +46,8 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     private var customFrameCapturer: Bool = false
     private var cameraDevicePosition: AVCaptureDevice.Position = .front
     
+    private var remoteAudioTrack: RTCAudioTrack?
+    
     var delegate: WebRTCClientDelegate?
     public private(set) var isConnected: Bool = false
     
@@ -77,7 +79,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         print("WebRTC Client Deinit")
         self.peerConnectionFactory = nil
         self.peerConnection = nil
-    
+        
     }
    
     
@@ -425,11 +427,17 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         }
     }
 
-    func toggleAudioMute(muted: Bool) {
+    func toggleSpeakerMute(muted: Bool) {
        
-        print("\n\noutside audiotrack to mute")
+        print("\n\n====> inside Speaker to mute")
+        self.remoteAudioTrack?.isEnabled = !muted
         
-            print("\n\n====> inside audiotrack to mute")
+        
+        
+    }
+    func toggleMicMute(muted: Bool) {
+       
+            print("\n\n====> inside Mic to mute")
         self.localAudioTrack.isEnabled = !muted
         
         
@@ -663,6 +671,7 @@ extension WebRTCClient {
         }
     }
     
+    //receiving audio and video
     func peerConnection(_ peerConnection: RTCPeerConnection, didAdd stream: RTCMediaStream) {
         print("did add stream")
         self.remoteStream = stream
@@ -674,7 +683,8 @@ extension WebRTCClient {
         
         if let audioTrack = stream.audioTracks.first{
             print("audio track faund")
-            audioTrack.source.volume = 1.0
+//            audioTrack.source.volume = 1.0
+            remoteAudioTrack = audioTrack
         }
     }
     

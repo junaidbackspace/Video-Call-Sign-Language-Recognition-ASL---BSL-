@@ -17,6 +17,8 @@
 		651E5C002BA4609C005DB71C /* CallTranscriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651E5BFF2BA4609C005DB71C /* CallTranscriptionViewController.swift */; };
 		651E5C0A2BA466DC005DB71C /* CallTranscriptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651E5C092BA466DB005DB71C /* CallTranscriptionTableViewCell.swift */; };
 		652C0AEE2BBC0A0C00D89A57 /* lessonsStrct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652C0AED2BBC0A0C00D89A57 /* lessonsStrct.swift */; };
+		65556C2D2BFD9ACE00B41A38 /* waiting.wav in Resources */ = {isa = PBXBuildFile; fileRef = 65556C2C2BFD9ACE00B41A38 /* waiting.wav */; };
+		65556C402BFDB1E900B41A38 /* onhold.wav in Resources */ = {isa = PBXBuildFile; fileRef = 65556C3F2BFDB1E900B41A38 /* onhold.wav */; };
 		656168BB2B724FA70006E5D2 /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656168BA2B724FA70006E5D2 /* ContactsViewController.swift */; };
 		656168BF2B72A80B0006E5D2 /* DetailedContactsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656168BE2B72A80B0006E5D2 /* DetailedContactsTableViewCell.swift */; };
 		65736E5A2BD6C914001D7418 /* webSockets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65736E592BD6C914001D7418 /* webSockets.swift */; };
@@ -122,6 +124,8 @@
 		651E5BFF2BA4609C005DB71C /* CallTranscriptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallTranscriptionViewController.swift; sourceTree = "<group>"; };
 		651E5C092BA466DB005DB71C /* CallTranscriptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallTranscriptionTableViewCell.swift; sourceTree = "<group>"; };
 		652C0AED2BBC0A0C00D89A57 /* lessonsStrct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lessonsStrct.swift; sourceTree = "<group>"; };
+		65556C2C2BFD9ACE00B41A38 /* waiting.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = waiting.wav; sourceTree = "<group>"; };
+		65556C3F2BFDB1E900B41A38 /* onhold.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = onhold.wav; sourceTree = "<group>"; };
 		656168BA2B724FA70006E5D2 /* ContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
 		656168BE2B72A80B0006E5D2 /* DetailedContactsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedContactsTableViewCell.swift; sourceTree = "<group>"; };
 		65736E592BD6C914001D7418 /* webSockets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = webSockets.swift; sourceTree = "<group>"; };
@@ -292,6 +296,8 @@
 		65A986D92B7C9C050011753C /* rigntones */ = {
 			isa = PBXGroup;
 			children = (
+				65556C3F2BFDB1E900B41A38 /* onhold.wav */,
+				65556C2C2BFD9ACE00B41A38 /* waiting.wav */,
 				6586500C2BECE4DC007946D7 /* default.mp3 */,
 				6586500E2BECE4DD007946D7 /* glow.mp3 */,
 				6586500D2BECE4DC007946D7 /* shapeofyou.mp3 */,
@@ -655,9 +661,11 @@
 				65BFA2B02B77743A007E73A8 /* giphy.gif in Resources */,
 				65A986E32B7C9C650011753C /* loser.mp3 in Resources */,
 				658650102BECE4DD007946D7 /* default.mp3 in Resources */,
+				65556C402BFDB1E900B41A38 /* onhold.wav in Resources */,
 				658650132BECE4DD007946D7 /* smooth.mp3 in Resources */,
 				658650122BECE4DD007946D7 /* glow.mp3 in Resources */,
 				AF711AAF21DFAD6E005CA4FA /* LaunchScreen.storyboard in Resources */,
+				65556C2D2BFD9ACE00B41A38 /* waiting.wav in Resources */,
 				AFBCD53121E8F52B00694C14 /* like_filled.png in Resources */,
 				AF711AAA21DFAD6C005CA4FA /* Main.storyboard in Resources */,
 				65BFA2B82B7783F8007E73A8 /* test.gif in Resources */,

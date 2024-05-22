@@ -41,7 +41,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
    
     
-    @IBOutlet weak var OutLetMute: UIButton!
+    @IBOutlet weak var OutLet_Mic_Mute: UIButton!
+    @IBOutlet weak var OutLet_speaker_Mute: UIButton!
     @IBOutlet weak var OutLetHangUp: UIButton!
     @IBOutlet weak var OutLetFreshMsg: UIButton!
     @IBOutlet weak var OutLetSwitchCam: UIButton!
@@ -52,18 +53,33 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     @IBAction func btn_SwitchCamera(_ sender: Any) {
         webRTCClient.switchCameraPosition()
     }
-    var ismute = true
-    @IBAction func btnMute(_ sender: Any) {
+    var ismute_speaker = true
+    @IBAction func btn_Speaker_Mute(_ sender: Any) {
         print("Entered in Mute")
-        webRTCClient.toggleAudioMute(muted: ismute)
-        ismute = !ismute
-        if ismute{
-            OutLetMute.setBackgroundImage(UIImage(systemName: "speaker.slash.fill") , for: .normal)
+        webRTCClient.toggleSpeakerMute(muted: ismute_speaker)
+        ismute_speaker = !ismute_speaker
+        if ismute_speaker{
+            OutLet_speaker_Mute.setBackgroundImage(UIImage(systemName: "speaker.slash.fill") , for: .normal)
         }
         else{
-            OutLetMute.setBackgroundImage(UIImage(systemName: "speaker.wave.2.fill") , for: .normal)
+            OutLet_speaker_Mute.setBackgroundImage(UIImage(systemName: "speaker.wave.2.fill") , for: .normal)
         }
-        print("is mute : \(ismute)")
+        print("is Speaker mute : \(ismute_speaker)")
+
+    }
+    
+    var ismute_mic = true
+    @IBAction func btn_Mic_Mute(_ sender: Any) {
+        print("Entered in Mute")
+        webRTCClient.toggleMicMute(muted: ismute_mic)
+        ismute_mic = !ismute_mic
+        if ismute_mic{
+            OutLet_Mic_Mute.setBackgroundImage(UIImage(systemName: "mic.slash.fill") , for: .normal)
+        }
+        else{
+            OutLet_Mic_Mute.setBackgroundImage(UIImage(systemName: "mic.fill") , for: .normal)
+        }
+        print("is Mic mute : \(ismute_mic)")
 
     }
     
@@ -204,6 +220,11 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let connectingView = ConnectingView(frame: CGRect(x: 0, y: 0, width: 100, height: 10))
+                connectingView.center = view.center
+                view.addSubview(connectingView)
+        
         disableAutoLock()
          userID = UserDefaults.standard.string(forKey: "userID")!
     
@@ -259,7 +280,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         
 
         
-        OutLetMute.layer.zPosition = 1
+        OutLet_Mic_Mute.layer.zPosition = 1
+        OutLet_speaker_Mute.layer.zPosition = 1
         OutLetHangUp .layer.zPosition = 1
         OutLetOldMsg.layer.zPosition = 1
         OutLetFreshMsg.layer.zPosition = 1
@@ -352,7 +374,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         localVideoView.addSubview(localVideoViewButton)
         
      
-        remoteVideoViewContainter.addSubview(OutLetMute)
+        remoteVideoViewContainter.addSubview(OutLet_Mic_Mute)
+        remoteVideoViewContainter.addSubview(OutLet_speaker_Mute)
         remoteVideoViewContainter.addSubview(OutLetHangUp)
         remoteVideoViewContainter.addSubview(OutLetSwitchCam)
 
@@ -706,3 +729,52 @@ extension ViewController {
         }
     }
 }
+
+class ConnectingView: UIView {
+    
+    private var dotSize: CGFloat = 10.0
+    private var dotSpacing: CGFloat = 8.0
+    private var dotCount: Int = 3
+    private var dotViews: [UIView] = []
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupDots()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupDots()
+    }
+    
+    private func setupDots() {
+        for i in 0..<dotCount {
+            let dotView = UIView()
+            dotView.backgroundColor = .gray
+            dotView.layer.cornerRadius = dotSize / 2
+            dotView.frame = CGRect(x: CGFloat(i) * (dotSize + dotSpacing), y: 0, width: dotSize, height: dotSize)
+            dotViews.append(dotView)
+            addSubview(dotView)
+        }
+        startAnimating()
+    }
+    
+    private func startAnimating() {
+        for (index, dotView) in dotViews.enumerated() {
+            let delay = Double(index) * 0.3
+            animateDot(dotView, delay: delay)
+        }
+    }
+    
+    private func animateDot(_ dotView: UIView, delay: Double) {
+        let animation = CAKeyframeAnimation(keyPath: "position.y")
+        animation.values = [dotView.center.y, dotView.center.y - 10, dotView.center.y]
+        animation.keyTimes = [0, 0.5, 1]
+        animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        animation.duration = 0.6
+        animation.beginTime = CACurrentMediaTime() + delay
+        animation.repeatCount = .infinity
+        dotView.layer.add(animation, forKey: "connectingAnimation")
+    }
+}
+
