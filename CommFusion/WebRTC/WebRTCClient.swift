@@ -28,7 +28,7 @@ protocol WebRTCClientDelegate {
 
 class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, RTCDataChannelDelegate {
   
-    private let speechRecognizer = SpeechRecognizer()
+  
     private var peerConnectionFactory: RTCPeerConnectionFactory!
     private var peerConnection: RTCPeerConnection?
     private var videoCapturer: RTCVideoCapturer!
@@ -225,9 +225,9 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         if self.peerConnection != nil{
 //            onDisConnected()
             self.peerConnection!.close()
-            DispatchQueue.main.async {
-                self.speechRecognizer.stopRecognition()
-            }
+//            DispatchQueue.main.async {
+//                self.speechRecognizer.stopRecognition()
+//            }
 
             
         }
@@ -376,7 +376,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         let audioSource = peerConnectionFactory.audioSource(with: RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil))
         let audioTrack = peerConnectionFactory.audioTrack(with: audioSource, trackId: "audio\(userID)")
        
-        speechRecognizer.startRecognition()
+        
         configureAudioSession()
         
         return audioTrack
@@ -850,73 +850,4 @@ extension UIView {
 }
 
 
-class SpeechRecognizer: NSObject, SFSpeechRecognizerDelegate {
-    
-    private let speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
-    private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
-    private var recognitionTask: SFSpeechRecognitionTask?
-    private let audioEngine = AVAudioEngine()
-    
-    override init() {
-        super.init()
-        speechRecognizer?.delegate = self
-    }
-    
-    func startRecognition() {
-        print("Audio Recognition started")
-        let audioSession = AVAudioSession.sharedInstance()
-        do {
-            try audioSession.setCategory(.record, mode: .default)
-            try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
-        } catch {
-            print("Audio session error: \(error.localizedDescription)")
-        }
-        
-        recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
-        
-        guard let recognitionRequest = recognitionRequest else {
-            fatalError("Unable to create an SFSpeechAudioBufferRecognitionRequest object")
-        }
-        
-        recognitionRequest.shouldReportPartialResults = true
-        
-        recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest, resultHandler: { (result, error) in
-            if let result = result {
-                print("Transcription: \(result.bestTranscription.formattedString)")
-            }
-            
-            if error != nil {
-                self.audioEngine.stop()
-                self.recognitionRequest = nil
-                self.recognitionTask = nil
-            }
-        })
-        
-        let inputNode = audioEngine.inputNode
-        let recordingFormat = inputNode.outputFormat(forBus: 0)
-        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
-            self.recognitionRequest?.append(buffer)
-        }
-        
-        audioEngine.prepare()
-        
-        do {
-            try audioEngine.start()
-        } catch {
-            print("audioEngine couldn't start because of an error: \(error.localizedDescription)")
-        }
-    }
-    func stopRecognition() {
-        guard audioEngine != nil, recognitionRequest != nil, recognitionTask != nil else {
-            // Handle the case when one or more objects are nil
-            return
-        }
-        audioEngine.stop()
-        recognitionRequest?.endAudio()
-        recognitionTask?.cancel()
-        
-        recognitionRequest = nil
-        recognitionTask = nil
-    }
 
-}

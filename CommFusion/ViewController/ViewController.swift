@@ -10,13 +10,13 @@ import UIKit
 import Starscream
 import WebRTC
 import UIKit
-
-
-
-
+import Speech
 
 class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate, CameraSessionDelegate {
   
+    
+    
+    var speechRecognizer: SpeechRecognizer?
     var isAutoLockEnabledBeforeCall: Bool = true
 
     let font_sizeDefault = UserDefaults.standard
@@ -85,7 +85,10 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
     @IBAction func btnHangupCall(_ sender: Any) {
         print("Entered in hangup")
+        speechRecognizer?.isStopping = true
+        speechRecognizer?.stopRecognition()
         hangupButtonTapped()
+        
     }
     
     var testmsg = "1"
@@ -93,11 +96,22 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         print("sendind Message")
 //        let data = testmsg.data(using: String.Encoding.utf8)
 //        print(testmsg)
-//        testmsg = String(Int(testmsg)!+1)
-//        webRTCClient.sendData(data: data!)
-        
         testmsg = String(Int(testmsg)!+1)
-        webRTCClient.sendMessge(message:   testmsg)
+        webRTCClient.sendMessge(message: testmsg)
+//        webRTCClient.sendData(data: data!)
+//          testmsg = String(testmsg)
+//                if let client = webRTCClient {
+//                    client.sendMessge(message: testmsg)
+//                } else {
+//                    print("webRTCClient is not initialized")
+//                }
+       
+    }
+    func textmsg(msg:String)
+    {
+     
+       self.webRTCClient.sendMessge(message: msg)
+        
     }
     
     @IBAction func btnOldMsg(_ sender: Any) {
@@ -280,7 +294,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         }
      
         
-
+        // Initialize speechRecognizer with a reference to self
+        speechRecognizer = SpeechRecognizer(viewController: self)
         
         OutLet_Mic_Mute.layer.zPosition = 1
         OutLet_speaker_Mute.layer.zPosition = 1
@@ -544,6 +559,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
                     if socketsClass.shared.isConnected() {
                         print("\nnow Reciever answering sdp to caller ")
                         socketsClass.shared.socket.write(string: message)
+                        
                     }
                     else{
 //
@@ -638,6 +654,8 @@ extension ViewController {
     func websocketDidReceiveData(socket: WebSocketClient, data: Data) { }
 }
 
+var disabilitytype_check_msg = true
+
 // MARK: - WebRTCClient Delegate
 extension ViewController {
     func didGenerateCandidate(iceCandidate: RTCIceCandidate) {
@@ -692,20 +710,33 @@ extension ViewController {
         }
     }
     
+   
+    
     func didReceiveMessage(message: String) {
         print("viewController message recieved : \(message)")
         
-        
-        
-        if message == "blind" {
-            let LangType = UserDefaults.standard.string(forKey: "disability_Type")!
-            if LangType == "blind"
+        //speechReconizer start after recieving message
+        if disabilitytype_check_msg{
+        let LangType = UserDefaults.standard.string(forKey: "disability_Type")!
+        if message == "blind" || LangType == "blind" {
+            
+            if LangType == "deaf" || message == "deaf"
             {
-            webRTCClient.localVideoTrack.isEnabled = false
+                DispatchQueue.main.async {
+                    print("++++++++Starting REcognition.....++++++")
+                    self.speechRecognizer!.startRecognition()
+                }
+//            webRTCClient.localVideoTrack.isEnabled = false
             }
             self.lblmsg.text = message
+            disabilitytype_check_msg = false
+        }
         }
         else{
+            DispatchQueue.main.async {
+                
+//                self.speechRecognizer.startRecognition()
+            }
         self.lblmsg.text = message
         }
         
@@ -794,3 +825,93 @@ class ConnectingView: UIView {
     }
 }
 
+
+class SpeechRecognizer: NSObject, SFSpeechRecognizerDelegate {
+    
+    private let speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
+    private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
+    private var recognitionTask: SFSpeechRecognitionTask?
+    private let audioEngine = AVAudioEngine()
+    
+    // Property to hold a reference to ViewController
+    weak var viewController: ViewController?
+    
+    init(viewController: ViewController) {
+        self.viewController = viewController
+        super.init()
+        speechRecognizer?.delegate = self
+    }
+    
+    func startRecognition() {
+        print("Audio Recognition started")
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setCategory(.record, mode: .default)
+            try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
+        } catch {
+            print("Audio session error: \(error.localizedDescription)")
+        }
+        
+        recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
+        
+        guard let recognitionRequest = recognitionRequest else {
+            fatalError("Unable to create an SFSpeechAudioBufferRecognitionRequest object")
+        }
+        
+        recognitionRequest.shouldReportPartialResults = true
+        
+        recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest, resultHandler: { (result, error) in
+            if let result = result {
+                print("Transcription: \(result.bestTranscription.formattedString)")
+                
+                // Use the reference to call ViewController's method
+                self.viewController?.textmsg(msg: result.bestTranscription.formattedString)
+                
+            }
+            
+            if error != nil || result?.isFinal == true {
+                print("Restarting recognition")
+                
+                self.stopRecognition()
+                if !self.isStopping{
+                    print("within>>> voice check false")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                   self.startRecognition() // Restart recognition after a short delay
+                               }
+                       }
+                else{
+                    print("MAking voice check false")
+                    self.isStopping = false
+                }
+            }
+        })
+        
+        let inputNode = audioEngine.inputNode
+        let recordingFormat = inputNode.outputFormat(forBus: 0)
+        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
+            self.recognitionRequest?.append(buffer)
+        }
+        
+        audioEngine.prepare()
+        
+        do {
+            try audioEngine.start()
+        } catch {
+            print("audioEngine couldn't start because of an error: \(error.localizedDescription)")
+        }
+    }
+    
+     var isStopping = false
+        
+    
+    func stopRecognition() {
+        audioEngine.stop()
+        audioEngine.inputNode.removeTap(onBus: 0)
+        
+        recognitionRequest?.endAudio()
+        recognitionTask?.cancel()
+        
+        recognitionRequest = nil
+        recognitionTask = nil
+    }
+}

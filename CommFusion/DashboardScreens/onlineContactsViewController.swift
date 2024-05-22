@@ -575,9 +575,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
             return
         }
         
-        DispatchQueue.main.async {
-            self.noFriendsLabel.isHidden = true
-        }
+       
        
         let Url = "\(Constants.serverURL)/contacts/\(userID)/online-contacts"
         
@@ -589,7 +587,9 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
                 
                
             } else if let jsonData = contactsUsers {
-                
+                DispatchQueue.main.async {
+                    self.noFriendsLabel.isHidden = true
+                }
                 self.processContactsData(jsonData)
             } else {
                 print("No data received from the server")
