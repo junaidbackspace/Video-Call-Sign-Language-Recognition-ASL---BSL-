@@ -220,10 +220,12 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
     override func viewDidLoad() {
         super.viewDidLoad()
+  
         
         let connectingView = ConnectingView(frame: CGRect(x: 0, y: 0, width: 100, height: 10))
                 connectingView.center = view.center
-                view.addSubview(connectingView)
+        connectingView.startAnimating()
+        self.view.addSubview(connectingView)
         
         disableAutoLock()
          userID = UserDefaults.standard.string(forKey: "userID")!
@@ -396,7 +398,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
      
         if !webRTCClient.isConnected {
             
-            print("Reciever side initiating call ...")
+            print("initiating call ...")
            
                
             webRTCClient.connect(onSuccess: { (offerSDP: RTCSessionDescription) -> Void in
@@ -521,6 +523,10 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
                            
                                 socketsClass.shared.socket.connect()
                                 socketsClass.shared.socket.write(string: message)
+                                
+                                let connectingView = ConnectingView(frame: CGRect(x: 0, y: 0, width: 100, height: 10))
+                                connectingView.center = self.view.center
+                                connectingView.startAnimating()
                             }
                         }
                     }
@@ -689,12 +695,15 @@ extension ViewController {
     func didReceiveMessage(message: String) {
         print("viewController message recieved : \(message)")
         
+        
+        
         if message == "blind" {
             let LangType = UserDefaults.standard.string(forKey: "disability_Type")!
             if LangType == "blind"
             {
             webRTCClient.localVideoTrack.isEnabled = false
             }
+            self.lblmsg.text = message
         }
         else{
         self.lblmsg.text = message
@@ -756,10 +765,11 @@ class ConnectingView: UIView {
             dotViews.append(dotView)
             addSubview(dotView)
         }
-        startAnimating()
+        
     }
     
-    private func startAnimating() {
+    func startAnimating() {
+        print("DOTS ANIMATION STARTED")
         for (index, dotView) in dotViews.enumerated() {
             let delay = Double(index) * 0.3
             animateDot(dotView, delay: delay)
@@ -775,6 +785,12 @@ class ConnectingView: UIView {
         animation.beginTime = CACurrentMediaTime() + delay
         animation.repeatCount = .infinity
         dotView.layer.add(animation, forKey: "connectingAnimation")
+    }
+    
+    func stopAnimating() {
+        for dotView in dotViews {
+            dotView.layer.removeAnimation(forKey: "connectingAnimation")
+        }
     }
 }
 

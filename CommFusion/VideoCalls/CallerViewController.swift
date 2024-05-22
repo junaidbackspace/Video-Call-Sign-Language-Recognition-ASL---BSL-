@@ -74,11 +74,29 @@ class CallerViewController: UIViewController, AVAudioPlayerDelegate {
     @objc func handleNotification(_ notification: Notification) {
             if let text = notification.userInfo?["text"] as? String {
                 lbl_is_ringing.text = text
-                print("=====>rigining now")
+                print("=====>rigining now: \(text)")
+                if text != "Busy in other call..."{
                 self.playMusic(fileName: "onhold")
+                }
+                else{
+                    self.playBeepMusic(fileName: "beep")
+                    print("\n\nwitin callerview else")
+                    DispatchQueue.main.asyncAfter(deadline: .now()+2)
+                    {
+                       
+                        self.captureSession?.stopRunning()
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                   
+                }
             }
         }
     @objc func handleCallNotification(_ notification: Notification) {
+        
+        //stoping rigning notift tune
+     
+        self.stopMusic()
+        
         let controller = (self.storyboard?.instantiateViewController(identifier: "videoCallscreen"))! as ViewController
         controller.isReciever = 0
         controller.reciver = recieverid
@@ -91,6 +109,7 @@ class CallerViewController: UIViewController, AVAudioPlayerDelegate {
         // Don't forget to remove observer when the ViewController is deallocated
         deinit {
             NotificationCenter.default.removeObserver(self)
+          
         }
     
        override func viewDidLoad() {
@@ -253,4 +272,38 @@ class CallerViewController: UIViewController, AVAudioPlayerDelegate {
               print("Playback finished with an error")
           }
       }
+    
+    func stopMusic() {
+        print("stoping ringing notify tone...\n")
+        self.musicPlayer?.stop()
+        self.musicPlayer = nil
+            do {
+                try AVAudioSession.sharedInstance().setActive(false)
+            } catch {
+                print("Error deactivating AVAudioSession: \(error.localizedDescription)")
+            }
+        }
+    
+    func playBeepMusic(fileName: String) {
+            guard let path = Bundle.main.path(forResource: fileName, ofType: "mp3") else {
+                print("File not found")
+                return
+            }
+
+            let url = URL(fileURLWithPath: path)
+
+            do {
+                try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+                try AVAudioSession.sharedInstance().setActive(true)
+                musicPlayer = try AVAudioPlayer(contentsOf: url)
+                musicPlayer?.delegate = self
+                musicPlayer?.prepareToPlay()
+                musicPlayer?.volume = 1.0
+                musicPlayer?.play()
+                print("\nplaying tune....\n")
+                
+            } catch {
+                print("Error playing music: \(error.localizedDescription)")
+            }
+        }
 }

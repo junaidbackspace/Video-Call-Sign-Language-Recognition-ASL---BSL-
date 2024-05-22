@@ -41,6 +41,7 @@
 		658DBD8D2B7DE9B700F26D96 /* CallRecieverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658DBD8C2B7DE9B700F26D96 /* CallRecieverViewController.swift */; };
 		658E032F2B6F618100BEDE73 /* loginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658E032E2B6F618100BEDE73 /* loginViewController.swift */; };
 		658E03352B6FF72100BEDE73 /* LoginToAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658E03342B6FF72100BEDE73 /* LoginToAccountViewController.swift */; };
+		658EF0A22BFDE54900483B19 /* beep.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 658EF0A12BFDE54900483B19 /* beep.mp3 */; };
 		65960B9B2B70E1EE00BC6EB2 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65960B9A2B70E1EE00BC6EB2 /* SignUpViewController.swift */; };
 		65A01BB32B6E19D5007AC395 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 65A01BB22B6E19D5007AC395 /* Assets.xcassets */; };
 		65A986E32B7C9C650011753C /* loser.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 65A986E22B7C9C650011753C /* loser.mp3 */; };
@@ -148,6 +149,7 @@
 		658DBD8C2B7DE9B700F26D96 /* CallRecieverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallRecieverViewController.swift; sourceTree = "<group>"; };
 		658E032E2B6F618100BEDE73 /* loginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = loginViewController.swift; sourceTree = "<group>"; };
 		658E03342B6FF72100BEDE73 /* LoginToAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginToAccountViewController.swift; sourceTree = "<group>"; };
+		658EF0A12BFDE54900483B19 /* beep.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = beep.mp3; sourceTree = "<group>"; };
 		65960B9A2B70E1EE00BC6EB2 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		65A01BB22B6E19D5007AC395 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		65A986E22B7C9C650011753C /* loser.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = loser.mp3; sourceTree = "<group>"; };
@@ -296,6 +298,7 @@
 		65A986D92B7C9C050011753C /* rigntones */ = {
 			isa = PBXGroup;
 			children = (
+				658EF0A12BFDE54900483B19 /* beep.mp3 */,
 				65556C3F2BFDB1E900B41A38 /* onhold.wav */,
 				65556C2C2BFD9ACE00B41A38 /* waiting.wav */,
 				6586500C2BECE4DC007946D7 /* default.mp3 */,
@@ -672,6 +675,7 @@
 				658650112BECE4DD007946D7 /* shapeofyou.mp3 in Resources */,
 				AFBCD53621E8F63A00694C14 /* like_border.png in Resources */,
 				65A01BB32B6E19D5007AC395 /* Assets.xcassets in Resources */,
+				658EF0A22BFDE54900483B19 /* beep.mp3 in Resources */,
 				AFB7E9B121E56D8B00A0E27A /* sample.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

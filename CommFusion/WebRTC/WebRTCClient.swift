@@ -10,7 +10,7 @@ import UIKit
 import WebRTC
 import Photos
 import AVFoundation
-
+import Speech
 
 protocol WebRTCClientDelegate {
     func didGenerateCandidate(iceCandidate: RTCIceCandidate)
@@ -28,6 +28,7 @@ protocol WebRTCClientDelegate {
 
 class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, RTCDataChannelDelegate {
   
+    private let speechRecognizer = SpeechRecognizer()
     private var peerConnectionFactory: RTCPeerConnectionFactory!
     private var peerConnection: RTCPeerConnection?
     private var videoCapturer: RTCVideoCapturer!
@@ -224,6 +225,11 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         if self.peerConnection != nil{
 //            onDisConnected()
             self.peerConnection!.close()
+            DispatchQueue.main.async {
+                self.speechRecognizer.stopRecognition()
+            }
+
+            
         }
         stopCaptureLocalVideo()
         print("\n------disconecting all thing-----\n")
@@ -360,72 +366,61 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     }
     
    
-    private func createAudioTrack() -> RTCAudioTrack {
-        // Initialize the audio constraints
-        let audioConstraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
-        
-        // Create the audio source and audio track
-        let audioSource = peerConnectionFactory.audioSource(with: audioConstraints)
-        let audioTrack = peerConnectionFactory.audioTrack(with: audioSource, trackId: "audio\(UserDefaults.standard.string(forKey: "userID")!)")
-        
-        // Set up the audio session to ensure the use of the loudspeaker
-        do {
-            let audioSession = AVAudioSession.sharedInstance()
-                    
-                    // Configure the audio session category, mode, and options
-                    try audioSession.setCategory(.playAndRecord, mode: .videoChat, options: [.defaultToSpeaker, .allowBluetooth, .allowBluetoothA2DP, .mixWithOthers])
-                   
-                    try audioSession.setActive(true)
-                    
-            
-            if let bottomMic = audioSession.availableInputs?.first(where: { $0.portType == .builtInMic }) {
-                // Bottom microphone is available, set it as the preferred input
-                do {
-                    try audioSession.setPreferredInput(bottomMic)
-                } catch {
-                    // Handle error setting preferred input
-                    print("Error setting preferred input: \(error.localizedDescription)")
-                }
-            } else {
-                // Bottom microphone is not available, provide fallback behavior
-                print("Bottom microphone is not available. Using default audio input.")
-            }
-            // Force audio routing multiple times to ensure it is applied
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        do {
-                            if let bottomMic = audioSession.availableInputs?.first(where: { $0.portType == .builtInMic }) {
-                                       try audioSession.setPreferredInput(bottomMic)
-                                        try audioSession.overrideOutputAudioPort(.speaker)
-                                   
-                                   }
-                            
-                            self.debugAudioRouting()
-                        } catch {
-                            print("Error forcing audio output: \(error.localizedDescription)")
-                        }
-                    }
-                    // Debug print to verify the audio route
-                    print("Audio session configured successfully.")
-            debugAudioRouting()
-            
-        } catch {
-            // Handle any errors during audio session configuration
-            print("Error setting up audio session: \(error.localizedDescription)")
+    private func createAudioTrack() -> RTCAudioTrack? {
+        guard let userID = UserDefaults.standard.string(forKey: "userID") else {
+            print("User ID not found")
+            return nil
         }
+
+        // Create audio source with default constraints
+        let audioSource = peerConnectionFactory.audioSource(with: RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil))
+        let audioTrack = peerConnectionFactory.audioTrack(with: audioSource, trackId: "audio\(userID)")
+       
+        speechRecognizer.startRecognition()
+        configureAudioSession()
         
         return audioTrack
     }
-
     
-    private func debugAudioRouting() {
-        let audioSession = AVAudioSession.sharedInstance()
-        
-        // Print the current audio route information
-        let currentRoute = audioSession.currentRoute
-        for output in currentRoute.outputs {
-            print("Current audio output: \(output.portType.rawValue) - \(output.portName)")
+    private func configureAudioSession() {
+        do {
+            let audioSession = AVAudioSession.sharedInstance()
+            
+            // Set the category, mode, and options for video chat
+            try audioSession.setCategory(.playAndRecord, mode: .videoChat, options: [.defaultToSpeaker, .allowBluetooth, .allowBluetoothA2DP])
+            try audioSession.setActive(true)
+            
+            // Check and set the preferred input to the built-in bottom microphone if available
+            if let bottomMic = audioSession.availableInputs?.first(where: { $0.portType == .builtInMic }) {
+                try audioSession.setPreferredInput(bottomMic)
+            } else {
+                print("Bottom microphone is not available. Using default audio input.")
+            }
+            
+            debugAudioRouting()
+        } catch {
+            print("Error setting up audio session: \(error.localizedDescription)")
         }
     }
+    
+       private func debugAudioRouting() {
+           let audioSession = AVAudioSession.sharedInstance()
+           var i = 0
+           // Print the current audio route information
+           let currentRoute = audioSession.currentRoute
+           for output in currentRoute.outputs {
+            
+               print("\(i): Current audio output: \(output.portType.rawValue) - \(output.portName)")
+            i = i+1
+           }
+        let currentInputRoute = audioSession.currentRoute.inputs
+           if let input = currentInputRoute.first {
+               print("Current audio input: \(input.portType.rawValue) - \(input.portName)")
+           } else {
+               print("No audio input route detected")
+           }
+    }
+   
 
     func toggleSpeakerMute(muted: Bool) {
        
@@ -683,9 +678,17 @@ extension WebRTCClient {
         
         if let audioTrack = stream.audioTracks.first{
             print("audio track faund")
-//            audioTrack.source.volume = 1.0
+            audioTrack.source.volume = 0.8
             remoteAudioTrack = audioTrack
+            DispatchQueue.main.async {
+                print("}}}}}}}stoping dots animation now...")
+                let connecting_animation = ConnectingView()
+                connecting_animation.stopAnimating()
+            }
         }
+       
+        
+        
     }
     
     
@@ -723,6 +726,7 @@ extension WebRTCClient{
         
         if videoView.isEqual(remoteRenderView!){
             //Setting to loud speaker after call connected
+           
             
             print("remote video size changed to: ", size)
             renderView = remoteRenderView
@@ -843,4 +847,76 @@ extension UIView {
         return image
     }
     
+}
+
+
+class SpeechRecognizer: NSObject, SFSpeechRecognizerDelegate {
+    
+    private let speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
+    private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
+    private var recognitionTask: SFSpeechRecognitionTask?
+    private let audioEngine = AVAudioEngine()
+    
+    override init() {
+        super.init()
+        speechRecognizer?.delegate = self
+    }
+    
+    func startRecognition() {
+        print("Audio Recognition started")
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setCategory(.record, mode: .default)
+            try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
+        } catch {
+            print("Audio session error: \(error.localizedDescription)")
+        }
+        
+        recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
+        
+        guard let recognitionRequest = recognitionRequest else {
+            fatalError("Unable to create an SFSpeechAudioBufferRecognitionRequest object")
+        }
+        
+        recognitionRequest.shouldReportPartialResults = true
+        
+        recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest, resultHandler: { (result, error) in
+            if let result = result {
+                print("Transcription: \(result.bestTranscription.formattedString)")
+            }
+            
+            if error != nil {
+                self.audioEngine.stop()
+                self.recognitionRequest = nil
+                self.recognitionTask = nil
+            }
+        })
+        
+        let inputNode = audioEngine.inputNode
+        let recordingFormat = inputNode.outputFormat(forBus: 0)
+        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
+            self.recognitionRequest?.append(buffer)
+        }
+        
+        audioEngine.prepare()
+        
+        do {
+            try audioEngine.start()
+        } catch {
+            print("audioEngine couldn't start because of an error: \(error.localizedDescription)")
+        }
+    }
+    func stopRecognition() {
+        guard audioEngine != nil, recognitionRequest != nil, recognitionTask != nil else {
+            // Handle the case when one or more objects are nil
+            return
+        }
+        audioEngine.stop()
+        recognitionRequest?.endAudio()
+        recognitionTask?.cancel()
+        
+        recognitionRequest = nil
+        recognitionTask = nil
+    }
+
 }

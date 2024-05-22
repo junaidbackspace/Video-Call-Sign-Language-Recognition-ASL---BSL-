@@ -574,7 +574,11 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
             print("User ID not found")
             return
         }
-        self.noFriendsLabel.isHidden = true
+        
+        DispatchQueue.main.async {
+            self.noFriendsLabel.isHidden = true
+        }
+       
         let Url = "\(Constants.serverURL)/contacts/\(userID)/online-contacts"
         
       
@@ -634,7 +638,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
             if self.contacts.count == 0 {
                 
                 self.noFriendsLabel.isHidden = false
-                self.noFriendsLabel.text = "You don't have any friends yet."
+                self.noFriendsLabel.text = "You don't have any online friends yet."
             }
             else{
                 self.noFriendsLabel.isHidden = true
