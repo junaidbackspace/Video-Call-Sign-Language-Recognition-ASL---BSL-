@@ -112,7 +112,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
            
                 let image =  self.localRenderView!.asImage()
 //                self.saveImageToDevice(image: image)
-            let apiUrl = URL(string: "\(Constants.serverURL)/predict/")!
+            let apiUrl = URL(string: "\(Constants.serverURL)/asl-signs/predict/")!
                 serverWrapper.predictAlphabet(baseUrl: apiUrl, image: image) { predictedLabel, error in
                     if let error = error {
                         print("Error: \(error.localizedDescription)")
@@ -126,7 +126,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
 
     func saveImageToDevice(image: UIImage) {
         PHPhotoLibrary.shared().performChanges({
-            if let imageData = image.jpegData(compressionQuality: 1.0) {
+            if let imageData = image.jpegData(compressionQuality: 3.0) {
                 let creationRequest = PHAssetCreationRequest.forAsset()
                 creationRequest.addResource(with: .photo, data: imageData, options: nil)
             }
@@ -241,6 +241,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         }
         stopCaptureLocalVideo()
         print("\n------disconecting all thing-----\n")
+        stopCaptureFrames()
 
     }
     

@@ -781,7 +781,7 @@ extension ViewController {
     func didReceiveMessage(message: String) {
         print("viewController message recieved : \(message)")
         
-        //speechReconizer start after recieving message
+       
         if disabilitytype_check_msg{
             let myLangType = UserDefaults.standard.string(forKey: "disabilityType")!
 //            if   (message == "deaf" && myLangType != "deaf") || (message != "deaf" && myLangType == "deaf") {
