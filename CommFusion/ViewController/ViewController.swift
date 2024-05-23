@@ -40,16 +40,47 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     }
     
    
-    
+   
+    @IBOutlet weak var msgtextView: UITextView!
+
     @IBOutlet weak var OutLet_Mic_Mute: UIButton!
     @IBOutlet weak var OutLet_speaker_Mute: UIButton!
     @IBOutlet weak var OutLetHangUp: UIButton!
     @IBOutlet weak var OutLetFreshMsg: UIButton!
     @IBOutlet weak var OutLetSwitchCam: UIButton!
     @IBOutlet weak var OutLetOldMsg: UIButton!
-    @IBOutlet weak var lblmsg: UILabel!
-    @IBOutlet weak var msgview_with_Btns: UIView!
+  
+
    
+    
+    func configureScrollView(with text: String) {
+            // Set your text
+        msgtextView.text = text
+               
+               // Ensure the text view does not allow editing
+        msgtextView.isEditable = false
+               
+               // Ensure the text view does not allow vertical scrolling
+        msgtextView.showsVerticalScrollIndicator = false
+        msgtextView.showsHorizontalScrollIndicator = true
+               
+               // Ensure the text view scrolls horizontally
+        msgtextView.isScrollEnabled = true
+        msgtextView.alwaysBounceHorizontal = true
+        msgtextView.textContainer.lineBreakMode = .byClipping
+        msgtextView.textContainer.heightTracksTextView = true
+        msgtextView.textContainer.widthTracksTextView = false
+               
+               // Scroll to the end of the content
+               scrollToEnd()
+           }
+
+          
+    func scrollToEnd() {
+               let bottomOffset = CGPoint(x: msgtextView.contentSize.width - msgtextView.bounds.size.width, y: 0)
+        msgtextView.setContentOffset(bottomOffset, animated: false)
+           }
+    
     @IBAction func btn_SwitchCamera(_ sender: Any) {
         webRTCClient.switchCameraPosition()
     }
@@ -151,6 +182,9 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         deinit {
             
            //Screen lock release
+            print("updating check of voice recognizer")
+            speechRecognizer?.isStopping = false
+            speechRecognizer?.stopRecognition()
          restoreAutoLock()
             NotificationCenter.default.removeObserver(self, name: .didReceiveMessage, object: nil)
                
@@ -302,8 +336,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         OutLetHangUp .layer.zPosition = 1
         OutLetOldMsg.layer.zPosition = 1
         OutLetFreshMsg.layer.zPosition = 1
-        lblmsg.layer.zPosition = 1
-        msgview_with_Btns.layer.zPosition = 1
+//        lblmsg.layer.zPosition = 1
+        msgtextView.layer.zPosition = 1
         OutLetSwitchCam.layer.zPosition = 1
         
        
@@ -327,21 +361,21 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         self.setupUI()
         let size = font_sizeDefault.integer(forKey: "fontsize")
         
-        let currentFontSize = lblmsg.font.pointSize
-        lblmsg.font = lblmsg.font.withSize(currentFontSize+CGFloat(size))
-        
-        let currentHeight = msgview_with_Btns.frame.size.height
+//        let currentFontSize = lblmsg.font.pointSize
+//        lblmsg.font = lblmsg.font.withSize(currentFontSize+CGFloat(size))
+//
+        let currentHeight = msgtextView.frame.size.height
        
-        msgview_with_Btns.frame.size.height = currentHeight + CGFloat(size)
+        msgtextView.frame.size.height = currentHeight + CGFloat(size)
        
         
         if let color = UserDefaults.standard.color(forKey: "color") {
             
-            lblmsg.textColor = color
+//            lblmsg.textColor = color
         }
         
         let opacity = caption_opacityDefault.float(forKey: "caption")
-        msgview_with_Btns.alpha = CGFloat(opacity)
+        msgtextView.alpha = CGFloat(opacity)
         
         
         
@@ -349,7 +383,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         let color = UserDefaults.standard.color(forKey: "color")
         if color == nil{
             let opacity = caption_opacityDefault.float(forKey: "caption")
-            msgview_with_Btns.alpha = CGFloat(1)
+            msgtextView.alpha = CGFloat(1)
             
         }
     }
@@ -396,8 +430,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         remoteVideoViewContainter.addSubview(OutLetHangUp)
         remoteVideoViewContainter.addSubview(OutLetSwitchCam)
 
-        remoteVideoViewContainter.addSubview(msgview_with_Btns)
-        msgview_with_Btns.addSubview(OutLetFreshMsg)
+        remoteVideoViewContainter.addSubview(msgtextView)
+        msgtextView.addSubview(OutLetFreshMsg)
         
         //Adding drag Gesture in local video view
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(dragview(_:)))
@@ -704,7 +738,8 @@ extension ViewController {
     func didReceiveData(data: Data) {
         if data == testmsg.data(using: String.Encoding.utf8) {
             if let Message = String(data: data, encoding: .utf8) {
-            lblmsg.text = Message
+                
+//            lblmsg.text = Message
             }
             print("String Message : \(data)")
         }
@@ -728,7 +763,9 @@ extension ViewController {
                 }
 //            webRTCClient.localVideoTrack.isEnabled = false
             }
-            self.lblmsg.text = message
+            //scroll view text
+            self.configureScrollView(with: message)
+
             disabilitytype_check_msg = false
         }
         }
@@ -737,7 +774,7 @@ extension ViewController {
                 
 //                self.speechRecognizer.startRecognition()
             }
-        self.lblmsg.text = message
+        self.msgtextView.text = message
         }
         
     }
@@ -880,8 +917,10 @@ class SpeechRecognizer: NSObject, SFSpeechRecognizerDelegate {
                                }
                        }
                 else{
+                    
                     print("MAking voice check false")
                     self.isStopping = false
+                    return
                 }
             }
         })
