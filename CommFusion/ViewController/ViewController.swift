@@ -46,14 +46,16 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     @IBOutlet weak var OutLet_Mic_Mute: UIButton!
     @IBOutlet weak var OutLet_speaker_Mute: UIButton!
     @IBOutlet weak var OutLetHangUp: UIButton!
-    @IBOutlet weak var OutLetFreshMsg: UIButton!
+ 
     @IBOutlet weak var OutLetSwitchCam: UIButton!
-    @IBOutlet weak var OutLetOldMsg: UIButton!
+   
   
 
    
     
     func configureScrollView(with text: String) {
+        
+       
             // Set your text
         msgtextView.text = text
                
@@ -61,25 +63,25 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         msgtextView.isEditable = false
                
                // Ensure the text view does not allow vertical scrolling
-        msgtextView.showsVerticalScrollIndicator = false
-        msgtextView.showsHorizontalScrollIndicator = true
+        msgtextView.showsVerticalScrollIndicator = true
+        msgtextView.showsHorizontalScrollIndicator = false
                
                // Ensure the text view scrolls horizontally
         msgtextView.isScrollEnabled = true
-        msgtextView.alwaysBounceHorizontal = true
-        msgtextView.textContainer.lineBreakMode = .byClipping
+        
+        msgtextView.textContainer.lineBreakMode = .byWordWrapping
         msgtextView.textContainer.heightTracksTextView = true
         msgtextView.textContainer.widthTracksTextView = false
                
                // Scroll to the end of the content
-               scrollToEnd()
+        scrollToBottom()
            }
 
           
-    func scrollToEnd() {
-               let bottomOffset = CGPoint(x: msgtextView.contentSize.width - msgtextView.bounds.size.width, y: 0)
-        msgtextView.setContentOffset(bottomOffset, animated: false)
-           }
+    func scrollToBottom() {
+        let bottomOffset = CGPoint(x: 0, y: msgtextView.contentSize.height - (msgtextView.bounds.size.height+5))
+        msgtextView.setContentOffset(bottomOffset, animated: true)
+        }
     
     @IBAction func btn_SwitchCamera(_ sender: Any) {
         webRTCClient.switchCameraPosition()
@@ -123,21 +125,21 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     }
     
     var testmsg = "1"
-    @IBAction func btnFreshmsg(_ sender: Any) {
-        print("sendind Message")
-//        let data = testmsg.data(using: String.Encoding.utf8)
-//        print(testmsg)
-        testmsg = String(Int(testmsg)!+1)
-        webRTCClient.sendMessge(message: testmsg)
-//        webRTCClient.sendData(data: data!)
-//          testmsg = String(testmsg)
-//                if let client = webRTCClient {
-//                    client.sendMessge(message: testmsg)
-//                } else {
-//                    print("webRTCClient is not initialized")
-//                }
-       
-    }
+//    @IBAction func btnFreshmsg(_ sender: Any) {
+//        print("sendind Message")
+////        let data = testmsg.data(using: String.Encoding.utf8)
+////        print(testmsg)
+//        testmsg = String(Int(testmsg)!+1)
+//        webRTCClient.sendMessge(message: testmsg)
+////        webRTCClient.sendData(data: data!)
+////          testmsg = String(testmsg)
+////                if let client = webRTCClient {
+////                    client.sendMessge(message: testmsg)
+////                } else {
+////                    print("webRTCClient is not initialized")
+////                }
+//
+//    }
     func textmsg(msg:String)
     {
      
@@ -145,8 +147,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         
     }
     
-    @IBAction func btnOldMsg(_ sender: Any) {
-    }
+//    @IBAction func btnOldMsg(_ sender: Any) {
+//    }
     //MARK: - Properties
     var webRTCClient: WebRTCClient!
     
@@ -170,8 +172,14 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
    
    
     @objc func endCall() {
+        DispatchQueue.main.async {
+        print("updating check of voice recognizer")
+            self.speechRecognizer?.isStopping = false
+            self.speechRecognizer?.stopRecognition()
+        
             print("\nNOW IN VIEWCONTROLLER TO END CALL")
-        CallEnd_API(vid: self.v_id, userid: Int(self.userID)!)
+            self.CallEnd_API(vid: self.v_id, userid: Int(self.userID)!)
+        }
             webRTCClient.disconnect()
             DispatchQueue.main.async {
                 self.navigationController?.popViewController(animated: true)
@@ -269,7 +277,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
   
-        
+        disabilitytype_check_msg = true
         let connectingView = ConnectingView(frame: CGRect(x: 0, y: 0, width: 100, height: 10))
                 connectingView.center = view.center
         connectingView.startAnimating()
@@ -334,8 +342,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         OutLet_Mic_Mute.layer.zPosition = 1
         OutLet_speaker_Mute.layer.zPosition = 1
         OutLetHangUp .layer.zPosition = 1
-        OutLetOldMsg.layer.zPosition = 1
-        OutLetFreshMsg.layer.zPosition = 1
+//        OutLetOldMsg.layer.zPosition = 1
+//        OutLetFreshMsg.layer.zPosition = 1
 //        lblmsg.layer.zPosition = 1
         msgtextView.layer.zPosition = 1
         OutLetSwitchCam.layer.zPosition = 1
@@ -361,6 +369,18 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         self.setupUI()
         let size = font_sizeDefault.integer(forKey: "fontsize")
         
+        if let textViewText = msgtextView.text {
+            let textViewSize = msgtextView.sizeThatFits(CGSize(width: msgtextView.frame.width, height: CGFloat.greatestFiniteMagnitude))
+            print("Text view size: \(textViewSize)")
+        }
+        
+        
+        
+        guard let currentFont = msgtextView.font else { return }
+        let newFontSize = currentFont.pointSize + CGFloat(size)
+              msgtextView.font = currentFont.withSize(newFontSize)
+        
+        
 //        let currentFontSize = lblmsg.font.pointSize
 //        lblmsg.font = lblmsg.font.withSize(currentFontSize+CGFloat(size))
 //
@@ -371,6 +391,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         
         if let color = UserDefaults.standard.color(forKey: "color") {
             
+            msgtextView.textColor = color
 //            lblmsg.textColor = color
         }
         
@@ -431,7 +452,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         remoteVideoViewContainter.addSubview(OutLetSwitchCam)
 
         remoteVideoViewContainter.addSubview(msgtextView)
-        msgtextView.addSubview(OutLetFreshMsg)
+       
         
         //Adding drag Gesture in local video view
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(dragview(_:)))
@@ -465,6 +486,9 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
     @objc func hangupButtonTapped(){
         print("hangup Tapped")
+        speechRecognizer?.isStopping = true
+        speechRecognizer?.stopRecognition()
+        
       CallEnd_API(vid: self.v_id, userid: Int(self.userID)!)
 
         let endCallData: [String: Any] = [
@@ -752,15 +776,14 @@ extension ViewController {
         
         //speechReconizer start after recieving message
         if disabilitytype_check_msg{
-        let LangType = UserDefaults.standard.string(forKey: "disability_Type")!
-        if message == "blind" || LangType == "blind" {
+        let myLangType = UserDefaults.standard.string(forKey: "disabilityType")!
+            if   (message == "deaf" && myLangType != "deaf") || (message != "deaf" && myLangType == "deaf") {
             
-            if LangType == "deaf" || message == "deaf"
-            {
                 DispatchQueue.main.async {
                     print("++++++++Starting REcognition.....++++++")
                     self.speechRecognizer!.startRecognition()
                 }
+                
 //            webRTCClient.localVideoTrack.isEnabled = false
             }
             //scroll view text
@@ -768,16 +791,12 @@ extension ViewController {
 
             disabilitytype_check_msg = false
         }
+        DispatchQueue.main.async {
+        self.configureScrollView(with: message)
         }
-        else{
-            DispatchQueue.main.async {
-                
-//                self.speechRecognizer.startRecognition()
-            }
-        self.msgtextView.text = message
-        }
-        
     }
+        
+    
     
     func hunguptapedbyOtherCaller(){
         
@@ -934,6 +953,7 @@ class SpeechRecognizer: NSObject, SFSpeechRecognizerDelegate {
         audioEngine.prepare()
         
         do {
+            print("strating engine for voice()()()()")
             try audioEngine.start()
         } catch {
             print("audioEngine couldn't start because of an error: \(error.localizedDescription)")
@@ -944,13 +964,24 @@ class SpeechRecognizer: NSObject, SFSpeechRecognizerDelegate {
         
     
     func stopRecognition() {
-        audioEngine.stop()
-        audioEngine.inputNode.removeTap(onBus: 0)
-        
-        recognitionRequest?.endAudio()
-        recognitionTask?.cancel()
-        
-        recognitionRequest = nil
-        recognitionTask = nil
-    }
+            print("Stopping audio engine and recognition task")
+            audioEngine.stop()
+            
+            if let inputNode = audioEngine.inputNode as? AVAudioInputNode {
+                inputNode.removeTap(onBus: 0)
+            }
+            
+            recognitionRequest?.endAudio()
+            recognitionTask?.cancel()
+            
+            recognitionRequest = nil
+            recognitionTask = nil
+            
+            let audioSession = AVAudioSession.sharedInstance()
+            do {
+                try audioSession.setActive(false, options: .notifyOthersOnDeactivation)
+            } catch {
+                print("Audio session deactivation error: \(error.localizedDescription)")
+            }
+        }
 }

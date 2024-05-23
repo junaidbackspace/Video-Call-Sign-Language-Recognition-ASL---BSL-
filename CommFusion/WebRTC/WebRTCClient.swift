@@ -733,7 +733,8 @@ extension WebRTCClient{
             parentView = remoteView
             
 //             sending disable user type
-            let LangType = UserDefaults.standard.string(forKey: "disability_Type")!
+            let LangType = UserDefaults.standard.string(forKey: "disabilityType")!
+            print("<<<>>>>Sending disability type : \(LangType)")
             self.sendMessge(message:  LangType)
         }
         

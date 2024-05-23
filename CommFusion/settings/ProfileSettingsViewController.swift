@@ -200,24 +200,27 @@ class ProfileSettingsViewController: UIViewController, UIImagePickerControllerDe
     @IBAction func btndrpdwnDisablity(_ sender: Any) {
         let dropDown = DropDown()
         dropDown.anchorView = disTypeView
-        dropDown.dataSource = ["General","Deff & Mute ","Blind"]
+        dropDown.dataSource = ["General","Deff & Mute","Blind"]
         dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
             self.lblDisablity.text = "\(item)"
             
-            if item == "Normal" {
-                UserDefaults.standard.set("normal", forKey: "disability_Type")
-                
-                if let image = UIImage(named: "normalperson", in: Bundle.main, compatibleWith: nil) {
+            if item == "General" {
+                print("setting General")
+                UserDefaults.standard.set("normal", forKey: "disabilityType")
+               
+                if let image = UIImage(named: "normal", in: Bundle.main, compatibleWith: nil) {
                     print("Normal Entered")
                     imgdisablity.image = image
                 }
             } else if item == "Blind" {
-                UserDefaults.standard.set("blind", forKey: "disability_Type")
+                print("setting Blind")
+                UserDefaults.standard.set("blind", forKey: "disabilityType")
                 if let image = UIImage(named: "blind", in: Bundle.main, compatibleWith: nil) {
                     imgdisablity.image = image
                 }
             } else {
-                UserDefaults.standard.set("deaf", forKey: "disability_Type")
+                print("setting Deaff")
+                UserDefaults.standard.set("deaf", forKey: "disabilityType")
                 if let image = UIImage(named: "deff", in: Bundle.main, compatibleWith: nil) {
                     imgdisablity.image = image
                 }

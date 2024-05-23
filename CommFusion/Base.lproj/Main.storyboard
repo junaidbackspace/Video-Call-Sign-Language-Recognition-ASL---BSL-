@@ -308,11 +308,11 @@
         <scene sceneID="eCh-nQ-xbI">
             <objects>
                 <viewController storyboardIdentifier="signupscreen" id="OFn-Vj-P9m" customClass="SignUpViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="1w1-FW-uC5">
+                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="1w1-FW-uC5">
                         <rect key="frame" x="0.0" y="0.0" width="828" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nqL-Fh-3wM">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nqL-Fh-3wM">
                                 <rect key="frame" x="0.0" y="0.0" width="828" height="736"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XLo-Oe-pFd">
@@ -1816,14 +1816,14 @@
         <scene sceneID="zPq-uy-VkO">
             <objects>
                 <viewController storyboardIdentifier="profilesettingsScreen" id="K7Z-Vh-RAa" customClass="ProfileSettingsViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="n1f-oW-XYb">
+                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="n1f-oW-XYb">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="blZ-uu-W4P">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="blZ-uu-W4P">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QNu-QK-fp3">
+                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QNu-QK-fp3">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="1200"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VhQ-vS-CJ7">
@@ -2296,14 +2296,14 @@
         <scene sceneID="KxS-R2-bg1">
             <objects>
                 <viewController storyboardIdentifier="termsconditions" id="6pY-0x-mis" customClass="termsConditionViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="IkY-Jv-J3B">
+                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="IkY-Jv-J3B">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vfm-PR-29H">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vfm-PR-29H">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4WX-Ji-1Zt">
+                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4WX-Ji-1Zt">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="3400"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" lineBreakMode="wordWrap" numberOfLines="150" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9cu-2A-9BU">
@@ -2704,7 +2704,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
         <scene sceneID="Wr7-9d-02a">
             <objects>
                 <viewController storyboardIdentifier="playerController" hidesBottomBarWhenPushed="YES" id="8hF-Et-3gG" customClass="PlayerLessonsViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="WZm-hd-wR4">
+                    <view key="view" contentMode="scaleToFill" id="WZm-hd-wR4">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -2715,7 +2715,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                     <constraint firstAttribute="width" constant="352" id="oap-hc-Wa0"/>
                                 </constraints>
                             </imageView>
-                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" ambiguous="YES" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Kdg-E6-a9r">
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Kdg-E6-a9r">
                                 <rect key="frame" x="56" y="459" width="302" height="4"/>
                             </progressView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mz0-HZ-ZOb">
@@ -2756,7 +2756,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="drA-ZD-Opy">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="drA-ZD-Opy">
                                 <rect key="frame" x="0.0" y="563" width="414" height="164"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gDc-fk-eZS">
@@ -3539,61 +3539,9 @@ By using the Application, you acknowledge that you have read, understood, and ag
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wl8-C9-sLJ">
-                                <rect key="frame" x="0.0" y="590" width="414" height="39"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5II-DH-ZBP">
-                                        <rect key="frame" x="391" y="5.6666666666666643" width="23" height="22"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="23" id="PfG-85-Bh5"/>
-                                        </constraints>
-                                        <state key="normal" backgroundImage="arrowtriangle.right.fill" catalog="system"/>
-                                        <connections>
-                                            <action selector="btnFreshmsg:" destination="BYZ-38-t0r" eventType="touchUpInside" id="faM-gX-GZm"/>
-                                        </connections>
-                                    </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Hi , how are you?" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mO7-aV-qkW">
-                                        <rect key="frame" x="28" y="9" width="366" height="23"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6aV-84-YSj">
-                                        <rect key="frame" x="0.0" y="5.6666666666666643" width="23" height="22"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="23" id="xSx-iM-TFV"/>
-                                        </constraints>
-                                        <state key="normal" backgroundImage="arrowtriangle.left.fill" catalog="system"/>
-                                        <connections>
-                                            <action selector="btnOldMsg:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sJK-LV-AwK"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" systemColor="systemGray6Color"/>
-                                <constraints>
-                                    <constraint firstItem="5II-DH-ZBP" firstAttribute="trailing" secondItem="9jd-tP-hjZ" secondAttribute="trailing" id="3oM-ku-WwT"/>
-                                    <constraint firstItem="6aV-84-YSj" firstAttribute="top" secondItem="9jd-tP-hjZ" secondAttribute="top" constant="2.9999999999998508" id="6L3-a3-WbY"/>
-                                    <constraint firstItem="6aV-84-YSj" firstAttribute="firstBaseline" secondItem="5II-DH-ZBP" secondAttribute="firstBaseline" id="AdU-dJ-8Mh"/>
-                                    <constraint firstAttribute="height" constant="39" id="Nw0-RS-sFZ"/>
-                                    <constraint firstAttribute="trailing" secondItem="5II-DH-ZBP" secondAttribute="trailing" id="Ooe-cf-jzv"/>
-                                    <constraint firstItem="6aV-84-YSj" firstAttribute="leading" secondItem="Wl8-C9-sLJ" secondAttribute="leading" id="ZBm-KI-s1c"/>
-                                    <constraint firstItem="5II-DH-ZBP" firstAttribute="baseline" secondItem="6aV-84-YSj" secondAttribute="baseline" id="ZiS-Mk-Kqj"/>
-                                    <constraint firstItem="6aV-84-YSj" firstAttribute="top" secondItem="5II-DH-ZBP" secondAttribute="top" id="dXc-YG-zzp"/>
-                                    <constraint firstAttribute="width" constant="414" id="etV-RQ-GN3"/>
-                                    <constraint firstItem="mO7-aV-qkW" firstAttribute="centerX" secondItem="Wl8-C9-sLJ" secondAttribute="centerX" constant="4" id="gbY-C9-aq8"/>
-                                    <constraint firstItem="6aV-84-YSj" firstAttribute="centerY" secondItem="Wl8-C9-sLJ" secondAttribute="centerY" constant="-2.9999999999999964" id="rWB-pU-8p8"/>
-                                    <constraint firstItem="6aV-84-YSj" firstAttribute="bottom" secondItem="5II-DH-ZBP" secondAttribute="bottom" id="uOv-7m-mMj"/>
-                                    <constraint firstItem="mO7-aV-qkW" firstAttribute="centerY" secondItem="Wl8-C9-sLJ" secondAttribute="centerY" constant="1" id="y90-Yn-8HR"/>
-                                </constraints>
-                                <viewLayoutGuide key="contentLayoutGuide" id="Ndq-kS-cBD"/>
-                                <viewLayoutGuide key="frameLayoutGuide" id="9jd-tP-hjZ"/>
-                            </scrollView>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Gl-h1-HgE">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Gl-h1-HgE">
                                 <rect key="frame" x="88" y="647" width="58" height="45"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="58" id="8bi-d9-XEd"/>
-                                    <constraint firstAttribute="height" constant="47.329999999999998" id="w5C-m1-pdS"/>
-                                </constraints>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="tintColor" systemColor="linkColor"/>
                                 <state key="normal" backgroundImage="arrow.triangle.2.circlepath.camera.fill" catalog="system"/>
                                 <connections>
@@ -3628,30 +3576,21 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                     <action selector="btn_Mic_Mute:" destination="BYZ-38-t0r" eventType="touchUpInside" id="i7i-dx-DVF"/>
                                 </connections>
                             </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="jim-tr-1r5">
-                                <rect key="frame" x="87" y="296" width="240" height="128"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jim-tr-1r5">
+                                <rect key="frame" x="20" y="594" width="374" height="43"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <color key="backgroundColor" systemColor="systemGray6Color"/>
                                 <color key="textColor" systemColor="labelColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="Wl8-C9-sLJ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="551-zL-Ejb"/>
-                            <constraint firstAttribute="trailing" secondItem="Wl8-C9-sLJ" secondAttribute="trailing" id="ZB8-tT-RC5"/>
-                            <constraint firstItem="0Gl-h1-HgE" firstAttribute="top" secondItem="Wl8-C9-sLJ" secondAttribute="bottom" constant="17" id="ZVO-5p-3tl"/>
-                            <constraint firstItem="Wl8-C9-sLJ" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="590" id="gjJ-G0-xDu"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="wax-MK-Llz"/>
                     <connections>
-                        <outlet property="OutLetFreshMsg" destination="5II-DH-ZBP" id="JIj-0d-h5T"/>
                         <outlet property="OutLetHangUp" destination="ukj-JL-nzc" id="KOb-Qg-boO"/>
-                        <outlet property="OutLetOldMsg" destination="6aV-84-YSj" id="rPP-wb-G4O"/>
                         <outlet property="OutLetSwitchCam" destination="0Gl-h1-HgE" id="24u-4U-93N"/>
                         <outlet property="OutLet_Mic_Mute" destination="6Zf-IW-vs7" id="hnq-dS-ppp"/>
                         <outlet property="OutLet_speaker_Mute" destination="MhY-XV-PtI" id="l17-RU-TDt"/>
