@@ -49,7 +49,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
  
     @IBOutlet weak var OutLetSwitchCam: UIButton!
    
-  
+    let myLangType = UserDefaults.standard.string(forKey: "disabilityType")!
 
    
     
@@ -118,8 +118,11 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
     @IBAction func btnHangupCall(_ sender: Any) {
         print("Entered in hangup")
+        if myLangType == "blind"
+        {
         speechRecognizer?.isStopping = true
         speechRecognizer?.stopRecognition()
+        }
         hangupButtonTapped()
         
     }
@@ -174,9 +177,10 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     @objc func endCall() {
         DispatchQueue.main.async {
         print("updating check of voice recognizer")
+            if self.myLangType == "blind"{
             self.speechRecognizer?.isStopping = false
             self.speechRecognizer?.stopRecognition()
-        
+            }
             print("\nNOW IN VIEWCONTROLLER TO END CALL")
             self.CallEnd_API(vid: self.v_id, userid: Int(self.userID)!)
         }
@@ -474,7 +478,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
             webRTCClient.connect(onSuccess: { (offerSDP: RTCSessionDescription) -> Void in
                 self.sendSDP(sessionDescription: offerSDP)
             })
-//            webRTCClient.startCaptureFrames()
+           
             
         
         }
@@ -486,8 +490,11 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
     @objc func hangupButtonTapped(){
         print("hangup Tapped")
+        if myLangType == "blind"
+        {
         speechRecognizer?.isStopping = true
         speechRecognizer?.stopRecognition()
+        }
         
       CallEnd_API(vid: self.v_id, userid: Int(self.userID)!)
 
@@ -776,16 +783,27 @@ extension ViewController {
         
         //speechReconizer start after recieving message
         if disabilitytype_check_msg{
-        let myLangType = UserDefaults.standard.string(forKey: "disabilityType")!
-            if   (message == "deaf" && myLangType != "deaf") || (message != "deaf" && myLangType == "deaf") {
-            
-                DispatchQueue.main.async {
-                    print("++++++++Starting REcognition.....++++++")
-                    self.speechRecognizer!.startRecognition()
-                }
+            let myLangType = UserDefaults.standard.string(forKey: "disabilityType")!
+//            if   (message == "deaf" && myLangType != "deaf") || (message != "deaf" && myLangType == "deaf") {
+//
+//                DispatchQueue.main.async {
+//                    print("++++++++Starting REcognition.....++++++")
+//                    self.speechRecognizer!.startRecognition()
+//                }
+            if myLangType == "deaf"
+            {
+                webRTCClient.startCaptureFrames()
+            }
+           else if myLangType == "blind"
+            {
+            DispatchQueue.main.async {
+                                print("++++++++Starting REcognition.....++++++")
+                                self.speechRecognizer!.startRecognition()
+                            }
+            }
                 
 //            webRTCClient.localVideoTrack.isEnabled = false
-            }
+//            }
             //scroll view text
             self.configureScrollView(with: message)
 

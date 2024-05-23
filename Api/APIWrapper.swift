@@ -1,4 +1,6 @@
 import Foundation
+import UIKit
+
 class APIWrapper {
   
 
@@ -336,4 +338,79 @@ class APIWrapper {
             }
         }.resume()
     }
+    
+    
+    func predictAlphabet(baseUrl: URL, image: UIImage, completion: @escaping (String?, Error?) -> Void) {
+           var request = URLRequest(url: baseUrl)
+           request.httpMethod = "POST"
+           let boundary = UUID().uuidString
+           request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+           
+           guard let imageData = image.jpegData(compressionQuality: 1.0) else {
+               let error = NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Could not get JPEG representation of UIImage"])
+               completion(nil, error)
+               return
+           }
+           
+           var body = Data()
+           
+           body.append("--\(boundary)\r\n".data(using: .utf8)!)
+           body.append("Content-Disposition: form-data; name=\"file\"; filename=\"image.jpg\"\r\n".data(using: .utf8)!)
+           body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
+           body.append(imageData)
+           body.append("\r\n".data(using: .utf8)!)
+           body.append("--\(boundary)--\r\n".data(using: .utf8)!)
+           
+           request.httpBody = body
+           
+           URLSession.shared.dataTask(with: request) { data, response, error in
+               DispatchQueue.main.async {
+                   if let error = error {
+                       print("Error in receiving:", error.localizedDescription)
+                       completion(nil, error)
+                       return
+                   }
+                   
+                   guard let httpResponse = response as? HTTPURLResponse else {
+                       let error = NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid HTTP response"])
+                       print("Error in receiving:", error.localizedDescription)
+                       completion(nil, error)
+                       return
+                   }
+                   
+                   if (200...299).contains(httpResponse.statusCode) {
+                       if let responseData = data {
+                           do {
+                               if let json = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any] {
+                                   if let predictedLabel = json["predicted_label"] as? String {
+                                       completion(predictedLabel, nil)
+                                   } else {
+                                       let error = NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to decode JSON response"])
+                                       print("Error in receiving:", error.localizedDescription)
+                                       completion(nil, error)
+                                   }
+                               } else {
+                                   let error = NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to decode JSON response"])
+                                   print("Error in receiving:", error.localizedDescription)
+                                   completion(nil, error)
+                               }
+                           } catch {
+                               print("Error decoding response:", error.localizedDescription)
+                               completion(nil, error)
+                           }
+                       } else {
+                           let error = NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data received from the server"])
+                           print("Error in receiving:", error.localizedDescription)
+                           completion(nil, error)
+                       }
+                   } else {
+                       let error = NSError(domain: "", code: httpResponse.statusCode, userInfo: [NSLocalizedDescriptionKey: "Failed to fetch data"])
+                       print("Error in receiving:", error.localizedDescription)
+                       completion(nil, error)
+                   }
+               }
+           }.resume()
+       }
+   
+    
 }

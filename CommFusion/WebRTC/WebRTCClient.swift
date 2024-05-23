@@ -28,7 +28,7 @@ protocol WebRTCClientDelegate {
 
 class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, RTCDataChannelDelegate {
   
-  
+    var serverWrapper = APIWrapper()
     private var peerConnectionFactory: RTCPeerConnectionFactory!
     private var peerConnection: RTCPeerConnection?
     private var videoCapturer: RTCVideoCapturer!
@@ -101,7 +101,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         DispatchQueue.global().async {
             DispatchQueue.main.async {
                 
-                self.captureTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.captureFrame), userInfo: nil, repeats: true)
+                self.captureTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.captureFrame), userInfo: nil, repeats: true)
                 print("\n\nBackend thread\n\n")
             }
         }
@@ -111,8 +111,16 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         @objc func captureFrame() {
            
                 let image =  self.localRenderView!.asImage()
-                self.saveImageToDevice(image: image)
-             
+//                self.saveImageToDevice(image: image)
+            let apiUrl = URL(string: "\(Constants.serverURL)/predict/")!
+                serverWrapper.predictAlphabet(baseUrl: apiUrl, image: image) { predictedLabel, error in
+                    if let error = error {
+                        print("Error: \(error.localizedDescription)")
+                    } else if let predictedLabel = predictedLabel {
+                        print("Predicted Label: \(predictedLabel)")
+                        self.sendMessge(message: predictedLabel)
+                    }
+                }
            
         }
 
