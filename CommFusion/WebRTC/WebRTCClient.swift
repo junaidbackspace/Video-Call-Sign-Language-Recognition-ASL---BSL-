@@ -101,7 +101,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         DispatchQueue.global().async {
             DispatchQueue.main.async {
                 
-                self.captureTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.captureFrame), userInfo: nil, repeats: true)
+                self.captureTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.captureFrame), userInfo: nil, repeats: true)
                 print("\n\nBackend thread\n\n")
             }
         }
