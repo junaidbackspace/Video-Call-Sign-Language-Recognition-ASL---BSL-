@@ -792,7 +792,8 @@ extension ViewController {
 //                }
             if myLangType == "deaf"
             {
-                webRTCClient.startCaptureFrames()
+//                webRTCClient.startCaptureFrames()
+                  webRTCClient.startCapturingVideo()
             }
            else if myLangType == "blind"
             {
