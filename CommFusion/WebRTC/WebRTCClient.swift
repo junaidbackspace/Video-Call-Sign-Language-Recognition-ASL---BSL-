@@ -11,7 +11,7 @@ import WebRTC
 import Photos
 import AVFoundation
 import Speech
-import Alamofire
+import requests
 
 protocol WebRTCClientDelegate {
     func didGenerateCandidate(iceCandidate: RTCIceCandidate)
@@ -154,7 +154,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
               return
           }
           finishRecording()
-          sendVideoToServer(videoData)
+          uploadVideoToServer(videoData)
       }
       
       // Setup video writer for recording
@@ -192,34 +192,69 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
            }
       }
       
-      // Send video data to server
-      private func sendVideoToServer(_ data: Data) {
-          let url = URL(string: "\(Constants.serverURL)/upload_video")!
-          var request = URLRequest(url: url)
-          request.httpMethod = "POST"
-          request.setValue("multipart/form-data; boundary=Boundary-\(UUID().uuidString)", forHTTPHeaderField: "Content-Type")
-          
-          var body = Data()
-          let boundary = "Boundary-\(UUID().uuidString)"
-          body.append("--\(boundary)\r\n".data(using: .utf8)!)
-          body.append("Content-Disposition: form-data; name=\"file\"; filename=\"video.mov\"\r\n".data(using: .utf8)!)
-          body.append("Content-Type: video/quicktime\r\n\r\n".data(using: .utf8)!)
-          body.append(data)
-          body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
-          
-          request.httpBody = body
-          
-          AF.upload(request).response { response in
-              switch response.result {
-              case .success(let data):
-                  print("Upload Successful")
-                  // Process server response data if needed
-              case .failure(let error):
-                  print("Upload Failed: \(error)")
-                  // Handle upload failure
-              }
-          }
-      }
+    func uploadVideoToServer(videoData: Data) {
+        do {
+            // Create a temporary URL to save the video data
+            let tempURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("video.mov")
+            
+            // Write the video data to the temporary URL
+            try videoData.write(to: tempURL)
+            
+            // Upload the video from the temporary URL
+            uploadVideoToServer(videoURL: tempURL)
+        } catch {
+            print("Error saving video data to temporary file: \(error)")
+        }
+    }
+
+    func uploadVideoToServer(videoURL: URL) {
+        let serverURL = URL(string: "\(Constants.serverURL)/predict_video/")!
+        
+        var request = URLRequest(url: serverURL)
+        request.httpMethod = "POST"
+        
+        let boundary = "Boundary-\(UUID().uuidString)"
+        let contentType = "multipart/form-data; boundary=\(boundary)"
+        request.setValue(contentType, forHTTPHeaderField: "Content-Type")
+        
+        let body = NSMutableData()
+        
+        // Append file data
+        body.append("--\(boundary)\r\n")
+        body.append("Content-Disposition: form-data; name=\"file\"; filename=\"video.mov\"\r\n")
+        body.append("Content-Type: video/quicktime\r\n\r\n")
+        body.append(contentsOf: try! Data(contentsOf: videoURL))
+        body.append("\r\n")
+        
+        // Append closing boundary
+        body.append("--\(boundary)--\r\n")
+        
+        request.httpBody = body as Data
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error uploading video to server: \(error)")
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("Unexpected response: \(response)")
+                return
+            }
+            
+            if (200 ..< 300).contains(httpResponse.statusCode) {
+                print("Video uploaded successfully")
+                // Process response if needed
+            } else {
+                print("Unexpected response status code: \(httpResponse.statusCode)")
+            }
+        }
+        
+        task.resume()
+    }
+
+
+
 
 
 //    func sendVideoToServer() {
