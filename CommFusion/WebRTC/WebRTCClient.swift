@@ -11,6 +11,7 @@ import WebRTC
 import Photos
 import AVFoundation
 import Speech
+import Alamofire
 
 protocol WebRTCClientDelegate {
     func didGenerateCandidate(iceCandidate: RTCIceCandidate)
@@ -100,7 +101,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     func startCaptureFrames() {
         DispatchQueue.global().async {
             DispatchQueue.main.async {
-                
+               
                 self.captureTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.captureFrame), userInfo: nil, repeats: true)
                 print("\n\nBackend thread\n\n")
             }
@@ -124,156 +125,147 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
            
         }
 
-        var videoWriter: AVAssetWriter?
-        var videoWriterInput: AVAssetWriterInput?
-        var pixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor?
-        var frameCount: Int64 = 0
-        var captureDuration: Double = 3.0
-        var timer: Timer?
-        var videoData: Data?
+   
     
-    
-    @objc func capturevideoFrame() {
-        print("started taking video for 3 sec")
-            guard let image = self.localRenderView?.asImage() else { return }
-            if let pixelBuffer = pixelBufferFromImage(image: image) {
-                let currentTime = CMTimeMake(value: frameCount, timescale: 30)
-                pixelBufferAdaptor?.append(pixelBuffer, withPresentationTime: currentTime)
-                frameCount += 1
-            }
-        }
+    var videoData: Data = Data()
+      var videoWriter: AVAssetWriter?
+      var videoWriterInput: AVAssetWriterInput?
+      var pixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor?
+      var recordingDuration: TimeInterval = 3.0
+      var recordingStartTime: CMTime?
+      let videoSettings: [String: Any] = [
+          AVVideoCodecKey: AVVideoCodecType.h264,
+          AVVideoWidthKey: 1280,
+          AVVideoHeightKey: 720
+      ]
+      
+      // Start recording video
+      func startRecording() {
+          setupVideoWriter()
+          recordingStartTime = CMTime.zero
+      }
+      
+      // Stop recording video and send it to server
+      func stopRecordingAndSendToServer() {
+          guard let recordingStartTime = recordingStartTime else { return }
+          let elapsedTime = CMTimeGetSeconds(CMTimeSubtract(CMTimeGetSeconds(CMTime.now()), recordingStartTime))
+          if elapsedTime < recordingDuration {
+              print("Recording duration is less than 3 seconds")
+              return
+          }
+          finishRecording()
+          sendVideoToServer(videoData)
+      }
+      
+      // Setup video writer for recording
+      private func setupVideoWriter() {
+          guard let url = URL(string: "memory://video") else {
+              fatalError("Invalid URL for memory buffer")
+          }
+          do {
+              videoWriter = try AVAssetWriter(outputURL: url, fileType: .mov)
+              guard let videoWriter = videoWriter else { return }
+              videoWriterInput = AVAssetWriterInput(mediaType: .video, outputSettings: videoSettings)
+              guard let videoWriterInput = videoWriterInput, videoWriter.canAdd(videoWriterInput) else { return }
+              videoWriter.add(videoWriterInput)
+              
+              // Additional setup for pixel buffer adaptor
+              
+              videoWriter.startWriting()
+              videoWriter.startSession(atSourceTime: .zero)
+          } catch {
+              print("Error setting up video writer: \(error)")
+          }
+      }
+      
+      // Finish recording video
+      private func finishRecording() {
+        guard let videoWriter = videoWriter else { return }
+           videoWriterInput?.markAsFinished()
+           videoWriter.finishWriting {
+               print("Video writing finished successfully.")
+               if let error = videoWriter.error {
+                   print("Error finishing writing: \(error.localizedDescription)")
+               } else {
+                   // Perform any additional tasks upon successful video recording completion
+               }
+           }
+      }
+      
+      // Send video data to server
+      private func sendVideoToServer(_ data: Data) {
+          let url = URL(string: "\(Constants.serverURL)/upload_video")!
+          var request = URLRequest(url: url)
+          request.httpMethod = "POST"
+          request.setValue("multipart/form-data; boundary=Boundary-\(UUID().uuidString)", forHTTPHeaderField: "Content-Type")
+          
+          var body = Data()
+          let boundary = "Boundary-\(UUID().uuidString)"
+          body.append("--\(boundary)\r\n".data(using: .utf8)!)
+          body.append("Content-Disposition: form-data; name=\"file\"; filename=\"video.mov\"\r\n".data(using: .utf8)!)
+          body.append("Content-Type: video/quicktime\r\n\r\n".data(using: .utf8)!)
+          body.append(data)
+          body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+          
+          request.httpBody = body
+          
+          AF.upload(request).response { response in
+              switch response.result {
+              case .success(let data):
+                  print("Upload Successful")
+                  // Process server response data if needed
+              case .failure(let error):
+                  print("Upload Failed: \(error)")
+                  // Handle upload failure
+              }
+          }
+      }
 
-        func startCapturingVideo() {
-            print("taking video of 3 sec")
-            timer = Timer.scheduledTimer(timeInterval: 1.0 / 30.0, target: self, selector: #selector(capturevideoFrame), userInfo: nil, repeats: true)
-            DispatchQueue.main.asyncAfter(deadline: .now() + captureDuration) {
-                self.stopCapturingFrames()
-            }
-        }
 
-        func stopCapturingFrames() {
-            print("taking video finished")
-            timer?.invalidate()
-            timer = nil
-            finishWriting()
-        }
+//    func sendVideoToServer() {
+//        print("sending video to server ")
+//            guard let videoData = videoData else { return }
+//
+//        let url = URL(string: "\(Constants.serverURL)/predict_video/")!
+//            var request = URLRequest(url: url)
+//            request.httpMethod = "POST"
+//            request.setValue("multipart/form-data; boundary=Boundary-\(UUID().uuidString)", forHTTPHeaderField: "Content-Type")
+//
+//            var body = Data()
+//            let boundary = "Boundary-\(UUID().uuidString)"
+//            body.append("--\(boundary)\r\n".data(using: .utf8)!)
+//            body.append("Content-Disposition: form-data; name=\"file\"; filename=\"video.mov\"\r\n".data(using: .utf8)!)
+//            body.append("Content-Type: video/quicktime\r\n\r\n".data(using: .utf8)!)
+//            body.append(videoData)
+//            body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+//
+//            request.httpBody = body
+//
+//            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+//                if let error = error {
+//                    print("Error sending video to server: \(error)")
+//                    return
+//                }
+//                if let response = response as? HTTPURLResponse, response.statusCode == 200, let data = data {
+//                    do {
+//                        if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+//                           let word = jsonResponse["word"] as? String {
+//                            print("Predicted word: \(word)")
+//                            DispatchQueue.main.asyncAfter(deadline: .now()+3) {
+//                                self.startCapturingVideo()
+//                            }
+//                        }
+//                    } catch {
+//                        print("Error parsing JSON response: \(error)")
+//                    }
+//                } else {
+//                    print("Unexpected response: \(response)")
+//                }
+//            }
+//            task.resume()
+//        }
 
-        func setupVideoWriter() {
-            let outputURL = URL(fileURLWithPath: NSTemporaryDirectory().appending("output.mov"))
-            do {
-                videoWriter = try AVAssetWriter(outputURL: outputURL, fileType: .mov)
-                let videoSettings: [String: Any] = [
-                    AVVideoCodecKey: AVVideoCodecType.h264,
-                    AVVideoWidthKey: 1280,
-                    AVVideoHeightKey: 720
-                ]
-                videoWriterInput = AVAssetWriterInput(mediaType: .video, outputSettings: videoSettings)
-                videoWriter?.add(videoWriterInput!)
-                
-                let sourcePixelBufferAttributes: [String: Any] = [
-                    kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32ARGB,
-                    kCVPixelBufferWidthKey as String: 1280,
-                    kCVPixelBufferHeightKey as String: 720
-                ]
-                pixelBufferAdaptor = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: videoWriterInput!,
-                                                                          sourcePixelBufferAttributes: sourcePixelBufferAttributes)
-                videoWriter?.startWriting()
-                videoWriter?.startSession(atSourceTime: .zero)
-            } catch {
-                print("Error setting up video writer: \(error)")
-            }
-        }
-
-        func finishWriting() {
-            videoWriterInput?.markAsFinished()
-            videoWriter?.finishWriting {
-                self.saveVideoToVariable()
-                self.sendVideoToServer()
-            }
-        }
-
-        func saveVideoToVariable() {
-            let outputURL = URL(fileURLWithPath: NSTemporaryDirectory().appending("output.mov"))
-            do {
-                videoData = try Data(contentsOf: outputURL)
-                try FileManager.default.removeItem(at: outputURL) // Clean up the temporary file
-            } catch {
-                print("Error reading video data: \(error)")
-            }
-        }
-
-    func sendVideoToServer() {
-        print("sending video to server")
-            guard let videoData = videoData else { return }
-
-        let url = URL(string: "\(Constants.serverURL)/predict_video/")!
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST"
-            request.setValue("multipart/form-data; boundary=Boundary-\(UUID().uuidString)", forHTTPHeaderField: "Content-Type")
-
-            var body = Data()
-            let boundary = "Boundary-\(UUID().uuidString)"
-            body.append("--\(boundary)\r\n".data(using: .utf8)!)
-            body.append("Content-Disposition: form-data; name=\"file\"; filename=\"video.mov\"\r\n".data(using: .utf8)!)
-            body.append("Content-Type: video/quicktime\r\n\r\n".data(using: .utf8)!)
-            body.append(videoData)
-            body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
-
-            request.httpBody = body
-
-            let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                if let error = error {
-                    print("Error sending video to server: \(error)")
-                    return
-                }
-                if let response = response as? HTTPURLResponse, response.statusCode == 200, let data = data {
-                    do {
-                        if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                           let word = jsonResponse["word"] as? String {
-                            print("Predicted word: \(word)")
-                            DispatchQueue.main.asyncAfter(deadline: .now()+3) {
-                                self.startCapturingVideo()
-                            }
-                        }
-                    } catch {
-                        print("Error parsing JSON response: \(error)")
-                    }
-                } else {
-                    print("Unexpected response: \(response)")
-                }
-            }
-            task.resume()
-        }
-
-        func pixelBufferFromImage(image: UIImage) -> CVPixelBuffer? {
-            let imageWidth = Int(image.size.width)
-            let imageHeight = Int(image.size.height)
-            var pixelBuffer: CVPixelBuffer?
-            let pixelBufferAttributes = [
-                kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue,
-                kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue
-            ] as CFDictionary
-            
-            let status = CVPixelBufferCreate(kCFAllocatorDefault, imageWidth, imageHeight, kCVPixelFormatType_32ARGB, pixelBufferAttributes, &pixelBuffer)
-            guard status == kCVReturnSuccess, let unwrappedPixelBuffer = pixelBuffer else {
-                return nil
-            }
-
-            CVPixelBufferLockBaseAddress(unwrappedPixelBuffer, .readOnly)
-            let pixelData = CVPixelBufferGetBaseAddress(unwrappedPixelBuffer)
-
-            let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
-            guard let context = CGContext(data: pixelData, width: imageWidth, height: imageHeight, bitsPerComponent: 8, bytesPerRow: CVPixelBufferGetBytesPerRow(unwrappedPixelBuffer), space: rgbColorSpace, bitmapInfo: CGImageAlphaInfo.noneSkipFirst.rawValue) else {
-                return nil
-            }
-
-            UIGraphicsPushContext(context)
-            image.draw(in: CGRect(x: 0, y: 0, width: imageWidth, height: imageHeight))
-            UIGraphicsPopContext()
-            CVPixelBufferUnlockBaseAddress(unwrappedPixelBuffer, .readOnly)
-            
-            return unwrappedPixelBuffer
-        }
+       
     
 
 //    func saveImageToDevice(image: UIImage) {
@@ -1008,8 +1000,9 @@ extension UIView {
         }
         return image
     }
-    
+
 }
+
 
 
 
