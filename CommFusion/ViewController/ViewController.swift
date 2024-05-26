@@ -13,6 +13,36 @@ import UIKit
 import Speech
 
 class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate, CameraSessionDelegate {
+    
+    
+    func change_localview_Color(color : UIColor , Glowcolor : UIColor) {
+        
+        
+        localVideoView?.layer.borderColor = color.cgColor
+        localVideoView?.layer.borderWidth = 2.0
+
+                // Add glow effect
+        localVideoView?.layer.shadowColor = Glowcolor.cgColor
+        localVideoView?.layer.shadowRadius = 10.0
+        localVideoView?.layer.shadowOpacity = 1.0
+        localVideoView?.layer.shadowOffset = CGSize.zero
+        localVideoView?.layer.masksToBounds = false
+    }
+    
+    func removeBorderAndGlow() {
+        DispatchQueue.main.async {
+            self.localVideoView?.layer.borderColor = UIColor.clear.cgColor
+            self.localVideoView?.layer.borderWidth = 0.0
+
+            // Remove glow effect
+            self.localVideoView?.layer.shadowColor = UIColor.clear.cgColor
+            self.localVideoView?.layer.shadowRadius = 0.0
+            self.localVideoView?.layer.shadowOpacity = 0.0
+            self.localVideoView?.layer.shadowOffset = CGSize.zero
+            self.localVideoView?.layer.masksToBounds = true
+        }
+            
+        }
   
     
     
@@ -354,8 +384,59 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         
        
         
-      
+        let doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap(_:)))
+               doubleTapGestureRecognizer.numberOfTapsRequired = 2
+               
+               // Add the gesture recognizer to the view
+               view.addGestureRecognizer(doubleTapGestureRecognizer)
+        
     }
+    
+    
+    var overlayView: UIView!
+
+    
+    var static_frameCheck = true
+    @objc func handleDoubleTap(_ sender: UITapGestureRecognizer) {
+        if static_frameCheck {
+            webRTCClient.stopStaticCaptureFrames()
+            performColorFade()
+            DispatchQueue.main.asyncAfter(deadline: .now()+3)
+            {
+                self.webRTCClient.stop_dynamicframe = true
+                self.webRTCClient.stop_Staticframe_check = false
+                self.webRTCClient.startCaptureFrames()
+                self.static_frameCheck = false
+            }
+            
+        }
+        else{
+            performColorFade()
+            DispatchQueue.main.asyncAfter(deadline: .now()+3)
+            {
+                self.webRTCClient.stop_dynamicframe = false
+                self.webRTCClient.stop_Staticframe_check = true
+                self.webRTCClient.Permanent_stopCaptureFrames()
+                self.webRTCClient.start_static_CaptureFrames()
+            }
+            static_frameCheck = true
+        }
+        }
+    
+    func performColorFade() {
+            // Set the initial color of the overlay view
+            overlayView.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.4)
+            
+            // Animate the color fade in and out
+            UIView.animate(withDuration: 0.5, animations: {
+                self.overlayView.backgroundColor = UIColor.blue.withAlphaComponent(0.2)
+            }) { _ in
+                UIView.animate(withDuration: 0.5, animations: {
+                    self.overlayView.backgroundColor = UIColor.clear
+                })
+            }
+        }
+    
     
     @objc func dragview(_ gestureRecognizer: UIPanGestureRecognizer) {
             guard let draggedView = gestureRecognizer.view else { return }
@@ -420,6 +501,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
     
     // MARK: - UI
+    
+    var localVideoView : UIView?
     private func setupUI(){
         
         
@@ -434,12 +517,12 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         remoteVideoView.center = remoteVideoViewContainter.center
         remoteVideoViewContainter.addSubview(remoteVideoView)
         
-        let localVideoView = webRTCClient.localVideoView()
+         localVideoView = webRTCClient.localVideoView()
         webRTCClient.setupLocalViewFrame(frame: CGRect(x: 0, y: 0, width: ScreenSizeUtil.width()/3, height: ScreenSizeUtil.height()/4))
-        localVideoView.center.y = self.view.center.y - 180
-        localVideoView.center.x = self.view.center.x + 120
-        localVideoView.subviews.last?.isUserInteractionEnabled = true
-        self.view.addSubview(localVideoView)
+        localVideoView?.center.y = self.view.center.y - 180
+        localVideoView?.center.x = self.view.center.x + 120
+        localVideoView?.subviews.last?.isUserInteractionEnabled = true
+        self.view.addSubview(localVideoView!)
        
         
         
@@ -447,7 +530,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         let localVideoViewButton = UIButton(frame: CGRect(x: 0, y: 0, width: ScreenSizeUtil.width()/3, height:  ScreenSizeUtil.height()/4))
         localVideoViewButton.backgroundColor = UIColor.clear
         localVideoViewButton.addTarget(self, action: #selector(self.localVideoViewTapped(_:)), for: .touchUpInside)
-        localVideoView.addSubview(localVideoViewButton)
+        localVideoView?.addSubview(localVideoViewButton)
         
      
         remoteVideoViewContainter.addSubview(OutLet_Mic_Mute)
@@ -460,8 +543,13 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         
         //Adding drag Gesture in local video view
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(dragview(_:)))
-        localVideoView.addGestureRecognizer(panGesture)
+        localVideoView?.addGestureRecognizer(panGesture)
         
+        // Create and configure the overlay view
+               overlayView = UIView(frame: view.bounds)
+               overlayView.backgroundColor = UIColor.clear
+               overlayView.isUserInteractionEnabled = false
+               view.addSubview(overlayView)
     }
     var reciver = 0
 
@@ -473,8 +561,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         if !webRTCClient.isConnected {
             
             print("initiating call ...")
-           
-               
+              
             webRTCClient.connect(onSuccess: { (offerSDP: RTCSessionDescription) -> Void in
                 self.sendSDP(sessionDescription: offerSDP)
             })
@@ -495,7 +582,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         speechRecognizer?.isStopping = true
         speechRecognizer?.stopRecognition()
         }
-        
+        webRTCClient.stop_dynamicframe = false
       CallEnd_API(vid: self.v_id, userid: Int(self.userID)!)
 
         let endCallData: [String: Any] = [
@@ -792,8 +879,8 @@ extension ViewController {
 //                }
             if myLangType == "deaf"
             {
-//                webRTCClient.startCaptureFrames()
-                  webRTCClient.startCapturingVideo()
+                webRTCClient.start_static_CaptureFrames()
+
             }
            else if myLangType == "blind"
             {

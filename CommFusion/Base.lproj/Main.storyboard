@@ -2296,14 +2296,14 @@
         <scene sceneID="KxS-R2-bg1">
             <objects>
                 <viewController storyboardIdentifier="termsconditions" id="6pY-0x-mis" customClass="termsConditionViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="IkY-Jv-J3B">
+                    <view key="view" contentMode="scaleToFill" id="IkY-Jv-J3B">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vfm-PR-29H">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vfm-PR-29H">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4WX-Ji-1Zt">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4WX-Ji-1Zt">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="3400"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" lineBreakMode="wordWrap" numberOfLines="150" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9cu-2A-9BU">
@@ -3617,11 +3617,11 @@ By using the Application, you acknowledge that you have read, understood, and ag
             </objects>
             <point key="canvasLocation" x="1509" y="810"/>
         </scene>
-        <!--Leassons-->
+        <!--Lessons-->
         <scene sceneID="6El-BN-0x8">
             <objects>
                 <navigationController navigationBarHidden="YES" id="Pan-Gl-jAg" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Leassons" image="lessons_TAB" selectedImage="lessons_TAB" id="BSI-HA-kkA"/>
+                    <tabBarItem key="tabBarItem" title="Lessons" image="lessons_TAB" selectedImage="lessons_TAB" id="BSI-HA-kkA"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="yHM-26-jWz">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
