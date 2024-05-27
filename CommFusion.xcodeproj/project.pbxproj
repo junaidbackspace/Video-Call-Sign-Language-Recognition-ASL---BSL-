@@ -127,6 +127,32 @@
 		652C0AED2BBC0A0C00D89A57 /* lessonsStrct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lessonsStrct.swift; sourceTree = "<group>"; };
 		65556C2C2BFD9ACE00B41A38 /* waiting.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = waiting.wav; sourceTree = "<group>"; };
 		65556C3F2BFDB1E900B41A38 /* onhold.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = onhold.wav; sourceTree = "<group>"; };
+		6557C12A2C04FADC00057048 /* e.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = e.mp4; sourceTree = "<group>"; };
+		6557C12B2C04FADC00057048 /* p.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = p.mp4; sourceTree = "<group>"; };
+		6557C12C2C04FADC00057048 /* h.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = h.mp4; sourceTree = "<group>"; };
+		6557C12D2C04FADC00057048 /* s.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = s.mp4; sourceTree = "<group>"; };
+		6557C12E2C04FADD00057048 /* x.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = x.mp4; sourceTree = "<group>"; };
+		6557C12F2C04FADD00057048 /* n.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = n.mp4; sourceTree = "<group>"; };
+		6557C1302C04FADD00057048 /* i.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = i.mp4; sourceTree = "<group>"; };
+		6557C1312C04FADD00057048 /* t.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = t.mp4; sourceTree = "<group>"; };
+		6557C1322C04FADD00057048 /* c.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = c.mp4; sourceTree = "<group>"; };
+		6557C1332C04FADD00057048 /* w.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = w.mp4; sourceTree = "<group>"; };
+		6557C1342C04FADD00057048 /* f.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = f.mp4; sourceTree = "<group>"; };
+		6557C1352C04FADD00057048 /* q.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = q.mp4; sourceTree = "<group>"; };
+		6557C1362C04FADD00057048 /* u.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = u.mp4; sourceTree = "<group>"; };
+		6557C1372C04FADD00057048 /* r.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = r.mp4; sourceTree = "<group>"; };
+		6557C1382C04FADD00057048 /* k.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = k.mp4; sourceTree = "<group>"; };
+		6557C1392C04FADE00057048 /* v.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = v.mp4; sourceTree = "<group>"; };
+		6557C13A2C04FADE00057048 /* l.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = l.mp4; sourceTree = "<group>"; };
+		6557C13B2C04FADE00057048 /* d.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = d.mp4; sourceTree = "<group>"; };
+		6557C13C2C04FADE00057048 /* m.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = m.mp4; sourceTree = "<group>"; };
+		6557C13D2C04FADE00057048 /* a.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = a.mp4; sourceTree = "<group>"; };
+		6557C13E2C04FADE00057048 /* b.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = b.mp4; sourceTree = "<group>"; };
+		6557C13F2C04FADE00057048 /* j.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = j.mp4; sourceTree = "<group>"; };
+		6557C1402C04FADE00057048 /* o.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = o.mp4; sourceTree = "<group>"; };
+		6557C1412C04FADE00057048 /* y.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = y.mp4; sourceTree = "<group>"; };
+		6557C1422C04FADE00057048 /* g.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = g.mp4; sourceTree = "<group>"; };
+		6557C1432C04FADF00057048 /* z.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = z.mp4; sourceTree = "<group>"; };
 		656168BA2B724FA70006E5D2 /* ContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
 		656168BE2B72A80B0006E5D2 /* DetailedContactsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedContactsTableViewCell.swift; sourceTree = "<group>"; };
 		65736E592BD6C914001D7418 /* webSockets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = webSockets.swift; sourceTree = "<group>"; };
@@ -249,6 +275,39 @@
 			children = (
 			);
 			path = SplashScreen;
+			sourceTree = "<group>";
+		};
+		6557C1292C04F6CA00057048 /* Asl_Signs */ = {
+			isa = PBXGroup;
+			children = (
+				6557C13D2C04FADE00057048 /* a.mp4 */,
+				6557C13E2C04FADE00057048 /* b.mp4 */,
+				6557C1322C04FADD00057048 /* c.mp4 */,
+				6557C13B2C04FADE00057048 /* d.mp4 */,
+				6557C12A2C04FADC00057048 /* e.mp4 */,
+				6557C1342C04FADD00057048 /* f.mp4 */,
+				6557C1422C04FADE00057048 /* g.mp4 */,
+				6557C12C2C04FADC00057048 /* h.mp4 */,
+				6557C1302C04FADD00057048 /* i.mp4 */,
+				6557C13F2C04FADE00057048 /* j.mp4 */,
+				6557C1382C04FADD00057048 /* k.mp4 */,
+				6557C13A2C04FADE00057048 /* l.mp4 */,
+				6557C13C2C04FADE00057048 /* m.mp4 */,
+				6557C12F2C04FADD00057048 /* n.mp4 */,
+				6557C1402C04FADE00057048 /* o.mp4 */,
+				6557C12B2C04FADC00057048 /* p.mp4 */,
+				6557C1352C04FADD00057048 /* q.mp4 */,
+				6557C1372C04FADD00057048 /* r.mp4 */,
+				6557C12D2C04FADC00057048 /* s.mp4 */,
+				6557C1312C04FADD00057048 /* t.mp4 */,
+				6557C1362C04FADD00057048 /* u.mp4 */,
+				6557C1392C04FADE00057048 /* v.mp4 */,
+				6557C1332C04FADD00057048 /* w.mp4 */,
+				6557C12E2C04FADD00057048 /* x.mp4 */,
+				6557C1412C04FADE00057048 /* y.mp4 */,
+				6557C1432C04FADF00057048 /* z.mp4 */,
+			);
+			path = Asl_Signs;
 			sourceTree = "<group>";
 		};
 		656168B32B724EE40006E5D2 /* DashboardScreens */ = {
@@ -436,6 +495,7 @@
 		AF711AA321DFAD6C005CA4FA /* CommFusion */ = {
 			isa = PBXGroup;
 			children = (
+				6557C1292C04F6CA00057048 /* Asl_Signs */,
 				65A986FA2B7CF0DE0011753C /* VideoCalls */,
 				65C2B3732B79F1EB00A916E6 /* settings */,
 				65CE5D402B76969800771A84 /* Custom_fav_Signs_Lessons */,

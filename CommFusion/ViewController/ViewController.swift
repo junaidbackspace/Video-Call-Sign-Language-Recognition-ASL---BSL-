@@ -44,7 +44,9 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
             
         }
   
-    
+    var player: AVPlayer?
+    var playerLayer: AVPlayerLayer?
+    var playerItem: AVPlayerItem?
     
     var speechRecognizer: SpeechRecognizer?
     var isAutoLockEnabledBeforeCall: Bool = true
@@ -892,10 +894,16 @@ extension ViewController {
                 
 //            webRTCClient.localVideoTrack.isEnabled = false
 //            }
-            //scroll view text
+
             self.configureScrollView(with: message)
 
             disabilitytype_check_msg = false
+        }
+        
+        if message.count == 1 {
+            print("Starting video of sign")
+            self.play_sign_video(name: message)
+            
         }
         DispatchQueue.main.async {
         self.configureScrollView(with: message)
@@ -912,6 +920,64 @@ extension ViewController {
                    self.navigationController?.popViewController(animated: true)
                }
     }
+  
+    
+    func play_sign_video(name: String) {
+        // Construct the file URL for the video
+        // if let filePath = Bundle.main.path(forResource: "\(name.lowercased())", ofType: "mp4")
+        
+        if let filePath = Bundle.main.path(forResource: "b", ofType: "mp4") {
+            let url = URL(fileURLWithPath: filePath)
+            
+            // Create AVPlayerItem and AVPlayer
+            let playerItem = AVPlayerItem(url: url)
+            let player = AVPlayer(playerItem: playerItem)
+            
+            // Create AVPlayerLayer
+            let playerLayer = AVPlayerLayer(player: player)
+            
+            // Set custom height and width
+            let videoWidth: CGFloat = 300.0 // specify desired width
+            let videoHeight: CGFloat = 200.0 // specify desired height
+            let xPos: CGFloat = (self.view.bounds.width - videoWidth) / 2 // center horizontally
+            let yPos: CGFloat = (self.view.bounds.height - videoHeight) / 2 // center vertically
+            
+            // Set frame and video gravity
+            playerLayer.frame = CGRect(x: xPos, y: yPos, width: videoWidth, height: videoHeight)
+            playerLayer.videoGravity = .resizeAspect
+            
+            // Add playerLayer to the view's layer hierarchy
+            self.view.layer.addSublayer(playerLayer)
+            
+            // Start playing the video
+            player.play()
+            
+            // Add observer for when the video completes
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(videoDidEnd),
+                                                   name: .AVPlayerItemDidPlayToEndTime,
+                                                   object: playerItem)
+        } else {
+            print("Video file not found.")
+        }
+    }
+
+    @objc func videoDidEnd(notification: Notification) {
+        // Stop and remove the video player when the video completes
+        if let playerItem = notification.object as? AVPlayerItem {
+            NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
+        }
+        self.view.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
+    }
+    
+//    @objc func videoDidEnd(notification: Notification) {
+//           // Stop and hide the video player
+//           player?.pause()
+//           playerLayer?.removeFromSuperlayer()
+//           player = nil
+//           playerLayer = nil
+//           playerItem = nil
+//       }
 }
 
 // MARK: - CameraSessionDelegate
