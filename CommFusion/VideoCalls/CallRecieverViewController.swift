@@ -39,16 +39,23 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
     
          override func viewDidLoad() {
              super.viewDidLoad()
+            var is_ringon = UserDefaults.standard.string(forKey: "notifi_sound")
+            if is_ringon == "on"
+            {
+                print("Ringtone is on...")
+                if UserDefaults.standard.object(forKey: "rigntones") == nil {
+                    UserDefaults.standard.setValue("default", forKey: "rigntones")
+                    
+                    playMusic(fileName: "default")
+                }
+                else {
+                    
+                    playMusic(fileName: UserDefaults.standard.string(forKey: "rigntones")! as String)
+                }
+               
+            }
+           
             
-            if UserDefaults.standard.object(forKey: "rigntones") == nil {
-                UserDefaults.standard.setValue("default", forKey: "rigntones")
-                
-                playMusic(fileName: "default")
-            }
-            else {
-                
-                playMusic(fileName: UserDefaults.standard.string(forKey: "rigntones")! as String)
-            }
             if !socketsClass.shared.isConnected(){
                 socketsClass.shared.connectSocket()
             }

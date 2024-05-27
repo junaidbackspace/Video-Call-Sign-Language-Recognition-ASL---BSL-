@@ -21,7 +21,20 @@ class NotificationsViewController: UIViewController {
     }
     
     @IBOutlet weak var soundOnOff: UISwitch!
+    
     @IBAction func swithSound(_ sender: Any) {
+        
+        
+        if soundOnOff.isOn == true{
+            print("\nturning sound on\n")
+            UserDefaults.standard.setValue("on", forKey: "notifi_sound")
+        }
+        else{
+            print("\nturning sound off\n")
+            UserDefaults.standard.setValue("off", forKey: "notifi_sound")
+        }
+        
+        
         
     }
     
@@ -63,6 +76,24 @@ class NotificationsViewController: UIViewController {
     @IBOutlet weak var ringtoneView: UIView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        if UserDefaults.standard.object(forKey: "notifi_sound") == nil {
+            print("setting on - onload\n")
+            UserDefaults.standard.setValue("on", forKey: "notifi_sound")
+            
+        }
+        else{
+            var is_ringon = UserDefaults.standard.string(forKey: "notifi_sound")
+            if is_ringon == "on"
+            {
+                soundOnOff.isOn = true
+            }
+            else{
+                soundOnOff.isOn = false
+            }
+        }
+       
 //        UserDefaults.standard.setValue(0, forKey: "userID")
         // Do any additional setup after loading the view.
         if UserDefaults.standard.object(forKey: "rigntones") == nil {

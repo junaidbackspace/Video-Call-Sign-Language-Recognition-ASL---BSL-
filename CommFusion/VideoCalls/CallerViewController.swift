@@ -71,15 +71,25 @@ class CallerViewController: UIViewController, AVAudioPlayerDelegate {
 
         }
     }
+    
+    
     @objc func handleNotification(_ notification: Notification) {
             if let text = notification.userInfo?["text"] as? String {
                 lbl_is_ringing.text = text
-                print("=====>rigining now: \(text)")
+            
+                var is_ringon = UserDefaults.standard.string(forKey: "notifi_sound")
+                
                 if text != "Busy in other call..."{
+                    if is_ringon == "on"
+                    {
                 self.playMusic(fileName: "onhold")
+                    }
                 }
                 else{
+                    if is_ringon == "on"
+                    {
                     self.playBeepMusic(fileName: "beep")
+                    }
                     print("\n\nwitin callerview else")
                     DispatchQueue.main.asyncAfter(deadline: .now()+2)
                     {
