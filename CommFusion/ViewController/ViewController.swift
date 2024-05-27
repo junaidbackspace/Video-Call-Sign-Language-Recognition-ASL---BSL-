@@ -47,6 +47,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     var player: AVPlayer?
     var playerLayer: AVPlayerLayer?
     var playerItem: AVPlayerItem?
+    var SignsvideoContainerView: UIView?
     
     var speechRecognizer: SpeechRecognizer?
     var isAutoLockEnabledBeforeCall: Bool = true
@@ -313,6 +314,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
   
+        let myLangType = UserDefaults.standard.string(forKey: "disabilityType")!
+        
         disabilitytype_check_msg = true
         let connectingView = ConnectingView(frame: CGRect(x: 0, y: 0, width: 100, height: 10))
                 connectingView.center = view.center
@@ -384,14 +387,14 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         msgtextView.layer.zPosition = 1
         OutLetSwitchCam.layer.zPosition = 1
         
-       
-        
+    
+        if myLangType == "deaf"{
         let doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap(_:)))
                doubleTapGestureRecognizer.numberOfTapsRequired = 2
                
                // Add the gesture recognizer to the view
                view.addGestureRecognizer(doubleTapGestureRecognizer)
-        
+        }
     }
     
     
@@ -872,7 +875,7 @@ extension ViewController {
         
        
         if disabilitytype_check_msg{
-            let myLangType = UserDefaults.standard.string(forKey: "disabilityType")!
+            
 //            if   (message == "deaf" && myLangType != "deaf") || (message != "deaf" && myLangType == "deaf") {
 //
 //                DispatchQueue.main.async {
@@ -922,62 +925,57 @@ extension ViewController {
     }
   
     
-    func play_sign_video(name: String) {
-        // Construct the file URL for the video
-        // if let filePath = Bundle.main.path(forResource: "\(name.lowercased())", ofType: "mp4")
-        
-        if let filePath = Bundle.main.path(forResource: "b", ofType: "mp4") {
-            let url = URL(fileURLWithPath: filePath)
-            
-            // Create AVPlayerItem and AVPlayer
-            let playerItem = AVPlayerItem(url: url)
-            let player = AVPlayer(playerItem: playerItem)
-            
-            // Create AVPlayerLayer
-            let playerLayer = AVPlayerLayer(player: player)
-            
-            // Set custom height and width
-            let videoWidth: CGFloat = 300.0 // specify desired width
-            let videoHeight: CGFloat = 200.0 // specify desired height
-            let xPos: CGFloat = (self.view.bounds.width - videoWidth) / 2 // center horizontally
-            let yPos: CGFloat = (self.view.bounds.height - videoHeight) / 2 // center vertically
-            
-            // Set frame and video gravity
-            playerLayer.frame = CGRect(x: xPos, y: yPos, width: videoWidth, height: videoHeight)
-            playerLayer.videoGravity = .resizeAspect
-            
-            // Add playerLayer to the view's layer hierarchy
-            self.view.layer.addSublayer(playerLayer)
-            
-            // Start playing the video
-            player.play()
-            
-            // Add observer for when the video completes
-            NotificationCenter.default.addObserver(self,
-                                                   selector: #selector(videoDidEnd),
-                                                   name: .AVPlayerItemDidPlayToEndTime,
-                                                   object: playerItem)
-        } else {
+    func play_sign_video(name  : String) {
+        guard let filePath = Bundle.main.path(forResource: name.lowercased(), ofType: "mp4") else {
             print("Video file not found.")
+            return
         }
+
+        let videoURL = URL(fileURLWithPath: filePath)
+        playerItem = AVPlayerItem(url: videoURL)
+        player = AVPlayer(playerItem: playerItem)
+        playerLayer = AVPlayerLayer(player: player)
+        
+        let videoWidth: CGFloat = 200.0 // specify desired width
+               let videoHeight: CGFloat = 150.0 // specify desired height
+               let xPos: CGFloat = (self.view.bounds.width - videoWidth) / 2 // center horizontally
+               let yPos: CGFloat = (self.view.bounds.height - videoHeight) - 150 // center vertically
+
+
+        // Set up playerLayer frame and other properties
+        playerLayer?.frame = CGRect(x: xPos, y: yPos, width: videoWidth, height: videoHeight)
+        playerLayer?.videoGravity = .resizeAspectFill
+        
+        SignsvideoContainerView = UIView(frame: view.bounds)
+        SignsvideoContainerView?.layer.addSublayer(playerLayer!)
+        
+        
+        if let playerLayer = playerLayer {
+            view.addSubview(SignsvideoContainerView!)
+        }
+
+        // Observe when the video finishes playing
+        NotificationCenter.default.addObserver(self, selector: #selector(videoDidFinish), name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
+
+        // Start playing the video
+        player?.play()
     }
 
-    @objc func videoDidEnd(notification: Notification) {
-        // Stop and remove the video player when the video completes
-        if let playerItem = notification.object as? AVPlayerItem {
-            NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
-        }
-        self.view.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
-    }
+
+    @objc func videoDidFinish() {
+        print("finishing animation")
+            SignsvideoContainerView?.isHidden = true
+           // Remove the playerLayer from the view's layer hierarchy
+           playerLayer?.removeFromSuperlayer()
+           playerLayer = nil
+           playerItem = nil
+           player = nil
+
+           // Stop observing the notification
+           NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
+       }
     
-//    @objc func videoDidEnd(notification: Notification) {
-//           // Stop and hide the video player
-//           player?.pause()
-//           playerLayer?.removeFromSuperlayer()
-//           player = nil
-//           playerLayer = nil
-//           playerItem = nil
-//       }
+
 }
 
 // MARK: - CameraSessionDelegate
