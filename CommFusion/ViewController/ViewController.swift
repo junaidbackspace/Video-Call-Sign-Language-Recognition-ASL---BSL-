@@ -44,6 +44,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
             
         }
   
+    var shouldtext_To_speech = false
     var player: AVPlayer?
     var playerLayer: AVPlayerLayer?
     var playerItem: AVPlayerItem?
@@ -55,6 +56,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     let font_sizeDefault = UserDefaults.standard
     let caption_opacityDefault = UserDefaults.standard
    
+    private var speechSynthesizer =   AVSpeechSynthesizer()
     var serverWrapper = APIWrapper()
     var isReciever = 0
     var callFriendId = ""
@@ -158,6 +160,10 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         }
         hangupButtonTapped()
         
+        if shouldtext_To_speech {
+            stopSpeaking()
+            shouldtext_To_speech = false
+        }
     }
     
     var testmsg = "1"
@@ -590,6 +596,12 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         speechRecognizer?.isStopping = true
         speechRecognizer?.stopRecognition()
         }
+        
+        if shouldtext_To_speech {
+            stopSpeaking()
+            shouldtext_To_speech = false
+        }
+        
         webRTCClient.stop_dynamicframe = false
       CallEnd_API(vid: self.v_id, userid: Int(self.userID)!)
 
@@ -900,12 +912,19 @@ extension ViewController {
                 
 //            webRTCClient.localVideoTrack.isEnabled = false
 //            }
+            
+            if message == "deaf"
+            {
+                shouldtext_To_speech = true
+            }
+            
 
             self.configureScrollView(with: message)
 
             disabilitytype_check_msg = false
         }
         
+       
         if message.count == 1 {
             print("Starting video of sign")
             self.play_sign_video(name: message)
@@ -917,14 +936,53 @@ extension ViewController {
         else {
             
         }
+        
+        //for text to speech
+        if shouldtext_To_speech
+        {
+            //speaking the message
+            speak(text: message)
+        }
         DispatchQueue.main.async {
         self.configureScrollView(with: message)
         }
     }
         
+    func speak(text: String) {
+            // Check if the speech synthesizer is speaking
+            if speechSynthesizer.isSpeaking {
+                speechSynthesizer.stopSpeaking(at: .immediate)
+            }
+            
+            // Create an utterance with the given text
+            let utterance = AVSpeechUtterance(string: text)
+            
+            // Set the voice (optional, can set to nil for default voice)
+            utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+            
+            // Adjust the rate, pitch, and volume (optional)
+            utterance.rate = AVSpeechUtteranceDefaultSpeechRate
+            utterance.pitchMultiplier = 1.0
+            utterance.volume = 1.0
+            
+            // Speak the utterance
+            speechSynthesizer.speak(utterance)
+        }
     
+    func stopSpeaking() {
+        // Stop the speech synthesizer from speaking
+        speechSynthesizer.stopSpeaking(at: .immediate)
+    }
+
     
     func hunguptapedbyOtherCaller(){
+        
+        //turning of speech
+        if shouldtext_To_speech {
+            print("turning off speech in hangup by other user")
+            stopSpeaking()
+            shouldtext_To_speech = false
+        }
         
         webRTCClient.disconnect()
         DispatchQueue.main.async {
