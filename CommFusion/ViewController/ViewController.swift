@@ -235,6 +235,9 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
                
             NotificationCenter.default.removeObserver(self)
             
+            if let playerItem = playerItem {
+                        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
+                    }
             //shifted in hangupcall
 //            webRTCClient.delegate = nil // Remove delegate
 //            webRTCClient.disconnect()
@@ -908,6 +911,12 @@ extension ViewController {
             self.play_sign_video(name: message)
             
         }
+        else if message == " "{
+            cleanupPlayer()
+        }
+        else {
+            
+        }
         DispatchQueue.main.async {
         self.configureScrollView(with: message)
         }
@@ -924,8 +933,26 @@ extension ViewController {
                }
     }
   
-    
+    func cleanupPlayer() {
+           if let playerItem = playerItem {
+               NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
+           }
+           playerLayer?.removeFromSuperlayer()
+           playerLayer = nil
+           playerItem = nil
+           player = nil
+       }
+
+      
+//           cleanupPlayer()
+       
+   
+
     func play_sign_video(name  : String) {
+        
+        // Clean up any existing player and observers
+        cleanupPlayer()
+
         guard let filePath = Bundle.main.path(forResource: name.lowercased(), ofType: "mp4") else {
             print("Video file not found.")
             return
@@ -947,15 +974,16 @@ extension ViewController {
         playerLayer?.videoGravity = .resizeAspectFill
         
         SignsvideoContainerView = UIView(frame: view.bounds)
-        SignsvideoContainerView?.layer.addSublayer(playerLayer!)
-        
-        
-        if let playerLayer = playerLayer {
-            view.addSubview(SignsvideoContainerView!)
-        }
+                if let playerLayer = playerLayer {
+                    SignsvideoContainerView?.layer.addSublayer(playerLayer)
+                }
+                
+                if let SignsvideoContainerView = SignsvideoContainerView {
+                    view.addSubview(SignsvideoContainerView)
+                }
 
-        // Observe when the video finishes playing
-        NotificationCenter.default.addObserver(self, selector: #selector(videoDidFinish), name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
+//        // Observe when the video finishes playing
+//        NotificationCenter.default.addObserver(self, selector: #selector(videoDidFinish), name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
 
         // Start playing the video
         player?.play()
@@ -963,17 +991,17 @@ extension ViewController {
 
 
     @objc func videoDidFinish() {
-        print("finishing animation")
+            print("Video finished playing")
             SignsvideoContainerView?.isHidden = true
-           // Remove the playerLayer from the view's layer hierarchy
-           playerLayer?.removeFromSuperlayer()
-           playerLayer = nil
-           playerItem = nil
-           player = nil
+            // Remove the playerLayer from the view's layer hierarchy
+            playerLayer?.removeFromSuperlayer()
+            playerLayer = nil
+            playerItem = nil
+            player = nil
 
-           // Stop observing the notification
-           NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
-       }
+            // Stop observing the notification
+            NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
+        }
     
 
 }

@@ -308,11 +308,11 @@
         <scene sceneID="eCh-nQ-xbI">
             <objects>
                 <viewController storyboardIdentifier="signupscreen" id="OFn-Vj-P9m" customClass="SignUpViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="1w1-FW-uC5">
+                    <view key="view" contentMode="scaleToFill" id="1w1-FW-uC5">
                         <rect key="frame" x="0.0" y="0.0" width="828" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nqL-Fh-3wM">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nqL-Fh-3wM">
                                 <rect key="frame" x="0.0" y="0.0" width="828" height="736"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XLo-Oe-pFd">
@@ -3123,7 +3123,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                                     <constraint firstItem="bbq-GQ-r3e" firstAttribute="leading" secondItem="E19-q0-R1J" secondAttribute="trailing" constant="84" id="zoH-iW-VYo"/>
                                                 </constraints>
                                             </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="60Q-Do-YDC">
+                                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="60Q-Do-YDC">
                                                 <rect key="frame" x="19.666666666666657" y="557" width="375" height="79"/>
                                                 <subviews>
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="punch_Sign" translatesAutoresizingMaskIntoConstraints="NO" id="TMB-8L-uoh">
@@ -3179,7 +3179,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                                     <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="E4C-AG-fAB">
+                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="E4C-AG-fAB">
                                                 <rect key="frame" x="48" y="710" width="318.33333333333331" height="51"/>
                                                 <color key="backgroundColor" name="AccentColor"/>
                                                 <constraints>
@@ -3422,7 +3422,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3HM-dE-yF3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2198.5507246376815" y="1575.8152173913045"/>
+            <point key="canvasLocation" x="2199" y="1576"/>
         </scene>
         <!--Favorite Lecture View Controller-->
         <scene sceneID="bgC-R4-2Ke">
@@ -4713,7 +4713,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
         <image name="Friends_TAB" width="27" height="27"/>
         <image name="Logout" width="28" height="27"/>
         <image name="addcontact" width="96" height="96"/>
-        <image name="arrow.backward" catalog="system" width="128" height="98"/>
+        <image name="arrow.backward" catalog="system" width="32" height="32"/>
         <image name="arrow.down.right" catalog="system" width="128" height="112"/>
         <image name="arrow.triangle.2.circlepath.camera.fill" catalog="system" width="128" height="94"/>
         <image name="arrow.up.right" catalog="system" width="128" height="112"/>

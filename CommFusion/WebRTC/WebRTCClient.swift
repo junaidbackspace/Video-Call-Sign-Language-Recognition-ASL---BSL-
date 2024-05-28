@@ -108,6 +108,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         }
 
         @objc func Static_captureFrame() {
+            print("taking picture")
             delegate?.change_localview_Color(color: UIColor.green, Glowcolor: UIColor.cyan)
             DispatchQueue.main.asyncAfter(deadline: .now()+1)
             {
@@ -694,6 +695,8 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         if let capturer = self.videoCapturer as? RTCCameraVideoCapturer {
             capturer.stopCapture()
             self.localAudioTrack?.isEnabled = false
+            self.stop_Staticframe_check = false
+            self.stop_dynamicframe = false
             print("\t,,,,,Stoping capturer")
         } else if let capturer = self.videoCapturer as? RTCFileVideoCapturer {
             print("\t,,,,,failedStoping capturer")
