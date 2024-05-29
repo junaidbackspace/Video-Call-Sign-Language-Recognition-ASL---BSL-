@@ -11,10 +11,18 @@ import Kingfisher
 
 
 class onlineContactsViewController: UIViewController,UITableViewDataSource, UITableViewDelegate  {
-
+//    func presentIncomingCallScreen(isRecieving: Bool) {
+//        print("\nrecieveing \(isRecieving)")
+//        
+//        
+//    }
     
 
     
+    
+    
+    @IBOutlet weak var protectview: UIView!
+    @IBOutlet weak var circleview: UIView!
     var pinned_contacts = [String]()
     var muted_contacts = [String]()
     var longPressGesture: UILongPressGestureRecognizer!
@@ -28,10 +36,6 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
     var dumylist = [User]()
     //used in scroll down refresh
     var isFunctionCalled = false
-    
-    @IBOutlet weak var protectview: UIView!
-    @IBOutlet weak var circleview: UIView!
-
    
     @IBAction func addFriend(_ sender: Any) {
         let controller = self.storyboard?.instantiateViewController(identifier: "addcontacts") 
@@ -396,9 +400,33 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
             }
     }
    }
-    
+    @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
         
-       
+        guard let tabBarController = tabBarController else {
+           
+               return
+           }
+        tabBarController.selectedIndex = 1
+           guard let selectedNavigationController = tabBarController.selectedViewController as? UINavigationController else {
+            
+               return
+           }
+        // Assuming you're using storyboards
+        if let storyboard = storyboard {
+            
+             if gesture.direction == .left {
+              
+                if let newViewController = storyboard.instantiateViewController(withIdentifier: "calllogs") as? CallLogsViewController {
+                    selectedNavigationController.pushViewController(newViewController, animated: false)
+                } else {
+                    print("Failed to instantiate LeassonsViewController")
+                }
+            }
+            //tabBarController.selectedIndex = 1
+        }
+
+        
+       }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -478,15 +506,15 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
             tapGestureRecognizer.cancelsTouchesInView = false
             view.addGestureRecognizer(tapGestureRecognizer)
         
-        // Add right swipe gesture recognizer
-                let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
-                rightSwipe.direction = .right
-                self.view.addGestureRecognizer(rightSwipe)
-                
-                // Add left swipe gesture recognizer
-                let leftSwipe = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
-                leftSwipe.direction = .left
-                self.view.addGestureRecognizer(leftSwipe)
+        
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+               swipeLeft.direction = .left
+               view.addGestureRecognizer(swipeLeft)
+              
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(swipedDown(_:)))
+        swipeDown.direction = .down
+             view.addGestureRecognizer(swipeDown)
+        
         
         
                 noFriendsLabel.text = "You don't have any friends yet."
@@ -497,7 +525,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
                 
                 // Add the label to the view
                 noFriendsLabel.translatesAutoresizingMaskIntoConstraints = false
-                self.view.addSubview(noFriendsLabel)
+        self.view.addSubview(noFriendsLabel)
         
                 
                 // Center the label in the view
@@ -509,29 +537,36 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
                 ])
       }
     
-    @objc func handleSwipes(_ gesture: UISwipeGestureRecognizer) {
-            guard let tabBarController = self.tabBarController else { return }
-            
-            let numberOfTabs = tabBarController.viewControllers?.count ?? 0
-            let selectedIndex = tabBarController.selectedIndex
-            
-            if gesture.direction == .right {
-                if selectedIndex > 0 {
-                    tabBarController.selectedIndex = selectedIndex - 1
-                }
-            } else if gesture.direction == .left {
-                if selectedIndex < numberOfTabs - 1 {
-                    tabBarController.selectedIndex = selectedIndex + 1
-                }
-            }
-        }
     let noFriendsLabel = UILabel()
     
     deinit {
             // Unsubscribe from the notification
             NotificationCenter.default.removeObserver(self, name: .openViewControllerNotification, object: nil)
         }
-
+//    @objc func openViewController(_ notification: Notification) {
+//
+//        if let value = notification.userInfo?["callerid"] as? String {
+//
+//        let callReceiverVC = storyboard?.instantiateViewController(withIdentifier: "callRecieverscreen") as! CallRecieverViewController
+//        callReceiverVC.hidesBottomBarWhenPushed = true
+//            callReceiverVC.calllerid = value
+//        navigationController?.pushViewController(callReceiverVC, animated: true)
+//        }
+//       }
+    @objc func swipedDown(_ gesture: UISwipeGestureRecognizer) {
+           if gesture.direction == .down {
+            //Displaying Refreshing
+            showLoadingView()
+            print("Refreshing online contacts...")
+         DispatchQueue.global().async {
+             print("Refreshing data")
+                 self.contacts = []
+                self.fetchContactsData()
+                
+         }
+            
+           }
+       }
     
     func fetchContactsData() {
        
