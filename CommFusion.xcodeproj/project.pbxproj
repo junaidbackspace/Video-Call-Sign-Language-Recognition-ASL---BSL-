@@ -64,6 +64,9 @@
 		658650112BECE4DD007946D7 /* shapeofyou.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6586500D2BECE4DC007946D7 /* shapeofyou.mp3 */; };
 		658650122BECE4DD007946D7 /* glow.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6586500E2BECE4DD007946D7 /* glow.mp3 */; };
 		658650132BECE4DD007946D7 /* smooth.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6586500F2BECE4DD007946D7 /* smooth.mp3 */; };
+		6589ED752C07A96C00A45276 /* GroupsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6589ED742C07A96C00A45276 /* GroupsViewController.swift */; };
+		6589ED792C07BB3300A45276 /* GroupsTableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6589ED782C07BB3300A45276 /* GroupsTableTableViewCell.swift */; };
+		6589ED7E2C07BF5100A45276 /* CreateGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6589ED7D2C07BF5100A45276 /* CreateGroupViewController.swift */; };
 		658DBD8D2B7DE9B700F26D96 /* CallRecieverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658DBD8C2B7DE9B700F26D96 /* CallRecieverViewController.swift */; };
 		658E032F2B6F618100BEDE73 /* loginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658E032E2B6F618100BEDE73 /* loginViewController.swift */; };
 		658E03352B6FF72100BEDE73 /* LoginToAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658E03342B6FF72100BEDE73 /* LoginToAccountViewController.swift */; };
@@ -198,6 +201,9 @@
 		6586500D2BECE4DC007946D7 /* shapeofyou.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = shapeofyou.mp3; sourceTree = "<group>"; };
 		6586500E2BECE4DD007946D7 /* glow.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = glow.mp3; sourceTree = "<group>"; };
 		6586500F2BECE4DD007946D7 /* smooth.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = smooth.mp3; sourceTree = "<group>"; };
+		6589ED742C07A96C00A45276 /* GroupsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsViewController.swift; sourceTree = "<group>"; };
+		6589ED782C07BB3300A45276 /* GroupsTableTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsTableTableViewCell.swift; sourceTree = "<group>"; };
+		6589ED7D2C07BF5100A45276 /* CreateGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGroupViewController.swift; sourceTree = "<group>"; };
 		658DBD8C2B7DE9B700F26D96 /* CallRecieverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallRecieverViewController.swift; sourceTree = "<group>"; };
 		658E032E2B6F618100BEDE73 /* loginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = loginViewController.swift; sourceTree = "<group>"; };
 		658E03342B6FF72100BEDE73 /* LoginToAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginToAccountViewController.swift; sourceTree = "<group>"; };
@@ -344,6 +350,7 @@
 				65E207812B73F9FC00978CAC /* CallLogsViewController.swift */,
 				65E207852B73FA3100978CAC /* leassonsViewController.swift */,
 				650E24622BEAAC8A00A4533C /* CallObserverViewController.swift */,
+				6589ED742C07A96C00A45276 /* GroupsViewController.swift */,
 			);
 			path = DashboardScreens;
 			sourceTree = "<group>";
@@ -358,6 +365,7 @@
 				65861D912B77ECF30038A38D /* FavoriteSignsTableViewCell.swift */,
 				6577F50F2B78B650005AD8AD /* CustomSignsTableViewCell.swift */,
 				651E5C092BA466DB005DB71C /* CallTranscriptionTableViewCell.swift */,
+				6589ED782C07BB3300A45276 /* GroupsTableTableViewCell.swift */,
 			);
 			path = CustomTableClasses;
 			sourceTree = "<group>";
@@ -368,6 +376,14 @@
 				657F46772B8FB52200B391A6 /* Custom_LessonsListCollectionViewCell.swift */,
 			);
 			path = CollectionView;
+			sourceTree = "<group>";
+		};
+		6589ED7C2C07BEFF00A45276 /* Group_Chat */ = {
+			isa = PBXGroup;
+			children = (
+				6589ED7D2C07BF5100A45276 /* CreateGroupViewController.swift */,
+			);
+			path = Group_Chat;
 			sourceTree = "<group>";
 		};
 		658E032D2B6F616100BEDE73 /* Login_Signup */ = {
@@ -521,6 +537,7 @@
 		AF711AA321DFAD6C005CA4FA /* CommFusion */ = {
 			isa = PBXGroup;
 			children = (
+				6589ED7C2C07BEFF00A45276 /* Group_Chat */,
 				6557C1292C04F6CA00057048 /* AslSigns */,
 				65A986FA2B7CF0DE0011753C /* VideoCalls */,
 				65C2B3732B79F1EB00A916E6 /* settings */,
@@ -863,6 +880,7 @@
 				AF711AA721DFAD6C005CA4FA /* ViewController.swift in Sources */,
 				65CE5D422B7696F700771A84 /* PlayerLessonsViewController.swift in Sources */,
 				652C0AEE2BBC0A0C00D89A57 /* lessonsStrct.swift in Sources */,
+				6589ED7E2C07BF5100A45276 /* CreateGroupViewController.swift in Sources */,
 				AF90A8E0220CF07A0083687C /* RTCCustomFrameCapture.swift in Sources */,
 				651E5C002BA4609C005DB71C /* CallTranscriptionViewController.swift in Sources */,
 				6574CA852B8F197000B80C11 /* intermediatelevelViewController.swift in Sources */,
@@ -908,8 +926,10 @@
 				AFAF58EA21EA0AD300609BB7 /* UIColorExtention.swift in Sources */,
 				65CE5D3D2B75FCCF00771A84 /* CallLogsTableTableViewCell.swift in Sources */,
 				65A986ED2B7CA3250011753C /* termsConditionViewController.swift in Sources */,
+				6589ED752C07A96C00A45276 /* GroupsViewController.swift in Sources */,
 				651E5C0A2BA466DC005DB71C /* CallTranscriptionTableViewCell.swift in Sources */,
 				65E199572B7E244600149118 /* VideoCallViewController.swift in Sources */,
+				6589ED792C07BB3300A45276 /* GroupsTableTableViewCell.swift in Sources */,
 				658E032F2B6F618100BEDE73 /* loginViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

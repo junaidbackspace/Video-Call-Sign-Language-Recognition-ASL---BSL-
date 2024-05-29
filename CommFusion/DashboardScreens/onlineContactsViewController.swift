@@ -400,33 +400,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
             }
     }
    }
-    @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
-        
-        guard let tabBarController = tabBarController else {
-           
-               return
-           }
-        tabBarController.selectedIndex = 1
-           guard let selectedNavigationController = tabBarController.selectedViewController as? UINavigationController else {
-            
-               return
-           }
-        // Assuming you're using storyboards
-        if let storyboard = storyboard {
-            
-             if gesture.direction == .left {
-              
-                if let newViewController = storyboard.instantiateViewController(withIdentifier: "calllogs") as? CallLogsViewController {
-                    selectedNavigationController.pushViewController(newViewController, animated: false)
-                } else {
-                    print("Failed to instantiate LeassonsViewController")
-                }
-            }
-            //tabBarController.selectedIndex = 1
-        }
-
-        
-       }
+   
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -507,9 +481,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
             view.addGestureRecognizer(tapGestureRecognizer)
         
         
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
-               swipeLeft.direction = .left
-               view.addGestureRecognizer(swipeLeft)
+        
               
         let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(swipedDown(_:)))
         swipeDown.direction = .down
@@ -535,7 +507,36 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
                     noFriendsLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
                     noFriendsLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20)
                 ])
+        
+        setupSwipeGestures()
       }
+    private func setupSwipeGestures() {
+           let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
+           rightSwipe.direction = .right
+           self.view.addGestureRecognizer(rightSwipe)
+           
+           let leftSwipe = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
+           leftSwipe.direction = .left
+           self.view.addGestureRecognizer(leftSwipe)
+       }
+       
+    
+    @objc func handleSwipes(_ gesture: UISwipeGestureRecognizer) {
+            guard let tabBarController = self.tabBarController else { return }
+            
+            let numberOfTabs = tabBarController.viewControllers?.count ?? 0
+            let selectedIndex = tabBarController.selectedIndex
+            
+            if gesture.direction == .right {
+                if selectedIndex > 0 {
+                    tabBarController.selectedIndex = selectedIndex - 1
+                }
+            } else if gesture.direction == .left {
+                if selectedIndex < numberOfTabs - 1 {
+                    tabBarController.selectedIndex = selectedIndex + 1
+                }
+            }
+        }
     
     let noFriendsLabel = UILabel()
     
@@ -543,16 +544,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
             // Unsubscribe from the notification
             NotificationCenter.default.removeObserver(self, name: .openViewControllerNotification, object: nil)
         }
-//    @objc func openViewController(_ notification: Notification) {
-//
-//        if let value = notification.userInfo?["callerid"] as? String {
-//
-//        let callReceiverVC = storyboard?.instantiateViewController(withIdentifier: "callRecieverscreen") as! CallRecieverViewController
-//        callReceiverVC.hidesBottomBarWhenPushed = true
-//            callReceiverVC.calllerid = value
-//        navigationController?.pushViewController(callReceiverVC, animated: true)
-//        }
-//       }
+
     @objc func swipedDown(_ gesture: UISwipeGestureRecognizer) {
            if gesture.direction == .down {
             //Displaying Refreshing

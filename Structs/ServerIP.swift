@@ -12,14 +12,8 @@ struct ServerResponse: Decodable {
     let userId: Int
 }
 struct Constants {
-<<<<<<< HEAD
 
     static let serverURL = "http://192.168.152.119:5000"
     static let nodeserverIP = "192.168.152.118"
 
-
-=======
-    static let serverURL = "http://192.168.152.119:5000"
-    static let nodeserverIP = "192.168.152.118"
->>>>>>> parent of 3870082 (group tab added , no screen)
 }
