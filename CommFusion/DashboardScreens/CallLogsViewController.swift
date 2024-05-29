@@ -303,50 +303,34 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
             contacts.append(contacts[i])
         }
         
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
-               swipeLeft.direction = .left
-               view.addGestureRecognizer(swipeLeft)
-               
-               let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
-               swipeRight.direction = .right
-               view.addGestureRecognizer(swipeRight)
-      
+        let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
+              rightSwipe.direction = .right
+              self.view.addGestureRecognizer(rightSwipe)
+              
+              // Add left swipe gesture recognizer
+              let leftSwipe = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
+              leftSwipe.direction = .left
+              self.view.addGestureRecognizer(leftSwipe)
     }
     
-    
-    @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
-        
-        guard let tabBarController = tabBarController else {
-               return
-           }
+    @objc func handleSwipes(_ gesture: UISwipeGestureRecognizer) {
+           guard let tabBarController = self.tabBarController else { return }
            
-           guard let selectedNavigationController = tabBarController.selectedViewController as? UINavigationController else {
-               return
+           let numberOfTabs = tabBarController.viewControllers?.count ?? 0
+           let selectedIndex = tabBarController.selectedIndex
+           
+           if gesture.direction == .right {
+               if selectedIndex > 0 {
+                   tabBarController.selectedIndex = selectedIndex - 1
+               }
+           } else if gesture.direction == .left {
+               if selectedIndex < numberOfTabs - 1 {
+                   tabBarController.selectedIndex = selectedIndex + 1
+               }
            }
-        // Assuming you're using storyboards
-        if let storyboard = storyboard {
-            if gesture.direction == .right {
-                tabBarController.selectedIndex = 0
-
-                if let newViewController = storyboard.instantiateViewController(withIdentifier: "onlineContacts") as? onlineContactsViewController {
-                    selectedNavigationController.pushViewController(newViewController, animated: false)
-                
-                } else {
-                    print("Failed to instantiate OnlineContactsViewController")
-                }
-            } else if gesture.direction == .left {
-                tabBarController.selectedIndex = 2
-                if let newViewController = storyboard.instantiateViewController(withIdentifier: "leassonsDashbaord") as? leassonsViewController {
-                    selectedNavigationController.pushViewController(newViewController, animated: false)
-                } else {
-                    print("Failed to instantiate LeassonsViewController")
-                }
-            }
-            //tabBarController.selectedIndex = 1
-        }
-
-        
        }
+
+    
     func fetchCallHistory() {
        
         guard let userID = self.logindefaults.string(forKey: "userID") else {

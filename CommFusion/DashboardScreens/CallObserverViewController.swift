@@ -17,6 +17,21 @@ class CallObserverViewController: UITabBarController, IncomingCallDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        let firstVC = onlineContactsViewController()
+                firstVC.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 0)
+                
+                let secondVC = GroupsViewController()
+                secondVC.tabBarItem = UITabBarItem(tabBarSystemItem: .contacts, tag: 1)
+                
+                let thirdVC = CallLogsViewController()
+                thirdVC.tabBarItem = UITabBarItem(tabBarSystemItem: .history, tag: 2)
+                
+                let fourthVC = leassonsViewController()
+                fourthVC.tabBarItem = UITabBarItem(tabBarSystemItem: .more, tag: 3)
+                
+                viewControllers = [firstVC, secondVC, thirdVC, fourthVC]
+        
         NotificationCenter.default.addObserver(self, selector: #selector(openViewController(_:)), name: .openViewControllerNotification, object: nil)
          
         let sharedSockets = socketsClass.shared
