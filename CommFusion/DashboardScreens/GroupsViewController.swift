@@ -10,6 +10,16 @@ import UIKit
 
 class GroupsViewController: UIViewController {
 
+    
+    
+    @IBAction func Create_grp(_ sender : Any)
+    {
+//        let controller = self.storyboard!.instantiateViewController(identifier: "settings")
+//        controller.modalPresentationStyle = .fullScreen
+//            controller.hidesBottomBarWhenPushed = true
+//          self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

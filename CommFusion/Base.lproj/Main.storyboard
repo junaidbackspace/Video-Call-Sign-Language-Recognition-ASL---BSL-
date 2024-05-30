@@ -4775,6 +4775,9 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                     <constraint firstAttribute="height" constant="42" id="qq5-gg-tsg"/>
                                 </constraints>
                                 <state key="normal" backgroundImage="add-group"/>
+                                <connections>
+                                    <action selector="Create_grp:" destination="cWA-N1-mej" eventType="touchUpInside" id="fkn-jg-Wrh"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jyH-3g-7Wr">
                                 <rect key="frame" x="317" y="15.666666666666664" width="29" height="29"/>
@@ -4989,6 +4992,9 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                         <state key="normal" backgroundImage="arrow.forward.circle.fill" catalog="system">
                                             <color key="titleColor" red="0.95686274510000002" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
+                                        <connections>
+                                            <action selector="Send_msg:" destination="WOL-Lf-Eji" eventType="touchUpInside" id="JrM-qV-H0C"/>
+                                        </connections>
                                     </button>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="gG1-RR-kPz">
                                         <rect key="frame" x="54" y="13.999999999999886" width="296" height="62"/>
@@ -5005,6 +5011,9 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                         <state key="normal" backgroundImage="mic.circle.fill" catalog="system">
                                             <color key="titleColor" red="0.95686274510000002" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
+                                        <connections>
+                                            <action selector="mic_tap:" destination="WOL-Lf-Eji" eventType="touchUpInside" id="VRQ-Yj-frl"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="97t-HC-wrS">
                                         <rect key="frame" x="4" y="25.333333333333371" width="47" height="42"/>
@@ -5013,6 +5022,9 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                         <state key="normal" backgroundImage="camera.circle.fill" catalog="system">
                                             <color key="titleColor" red="0.95686274510000002" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
+                                        <connections>
+                                            <action selector="camera:" destination="WOL-Lf-Eji" eventType="touchUpInside" id="1N0-CS-9h3"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.30304658601677681" green="0.57324465138166936" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

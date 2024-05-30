@@ -7,9 +7,15 @@
 //
 
 import UIKit
+import Speech
+class ChatScreenViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCapturePhotoCaptureDelegate {
 
-class ChatScreenViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
+        var captureSession: AVCaptureSession!
+        var stillImageOutput: AVCapturePhotoOutput!
+        var videoPreviewLayer: AVCaptureVideoPreviewLayer!
+        var capturedImage: UIImage?
+        var cameraView: UIView!
+    var speechRecognizer: SpeechRecognizer?
     
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var Outlettextmsg : UITextView!
@@ -35,6 +41,7 @@ class ChatScreenViewController: UIViewController, UITableViewDelegate, UITableVi
         super.viewDidLoad()
         setup()
         setupTable()
+       
        }
     
     @IBAction func Back(_ sender: Any) {
@@ -42,6 +49,120 @@ class ChatScreenViewController: UIViewController, UITableViewDelegate, UITableVi
         self.navigationController?.popViewController(animated: true)
     }
     
+    var isMicoff = true
+    @IBAction func mic_tap(_ sender: Any) {
+        
+        if isMicoff{
+           
+            self.speechRecognizer!.startRecognition()
+            isMicoff = false
+        }
+        else{
+            isMicoff  = true
+            self.speechRecognizer!.isStopping = true
+            self.speechRecognizer!.stopRecognition()
+            
+            //send message now
+            Outlettextmsg.text = ""
+        }
+    }
+    
+    @IBAction func Send_msg(_ sender: Any) {
+        
+       
+    }
+    
+    @IBAction func camera(_ sender: Any) {
+        
+        setupCamera()
+        captureSession.startRunning()
+        
+        // Capture photo after 3 seconds
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+            self.takePicture()
+        }
+       
+    }
+    
+    func speechtoTextMsg (message : String)
+    {
+        Outlettextmsg.text = message
+    }
+    
+    //MARK:-  camera functions
+    func setupCamera()
+    {
+        
+        
+        
+            cameraView = UIView(frame: self.view.frame)
+            self.view.addSubview(cameraView)
+                
+                // Setup camera
+                captureSession = AVCaptureSession()
+                captureSession.sessionPreset = .medium
+       
+                guard let frontCamera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .front) else {
+                    print("Unable to access back camera!")
+                    return
+                }
+                
+                do {
+                    let input = try AVCaptureDeviceInput(device: frontCamera)
+                    stillImageOutput = AVCapturePhotoOutput()
+                    
+                    if captureSession.canAddInput(input) && captureSession.canAddOutput(stillImageOutput) {
+                        captureSession.addInput(input)
+                        captureSession.addOutput(stillImageOutput)
+                        setupLivePreview()
+                    }
+                } catch let error  {
+                    print("Error Unable to initialize back camera:  \(error.localizedDescription)")
+                }
+        
+    }
+    
+    
+    func setupLivePreview() {
+            videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+            
+            videoPreviewLayer.videoGravity = .resizeAspect
+            videoPreviewLayer.connection?.videoOrientation = .portrait
+            cameraView.layer.addSublayer(videoPreviewLayer)
+            
+            DispatchQueue.global(qos: .userInitiated).async {
+                self.captureSession.startRunning()
+                DispatchQueue.main.async {
+                    self.videoPreviewLayer.frame = self.cameraView.bounds
+                }
+            }
+        }
+
+        
+
+        
+        func takePicture() {
+            let settings = AVCapturePhotoSettings()
+            stillImageOutput.capturePhoto(with: settings, delegate: self)
+        }
+        
+        func stopCamera() {
+            captureSession.stopRunning()
+            cameraView.isHidden = true
+        }
+    
+    
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        if let imageData = photo.fileDataRepresentation() {
+            capturedImage = UIImage(data: imageData)
+            // Handle the captured image (e.g., store it in a variable, save to disk, etc.)
+            print("Image captured: \(String(describing: capturedImage))")
+            
+            // Stop the capture session
+            stopCamera()
+        }
+    }
+    //MARK:- end camera functions
     func setupTable()
     {
         tble.delegate = self
@@ -52,7 +173,8 @@ class ChatScreenViewController: UIViewController, UITableViewDelegate, UITableVi
 
     func setup(){
         
-        
+        // Initialize speechRecognizer with a reference to self
+        speechRecognizer = SpeechRecognizer(groupchat: self)
         // Create a tap gesture recognizer
                let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(textFieldTapped))
         Outlettextmsg.addGestureRecognizer(tapGestureRecognizer)
@@ -70,6 +192,9 @@ class ChatScreenViewController: UIViewController, UITableViewDelegate, UITableVi
            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
        deinit {
+        
+        speechRecognizer?.isStopping = false
+        speechRecognizer?.stopRecognition()
            // Unregister from keyboard notifications
            NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
            NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -172,3 +297,5 @@ class ChatScreenViewController: UIViewController, UITableViewDelegate, UITableVi
     
 
 }
+
+

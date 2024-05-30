@@ -1147,12 +1147,23 @@ class SpeechRecognizer: NSObject, SFSpeechRecognizerDelegate {
     
     // Property to hold a reference to ViewController
     weak var viewController: ViewController?
+    weak var Group_chats: ChatScreenViewController?
+    var checkclass  = ""
     
     init(viewController: ViewController) {
         self.viewController = viewController
         super.init()
         speechRecognizer?.delegate = self
+        checkclass = "videocall"
     }
+    
+    init(groupchat: ChatScreenViewController) {
+        self.Group_chats = groupchat
+        super.init()
+        speechRecognizer?.delegate = self
+        checkclass = "groupchat"
+    }
+    
     
     func startRecognition() {
         print("Audio Recognition started")
@@ -1175,9 +1186,15 @@ class SpeechRecognizer: NSObject, SFSpeechRecognizerDelegate {
         recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest, resultHandler: { (result, error) in
             if let result = result {
                 print("Transcription: \(result.bestTranscription.formattedString)")
+                if self.checkclass == "groupchat"{
                 
-                // Use the reference to call ViewController's method
-                self.viewController?.textmsg(msg: result.bestTranscription.formattedString)
+//                    self.Group_chats?.textmsg(msg: result.bestTranscription.formattedString)
+                    self.Group_chats?.speechtoTextMsg(message : result.bestTranscription.formattedString)
+                }
+                else{
+                    self.viewController?.textmsg(msg: result.bestTranscription.formattedString)
+                    
+                }
                 
             }
             
