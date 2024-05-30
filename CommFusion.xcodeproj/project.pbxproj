@@ -11,6 +11,7 @@
 		378B38D82365C2A8002C5E8B /* CameraFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378B38D72365C2A8002C5E8B /* CameraFilter.swift */; };
 		650950672B945FC400035C85 /* APIWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650950662B945FC400035C85 /* APIWrapper.swift */; };
 		6509506B2B9488AD00035C85 /* UserStrct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6509506A2B9488AD00035C85 /* UserStrct.swift */; };
+		650AAF522C087C0D0034CA3B /* Chat_GroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650AAF512C087C0D0034CA3B /* Chat_GroupTableViewCell.swift */; };
 		650E24632BEAAC8A00A4533C /* CallObserverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650E24622BEAAC8A00A4533C /* CallObserverViewController.swift */; };
 		65182F312B8DFC3000199D36 /* beginnerlevelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65182F302B8DFC3000199D36 /* beginnerlevelViewController.swift */; };
 		651AD82C2B7B49E800D94D1B /* GeneralSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651AD82B2B7B49E800D94D1B /* GeneralSettingsViewController.swift */; };
@@ -149,6 +150,7 @@
 		378B38D72365C2A8002C5E8B /* CameraFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFilter.swift; sourceTree = "<group>"; };
 		650950662B945FC400035C85 /* APIWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIWrapper.swift; sourceTree = "<group>"; };
 		6509506A2B9488AD00035C85 /* UserStrct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStrct.swift; sourceTree = "<group>"; };
+		650AAF512C087C0D0034CA3B /* Chat_GroupTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat_GroupTableViewCell.swift; sourceTree = "<group>"; };
 		650E24622BEAAC8A00A4533C /* CallObserverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallObserverViewController.swift; sourceTree = "<group>"; };
 		65182F302B8DFC3000199D36 /* beginnerlevelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = beginnerlevelViewController.swift; sourceTree = "<group>"; };
 		651AD82B2B7B49E800D94D1B /* GeneralSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsViewController.swift; sourceTree = "<group>"; };
@@ -368,6 +370,7 @@
 				6577F50F2B78B650005AD8AD /* CustomSignsTableViewCell.swift */,
 				651E5C092BA466DB005DB71C /* CallTranscriptionTableViewCell.swift */,
 				6589ED782C07BB3300A45276 /* GroupsTableTableViewCell.swift */,
+				650AAF512C087C0D0034CA3B /* Chat_GroupTableViewCell.swift */,
 			);
 			path = CustomTableClasses;
 			sourceTree = "<group>";
@@ -879,6 +882,7 @@
 				65736E5A2BD6C914001D7418 /* webSockets.swift in Sources */,
 				65A986FC2B7CF10B0011753C /* CallerViewController.swift in Sources */,
 				AF15C0B721E54EB1005B4ED6 /* SignalingCandidate.swift in Sources */,
+				650AAF522C087C0D0034CA3B /* Chat_GroupTableViewCell.swift in Sources */,
 				65A986E72B7C9CA40011753C /* NotificationsViewController.swift in Sources */,
 				AF711AA721DFAD6C005CA4FA /* ViewController.swift in Sources */,
 				65CE5D422B7696F700771A84 /* PlayerLessonsViewController.swift in Sources */,
