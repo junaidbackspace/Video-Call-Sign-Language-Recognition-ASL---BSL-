@@ -308,11 +308,11 @@
         <scene sceneID="eCh-nQ-xbI">
             <objects>
                 <viewController storyboardIdentifier="signupscreen" id="OFn-Vj-P9m" customClass="SignUpViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="1w1-FW-uC5">
+                    <view key="view" contentMode="scaleToFill" id="1w1-FW-uC5">
                         <rect key="frame" x="0.0" y="0.0" width="828" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nqL-Fh-3wM">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nqL-Fh-3wM">
                                 <rect key="frame" x="0.0" y="0.0" width="828" height="736"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XLo-Oe-pFd">
@@ -4970,19 +4970,20 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ruI-rN-tMJ">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ruI-rN-tMJ">
                                 <rect key="frame" x="4" y="16" width="44" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" backgroundImage="arrow.backward" catalog="system"/>
                                 <connections>
                                     <action selector="Back:" destination="WOL-Lf-Eji" eventType="touchUpInside" id="Whn-7L-Yf5"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TBC-y3-XJb">
+                            <view multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TBC-y3-XJb">
                                 <rect key="frame" x="0.0" y="644.66666666666663" width="414" height="96.333333333333371"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w4D-hc-VA1">
-                                        <rect key="frame" x="359" y="8.9999999999999964" width="47" height="42"/>
+                                        <rect key="frame" x="359" y="4.9999999999998863" width="47" height="42"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="tintColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                         <state key="normal" backgroundImage="arrow.forward.circle.fill" catalog="system">
@@ -4990,13 +4991,29 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                         </state>
                                     </button>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="gG1-RR-kPz">
-                                        <rect key="frame" x="8" y="10" width="343" height="50"/>
+                                        <rect key="frame" x="54" y="13.999999999999886" width="296" height="62"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <color key="textColor" systemColor="labelColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Wd-Sw-ugf">
+                                        <rect key="frame" x="360" y="47.333333333333371" width="47" height="42"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="tintColor" systemColor="secondarySystemGroupedBackgroundColor"/>
+                                        <state key="normal" backgroundImage="mic.circle.fill" catalog="system">
+                                            <color key="titleColor" red="0.95686274510000002" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="97t-HC-wrS">
+                                        <rect key="frame" x="4" y="25.333333333333371" width="47" height="42"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="tintColor" systemColor="secondarySystemGroupedBackgroundColor"/>
+                                        <state key="normal" backgroundImage="camera.circle.fill" catalog="system">
+                                            <color key="titleColor" red="0.95686274510000002" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.30304658601677681" green="0.57324465138166936" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
@@ -5020,7 +5037,6 @@ By using the Application, you acknowledge that you have read, understood, and ag
                             <constraint firstItem="TBC-y3-XJb" firstAttribute="leading" secondItem="uKX-IO-nUu" secondAttribute="leading" id="FcC-d7-soa"/>
                             <constraint firstItem="TBC-y3-XJb" firstAttribute="bottom" secondItem="uKX-IO-nUu" secondAttribute="bottom" constant="5" id="FdF-oJ-KcN"/>
                             <constraint firstItem="TBC-y3-XJb" firstAttribute="trailing" secondItem="uKX-IO-nUu" secondAttribute="trailing" id="IzP-7A-B8s"/>
-                            <constraint firstItem="Rnb-Va-LgV" firstAttribute="top" secondItem="ruI-rN-tMJ" secondAttribute="bottom" constant="14.000000000000014" id="NKD-vK-3zU"/>
                             <constraint firstItem="TBC-y3-XJb" firstAttribute="top" secondItem="Rnb-Va-LgV" secondAttribute="bottom" id="bdL-0R-Zhm"/>
                         </constraints>
                     </view>
@@ -5055,6 +5071,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
         <image name="arrowtriangle.right.fill" catalog="system" width="128" height="113"/>
         <image name="backward.end.fill" catalog="system" width="128" height="102"/>
         <image name="call_Black" width="36" height="20"/>
+        <image name="camera.circle.fill" catalog="system" width="128" height="121"/>
         <image name="chevron.right" catalog="system" width="96" height="128"/>
         <image name="chevron.up" catalog="system" width="128" height="72"/>
         <image name="circle" catalog="system" width="128" height="121"/>
@@ -5072,6 +5089,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
         <image name="lessons_TAB" width="32" height="32"/>
         <image name="logo" width="386" height="386"/>
         <image name="magnifyingglass" catalog="system" width="128" height="115"/>
+        <image name="mic.circle.fill" catalog="system" width="128" height="121"/>
         <image name="mic.slash.fill" catalog="system" width="108" height="128"/>
         <image name="minus" catalog="system" width="128" height="24"/>
         <image name="name" width="31" height="31"/>

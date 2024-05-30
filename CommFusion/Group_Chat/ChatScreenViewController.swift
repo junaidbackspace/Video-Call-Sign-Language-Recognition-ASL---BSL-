@@ -161,8 +161,13 @@ class ChatScreenViewController: UIViewController, UITableViewDelegate, UITableVi
         return ceil(textSize.height) + 20 // Add padding as needed
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
+        let message = messages[indexPath.row]
+        let font = UIFont.systemFont(ofSize: 17) // Adjust the font size as needed
+        let width = tableView.frame.width - 40 // Adjust based on your layout
+        let messageHeight = heightForMessage(message)
+        return messageHeight + 40 // Add padding or other components' heights as needed
     }
+
 
     
 
