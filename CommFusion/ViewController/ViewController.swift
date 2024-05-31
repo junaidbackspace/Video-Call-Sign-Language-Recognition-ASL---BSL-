@@ -890,19 +890,13 @@ extension ViewController {
         
        
         if disabilitytype_check_msg{
-            
-//            if   (message == "deaf" && myLangType != "deaf") || (message != "deaf" && myLangType == "deaf") {
-//
-//                DispatchQueue.main.async {
-//                    print("++++++++Starting REcognition.....++++++")
-//                    self.speechRecognizer!.startRecognition()
-//                }
+        
             if myLangType == "deaf"
             {
                 webRTCClient.start_static_CaptureFrames()
 
             }
-           else if myLangType == "blind"
+           else if myLangType == "blind" && message == "deaf"
             {
             DispatchQueue.main.async {
                                 print("++++++++Starting REcognition.....++++++")
@@ -916,6 +910,8 @@ extension ViewController {
             if message == "deaf"
             {
                 shouldtext_To_speech = true
+                
+                
             }
             
 
