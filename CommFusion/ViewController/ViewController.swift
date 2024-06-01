@@ -1144,6 +1144,8 @@ class SpeechRecognizer: NSObject, SFSpeechRecognizerDelegate {
     // Property to hold a reference to ViewController
     weak var viewController: ViewController?
     weak var Group_chats: ChatScreenViewController?
+    weak var Blind_NormalGroup: GroupCall_Blind_NormalViewController?
+    
     var checkclass  = ""
     
     init(viewController: ViewController) {
@@ -1158,6 +1160,12 @@ class SpeechRecognizer: NSObject, SFSpeechRecognizerDelegate {
         super.init()
         speechRecognizer?.delegate = self
         checkclass = "groupchat"
+    }
+    init(blind_normalGroup: GroupCall_Blind_NormalViewController) {
+        self.Blind_NormalGroup = blind_normalGroup
+        super.init()
+        speechRecognizer?.delegate = self
+        checkclass = "blind_normal"
     }
     
     
@@ -1186,6 +1194,9 @@ class SpeechRecognizer: NSObject, SFSpeechRecognizerDelegate {
                 
 //                    self.Group_chats?.textmsg(msg: result.bestTranscription.formattedString)
                     self.Group_chats?.speechtoTextMsg(message : result.bestTranscription.formattedString)
+                }
+                if self.checkclass == "blind_normal"{
+                    self.Blind_NormalGroup?.speechtoText = result.bestTranscription.formattedString
                 }
                 else{
                     self.viewController?.textmsg(msg: result.bestTranscription.formattedString)

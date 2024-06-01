@@ -20,20 +20,20 @@ class CallObserverViewController: UITabBarController, IncomingCallDelegate {
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 
                 guard let firstVC = storyboard.instantiateViewController(withIdentifier: "onlineContacts") as? onlineContactsViewController,
-                      let secondVC = storyboard.instantiateViewController(withIdentifier: "groupsScreen") as? GroupsViewController,
-                      let thirdVC = storyboard.instantiateViewController(withIdentifier: "calllogs") as? CallLogsViewController,
-                      let fourthVC = storyboard.instantiateViewController(withIdentifier: "leassonsDashbaord") as? leassonsViewController else {
+//                      let secondVC = storyboard.instantiateViewController(withIdentifier: "groupsScreen") as? GroupsViewController,
+                      let  secondVC = storyboard.instantiateViewController(withIdentifier: "calllogs") as? CallLogsViewController,
+                      let thirdVC = storyboard.instantiateViewController(withIdentifier: "leassonsDashbaord") as? leassonsViewController else {
                     fatalError("Unable to instantiate one or more view controllers from storyboard")
                 }
                 
                 // Set tab bar items
         firstVC.tabBarItem = UITabBarItem(title: "Online Contacts", image: UIImage(systemName: "person.2"), tag: 0)
-                secondVC.tabBarItem = UITabBarItem(title: "Groups", image: UIImage(systemName: "person.3"), tag: 1)
-                thirdVC.tabBarItem = UITabBarItem(title: "Call History", image: UIImage(systemName: "phone.fill"), tag: 2)
-                fourthVC.tabBarItem = UITabBarItem(title: "Lessons", image: UIImage(named: "lessons_TAB"), tag: 3)
+//                secondVC.tabBarItem = UITabBarItem(title: "Groups", image: UIImage(systemName: "person.3"), tag: 1)
+        secondVC.tabBarItem = UITabBarItem(title: "Call History", image: UIImage(systemName: "phone.fill"), tag: 2)
+        thirdVC.tabBarItem = UITabBarItem(title: "Lessons", image: UIImage(named: "lessons_TAB"), tag: 3)
 
                 
-                viewControllers = [firstVC, secondVC, thirdVC, fourthVC]
+                viewControllers = [firstVC, secondVC, thirdVC]
         
         NotificationCenter.default.addObserver(self, selector: #selector(openViewController(_:)), name: .openViewControllerNotification, object: nil)
          

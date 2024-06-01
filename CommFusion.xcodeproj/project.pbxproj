@@ -19,6 +19,8 @@
 		651E5C0A2BA466DC005DB71C /* CallTranscriptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651E5C092BA466DB005DB71C /* CallTranscriptionTableViewCell.swift */; };
 		652C0AEE2BBC0A0C00D89A57 /* lessonsStrct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652C0AED2BBC0A0C00D89A57 /* lessonsStrct.swift */; };
 		65357E1E2C083E96008C366D /* ChatScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65357E1D2C083E96008C366D /* ChatScreenViewController.swift */; };
+		65374FF62C0B1AB200CF5009 /* GroupCall_Blind_NormalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65374FF52C0B1AB200CF5009 /* GroupCall_Blind_NormalViewController.swift */; };
+		65374FFA2C0B1AEF00CF5009 /* GroupCall_deaf_ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65374FF92C0B1AEF00CF5009 /* GroupCall_deaf_ViewController.swift */; };
 		65556C2D2BFD9ACE00B41A38 /* waiting.wav in Resources */ = {isa = PBXBuildFile; fileRef = 65556C2C2BFD9ACE00B41A38 /* waiting.wav */; };
 		65556C402BFDB1E900B41A38 /* onhold.wav in Resources */ = {isa = PBXBuildFile; fileRef = 65556C3F2BFDB1E900B41A38 /* onhold.wav */; };
 		6557C1642C0516C000057048 /* a.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 6557C13D2C04FADE00057048 /* a.mp4 */; };
@@ -158,6 +160,8 @@
 		651E5C092BA466DB005DB71C /* CallTranscriptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallTranscriptionTableViewCell.swift; sourceTree = "<group>"; };
 		652C0AED2BBC0A0C00D89A57 /* lessonsStrct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lessonsStrct.swift; sourceTree = "<group>"; };
 		65357E1D2C083E96008C366D /* ChatScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatScreenViewController.swift; sourceTree = "<group>"; };
+		65374FF52C0B1AB200CF5009 /* GroupCall_Blind_NormalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCall_Blind_NormalViewController.swift; sourceTree = "<group>"; };
+		65374FF92C0B1AEF00CF5009 /* GroupCall_deaf_ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCall_deaf_ViewController.swift; sourceTree = "<group>"; };
 		65556C2C2BFD9ACE00B41A38 /* waiting.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = waiting.wav; sourceTree = "<group>"; };
 		65556C3F2BFDB1E900B41A38 /* onhold.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = onhold.wav; sourceTree = "<group>"; };
 		6557C12A2C04FADC00057048 /* e.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = e.mp4; sourceTree = "<group>"; };
@@ -424,6 +428,8 @@
 				658DBD8C2B7DE9B700F26D96 /* CallRecieverViewController.swift */,
 				65E199562B7E244600149118 /* VideoCallViewController.swift */,
 				651E5BFF2BA4609C005DB71C /* CallTranscriptionViewController.swift */,
+				65374FF52C0B1AB200CF5009 /* GroupCall_Blind_NormalViewController.swift */,
+				65374FF92C0B1AEF00CF5009 /* GroupCall_deaf_ViewController.swift */,
 			);
 			path = VideoCalls;
 			sourceTree = "<group>";
@@ -919,8 +925,10 @@
 				6573B4772B716AAE000DD658 /* onlineContactsViewController.swift in Sources */,
 				65861D982B77EEED0038A38D /* FavoriteLectureViewController.swift in Sources */,
 				6577F5142B78BB39005AD8AD /* CustomSignsViewController.swift in Sources */,
+				65374FFA2C0B1AEF00CF5009 /* GroupCall_deaf_ViewController.swift in Sources */,
 				65357E1E2C083E96008C366D /* ChatScreenViewController.swift in Sources */,
 				65E2078A2B74061100978CAC /* UserProfileViewController.swift in Sources */,
+				65374FF62C0B1AB200CF5009 /* GroupCall_Blind_NormalViewController.swift in Sources */,
 				650950672B945FC400035C85 /* APIWrapper.swift in Sources */,
 				AF711ADA21E1454E005CA4FA /* WebRTCClient.swift in Sources */,
 				658DBD8D2B7DE9B700F26D96 /* CallRecieverViewController.swift in Sources */,
