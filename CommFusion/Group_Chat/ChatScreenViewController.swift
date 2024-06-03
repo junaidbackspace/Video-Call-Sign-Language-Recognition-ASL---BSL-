@@ -261,7 +261,7 @@ class ChatScreenViewController: UIViewController, UITableViewDelegate, UITableVi
             cell.msgView.backgroundColor = UIColor.init(red: 0, green: 0, blue: 1, alpha: 0.5)
             cell.msgViewLeadingConstraints.constant = 80
             cell.msgViewTrailingConstraints.constant = -10
-          
+            cell.configure(with: messages[indexPath.row])
         }
        
         else{
@@ -269,6 +269,7 @@ class ChatScreenViewController: UIViewController, UITableViewDelegate, UITableVi
             cell.msgView.backgroundColor = UIColor.init(red: 0.1, green: 0.1, blue: 0.1, alpha: 0.5)
             cell.msgViewLeadingConstraints.constant = -10
             cell.msgViewTrailingConstraints.constant = -20
+            cell.configure(with: messages[indexPath.row])
             
             
         }
