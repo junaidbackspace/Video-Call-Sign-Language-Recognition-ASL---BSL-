@@ -4996,6 +4996,9 @@ By using the Application, you acknowledge that you have read, understood, and ag
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="bPX-LI-x52"/>
+                    <connections>
+                        <outlet property="tble" destination="onZ-5t-JZa" id="4kG-sh-z8m"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nXb-wZ-WoG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -5030,6 +5033,9 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                 </constraints>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" backgroundImage="arrow.backward" catalog="system"/>
+                                <connections>
+                                    <action selector="btnBack_Grp:" destination="tBI-rc-nOR" eventType="touchUpInside" id="Vez-8a-qca"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uM7-if-sF7">
                                 <rect key="frame" x="59" y="610" width="300" height="59"/>

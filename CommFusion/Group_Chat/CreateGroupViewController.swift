@@ -1,10 +1,4 @@
-//
-//  CreateGroupViewController.swift
-//  CommFusion
-//
-//  Created by Umer Farooq on 30/05/2024.
-//  Copyright © 2024 n0. All rights reserved.
-//
+
 
 import UIKit
 
@@ -34,7 +28,15 @@ class CreateGroupViewController: UIViewController, UIImagePickerControllerDelega
            profilepic.addGestureRecognizer(tapGesture)
            profilepic.isUserInteractionEnabled = true
         // Do any additional setup after loading the view.
+        
+        let KeyboardRecognizer = UITapGestureRecognizer(target: self, action: #selector(hidekeyboard))
+        view.addGestureRecognizer(KeyboardRecognizer)
     }
+    
+    @objc func hidekeyboard() {
+            print("hidind keybioard tapped")
+        self.view.endEditing(true)
+        }
     
     @objc func profilePicTapped() {
     
@@ -48,6 +50,10 @@ class CreateGroupViewController: UIViewController, UIImagePickerControllerDelega
         
     }
     
+    @IBAction func btnBack_Grp(_ sender: Any)
+    {
+        self.navigationController?.popViewController(animated: true)
+    }
    
     
 
