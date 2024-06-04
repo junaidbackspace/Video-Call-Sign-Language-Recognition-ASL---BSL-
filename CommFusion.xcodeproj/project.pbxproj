@@ -12,6 +12,7 @@
 		650950672B945FC400035C85 /* APIWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650950662B945FC400035C85 /* APIWrapper.swift */; };
 		6509506B2B9488AD00035C85 /* UserStrct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6509506A2B9488AD00035C85 /* UserStrct.swift */; };
 		650AAF522C087C0D0034CA3B /* Chat_GroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650AAF512C087C0D0034CA3B /* Chat_GroupTableViewCell.swift */; };
+		650C50E12C0F03F500EE0F22 /* AddFriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650C50E02C0F03F500EE0F22 /* AddFriendViewController.swift */; };
 		650E24632BEAAC8A00A4533C /* CallObserverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650E24622BEAAC8A00A4533C /* CallObserverViewController.swift */; };
 		65182F312B8DFC3000199D36 /* beginnerlevelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65182F302B8DFC3000199D36 /* beginnerlevelViewController.swift */; };
 		651AD82C2B7B49E800D94D1B /* GeneralSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651AD82B2B7B49E800D94D1B /* GeneralSettingsViewController.swift */; };
@@ -153,6 +154,7 @@
 		650950662B945FC400035C85 /* APIWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIWrapper.swift; sourceTree = "<group>"; };
 		6509506A2B9488AD00035C85 /* UserStrct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStrct.swift; sourceTree = "<group>"; };
 		650AAF512C087C0D0034CA3B /* Chat_GroupTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat_GroupTableViewCell.swift; sourceTree = "<group>"; };
+		650C50E02C0F03F500EE0F22 /* AddFriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendViewController.swift; sourceTree = "<group>"; };
 		650E24622BEAAC8A00A4533C /* CallObserverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallObserverViewController.swift; sourceTree = "<group>"; };
 		65182F302B8DFC3000199D36 /* beginnerlevelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = beginnerlevelViewController.swift; sourceTree = "<group>"; };
 		651AD82B2B7B49E800D94D1B /* GeneralSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsViewController.swift; sourceTree = "<group>"; };
@@ -310,6 +312,16 @@
 			path = Api;
 			sourceTree = "<group>";
 		};
+		650C50DF2C0F03D400EE0F22 /* add_Call */ = {
+			isa = PBXGroup;
+			children = (
+				65374FF52C0B1AB200CF5009 /* GroupCall_Blind_NormalViewController.swift */,
+				65374FF92C0B1AEF00CF5009 /* GroupCall_deaf_ViewController.swift */,
+				650C50E02C0F03F500EE0F22 /* AddFriendViewController.swift */,
+			);
+			path = add_Call;
+			sourceTree = "<group>";
+		};
 		6527CD1B2BE67CB5005CFE96 /* SplashScreen */ = {
 			isa = PBXGroup;
 			children = (
@@ -428,8 +440,6 @@
 				658DBD8C2B7DE9B700F26D96 /* CallRecieverViewController.swift */,
 				65E199562B7E244600149118 /* VideoCallViewController.swift */,
 				651E5BFF2BA4609C005DB71C /* CallTranscriptionViewController.swift */,
-				65374FF52C0B1AB200CF5009 /* GroupCall_Blind_NormalViewController.swift */,
-				65374FF92C0B1AEF00CF5009 /* GroupCall_deaf_ViewController.swift */,
 			);
 			path = VideoCalls;
 			sourceTree = "<group>";
@@ -549,6 +559,7 @@
 		AF711AA321DFAD6C005CA4FA /* CommFusion */ = {
 			isa = PBXGroup;
 			children = (
+				650C50DF2C0F03D400EE0F22 /* add_Call */,
 				6589ED7C2C07BEFF00A45276 /* Group_Chat */,
 				6557C1292C04F6CA00057048 /* AslSigns */,
 				65A986FA2B7CF0DE0011753C /* VideoCalls */,
@@ -908,6 +919,7 @@
 				65182F312B8DFC3000199D36 /* beginnerlevelViewController.swift in Sources */,
 				650E24632BEAAC8A00A4533C /* CallObserverViewController.swift in Sources */,
 				AF711ADD21E14DDC005CA4FA /* ScreenSizeUtil.swift in Sources */,
+				650C50E12C0F03F500EE0F22 /* AddFriendViewController.swift in Sources */,
 				AF60114024547E7B00E6E407 /* RTCSimulatorVideoDecoderFactory.swift in Sources */,
 				656168BB2B724FA70006E5D2 /* ContactsViewController.swift in Sources */,
 				65861D922B77ECF30038A38D /* FavoriteSignsTableViewCell.swift in Sources */,

@@ -74,7 +74,10 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         }
     }
     
-   
+    @IBAction func btnAddCall(_ sender  : Any)
+    {
+        
+    }
    
     @IBOutlet weak var msgtextView: UITextView!
 
@@ -83,7 +86,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     @IBOutlet weak var OutLetHangUp: UIButton!
  
     @IBOutlet weak var OutLetSwitchCam: UIButton!
-   
+    @IBOutlet weak var OutletbtnAddCall : UIButton!
     let myLangType = UserDefaults.standard.string(forKey: "disabilityType")!
 
    
@@ -390,12 +393,9 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         OutLet_Mic_Mute.layer.zPosition = 1
         OutLet_speaker_Mute.layer.zPosition = 1
         OutLetHangUp .layer.zPosition = 1
-//        OutLetOldMsg.layer.zPosition = 1
-//        OutLetFreshMsg.layer.zPosition = 1
-//        lblmsg.layer.zPosition = 1
         msgtextView.layer.zPosition = 1
         OutLetSwitchCam.layer.zPosition = 1
-        
+        OutletbtnAddCall.layer.zPosition = 1
     
         if myLangType == "deaf"{
         let doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap(_:)))
