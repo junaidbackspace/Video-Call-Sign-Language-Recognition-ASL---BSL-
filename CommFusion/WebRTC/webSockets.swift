@@ -153,6 +153,8 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
                 let key = keyValue[0].trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\"", with: "")
                 let value = keyValue[1].trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\"", with: "")
                 
+                
+                
                 // Store key-value pair in variables
                 switch key {
                 case "type":
@@ -163,21 +165,31 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
                     from = value
                 case "sessionDescription":
                     from = value
+                case "user1":
+                    caller1 = value
+                case "user2":
+                    caller2 = value
+                case "vid":
+                    vid = Int(value)!
+                    
                 default:
                     break
                 }
             }
-          else  if keyValue.count == 5 {
-            
-            // Remove surrounding quotes and whitespace
-            let key = keyValue[0].trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\"", with: "")
-             caller1 = keyValue[1].trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\"", with: "")
-            
-             caller2 = keyValue[2].trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\"", with: "")
-             vid = Int(keyValue[3].trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\"", with: ""))!
-            
-            
-            }
+//          else  if components.count == 4 {
+//            print("setting up group call values")
+//            // Remove surrounding quotes and whitespace
+//            let key = keyValue[0].trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\"", with: "")
+//
+//            if key == "incoming_group_call"
+//            {
+//             caller1 = keyValue[1].trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\"", with: "")
+//
+//             caller2 = keyValue[2].trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\"", with: "")
+//             vid = Int(keyValue[3].trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\"", with: ""))!
+//            }
+//
+//            }
             else {
                
                 // Remove surrounding quotes and whitespace
@@ -358,20 +370,19 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
             guard let delegate = self.incomingCallDelegate else {
                 print("Incoming call delegate not set")
                 
-                NotificationCenter.default.post(name: .openGroupCallNotification, object: nil,  userInfo: ["firstuser": firstuser_id])
-                NotificationCenter.default.post(name: .openGroupCallNotification, object: nil,  userInfo: ["seconduser": SecondUser_id])
+                let userInfo: [String: Any] = [
+                               "firstuser": firstuser_id,
+                               "seconduser": SecondUser_id,
+                               "videocallid": Vid
+                           ]
                 
-                NotificationCenter.default.post(name: .openGroupCallNotification, object: nil,  userInfo: ["videocallid": Vid])
-                   
-                
+                NotificationCenter.default.post(name: .openGroupCallNotification, object: nil, userInfo: userInfo)
+                          
                 return
-            }
+                        }
             
-            
-           
+                    }
             }
-
-        }
     func CancellCall(with friendId: String) {
        
         self.connectSocket()

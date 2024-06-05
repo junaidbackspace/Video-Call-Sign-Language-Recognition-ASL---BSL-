@@ -65,18 +65,24 @@ class CallObserverViewController: UITabBarController, IncomingCallDelegate {
     @objc func openGroupCallController(_ notification: Notification) {
          print("opening recieving call screen")
         
-        let firstuser = notification.userInfo?["firstuser"] as? Int
-        let seconduser = notification.userInfo?["seconduser"] as? Int
-        
-        let vid = notification.userInfo?["videocallid"] as? Int
-        
-          
         let callReceiverVC = storyboard?.instantiateViewController(withIdentifier: "callRecieverscreen") as! CallRecieverViewController
-        callReceiverVC.hidesBottomBarWhenPushed = true
-        callReceiverVC.caller1_id = firstuser!
-        callReceiverVC.caller2_id = seconduser!
-     
-        callReceiverVC.vid = vid!
+        
+        if let userInfo = notification.userInfo,
+               let firstuser = userInfo["firstuser"] as? Int,
+               let seconduser = userInfo["seconduser"] as? Int,
+               let videocallid = userInfo["videocallid"] as? Int {
+                // Handle the values here
+                print("First User ID: \(firstuser)")
+                print("Second User ID: \(seconduser)")
+                print("Video Call ID: \(videocallid)")
+            
+            
+            callReceiverVC.hidesBottomBarWhenPushed = true
+            callReceiverVC.caller1_id = firstuser
+            callReceiverVC.caller2_id = seconduser
+            callReceiverVC.vid = videocallid
+            
+            }
         navigationController?.pushViewController(callReceiverVC, animated: true)
         
     }

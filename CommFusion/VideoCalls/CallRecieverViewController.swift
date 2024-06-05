@@ -278,9 +278,9 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
                 let controller = (self.storyboard?.instantiateViewController(identifier: "groupcall_blind_normalScreen"))! as GroupCall_Blind_NormalViewController
                 
                 controller.userfirst_id = caller1_id
-                controller.userfirst_id = caller2_id
+                controller.usersecond_id = caller2_id
                     
-                    print("call friend id : \(self.calllerid)")
+                    print("caller 1 : \(caller1_id) and caller 2  : \(caller2_id)")
                 controller.modalPresentationStyle = .fullScreen
                   self.navigationController?.pushViewController(controller, animated: true)
             }
