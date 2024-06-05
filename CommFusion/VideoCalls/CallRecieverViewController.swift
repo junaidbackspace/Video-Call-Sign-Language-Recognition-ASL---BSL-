@@ -24,6 +24,8 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
     var caller2_id = 0
     var friend_id = 0
     var vid = 0
+    var caller1Name = ""
+    var caller2Name = ""
     
     var userid = UserDefaults.standard.integer(forKey: "userID")
     @IBOutlet weak var lblrecievingCall: UILabel!
@@ -68,8 +70,17 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
             }
             NotificationCenter.default.addObserver(self, selector: #selector(callcenlled), name: Notification.Name("CallCancelledFromReciverNotification"), object: nil)
                
-            
+            if calllerid != "0"
+            {
           fetchUserData(callerId: calllerid)
+                
+            }
+            
+            else{
+                fetchUserNames(callerId: String(caller1_id), number: 1)
+                fetchUserNames(callerId: String(caller2_id), number: 2)
+                lblname.text = caller1Name+" & "+caller2Name
+            }
             startCamera()
             acceptButton.layer.zPosition = 1
             rejectButton.layer.zPosition = 1
@@ -265,6 +276,7 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
             if myLangType == "deaf"
             {
                 
+                socketsClass.shared.GroupCallAccepted(caller1: String(caller1_id), caller2: String(caller2_id))
                 let controller = (self.storyboard?.instantiateViewController(identifier: "groupcall_Deaf_Screen"))! as GroupCall_deaf_ViewController
                    
                     print("call friend id : \(self.calllerid)")
@@ -275,11 +287,12 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
             
             }
             else{
+                socketsClass.shared.GroupCallAccepted(caller1: String(caller1_id), caller2: String(caller2_id))
                 let controller = (self.storyboard?.instantiateViewController(identifier: "groupcall_blind_normalScreen"))! as GroupCall_Blind_NormalViewController
                 
                 controller.userfirst_id = caller1_id
                 controller.usersecond_id = caller2_id
-                    
+                
                     print("caller 1 : \(caller1_id) and caller 2  : \(caller2_id)")
                 controller.modalPresentationStyle = .fullScreen
                   self.navigationController?.pushViewController(controller, animated: true)
@@ -374,6 +387,58 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
         
         group.leave()
     }
+    
+    
+    func fetchUserNames(callerId : String , number : Int) {
+       
+        let userID = String(callerId)
+        let Url = "\(Constants.serverURL)/user/userdetails/\(userID)"
+        print("URL: "+Url)
+      
+        let url = URL(string: Url)!
+        
+        self.serverWrapper.fetchUserInfo(baseUrl: url, structure: singleUserInfo.self) { userInfo, error in
+            if let error = error {
+                print("inner URL: \(Url)")
+                print("Error in receiving:", error.localizedDescription)
+            } else if let userObject = userInfo {
+                print("JSON Data:", userObject)
+                self.processUserName(userObject , no : number)
+            } else {
+                print("No data received from the server")
+            }
+        }
+    }
+
+    func processUserName(_ userObject: singleUserInfo, no: Int) {
+        print("Processing user data")
+        user.Fname = userObject.fname
+        user.Lname = userObject.lname
+        
+        if no == 1{
+        caller1Name = user.Fname+" "+user.Lname
+        
+        }
+        else{
+            caller2Name = user.Fname+" "+user.Lname
+        }
+        
+        let group = DispatchGroup()
+          group.enter()
+
+        let urlString = "\(Constants.serverURL)\(user.ProfilePicture)"
+
+        if let url = URL(string: urlString) {
+            profilePic.kf.setImage(with: url, placeholder: UIImage(named: "No image found"))
+        } else {
+            // Handle invalid URL
+            print("Invalid URL:", urlString)
+        }
+        
+        group.leave()
+    }
+    
+    
     deinit {
            NotificationCenter.default.removeObserver(self)
        }

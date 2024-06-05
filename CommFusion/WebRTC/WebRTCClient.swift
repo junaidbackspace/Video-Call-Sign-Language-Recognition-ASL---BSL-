@@ -96,8 +96,9 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     var captureDuration: TimeInterval = 3.0 // Duration to capture frames (in seconds)
     var waitDuration: TimeInterval = 4.0 // Duration to wait between captures (in seconds)
     var isCapturing = false
-
-    
+    public var ShouldGroupChat = false
+    var groupFriendId = " "
+    let userID = UserDefaults.standard.string(forKey: "userID")!
 //    MARK:- static frames
     var Static_captureTimer: Timer?
     var stop_Staticframe_check = true
@@ -177,6 +178,10 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
                          } else if let predictedLabel = predictedLabel {
                              print("Predicted Label: \(predictedLabel)")
                              self.sendMessge(message: predictedLabel)
+                            
+                            if self.ShouldGroupChat{
+                                socketsClass.shared.Send_GroupChatMsg(friendId: self.groupFriendId, Message: predictedLabel, from : self.userID)
+                            }
                          }
                      }
     }
@@ -300,9 +305,13 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         }.resume()
     }
 
+    
     func handleServerResponse(word: String) {
         print("Predicted Word: \(word)")
         sendMessge(message: word)
+        if self.ShouldGroupChat{
+            socketsClass.shared.Send_GroupChatMsg(friendId: groupFriendId, Message: word, from :userID )
+        }
         // Use the predicted word in your app as needed
     }
 

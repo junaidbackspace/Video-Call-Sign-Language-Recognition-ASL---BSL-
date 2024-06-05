@@ -353,6 +353,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         NotificationCenter.default.addObserver(self, selector: #selector(endCall), name: Notification.Name("CallEndedNotification"), object: nil)
            
         
+        NotificationCenter.default.addObserver(self, selector: #selector(EnableGroup_Chat(_:)), name: Notification.Name("Noti_GroupChatAccepted"), object: nil)
+        
         
         #if targetEnvironment(simulator)
         // simulator does not have camera
@@ -413,6 +415,24 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         }
     }
     
+    var groupFriendId = " "
+    var ShouldGroupChat = false
+    @objc func EnableGroup_Chat(_ notification: Notification)
+    {
+        if let value = notification.userInfo?["callerid"] as? String {
+           if myLangType == "deaf"
+           {
+            webRTCClient.ShouldGroupChat = true
+            webRTCClient.groupFriendId = value
+           }
+           else{
+            self.ShouldGroupChat = true
+            speechRecognizer?.ShouldGroupChat = true
+            speechRecognizer?.groupFriendId = value
+            self.speechRecognizer!.startRecognition()
+           }
+        }
+    }
     
     var overlayView: UIView!
 
@@ -1176,7 +1196,9 @@ class SpeechRecognizer: NSObject, SFSpeechRecognizerDelegate {
         checkclass = "blind_normal"
     }
     
-    
+   var  groupFriendId = ""
+    var ShouldGroupChat = false
+   let  userID = UserDefaults.standard.string(forKey: "userID")!
     func startRecognition() {
         print("Audio Recognition started")
         let audioSession = AVAudioSession.sharedInstance()
@@ -1198,6 +1220,12 @@ class SpeechRecognizer: NSObject, SFSpeechRecognizerDelegate {
         recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest, resultHandler: { (result, error) in
             if let result = result {
                 print("Transcription: \(result.bestTranscription.formattedString)")
+                
+                if self.ShouldGroupChat{
+                    
+                    print("Group Chat Send.")
+                    socketsClass.shared.Send_GroupChatMsg(friendId: self.groupFriendId, Message: result.bestTranscription.formattedString , from : self.userID)
+                }
                 if self.checkclass == "groupchat"{
                 
 //                    self.Group_chats?.textmsg(msg: result.bestTranscription.formattedString)

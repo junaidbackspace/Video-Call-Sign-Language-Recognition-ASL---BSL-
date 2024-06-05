@@ -37,7 +37,7 @@ class GroupCall_Blind_NormalViewController: UIViewController {
     
     @IBAction func hangupcall(_ sender : Any)
     {
-        
+        self.navigationController?.popViewController(animated: true)
     }
     
     @IBAction func MuteSpeaker(_ sender : Any)

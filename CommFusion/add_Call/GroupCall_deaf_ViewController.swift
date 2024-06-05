@@ -30,7 +30,8 @@ class GroupCall_deaf_ViewController: UIViewController, AVCapturePhotoCaptureDele
     
     @IBAction func hangupCall (_ sender : Any)
     {
-        
+        stopCamera()
+        self.navigationController?.popViewController(animated: true)
     }
     
     

@@ -67,7 +67,7 @@ ws.on('close', function () {
        
         try {
             const data = JSON.parse(message);
-            const { type, from, to, sessionDescription, candidate,videocallid , caller1 ,caller2 ,newUser } = data; // Extract necessary fields from the received message
+            const { type, from, to, sessionDescription, candidate,videocallid , caller1 ,caller2 ,newUser ,msg} = data; // Extract necessary fields from the received message
             
             //call initiated
             if (data.type === 'call') {
@@ -163,22 +163,44 @@ ws.on('close', function () {
             }
            }
           else if (data.type === 'groupchat') {
-              console.log("staring group chat");
+              console.log(" group chat");
             handleGroupChat(data.caller1, data.caller2 , data.newUser,data.videocallid);
-            
-        }
-            else {
-                // Handle other types of messages (if any)
-            }
-        } catch (error) {
-            const json = JSON.parse(message.toString());
-        }
-        
-    });
-    
 
-    
+         }
+
+        else if (data.type === 'group_call_accepted') {
+            console.log(" group chat accepted");
+           
+                
+                const caller1 = clients.get(data.caller1); // user
+                const caller2 = clients.get(data.caller2);
+                
+                console.log("ringing")
+               
+                caller1.send(JSON.stringify({ type: 'group_chat_accept', userid: from }));
+                console.log(`Sending Group chat accept Noti to : '${caller1} `);
+                caller2.send(JSON.stringify({ type: 'group_chat_accept', userid: from }));
+                console.log(`Sending Group chat accept Noti to : '${caller2} `);
+               
+        
+    }
+
+    else if (data.type === 'groupMsg') {
+        const member = clients.get(data.to);
+        console.log(data.msg)
+        member.send(JSON.stringify({type: 'msg' , msg: data.msg , from : data.from}))
+    }
+
+    else {
+        // Handle other types of messages (if any)
+    }
+}
+ catch (error) {
+    const json = JSON.parse(message.toString());
+}
 });
+
+        
 
 
 
@@ -210,7 +232,7 @@ function handleCall(from, to,vid) {
 
 function handleGroupChat(c1, c2,user , v_id) {
     // Check if the recipient (to) is connected
-    console.log("within group call ")
+    console.log("within group call ");
     if (clients.has(user)) {
         const recipient = clients.get(user); //friend
         const caller1 = clients.get(c1); // user
@@ -238,5 +260,4 @@ function handleGroupChat(c1, c2,user , v_id) {
         return `User '${to}' is not connected.`;
     }
 }
-
-
+});

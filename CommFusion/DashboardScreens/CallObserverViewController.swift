@@ -81,20 +81,13 @@ class CallObserverViewController: UITabBarController, IncomingCallDelegate {
             callReceiverVC.caller1_id = firstuser
             callReceiverVC.caller2_id = seconduser
             callReceiverVC.vid = videocallid
+            callReceiverVC.calllerid = "0"
             
             }
         navigationController?.pushViewController(callReceiverVC, animated: true)
         
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
+    
 
 }

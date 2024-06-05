@@ -120,6 +120,7 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
     }
 }
 
+    var groupChat_AcceptId = " "
     var caller1 = " "
     var caller2 = " "
     var type: String?
@@ -171,25 +172,13 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
                     caller2 = value
                 case "vid":
                     vid = Int(value)!
-                    
+                case "userid":
+                    groupChat_AcceptId = value
                 default:
                     break
                 }
             }
-//          else  if components.count == 4 {
-//            print("setting up group call values")
-//            // Remove surrounding quotes and whitespace
-//            let key = keyValue[0].trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\"", with: "")
-//
-//            if key == "incoming_group_call"
-//            {
-//             caller1 = keyValue[1].trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\"", with: "")
-//
-//             caller2 = keyValue[2].trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\"", with: "")
-//             vid = Int(keyValue[3].trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\"", with: ""))!
-//            }
-//
-//            }
+
             else {
                
                 // Remove surrounding quotes and whitespace
@@ -270,6 +259,14 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
 
         }
         
+        if type == "group_chat_accept"{
+            
+            print("incoming call From: \(from)")
+            
+            
+            receiveIncomingCall()
+           
+        }
         else{
 
             
@@ -345,6 +342,24 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
 
 
 
+    func Group_Chat_Accepted() {
+       
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
+            // Ensure that the delegate is set and the function is implemented
+            guard let delegate = self.incomingCallDelegate else {
+                print("Incoming call delegate not set")
+                
+                NotificationCenter.default.post(name: .grouchatAccepted, object: nil,  userInfo: ["callerid": self.groupChat_AcceptId])
+                   
+                return
+            }
+            
+            
+           
+            }
+
+        }
+    
     func receiveIncomingCall() {
        
         DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
@@ -414,9 +429,43 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
             print("Error serializing call canceling data: \(error)")
         }
     }
+    
+    func GroupCallAccepted( caller1: String , caller2 : String) {
+       
+        self.connectSocket()
+       userID = String(UserDefaults.standard.integer(forKey: "userID"))
+        // Send call initiation message
+        let callData: [String: Any] = ["type": "group_call_accepted", "from": userID, "caller1": caller1,"caller2":caller2]
+        do {
+            print("\n \(callData)")
+            let jsonData = try JSONSerialization.data(withJSONObject: callData, options: [])
+            socket.write(data: jsonData)
+            print("canceling call...")
+        } catch {
+            print("Error serializing call canceling data: \(error)")
+        }
+    }
+    
+    func Send_GroupChatMsg(friendId: String ,Message : String , from : String ) {
+       
+        self.connectSocket()
+       userID = String(UserDefaults.standard.integer(forKey: "userID"))
+        // Send call initiation message
+        let Data: [String: Any] = ["type": "groupMsg","to":friendId, "msg": Message]
+        do {
+            print("\n \(Data)")
+            let jsonData = try JSONSerialization.data(withJSONObject: Data, options: [])
+            socket.write(data: jsonData)
+            print("Group msg send...")
+        } catch {
+            print("Error serializing call canceling data: \(error)")
+        }
+    }
 
 }
 extension Notification.Name {
+    
+    static let grouchatAccepted = Notification.Name("Noti_GroupChatAccepted")
     static let openViewControllerNotification = Notification.Name("openViewControllerNotification")
     
     static let openGroupCallNotification = Notification.Name("openGroupCallViewControllerNotification")
