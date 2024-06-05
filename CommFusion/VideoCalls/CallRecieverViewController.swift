@@ -18,6 +18,13 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
     var user = User()
     var serverWrapper = APIWrapper()
     var calllerid = ""
+    
+    
+    var caller1_id  = 0
+    var caller2_id = 0
+    var friend_id = 0
+    var vid = 0
+    
     var userid = UserDefaults.standard.integer(forKey: "userID")
     @IBOutlet weak var lblrecievingCall: UILabel!
     @IBOutlet weak var lblname: UILabel!
@@ -225,9 +232,12 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
 
 
 
-
+    let isGroupCall = UserDefaults.standard.string(forKey: "groupchat")
     func acceptCall() {
         musicPlayer?.stop()
+        
+        if isGroupCall != "1"
+        {
             print("Accepted call")
         let callData = ["type": "call_accept", "from": String(userid), "to": calllerid]
                if let jsonData = try? JSONSerialization.data(withJSONObject: callData) {
@@ -245,6 +255,35 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
             print("call friend id : \(self.calllerid)")
         controller.modalPresentationStyle = .fullScreen
           self.navigationController?.pushViewController(controller, animated: true)
+                }
+            
+            }
+        
+        else{
+            let myLangType = UserDefaults.standard.string(forKey: "disabilityType")!
+            
+            if myLangType == "deaf"
+            {
+                
+                let controller = (self.storyboard?.instantiateViewController(identifier: "groupcall_Deaf_Screen"))! as GroupCall_deaf_ViewController
+                   
+                    print("call friend id : \(self.calllerid)")
+                controller.userfirst_id = caller1_id
+                controller.userfirst_id = caller2_id
+                controller.modalPresentationStyle = .fullScreen
+                  self.navigationController?.pushViewController(controller, animated: true)
+            
+            }
+            else{
+                let controller = (self.storyboard?.instantiateViewController(identifier: "groupcall_blind_normalScreen"))! as GroupCall_Blind_NormalViewController
+                
+                controller.userfirst_id = caller1_id
+                controller.userfirst_id = caller2_id
+                    
+                    print("call friend id : \(self.calllerid)")
+                controller.modalPresentationStyle = .fullScreen
+                  self.navigationController?.pushViewController(controller, animated: true)
+            }
         }
         }
         

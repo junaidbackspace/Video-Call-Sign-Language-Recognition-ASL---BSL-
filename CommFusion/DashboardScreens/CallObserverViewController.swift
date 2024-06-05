@@ -36,6 +36,9 @@ class CallObserverViewController: UITabBarController, IncomingCallDelegate {
         viewControllers = [firstVC , thirdVC , forthVC]
         
         NotificationCenter.default.addObserver(self, selector: #selector(openViewController(_:)), name: .openViewControllerNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(openGroupCallController(_:)), name: .openGroupCallNotification, object: nil)
+        
          
         let sharedSockets = socketsClass.shared
      
@@ -58,6 +61,25 @@ class CallObserverViewController: UITabBarController, IncomingCallDelegate {
         navigationController?.pushViewController(callReceiverVC, animated: true)
         }
        }
+    
+    @objc func openGroupCallController(_ notification: Notification) {
+         print("opening recieving call screen")
+        
+        let firstuser = notification.userInfo?["firstuser"] as? Int
+        let seconduser = notification.userInfo?["seconduser"] as? Int
+        
+        let vid = notification.userInfo?["videocallid"] as? Int
+        
+          
+        let callReceiverVC = storyboard?.instantiateViewController(withIdentifier: "callRecieverscreen") as! CallRecieverViewController
+        callReceiverVC.hidesBottomBarWhenPushed = true
+        callReceiverVC.caller1_id = firstuser!
+        callReceiverVC.caller2_id = seconduser!
+     
+        callReceiverVC.vid = vid!
+        navigationController?.pushViewController(callReceiverVC, animated: true)
+        
+    }
 
     /*
     // MARK: - Navigation

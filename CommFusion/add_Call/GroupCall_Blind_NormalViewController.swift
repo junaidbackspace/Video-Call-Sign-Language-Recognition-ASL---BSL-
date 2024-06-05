@@ -12,6 +12,9 @@ import Speech
 class GroupCall_Blind_NormalViewController: UIViewController {
 
     public var speechtoText = ""
+    var userfirst_id = 0
+    var usersecond_id = 0
+    
     var speechRecognizer: SpeechRecognizer?
     private var speechSynthesizer =   AVSpeechSynthesizer() // to text to speech
     var user = User()
@@ -64,8 +67,8 @@ class GroupCall_Blind_NormalViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        fetchUserData(userid : 2 , userno : 1)
-        fetchUserData(userid : 3 , userno : 2)
+        fetchUserData(userid : userfirst_id , userno : 1)
+        fetchUserData(userid : usersecond_id , userno : 2)
         
         setupSpeechToText()
     }

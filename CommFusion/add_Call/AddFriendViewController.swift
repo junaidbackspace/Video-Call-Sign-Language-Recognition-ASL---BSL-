@@ -7,18 +7,21 @@
 //
 import UIKit
 import Kingfisher
-
-
+import Starscream
 import UIKit
 
 class AddFriendViewController: UIViewController ,UITableViewDataSource, UITableViewDelegate{
+
+    
 
    var serverWrapper = APIWrapper()
 
      var contacts = [User]()
      var filteredContacts = [User]()
      var dumylist = [User]()
-
+    let sharedSockets = socketsClass.shared
+ 
+       
      // iterate from i = 1 to i = 3
     
     
@@ -233,11 +236,9 @@ class AddFriendViewController: UIViewController ,UITableViewDataSource, UITableV
          print("index path : \(indexPath.row)")
          if contacts[indexPath.row].IsBlocked == 0 {
              
-             
-             cell.call.setBackgroundImage(UIImage(named: "videocall"), for: .normal)
-             cell.call.imageView?.contentMode = .scaleAspectFit
- //            cell.call.frame.size.width = CGFloat(32)
- //            cell.call.frame.size.height = CGFloat(18)
+
+         cell.call.imageView?.contentMode = .scaleAspectFit
+
              
          cell.name.text = contacts[indexPath.row].Fname+" "+contacts[indexPath.row].Lname
          cell.about.text = contacts[indexPath.row].BioStatus
@@ -308,43 +309,23 @@ class AddFriendViewController: UIViewController ,UITableViewDataSource, UITableV
        
      }
      
-
-    
+    var vid = 0
+    var callledFriendId = 0
 
      @objc func btn_call(_ sender:UIButton)
      {
          
          var userid = UserDefaults.standard.integer(forKey: "userID")
-             let controller = self.storyboard?.instantiateViewController(identifier: "callerscreen") as! CallerViewController
+//             let controller = self.storyboard?.instantiateViewController(identifier: "callerscreen") as! CallerViewController
+//
+         let  callerid = userid
+         let recieverid = contacts[sender.tag].UserId
+         let name =  contacts[sender.tag].Fname+" "+contacts[sender.tag].Lname
+         let isringing = "Calling"
          
-         controller.callerid = userid
-         controller.recieverid = contacts[sender.tag].UserId
-         controller.name =  contacts[sender.tag].Fname+" "+contacts[sender.tag].Lname
-         controller.isringing = "Calling"
-         if contacts[sender.tag].ProfilePicture != "" {
-         let base = "\(Constants.serverURL)\(contacts[sender.tag].ProfilePicture)"
-         if let url = URL(string: base) {
-             
-             KingfisherManager.shared.retrieveImage(with: url) { result in
-                 switch result {
-                 case .success(let value):
-                     let downloadedImage = value.image
-                     controller.profilepic = downloadedImage
-                 case .failure(let error):
-                     print("Error downloading image: \(error)")
-                 }
-             }
-         }
-             }
-         else{
-             controller.profilepic =  UIImage(named: "noprofile", in: Bundle.main, compatibleWith: nil)!
-             
-         }
-             
-        
-         controller.modalPresentationStyle = .fullScreen
-         controller.hidesBottomBarWhenPushed = true
-         self.navigationController?.pushViewController(controller, animated: true)
+        print("--->sending group call msg to  sockets..\n")
+        sharedSockets.GroupChatCall(with: String(recieverid) , caller1: String(callerid), Caller2: String(callledFriendId), vid: vid)
+       
                 
      }
      

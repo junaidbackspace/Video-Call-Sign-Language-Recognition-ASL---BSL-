@@ -48,6 +48,7 @@ ws.on('close', function () {
     clients.forEach((client, userId) => {
         if (client === ws) {
             clients.delete(userId);
+            callers.delete(userId);
             console.log(`User '${userId}' disconnected.`);
             return;
         }
@@ -66,7 +67,7 @@ ws.on('close', function () {
        
         try {
             const data = JSON.parse(message);
-            const { type, from, to, sessionDescription, candidate,videocallid } = data; // Extract necessary fields from the received message
+            const { type, from, to, sessionDescription, candidate,videocallid , caller1 ,caller2 ,newUser } = data; // Extract necessary fields from the received message
             
             //call initiated
             if (data.type === 'call') {
@@ -161,6 +162,11 @@ ws.on('close', function () {
                 console.log("Caller ID not found or invalid type");
             }
            }
+          else if (data.type === 'groupchat') {
+              console.log("staring group chat");
+            handleGroupChat(data.caller1, data.caller2 , data.newUser,data.videocallid);
+            
+        }
             else {
                 // Handle other types of messages (if any)
             }
@@ -202,5 +208,35 @@ function handleCall(from, to,vid) {
     }
 }
 
+function handleGroupChat(c1, c2,user , v_id) {
+    // Check if the recipient (to) is connected
+    console.log("within group call ")
+    if (clients.has(user)) {
+        const recipient = clients.get(user); //friend
+        const caller1 = clients.get(c1); // user
+        const caller2 = clients.get(c2);
+        // Send call initiation message to the recipient
+        if (callers.has(user)) {
+            caller1.send(JSON.stringify({ type: 'busy', to: to }));
+            console.log(`User  '${user}' is busy on other call `);
+            return;
+        }
+        else{
+        console.log("ringing")
+        //caller1.send(JSON.stringify({ type: 'ringing', to: to }));
+        //caller2.send(JSON.stringify({ type: 'ringing', to: to }));
+
+        recipient.send(JSON.stringify({ type: 'incoming_group_call', user1: c1 ,user2: c2, vid: v_id}));
+        console.log(`Initiating call from '${c1} & ${c2}' to '${user}' videocall id : '${vid}'`);
+        return `Initiating call from '${from}' to '${to}'`;
+        }
+    } else {
+        console.log(`User '${to}' is not connected.`);
+        // Optionally, you can send a message back to the caller indicating that the recipient is not available
+        const caller = clients.get(from);
+        caller.send(JSON.stringify({ type: 'recipient_not_available', to: to }));
+        return `User '${to}' is not connected.`;
+    }
+}
 
 

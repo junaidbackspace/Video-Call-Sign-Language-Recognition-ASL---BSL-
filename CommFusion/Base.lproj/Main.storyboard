@@ -308,11 +308,11 @@
         <scene sceneID="eCh-nQ-xbI">
             <objects>
                 <viewController storyboardIdentifier="signupscreen" id="OFn-Vj-P9m" customClass="SignUpViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="1w1-FW-uC5">
+                    <view key="view" contentMode="scaleToFill" id="1w1-FW-uC5">
                         <rect key="frame" x="0.0" y="0.0" width="828" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nqL-Fh-3wM">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nqL-Fh-3wM">
                                 <rect key="frame" x="0.0" y="0.0" width="828" height="736"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XLo-Oe-pFd">
@@ -5242,10 +5242,10 @@ By using the Application, you acknowledge that you have read, understood, and ag
             </objects>
             <point key="canvasLocation" x="5376.811594202899" y="809.51086956521749"/>
         </scene>
-        <!--Contacts View Controller-->
+        <!--Add Friend View Controller-->
         <scene sceneID="uVZ-aT-EJH">
             <objects>
-                <viewController storyboardIdentifier="addCallScreen" id="goE-Fc-JG2" customClass="ContactsViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="addCallScreen" id="goE-Fc-JG2" customClass="AddFriendViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vw2-O1-1Jw">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -5297,18 +5297,12 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                                     <rect key="frame" x="318" y="26" width="9" height="10"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hKp-wM-c5V">
-                                                    <rect key="frame" x="356.33333333333331" y="26.666666666666664" width="31.666666666666686" height="19"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="30" id="0Da-oj-1lU"/>
-                                                    </constraints>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hKp-wM-c5V">
+                                                    <rect key="frame" x="351" y="19" width="46" height="29"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <state key="normal" backgroundImage="video.fill.badge.plus" catalog="system"/>
                                                 </button>
                                             </subviews>
-                                            <constraints>
-                                                <constraint firstAttribute="trailingMargin" secondItem="hKp-wM-c5V" secondAttribute="trailing" constant="6" id="4mR-ni-CeJ"/>
-                                                <constraint firstItem="hKp-wM-c5V" firstAttribute="top" secondItem="r3Z-gC-OfR" secondAttribute="topMargin" constant="13" id="8KD-8c-xOc"/>
-                                            </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="about" destination="c1S-0n-LaE" id="rZC-ar-Rjf"/>

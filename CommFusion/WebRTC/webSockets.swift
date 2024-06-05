@@ -120,9 +120,11 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
     }
 }
 
+    var caller1 = " "
+    var caller2 = " "
     var type: String?
     var from: String?
-    var vid : Int?
+    var vid  = 0
     var checkReciever = 0
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
        
@@ -143,6 +145,8 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         for component in components {
             // Split each component by colon
             let keyValue = component.components(separatedBy: ":")
+            
+            print("\n \tkey Count : \(keyValue.count)")
             if keyValue.count == 2 {
                
                 // Remove surrounding quotes and whitespace
@@ -163,6 +167,17 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
                     break
                 }
             }
+          else  if keyValue.count == 5 {
+            
+            // Remove surrounding quotes and whitespace
+            let key = keyValue[0].trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\"", with: "")
+             caller1 = keyValue[1].trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\"", with: "")
+            
+             caller2 = keyValue[2].trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\"", with: "")
+             vid = Int(keyValue[3].trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\"", with: ""))!
+            
+            
+            }
             else {
                
                 // Remove surrounding quotes and whitespace
@@ -181,7 +196,7 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
                 case "sessionDescription":
                     from = value
                 case "vid":
-                    vid = Int(videocallID)
+                    vid = Int(videocallID)!
                     
                 default:
                     break
@@ -198,6 +213,17 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
             receiveIncomingCall()
            
         }
+        
+        if type == "incoming_group_call"{
+           
+            print("incoming Group call From: \(caller1)&\(caller2)")
+            callerid = caller1
+            UserDefaults.standard.setValue("1", forKey: "groupchat")
+            
+            self.receiveGroupCall(firstuser_id: Int(caller1)!, SecondUser_id: Int(caller2)!, Vid: vid)
+           
+        }
+        
         if type == "ringing" {
             print("user \(from) is ringing ")
             NotificationCenter.default.post(name: Notification.Name("UpdateLabelNotification"), object: nil, userInfo: ["text": "Ringing..."])
@@ -216,6 +242,7 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
            
         }
         if type == "call_ended"{
+            UserDefaults.standard.setValue("0", forKey: "groupchat")
             print("within sockets call ended by user in viewcontroller")
             NotificationCenter.default.post(name: Notification.Name("CallEndedNotification"), object: nil)
 
@@ -323,6 +350,28 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
             }
 
         }
+    
+    func receiveGroupCall(firstuser_id : Int , SecondUser_id : Int , Vid : Int) {
+       
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
+            // Ensure that the delegate is set and the function is implemented
+            guard let delegate = self.incomingCallDelegate else {
+                print("Incoming call delegate not set")
+                
+                NotificationCenter.default.post(name: .openGroupCallNotification, object: nil,  userInfo: ["firstuser": firstuser_id])
+                NotificationCenter.default.post(name: .openGroupCallNotification, object: nil,  userInfo: ["seconduser": SecondUser_id])
+                
+                NotificationCenter.default.post(name: .openGroupCallNotification, object: nil,  userInfo: ["videocallid": Vid])
+                   
+                
+                return
+            }
+            
+            
+           
+            }
+
+        }
     func CancellCall(with friendId: String) {
        
         self.connectSocket()
@@ -339,10 +388,28 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
         }
     }
     
+    func GroupChatCall(with friendId: String ,caller1 : String , Caller2 : String ,  vid : Int) {
+       
+        self.connectSocket()
+       userID = String(UserDefaults.standard.integer(forKey: "userID"))
+        // Send call initiation message
+        let callData: [String: Any] = ["type": "groupchat", "caller1": caller1, "caller2": Caller2 ,"newUser" : friendId, "videocallid" : vid]
+        do {
+            print("\n \(callData)")
+            let jsonData = try JSONSerialization.data(withJSONObject: callData, options: [])
+            socket.write(data: jsonData)
+            print("Group call initiated...")
+        } catch {
+            print("Error serializing call canceling data: \(error)")
+        }
+    }
 
 }
 extension Notification.Name {
     static let openViewControllerNotification = Notification.Name("openViewControllerNotification")
+    
+    static let openGroupCallNotification = Notification.Name("openGroupCallViewControllerNotification")
+    
     static let didReceiveMessage = Notification.Name("didReceiveMessage")
     
 }

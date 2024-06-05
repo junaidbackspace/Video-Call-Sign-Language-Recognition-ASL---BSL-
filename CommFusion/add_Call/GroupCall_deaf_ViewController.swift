@@ -18,7 +18,8 @@ class GroupCall_deaf_ViewController: UIViewController, AVCapturePhotoCaptureDele
     var stillImageOutput: AVCapturePhotoOutput!
     var videoPreviewLayer: AVCaptureVideoPreviewLayer!
     var capturedImage: UIImage?
-   
+    var userfirst_id = 0
+    var usersecond_id = 0
     
     @IBOutlet weak var Profilepic_Firstuser : UIImageView!
     @IBOutlet weak var Profilepic_Seconduser : UIImageView!
@@ -35,8 +36,8 @@ class GroupCall_deaf_ViewController: UIViewController, AVCapturePhotoCaptureDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchUserData(userid: 2, userno: 1)
-        fetchUserData(userid: 1, userno: 2)
+        fetchUserData(userid: userfirst_id, userno: 1)
+        fetchUserData(userid: usersecond_id, userno: 2)
         
         setupCamera()
         captureSession.startRunning()

@@ -76,6 +76,13 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
     @IBAction func btnAddCall(_ sender  : Any)
     {
+        print("Adding friend in video call")
+       let controller =  self.storyboard?.instantiateViewController(identifier: "addCallScreen") as! AddFriendViewController
+        controller.callledFriendId = Int(callFriendId)!
+        controller.vid = self.v_id
+        controller.modalPresentationStyle = .fullScreen
+        self.navigationController?.pushViewController(controller, animated: true)
+        
         
     }
    
@@ -551,6 +558,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         remoteVideoViewContainter.addSubview(OutLet_speaker_Mute)
         remoteVideoViewContainter.addSubview(OutLetHangUp)
         remoteVideoViewContainter.addSubview(OutLetSwitchCam)
+        remoteVideoViewContainter.addSubview(OutletbtnAddCall)
 
         remoteVideoViewContainter.addSubview(msgtextView)
        
