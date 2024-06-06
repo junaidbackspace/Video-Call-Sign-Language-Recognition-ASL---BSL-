@@ -187,10 +187,17 @@ ws.on('close', function () {
 
     else if (data.type === 'groupMsg') {
         const member = clients.get(data.to);
-        console.log(data.msg)
-        member.send(JSON.stringify({type: 'msg' , msg: data.msg , from : data.from}))
+        member.send(JSON.stringify({type: 'msg' , msg: data.msg , chatsender : data.from}))
+       
+       
     }
 
+    else if (data.type === 'groupchatend') {
+        const member = clients.get(data.to);
+       member.send(JSON.stringify({ type: 'groupChat_ended' }));
+         console.log("Sending End GroupChat Msg to ",data.to)       
+       
+    }
     else {
         // Handle other types of messages (if any)
     }

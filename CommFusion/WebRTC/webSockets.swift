@@ -125,6 +125,7 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
     var caller2 = " "
     var type: String?
     var from: String?
+    var chatSenderID = ""
     var chatMsg : String?
     var vid  = 0
     var checkReciever = 0
@@ -177,6 +178,8 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
                     groupChat_AcceptId = value
                 case "msg":
                     chatMsg = value
+                case "chatsender":
+                    chatSenderID = value
                 default:
                     break
                 }
@@ -246,12 +249,31 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
            
         }
         if type == "call_ended"{
-            UserDefaults.standard.setValue("0", forKey: "groupchat")
-            print("within sockets call ended by user in viewcontroller")
+            
+            print("\nwithin sockets call ended by user in viewcontroller")
             NotificationCenter.default.post(name: Notification.Name("CallEndedNotification"), object: nil)
 
+            let groupchatisEnabled = UserDefaults.standard.string(forKey: "groupchat")
+            if groupchatisEnabled == "1"
+            {
+                print("\nAlso Closing group Chat")
+                EndGroupChat(friendId: chatSenderID)
+               
+                UserDefaults.standard.setValue("0", forKey: "groupchat")
+                
+            }
 
+            
         }
+        
+        if type == "groupchatend"{
+            
+            print("Ending Group Chat")
+            NotificationCenter.default.post(name: Notification.Name("groupChatEnd"), object: nil)
+            UserDefaults.standard.setValue("0", forKey: "groupchat")
+            
+        }
+        
         if type == "call_cancell"{
 
             print("within Reciver call cancelled by user")
@@ -266,18 +288,21 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
             
             print("Group chat accepted")
             
-            
+            UserDefaults.standard.setValue("1", forKey: "groupchat")
             Group_Chat_Accepted()
            
         }
         
         if type == "msg"{
             
-            print("Group Msg Recieved")
+            print("Group Msg Recieved: \(chatMsg) , from : \(chatSenderID)")
             
-            
-            Recieve_ChatMessage(From: from!, Message: chatMsg!)
            
+                if let msg = chatMsg{
+                    print("\n within sockets chatMessage Recieved: \(msg)")
+            Recieve_ChatMessage(From: chatSenderID, Message: msg)
+                }
+            
         }
         else{
 
@@ -356,28 +381,45 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
 
     func Group_Chat_Accepted() {
        
+        UserDefaults.standard.setValue("1", forKey: "groupchat")
         DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
             // Ensure that the delegate is set and the function is implemented
-            guard let delegate = self.incomingCallDelegate else {
-                print("Incoming call delegate not set")
-                
+           
                 NotificationCenter.default.post(name: .grouchatAccepted, object: nil,  userInfo: ["callerid": self.groupChat_AcceptId])
                    
                 return
-            }
-            
-            
+           
            
             }
 
         }
     
+    func EndGroupChat( friendId: String) {
+        
+        print("Also Notifying to end Group Call")
+        if !self.socket.isConnected{
+        self.connectSocket()
+        }
+       
+        let callData: [String: Any] = ["type": "groupchatend", "to": friendId]
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: callData, options: [])
+            socket.write(data: jsonData)
+            videocallid = Int(videocallid)
+            
+            print("Sending end GroupChat Msg: \(callData)")
+            
+        } catch {
+            print("Error serializing ChatEnd initiation data: \(error)")
+        }
+    }
+
     func receiveIncomingCall() {
        
         DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
             // Ensure that the delegate is set and the function is implemented
             guard let delegate = self.incomingCallDelegate else {
-                print("Incoming call delegate not set")
+               
                 
                 NotificationCenter.default.post(name: .openViewControllerNotification, object: nil,  userInfo: ["callerid": self.callerid])
                    
@@ -439,6 +481,7 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
             let jsonData = try JSONSerialization.data(withJSONObject: callData, options: [])
             socket.write(data: jsonData)
             print("Group call initiated...")
+            UserDefaults.standard.setValue("1", forKey: "groupchat")
         } catch {
             print("Error serializing call canceling data: \(error)")
         }
@@ -465,7 +508,7 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
         self.connectSocket()
        userID = String(UserDefaults.standard.integer(forKey: "userID"))
         // Send call initiation message
-        let Data: [String: Any] = ["type": "groupMsg","to":friendId, "msg": Message]
+        let Data: [String: Any] = ["type": "groupMsg","from": userID,"to":friendId, "msg": Message]
         do {
             print("\n \(Data)")
             let jsonData = try JSONSerialization.data(withJSONObject: Data, options: [])

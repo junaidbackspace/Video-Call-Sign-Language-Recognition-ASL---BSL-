@@ -71,7 +71,7 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
             NotificationCenter.default.addObserver(self, selector: #selector(callcenlled), name: Notification.Name("CallCancelledFromReciverNotification"), object: nil)
               
             //if simple call
-            if calllerid != "0"
+            if calllerid != ""
             {
           fetchUserData(callerId: calllerid)
                 

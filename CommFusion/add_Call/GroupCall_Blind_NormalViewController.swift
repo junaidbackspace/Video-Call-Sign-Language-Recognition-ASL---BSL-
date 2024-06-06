@@ -35,6 +35,7 @@ class GroupCall_Blind_NormalViewController: UIViewController {
     
    @objc func messageRecieved(_ notification : Notification)
     {
+    print("displaying chat message")
         if let userid = notification.userInfo?["from"] as? String {
             if let Message = notification.userInfo?["message"] as? String {
         if userfirst_id == Int(userid) {
@@ -45,14 +46,28 @@ class GroupCall_Blind_NormalViewController: UIViewController {
         else{
             msg_seconduser.text = Message
         }
+                print(" chat message is : \(Message)")
             
             }
         }
+    }
+    @objc func ChatEnded(){
+        
+        self.speechRecognizer!.isStopping = true
+        self.speechRecognizer!.stopRecognition()
+        self.navigationController?.popViewController(animated: true)
+        self.navigationController?.popViewController(animated: true)
+        
     }
     
     
     @IBAction func hangupcall(_ sender : Any)
     {
+        
+        self.speechRecognizer!.isStopping = true
+        self.speechRecognizer!.stopRecognition()
+        
+        self.navigationController?.popViewController(animated: true)
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -89,6 +104,8 @@ class GroupCall_Blind_NormalViewController: UIViewController {
         setupSpeechToText()
         
         NotificationCenter.default.addObserver(self, selector: #selector(messageRecieved(_:)), name: Notification.Name("ChatMsg_Recieved"), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(ChatEnded), name: Notification.Name("groupChatEnd"), object: nil)
     }
     deinit {
      

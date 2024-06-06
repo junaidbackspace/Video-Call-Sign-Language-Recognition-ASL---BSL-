@@ -163,35 +163,20 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
     @IBAction func btnHangupCall(_ sender: Any) {
         print("Entered in hangup")
-        if myLangType == "blind"
-        {
-        speechRecognizer?.isStopping = true
-        speechRecognizer?.stopRecognition()
+        
+        if ShouldGroupChat == true && speechRecognizer?.isStopping == false{
+            print("Turning off speech Recognizer in GroupChat End")
+            ShouldGroupChat = false
+            speechRecognizer?.isStopping = true
+            speechRecognizer?.stopRecognition()
         }
+        
         hangupButtonTapped()
         
-        if shouldtext_To_speech {
-            stopSpeaking()
-            shouldtext_To_speech = false
-        }
+        
     }
     
-    var testmsg = "1"
-//    @IBAction func btnFreshmsg(_ sender: Any) {
-//        print("sendind Message")
-////        let data = testmsg.data(using: String.Encoding.utf8)
-////        print(testmsg)
-//        testmsg = String(Int(testmsg)!+1)
-//        webRTCClient.sendMessge(message: testmsg)
-////        webRTCClient.sendData(data: data!)
-////          testmsg = String(testmsg)
-////                if let client = webRTCClient {
-////                    client.sendMessge(message: testmsg)
-////                } else {
-////                    print("webRTCClient is not initialized")
-////                }
-//
-//    }
+   
     func textmsg(msg:String)
     {
      
@@ -199,8 +184,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         
     }
     
-//    @IBAction func btnOldMsg(_ sender: Any) {
-//    }
+
     //MARK: - Properties
     var webRTCClient: WebRTCClient!
     
@@ -413,6 +397,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
                // Add the gesture recognizer to the view
                view.addGestureRecognizer(doubleTapGestureRecognizer)
         }
+        
+        self.setupUI()
     }
     
     var groupFriendId = " "
@@ -420,7 +406,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     @objc func EnableGroup_Chat(_ notification: Notification)
     {
         if let value = notification.userInfo?["callerid"] as? String {
-           if myLangType == "deaf"
+            
+            if myLangType == "deaf" || myLangType == "blind"
            {
             webRTCClient.ShouldGroupChat = true
             webRTCClient.groupFriendId = value
@@ -492,7 +479,25 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         }
     
     override func viewDidAppear(_ animated: Bool) {
-        self.setupUI()
+       
+        
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    
+    // MARK: - UI
+    
+    var localVideoView : UIView?
+    private func setupUI(){
+        
+        
+       
+        //MARK:- setting user defined size and color
+        
         let size = font_sizeDefault.integer(forKey: "fontsize")
         
         if let textViewText = msgtextView.text {
@@ -533,21 +538,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
             msgtextView.alpha = CGFloat(1)
             
         }
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    
-    // MARK: - UI
-    
-    var localVideoView : UIView?
-    private func setupUI(){
         
-        
-       
+         //MARK:- setting user defined size and color
         
         let remoteVideoViewContainter = UIView(frame: CGRect(x: 0, y: 0, width: ScreenSizeUtil.width(), height: ScreenSizeUtil.height()))
         remoteVideoViewContainter.backgroundColor = .white
@@ -661,10 +653,11 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
    
     
-        func disconnectWebRTC() {
+    func disconnectWebRTC() {
             if webRTCClient.isConnected {
                 webRTCClient.disconnect()
                 DispatchQueue.main.async {
+                    print("Closing Video Call")
                     self.navigationController?.popViewController(animated: true)
                     self.navigationController?.popViewController(animated: true)
                 }
@@ -901,8 +894,10 @@ extension ViewController {
         print("did open data channel")
     }
         
+
     func didReceiveData(data: Data) {
-        if data == testmsg.data(using: String.Encoding.utf8) {
+        var test = "hi"
+        if data == test.data(using: String.Encoding.utf8) {
             if let Message = String(data: data, encoding: .utf8) {
                 
 //            lblmsg.text = Message
@@ -1007,9 +1002,16 @@ extension ViewController {
             stopSpeaking()
             shouldtext_To_speech = false
         }
+        if ShouldGroupChat{
+            print("HAngupby other Turning off speech Recognizer in GroupChat End")
+            ShouldGroupChat = false
+            speechRecognizer?.isStopping = true
+            speechRecognizer?.stopRecognition()
+        }
         
         webRTCClient.disconnect()
         DispatchQueue.main.async {
+            print("Returning back because user ends call")
                    self.navigationController?.popViewController(animated: true)
                    self.navigationController?.popViewController(animated: true)
                }

@@ -419,12 +419,15 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
         //for update list after block /unblock from user profile
         NotificationCenter.default.addObserver(self, selector: #selector(refreshContacts), name: .RefreshOnlineContacts, object: nil)
 
+        //Setting Group Call not
+         UserDefaults.standard.setValue("0", forKey:"groupchat")
         
         if let retrievedArray = UserDefaults.standard.array(forKey: "pinnedUser") as? [String] {
             pinned_contacts = retrievedArray
            
             
         }
+        
         
         if let muttedArray = UserDefaults.standard.array(forKey: "muttedUser") as? [String] {
             let mutted_users = muttedArray
