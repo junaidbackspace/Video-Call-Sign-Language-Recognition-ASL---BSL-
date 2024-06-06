@@ -69,18 +69,34 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
                 socketsClass.shared.connectSocket()
             }
             NotificationCenter.default.addObserver(self, selector: #selector(callcenlled), name: Notification.Name("CallCancelledFromReciverNotification"), object: nil)
-               
+              
+            //if simple call
             if calllerid != "0"
             {
           fetchUserData(callerId: calllerid)
                 
             }
             
-            else{
-                fetchUserNames(callerId: String(caller1_id), number: 1)
-                fetchUserNames(callerId: String(caller2_id), number: 2)
-                lblname.text = caller1Name+" & "+caller2Name
+            //if group chat
+            else {
+                let group = DispatchGroup()
+                
+                group.enter()
+                self.fetchUserNames(callerId: String(self.caller1_id), number: 1) {
+                    group.leave()
+                }
+                
+                group.enter()
+                self.fetchUserNames(callerId: String(self.caller2_id), number: 2) {
+                    group.leave()
+                }
+                
+                group.notify(queue: DispatchQueue.main) {
+                    self.lblname.text = self.caller1Name + " & " + self.caller2Name
+                    print("getting call from \(self.caller1Name) & \(self.caller2Name)")
+                }
             }
+            
             startCamera()
             acceptButton.layer.zPosition = 1
             rejectButton.layer.zPosition = 1
@@ -389,11 +405,10 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
     }
     
     
-    func fetchUserNames(callerId : String , number : Int) {
-       
+    func fetchUserNames(callerId: String, number: Int, completion: @escaping () -> Void) {
         let userID = String(callerId)
         let Url = "\(Constants.serverURL)/user/userdetails/\(userID)"
-        print("URL: "+Url)
+        print("URL: " + Url)
       
         let url = URL(string: Url)!
         
@@ -403,40 +418,36 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
                 print("Error in receiving:", error.localizedDescription)
             } else if let userObject = userInfo {
                 print("JSON Data:", userObject)
-                self.processUserName(userObject , no : number)
+                self.processUserName(userObject, no: number, completion: completion)
             } else {
                 print("No data received from the server")
             }
         }
     }
 
-    func processUserName(_ userObject: singleUserInfo, no: Int) {
+    func processUserName(_ userObject: singleUserInfo, no: Int, completion: @escaping () -> Void) {
         print("Processing user data")
         user.Fname = userObject.fname
         user.Lname = userObject.lname
         
-        if no == 1{
-        caller1Name = user.Fname+" "+user.Lname
-        
-        }
-        else{
-            caller2Name = user.Fname+" "+user.Lname
+        if no == 1 {
+            caller1Name = user.Fname + " " + user.Lname
+        } else {
+            caller2Name = user.Fname + " " + user.Lname
         }
         
-        let group = DispatchGroup()
-          group.enter()
-
         let urlString = "\(Constants.serverURL)\(user.ProfilePicture)"
-
         if let url = URL(string: urlString) {
-            profilePic.kf.setImage(with: url, placeholder: UIImage(named: "No image found"))
+            profilePic.kf.setImage(with: url, placeholder: UIImage(named: "No image found")) { result in
+                completion()
+            }
         } else {
             // Handle invalid URL
             print("Invalid URL:", urlString)
+            completion()
         }
-        
-        group.leave()
     }
+
     
     
     deinit {

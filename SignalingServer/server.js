@@ -177,10 +177,10 @@ ws.on('close', function () {
                 
                 console.log("ringing")
                
-                caller1.send(JSON.stringify({ type: 'group_chat_accept', userid: from }));
-                console.log(`Sending Group chat accept Noti to : '${caller1} `);
-                caller2.send(JSON.stringify({ type: 'group_chat_accept', userid: from }));
-                console.log(`Sending Group chat accept Noti to : '${caller2} `);
+                caller1.send(JSON.stringify({ type: 'group_chat_accept', userid: data.from }));
+                console.log(`Sending Group chat accept Noti to : '${data.caller1}' `);
+                caller2.send(JSON.stringify({ type: 'group_chat_accept', userid: data.from }));
+                console.log(`Sending Group chat accept Noti to : '${data.caller2}' `);
                
         
     }

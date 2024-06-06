@@ -261,10 +261,10 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         
         if type == "group_chat_accept"{
             
-            print("incoming call From: \(from)")
+            print("Group chat accepted")
             
             
-            receiveIncomingCall()
+            Group_Chat_Accepted()
            
         }
         else{
