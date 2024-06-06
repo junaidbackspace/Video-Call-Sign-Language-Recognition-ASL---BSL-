@@ -33,6 +33,22 @@ class GroupCall_Blind_NormalViewController: UIViewController {
     @IBOutlet weak var view_SecondUser : UIView!
     
     
+   @objc func messageRecieved(_ notification : Notification)
+    {
+        if let userid = notification.userInfo?["from"] as? String {
+            if let Message = notification.userInfo?["message"] as? String {
+        if userfirst_id == Int(userid) {
+            
+            msg_firstuser.text = Message
+            
+        }
+        else{
+            msg_seconduser.text = Message
+        }
+            
+            }
+        }
+    }
     
     
     @IBAction func hangupcall(_ sender : Any)
@@ -71,6 +87,8 @@ class GroupCall_Blind_NormalViewController: UIViewController {
         fetchUserData(userid : usersecond_id , userno : 2)
         
         setupSpeechToText()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(messageRecieved(_:)), name: Notification.Name("ChatMsg_Recieved"), object: nil)
     }
     deinit {
      

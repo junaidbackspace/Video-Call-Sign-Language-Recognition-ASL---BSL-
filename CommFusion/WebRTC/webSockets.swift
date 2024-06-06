@@ -125,6 +125,7 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
     var caller2 = " "
     var type: String?
     var from: String?
+    var chatMsg : String?
     var vid  = 0
     var checkReciever = 0
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
@@ -174,6 +175,8 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
                     vid = Int(value)!
                 case "userid":
                     groupChat_AcceptId = value
+                case "msg":
+                    chatMsg = value
                 default:
                     break
                 }
@@ -265,6 +268,15 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
             
             
             Group_Chat_Accepted()
+           
+        }
+        
+        if type == "msg"{
+            
+            print("Group Msg Recieved")
+            
+            
+            Recieve_ChatMessage(From: from!, Message: chatMsg!)
            
         }
         else{
@@ -398,6 +410,8 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
             
                     }
             }
+    
+    
     func CancellCall(with friendId: String) {
        
         self.connectSocket()
@@ -461,10 +475,31 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
             print("Error serializing call canceling data: \(error)")
         }
     }
+    
+    func Recieve_ChatMessage(From : String  , Message : String) {
+       
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
+            // Ensure that the delegate is set and the function is implemented
+            guard let delegate = self.incomingCallDelegate else {
+                print("Incoming call delegate not set")
+                
+                let userInfo: [String: Any] = [
+                               "from": From,
+                               "message": Message
+                           ]
+                
+                NotificationCenter.default.post(name: .chatMsg_Recieve, object: nil, userInfo: userInfo)
+                          
+                return
+                        }
+            
+                    }
+            }
 
 }
 extension Notification.Name {
     
+    static let chatMsg_Recieve = Notification.Name("ChatMsg_Recieved")
     static let grouchatAccepted = Notification.Name("Noti_GroupChatAccepted")
     static let openViewControllerNotification = Notification.Name("openViewControllerNotification")
     

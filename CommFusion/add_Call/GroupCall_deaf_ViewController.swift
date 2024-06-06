@@ -44,12 +44,33 @@ class GroupCall_deaf_ViewController: UIViewController, AVCapturePhotoCaptureDele
         captureSession.startRunning()
         
         
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(messageRecieved(_:)), name: Notification.Name("ChatMsg_Recieved"), object: nil)
+        
 //        self.captureTimer = Timer.scheduledTimer(timeInterval: 1.0 , target: self, selector: #selector(self.takePicture), userInfo: nil, repeats: true)
         
       
        
     }
     
+    
+    @objc func messageRecieved(_ notification : Notification)
+     {
+         if let userid = notification.userInfo?["from"] as? String {
+             if let Message = notification.userInfo?["message"] as? String {
+         if userfirst_id == Int(userid) {
+             
+            textMessage.text = userid+": "+Message
+             
+         }
+         else{
+            textMessage.text = userid+": "+Message
+         }
+             
+             }
+         }
+     }
+     
     func setupCamera() {
            // Setup camera
            captureSession = AVCaptureSession()
