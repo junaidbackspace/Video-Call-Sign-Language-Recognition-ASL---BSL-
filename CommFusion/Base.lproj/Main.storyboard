@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Jq4-0i-WH5">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="J62-k5-xsU">
     <device id="retina5_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
@@ -3599,22 +3599,22 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uGz-aL-iL1">
-                                <rect key="frame" x="55" y="123" width="305" height="167"/>
+                                <rect key="frame" x="55" y="123" width="304" height="167"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MHA-Hv-iZP">
-                                        <rect key="frame" x="116" y="8" width="73" height="63"/>
+                                        <rect key="frame" x="115.66666666666666" y="8" width="73" height="63"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NCi-mj-YDw">
-                                        <rect key="frame" x="44" y="79" width="225" height="21"/>
+                                        <rect key="frame" x="44" y="79" width="224" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c5r-vf-wOV">
-                                        <rect key="frame" x="8" y="112" width="289" height="47"/>
+                                        <rect key="frame" x="8" y="112" width="288" height="47"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" systemColor="systemGray6Color"/>
                                         <color key="textColor" systemColor="labelColor"/>
@@ -3625,7 +3625,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                 <color key="backgroundColor" red="0.20392156862745098" green="0.61960784313725492" blue="0.46274509803921571" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mJU-cw-puj">
-                                <rect key="frame" x="55" y="344" width="305" height="167"/>
+                                <rect key="frame" x="55" y="344" width="304" height="167"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DY5-TC-BkE">
@@ -3650,27 +3650,37 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                 </subviews>
                                 <color key="backgroundColor" red="0.20392156862745098" green="0.61960784313725492" blue="0.46274509803921571" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WYa-ef-dFR">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WYa-ef-dFR">
                                 <rect key="frame" x="102" y="654" width="39" height="38"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40.329999999999998" id="XQw-o7-tef"/>
+                                    <constraint firstAttribute="width" constant="39" id="cxA-bW-Mcj"/>
+                                    <constraint firstAttribute="height" constant="40.333333333333258" id="glz-QX-qWC"/>
+                                </constraints>
                                 <color key="tintColor" systemColor="systemGray6Color"/>
                                 <state key="normal" backgroundImage="speaker.slash.fill" catalog="system"/>
                                 <connections>
                                     <action selector="MuteMic:" destination="J62-k5-xsU" eventType="touchUpInside" id="XJj-Ce-cnu"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jxj-0L-Utt">
-                                <rect key="frame" x="269" y="649" width="35" height="38"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jxj-0L-Utt">
+                                <rect key="frame" x="269" y="649.66666666666663" width="35" height="38"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="35" id="O81-Tc-hlb"/>
+                                    <constraint firstAttribute="height" constant="38.329999999999998" id="TAd-4t-b96"/>
+                                </constraints>
                                 <color key="tintColor" systemColor="linkColor"/>
                                 <state key="normal" backgroundImage="mic.slash.fill" catalog="system"/>
                                 <connections>
                                     <action selector="MuteSpeaker:" destination="J62-k5-xsU" eventType="touchUpInside" id="x8F-HG-VDb"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p8T-J6-wt5">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p8T-J6-wt5">
                                 <rect key="frame" x="176" y="642" width="62" height="55"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="62" id="3Dr-j4-Iww"/>
+                                    <constraint firstAttribute="height" constant="56.333333333333371" id="uXN-oK-8Eq"/>
+                                </constraints>
                                 <color key="tintColor" systemColor="systemRedColor"/>
                                 <state key="normal" backgroundImage="phone.down.circle.fill" catalog="system"/>
                                 <connections>
@@ -3680,6 +3690,14 @@ By using the Application, you acknowledge that you have read, understood, and ag
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="sjd-W7-lfv"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="WYa-ef-dFR" firstAttribute="leading" secondItem="sjd-W7-lfv" secondAttribute="leading" constant="102" id="FjS-MV-N7T"/>
+                            <constraint firstItem="sjd-W7-lfv" firstAttribute="bottom" secondItem="p8T-J6-wt5" secondAttribute="bottom" constant="38.666666666666629" id="UdV-lo-vwW"/>
+                            <constraint firstItem="Jxj-0L-Utt" firstAttribute="leading" secondItem="p8T-J6-wt5" secondAttribute="trailing" constant="31" id="gBN-Pg-SXa"/>
+                            <constraint firstItem="p8T-J6-wt5" firstAttribute="centerY" secondItem="Jxj-0L-Utt" secondAttribute="centerY" id="tWn-hN-EFk"/>
+                            <constraint firstItem="sjd-W7-lfv" firstAttribute="bottom" secondItem="WYa-ef-dFR" secondAttribute="bottom" constant="43.333333333333371" id="vla-8V-gme"/>
+                            <constraint firstItem="p8T-J6-wt5" firstAttribute="leading" secondItem="WYa-ef-dFR" secondAttribute="trailing" constant="35" id="wBD-hm-MUr"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="lblname_FirstUser" destination="NCi-mj-YDw" id="OvR-62-kAd"/>
