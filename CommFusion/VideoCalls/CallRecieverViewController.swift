@@ -287,7 +287,7 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
                 }
             
             }
-        
+        //it is Group Chat
         else{
             let myLangType = UserDefaults.standard.string(forKey: "disabilityType")!
             

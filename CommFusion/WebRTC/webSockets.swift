@@ -148,8 +148,7 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         for component in components {
             // Split each component by colon
             let keyValue = component.components(separatedBy: ":")
-            
-            print("\n \tkey Count : \(keyValue.count)")
+     
             if keyValue.count == 2 {
                
                 // Remove surrounding quotes and whitespace
@@ -258,6 +257,7 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
             
             DispatchQueue.main.asyncAfter(deadline: .now()+0.2 ){
                 print("Dispatch queue continued")
+                
             let groupchatisEnabled = UserDefaults.standard.string(forKey: "groupchat")
             if groupchatisEnabled == "1"
             {

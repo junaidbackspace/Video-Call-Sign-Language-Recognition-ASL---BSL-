@@ -171,6 +171,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
             speechRecognizer?.stopRecognition()
         }
         
+        UserDefaults.standard.setValue("0", forKey: "groupchat")
         hangupButtonTapped()
         
         
@@ -637,13 +638,12 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
             let jsonData = try JSONSerialization.data(withJSONObject: endCallData, options: [])
             socket.write(data: jsonData) { [weak self] in
                 guard let self = self else { return }
-                self.webRTCClient.delegate = nil // Remove delegate
-                self.isReciever = 0
                 
-               
-                self.disconnectWebRTC()
                 
             }
+            self.webRTCClient.delegate = nil // Remove delegate
+            self.isReciever = 0
+            self.disconnectWebRTC()
         } catch {
             print("Error serializing end call data: \(error)")
         }
@@ -655,6 +655,10 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
    
     
     func disconnectWebRTC() {
+        
+        let chatmemberID = UserDefaults.standard.string(forKey: "groupchatmember")!
+        socketsClass.shared.EndGroupChat(friendId: chatmemberID)
+        print("getting back to screen call is ended")
             if webRTCClient.isConnected {
                 webRTCClient.disconnect()
                 DispatchQueue.main.async {
@@ -664,6 +668,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
                 }
             } else {
                 DispatchQueue.main.async {
+                    print("WebRTC is disconnected , now backing to screen")
                     self.navigationController?.popViewController(animated: true)
                     self.navigationController?.popViewController(animated: true)
                 }
@@ -997,6 +1002,8 @@ extension ViewController {
     
     func hunguptapedbyOtherCaller(){
         
+        
+        UserDefaults.standard.setValue("0", forKey: "groupchat")
         //turning of speech
         if shouldtext_To_speech {
             print("turning off speech in hangup by other user")
@@ -1010,7 +1017,8 @@ extension ViewController {
             speechRecognizer?.stopRecognition()
         }
         
-        webRTCClient.disconnect()
+        self.disconnectWebRTC()
+        
         DispatchQueue.main.async {
             print("Returning back because user ends call")
                    self.navigationController?.popViewController(animated: true)
