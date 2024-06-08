@@ -82,11 +82,13 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
                 let group = DispatchGroup()
                 
                 group.enter()
+                print("Caller 1 id : \(caller1_id) where as self id \(self.caller1_id)")
                 self.fetchUserNames(callerId: String(self.caller1_id), number: 1) {
                     group.leave()
                 }
                 
                 group.enter()
+                print("Caller 2 id : \(caller2_id) where as self id : \(self.caller2_id)")
                 self.fetchUserNames(callerId: String(self.caller2_id), number: 2) {
                     group.leave()
                 }

@@ -208,6 +208,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
    
    
     @objc func endCall() {
+        print("Remote side closing call")
         DispatchQueue.main.async {
         print("updating check of voice recognizer")
             if self.myLangType == "blind"{

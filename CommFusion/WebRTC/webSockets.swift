@@ -180,6 +180,9 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
                     chatMsg = value
                 case "chatsender":
                     chatSenderID = value
+                case "chatuserid":
+                    print("chat accepted : \(value)")
+                    chatSenderID = value
                 default:
                     break
                 }
@@ -252,21 +255,28 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
             
             print("\nwithin sockets call ended by user in viewcontroller")
             NotificationCenter.default.post(name: Notification.Name("CallEndedNotification"), object: nil)
-
+            
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.2 ){
+                print("Dispatch queue continued")
             let groupchatisEnabled = UserDefaults.standard.string(forKey: "groupchat")
             if groupchatisEnabled == "1"
             {
-                print("\nAlso Closing group Chat")
-                EndGroupChat(friendId: chatSenderID)
+                print("\nAlso Closing group Chat : \(self.chatSenderID)")
+                self.EndGroupChat(friendId: self.chatSenderID)
                
                 UserDefaults.standard.setValue("0", forKey: "groupchat")
                 
             }
+            else{
+                print("in else again saving 0 in groupcall check")
+                UserDefaults.standard.setValue("0", forKey: "groupchat")
+            }
 
+            }
             
         }
         
-        if type == "groupchatend"{
+        if type == "groupChat_ended"{
             
             print("Ending Group Chat")
             NotificationCenter.default.post(name: Notification.Name("groupChatEnd"), object: nil)
@@ -286,9 +296,10 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         
         if type == "group_chat_accept"{
             
-            print("Group chat accepted")
+            print("Group chat accepted friend id : \(chatSenderID)")
             
             UserDefaults.standard.setValue("1", forKey: "groupchat")
+            UserDefaults.standard.setValue(chatSenderID, forKey: "groupchatmember")
             Group_Chat_Accepted()
            
         }
@@ -396,7 +407,7 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
     
     func EndGroupChat( friendId: String) {
         
-        print("Also Notifying to end Group Call")
+        print("Also Notifying to end Group Call:\(friendId) , chat sender\(chatSenderID)")
         if !self.socket.isConnected{
         self.connectSocket()
         }
@@ -494,10 +505,10 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
         // Send call initiation message
         let callData: [String: Any] = ["type": "group_call_accepted", "from": userID, "caller1": caller1,"caller2":caller2]
         do {
-            print("\n \(callData)")
+            print("\nAccepting group call : \(callData)")
             let jsonData = try JSONSerialization.data(withJSONObject: callData, options: [])
             socket.write(data: jsonData)
-            print("canceling call...")
+            
         } catch {
             print("Error serializing call canceling data: \(error)")
         }
@@ -507,8 +518,9 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
        
         self.connectSocket()
        userID = String(UserDefaults.standard.integer(forKey: "userID"))
+        var chatmember = UserDefaults.standard.string(forKey: "groupchatmember")
         // Send call initiation message
-        let Data: [String: Any] = ["type": "groupMsg","from": userID,"to":friendId, "msg": Message]
+        let Data: [String: Any] = ["type": "groupMsg","from": userID,"to": chatmember, "msg": Message]
         do {
             print("\n \(Data)")
             let jsonData = try JSONSerialization.data(withJSONObject: Data, options: [])

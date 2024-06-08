@@ -81,7 +81,7 @@ class CallObserverViewController: UITabBarController, IncomingCallDelegate {
             callReceiverVC.caller1_id = firstuser
             callReceiverVC.caller2_id = seconduser
             callReceiverVC.vid = videocallid
-            callReceiverVC.calllerid = "0"
+//            callReceiverVC.calllerid = ""
             
             }
         navigationController?.pushViewController(callReceiverVC, animated: true)
