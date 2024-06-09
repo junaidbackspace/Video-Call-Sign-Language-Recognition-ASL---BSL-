@@ -213,9 +213,11 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         DispatchQueue.main.async {
         print("updating check of voice recognizer")
             if self.myLangType == "blind"{
-            self.speechRecognizer?.isStopping = false
+            self.speechRecognizer?.isStopping = true
             self.speechRecognizer?.stopRecognition()
             }
+            
+            
             print("\nNOW IN VIEWCONTROLLER TO END CALL")
             self.CallEnd_API(vid: self.v_id, userid: Int(self.userID)!)
         }
@@ -336,7 +338,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         NotificationCenter.default.addObserver(self, selector: #selector(handleMessage(_:)), name: .didReceiveMessage, object: nil)
             
         
-        NotificationCenter.default.addObserver(self, selector: #selector(endCall), name: Notification.Name("CallEndedNotification"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hunguptapedbyOtherCaller), name: Notification.Name("CallEndedNotification"), object: nil)
            
         
         NotificationCenter.default.addObserver(self, selector: #selector(EnableGroup_Chat(_:)), name: Notification.Name("Noti_GroupChatAccepted"), object: nil)
@@ -407,19 +409,23 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     var ShouldGroupChat = false
     @objc func EnableGroup_Chat(_ notification: Notification)
     {
+        if !ShouldGroupChat{ //if already enabled
         if let value = notification.userInfo?["callerid"] as? String {
             
-            if myLangType == "deaf" || myLangType == "blind"
+            if myLangType == "deaf" //|| myLangType == "blind"
            {
             webRTCClient.ShouldGroupChat = true
             webRTCClient.groupFriendId = value
            }
            else{
+            print("Enabling group chat in view controller by turning on S_Recognizer")
             self.ShouldGroupChat = true
             speechRecognizer?.ShouldGroupChat = true
             speechRecognizer?.groupFriendId = value
+            speechRecognizer?.isStopping = false
             self.speechRecognizer!.startRecognition()
            }
+        }
         }
     }
     
@@ -613,10 +619,19 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
     @objc func hangupButtonTapped(){
         print("hangup Tapped")
-        if myLangType == "blind"
+//        if myLangType == "blind"
+//        {
+//        speechRecognizer?.isStopping = true
+//        speechRecognizer?.stopRecognition()
+//        }
+        self.ShouldGroupChat = false
+        speechRecognizer?.ShouldGroupChat = false
+        
+        if speechRecognizer?.isStopping == false
         {
-        speechRecognizer?.isStopping = true
-        speechRecognizer?.stopRecognition()
+            print("within hangup tap speech recognizer turning off ")
+            speechRecognizer?.isStopping = true
+            speechRecognizer?.stopRecognition()
         }
         
         if shouldtext_To_speech {
@@ -1000,10 +1015,18 @@ extension ViewController {
     }
 
     
-    func hunguptapedbyOtherCaller(){
-        
+    @objc func hunguptapedbyOtherCaller(){
         
         UserDefaults.standard.setValue("0", forKey: "groupchat")
+       
+        
+        if speechRecognizer?.isStopping == false
+        {
+            print("within speech recognizer check , turning off it")
+            speechRecognizer?.isStopping = true
+            speechRecognizer?.stopRecognition()
+        }
+        
         //turning of speech
         if shouldtext_To_speech {
             print("turning off speech in hangup by other user")
@@ -1015,6 +1038,8 @@ extension ViewController {
             ShouldGroupChat = false
             speechRecognizer?.isStopping = true
             speechRecognizer?.stopRecognition()
+            speechRecognizer?.ShouldGroupChat = false
+            
         }
         
         self.disconnectWebRTC()
