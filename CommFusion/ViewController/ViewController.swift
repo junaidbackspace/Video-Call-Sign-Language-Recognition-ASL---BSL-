@@ -409,7 +409,9 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     var ShouldGroupChat = false
     @objc func EnableGroup_Chat(_ notification: Notification)
     {
-        if !ShouldGroupChat{ //if already enabled
+       if !ShouldGroupChat{ //if already enabled
+            
+            self.ShouldGroupChat = true
         if let value = notification.userInfo?["callerid"] as? String {
             
             if myLangType == "deaf" //|| myLangType == "blind"
@@ -418,12 +420,17 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
             webRTCClient.groupFriendId = value
            }
            else{
+            //already speech recognizer is on
+            if speechRecognizer?.isStopping != false{
             print("Enabling group chat in view controller by turning on S_Recognizer")
             self.ShouldGroupChat = true
             speechRecognizer?.ShouldGroupChat = true
             speechRecognizer?.groupFriendId = value
             speechRecognizer?.isStopping = false
             self.speechRecognizer!.startRecognition()
+            }
+            
+            
            }
         }
         }
@@ -671,6 +678,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
     func disconnectWebRTC() {
         
+        UserDefaults.standard.setValue("0", forKey: "groupchat")
         let chatmemberID = UserDefaults.standard.string(forKey: "groupchatmember")!
         socketsClass.shared.EndGroupChat(friendId: chatmemberID)
         print("getting back to screen call is ended")
@@ -1017,38 +1025,53 @@ extension ViewController {
     
     @objc func hunguptapedbyOtherCaller(){
         
-        UserDefaults.standard.setValue("0", forKey: "groupchat")
-       
+        self.ShouldGroupChat = false
+        speechRecognizer?.ShouldGroupChat = false
         
         if speechRecognizer?.isStopping == false
         {
-            print("within speech recognizer check , turning off it")
+            print("within hangup tap speech recognizer turning off ")
             speechRecognizer?.isStopping = true
             speechRecognizer?.stopRecognition()
         }
         
-        //turning of speech
         if shouldtext_To_speech {
-            print("turning off speech in hangup by other user")
             stopSpeaking()
             shouldtext_To_speech = false
         }
-        if ShouldGroupChat{
-            print("HAngupby other Turning off speech Recognizer in GroupChat End")
-            ShouldGroupChat = false
-            speechRecognizer?.isStopping = true
-            speechRecognizer?.stopRecognition()
-            speechRecognizer?.ShouldGroupChat = false
-            
-        }
         
-        self.disconnectWebRTC()
+            webRTCClient.stop_dynamicframe = false
+            self.webRTCClient.delegate = nil // Remove delegate
+            self.isReciever = 0
+            self.disconnectWebRTC()
+       
+    
         
-        DispatchQueue.main.async {
-            print("Returning back because user ends call")
-                   self.navigationController?.popViewController(animated: true)
-                   self.navigationController?.popViewController(animated: true)
-               }
+//        if ShouldGroupChat == true && speechRecognizer?.isStopping == false{
+//            print("within speech recognizer check , turning off it")
+//            ShouldGroupChat = false
+//            speechRecognizer?.isStopping = true
+//            speechRecognizer?.stopRecognition()
+//            speechRecognizer?.ShouldGroupChat = false
+//        }
+//
+//
+//
+//        //turning of speech
+//        if shouldtext_To_speech {
+//            print("turning off speech in hangup by other user")
+//            stopSpeaking()
+//            shouldtext_To_speech = false
+//        }
+//
+//
+//        self.disconnectWebRTC()
+//
+//        DispatchQueue.main.async {
+//            print("Returning back because user ends call")
+//                   self.navigationController?.popViewController(animated: true)
+//                   self.navigationController?.popViewController(animated: true)
+//               }
     }
   
     func cleanupPlayer() {
@@ -1283,7 +1306,7 @@ class SpeechRecognizer: NSObject, SFSpeechRecognizerDelegate {
                 self.stopRecognition()
                 if !self.isStopping{
                     print("within>>> voice check false")
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                                    self.startRecognition() // Restart recognition after a short delay
                                }
                        }
