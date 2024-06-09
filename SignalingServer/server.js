@@ -186,9 +186,10 @@ ws.on('close', function () {
     }
 
     else if (data.type === 'groupMsg') {
+        console.log("Chat msg Recived : ",data.msg)
         const member = clients.get(data.to);
         member.send(JSON.stringify({type: 'msg' , msg: data.msg , chatsender : data.from}))
-       
+       console.log("sending GroupChat member msg to ",data.to)
        
     }
 

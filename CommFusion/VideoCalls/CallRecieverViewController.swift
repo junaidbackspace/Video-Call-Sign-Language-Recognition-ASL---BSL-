@@ -299,7 +299,7 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
                    
                     print("call friend id : \(self.calllerid)")
                 controller.userfirst_id = caller1_id
-                controller.userfirst_id = caller2_id
+                controller.usersecond_id = caller2_id
                 controller.modalPresentationStyle = .fullScreen
                   self.navigationController?.pushViewController(controller, animated: true)
             

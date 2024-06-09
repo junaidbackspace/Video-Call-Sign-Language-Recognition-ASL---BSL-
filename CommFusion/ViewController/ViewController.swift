@@ -249,6 +249,21 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
 //            socket.delegate = nil
 //            socket.disconnect()
         }
+    
+    
+    @objc func ChatmessageRecieved(_ notification : Notification)
+     {
+     print("displaying chat message")
+         
+             if let Message = notification.userInfo?["message"] as? String {
+         
+            msgtextView.text = "Chat Member : "+Message
+             print(" chat message is : \(Message)")
+             
+             }
+         
+     }
+    
     @objc func handleMessage(_ notification: Notification) {
             guard let messageTuple = notification.userInfo?["messageTuple"] as? (WebSocketClient, String) else { return }
             let (socket, text) = messageTuple
@@ -336,6 +351,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
        
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleMessage(_:)), name: .didReceiveMessage, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ChatmessageRecieved(_:)), name: Notification.Name("ChatMsg_Recieved"), object: nil)
             
         
         NotificationCenter.default.addObserver(self, selector: #selector(hunguptapedbyOtherCaller), name: Notification.Name("CallEndedNotification"), object: nil)

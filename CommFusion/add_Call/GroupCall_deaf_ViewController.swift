@@ -20,6 +20,7 @@ class GroupCall_deaf_ViewController: UIViewController, AVCapturePhotoCaptureDele
     var capturedImage: UIImage?
     var userfirst_id = 0
     var usersecond_id = 0
+    let userID = UserDefaults.standard.string(forKey: "userID")!
     
     @IBOutlet weak var Profilepic_Firstuser : UIImageView!
     @IBOutlet weak var Profilepic_Seconduser : UIImageView!
@@ -31,6 +32,7 @@ class GroupCall_deaf_ViewController: UIViewController, AVCapturePhotoCaptureDele
     @IBAction func hangupCall (_ sender : Any)
     {
         stopCamera()
+        self.navigationController?.popViewController(animated: true)
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -47,7 +49,7 @@ class GroupCall_deaf_ViewController: UIViewController, AVCapturePhotoCaptureDele
         
         NotificationCenter.default.addObserver(self, selector: #selector(messageRecieved(_:)), name: Notification.Name("ChatMsg_Recieved"), object: nil)
         
-//        self.captureTimer = Timer.scheduledTimer(timeInterval: 1.0 , target: self, selector: #selector(self.takePicture), userInfo: nil, repeats: true)
+        self.captureTimer = Timer.scheduledTimer(timeInterval: 1.0 , target: self, selector: #selector(self.takePicture), userInfo: nil, repeats: true)
         
       
        
@@ -129,16 +131,32 @@ class GroupCall_deaf_ViewController: UIViewController, AVCapturePhotoCaptureDele
        // AVCapturePhotoCaptureDelegate method
        func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
            guard let imageData = photo.fileDataRepresentation() else { return }
-           let image = UIImage(data: imageData)
+           let static_image = UIImage(data: imageData)
 
+        self.predict_staticSign(image: static_image!)
            // Process the image as needed, e.g., assign to an UIImageView
-           let imageView = UIImageView(image: image)
-           imageView.frame = cameraView.bounds
-           imageView.contentMode = .scaleAspectFit
-           cameraView.addSubview(imageView)
+//           let imageView = UIImageView(image: image)
+//           imageView.frame = cameraView.bounds
+//           imageView.contentMode = .scaleAspectFit
+//           cameraView.addSubview(imageView)
        }
    
    
+    func predict_staticSign(image : UIImage)
+    {
+        let apiUrl = URL(string: "\(Constants.serverURL)/asl-signs/predict/")!
+        serverWrapper.predictAlphabet(baseUrl: apiUrl, image: image) { [self] predictedLabel, error in
+                         if let error = error {
+                             print("Error: \(error.localizedDescription)")
+                         } else if let predictedLabel = predictedLabel {
+                             print("Predicted Label: \(predictedLabel)")
+                            socketsClass.shared.Send_GroupChatMsgByDeaf(friendId: String(userfirst_id), Message: predictedLabel, from: userID )
+                            socketsClass.shared.Send_GroupChatMsgByDeaf(friendId: String(usersecond_id), Message: predictedLabel, from: userID )
+                         }
+                     }
+    }
+    
+    
 
     func fetchUserData(userid : Int , userno : Int) {
             let userID = userid

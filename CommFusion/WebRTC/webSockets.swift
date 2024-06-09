@@ -531,12 +531,30 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
         }
     }
     
+    func Send_GroupChatMsgByDeaf(friendId: String ,Message : String , from : String ) {
+       
+        self.connectSocket()
+       
+        
+        // Send call initiation message
+        let Data: [String: Any] = ["type": "groupMsg","from": from,"to": friendId, "msg": Message]
+        do {
+            print("\n \(Data)")
+            let jsonData = try JSONSerialization.data(withJSONObject: Data, options: [])
+            socket.write(data: jsonData)
+            print("Group msg send by deaf...")
+        } catch {
+            print("Error serializing call canceling data: \(error)")
+        }
+    }
+    
+    
     func Recieve_ChatMessage(From : String  , Message : String) {
        
         DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
             // Ensure that the delegate is set and the function is implemented
             guard let delegate = self.incomingCallDelegate else {
-                print("Incoming call delegate not set")
+                print("Chat Message Recieve  delegate not set")
                 
                 let userInfo: [String: Any] = [
                                "from": From,
@@ -561,5 +579,6 @@ extension Notification.Name {
     static let openGroupCallNotification = Notification.Name("openGroupCallViewControllerNotification")
     
     static let didReceiveMessage = Notification.Name("didReceiveMessage")
+    
     
 }
