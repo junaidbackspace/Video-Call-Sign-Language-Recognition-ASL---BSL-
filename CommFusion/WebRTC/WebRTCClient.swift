@@ -102,6 +102,9 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
 //    MARK:- static frames
     var Static_captureTimer: Timer?
     var stop_Staticframe_check = true
+    var should_predictWord_check = false
+    
+    
     func start_static_CaptureFrames() {
         if stop_Staticframe_check{
         Static_captureTimer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(Static_captureFrame), userInfo: nil, repeats: true)
@@ -114,8 +117,16 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
             DispatchQueue.main.asyncAfter(deadline: .now()+1)
             {
             let static_image =  self.localRenderView!.asImage()
-            self.predict_staticSign(image: static_image)
-                self.delegate?.removeBorderAndGlow()
+                
+                
+                if !self.should_predictWord_check{
+                        self.predict_staticSign(image: static_image)
+                        self.delegate?.removeBorderAndGlow()
+                }
+                else{
+                    //predict word now
+                    print("\n}}}}}}}}NOW PREDICTING WORD\n")
+                }
             }
              
         }
@@ -123,6 +134,10 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         self.Static_captureTimer?.invalidate()
         self.Static_captureTimer = nil
     }
+    
+    
+    // MARK:- Predicting words
+   
     
     //    MARK:- creating video from frames
     
@@ -147,6 +162,8 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
             createVideoFromFrames()
         }
     }
+    
+    
 
     func startCaptureFrames() {
         DispatchQueue.global().async {
@@ -186,6 +203,28 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
                          }
                      }
     }
+    
+    
+    //prediction words
+    func predict_WordsSign(image : UIImage)
+    {
+
+        let apiUrl = URL(string: "\(Constants.serverURL)/asl-Updatedsigns/detect_hand")!
+                     serverWrapper.predictAlphabet(baseUrl: apiUrl, image: image) { predictedLabel, error in
+                         if let error = error {
+                             print("Error: \(error.localizedDescription)")
+                         } else if let predictedLabel = predictedLabel {
+                             print("Predicted Label: \(predictedLabel)")
+                             self.sendMessge(message: predictedLabel)
+                            
+                            if self.ShouldGroupChat{
+                                socketsClass.shared.Send_GroupChatMsg(friendId: self.groupFriendId, Message: predictedLabel, from : self.userID)
+                            }
+                         }
+                     }
+    }
+
+    
 
     func createVideoFromFrames() {
         guard !frames.isEmpty else { return }
@@ -401,7 +440,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
             startCaptureLocalVideo(cameraPositon: self.cameraDevicePosition, videoWidth: 640, videoHeight: 640*16/9, videoFps: 30)
             self.localVideoTrack?.add(self.localRenderView!)
         }
-      //  startCaptureFrames()
+    
     }
     
     func setupLocalViewFrame(frame: CGRect){

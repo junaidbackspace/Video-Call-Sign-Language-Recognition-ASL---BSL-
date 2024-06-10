@@ -457,15 +457,20 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
     var static_frameCheck = true
     @objc func handleDoubleTap(_ sender: UITapGestureRecognizer) {
+        
+        //toggle static , dynamic
         if static_frameCheck {
             webRTCClient.stopStaticCaptureFrames()
             performColorFade()
             DispatchQueue.main.asyncAfter(deadline: .now()+3)
             {
                 self.webRTCClient.stop_dynamicframe = true
-                self.webRTCClient.stop_Staticframe_check = false
-                self.webRTCClient.startCaptureFrames()
+                self.webRTCClient.should_predictWord_check = false
+//                self.webRTCClient.startCaptureFrames()
                 self.static_frameCheck = false
+                
+                //predicting word...
+                self.webRTCClient.start_static_CaptureFrames()
             }
             
         }
