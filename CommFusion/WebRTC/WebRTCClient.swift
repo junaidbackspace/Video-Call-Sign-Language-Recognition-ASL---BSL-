@@ -171,7 +171,8 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     
     func predict_staticSign(image : UIImage)
     {
-        let apiUrl = URL(string: "\(Constants.serverURL)/asl-signs/predict/")!
+//        let apiUrl = URL(string: "\(Constants.serverURL)/asl-signs/predict/")!
+        let apiUrl = URL(string: "\(Constants.serverURL)/asl-Updatedsigns/detect_hand")!
                      serverWrapper.predictAlphabet(baseUrl: apiUrl, image: image) { predictedLabel, error in
                          if let error = error {
                              print("Error: \(error.localizedDescription)")
