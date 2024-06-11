@@ -435,7 +435,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     {
        if !ShouldGroupChat{ //if already enabled
             
-            self.ShouldGroupChat = true
+        print("Entered in Group Chat Enable")
+        self.ShouldGroupChat = true
         if let value = notification.userInfo?["callerid"] as? String {
             
             if myLangType == "deaf" //|| myLangType == "blind"
@@ -445,13 +446,26 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
            }
            else{
             //already speech recognizer is on
-            if speechRecognizer?.isStopping != false{
+            
+            if speechRecognizer?.isStopping == false{
             print("Enabling group chat in view controller by turning on S_Recognizer")
-            self.ShouldGroupChat = true
+            
             speechRecognizer?.ShouldGroupChat = true
             speechRecognizer?.groupFriendId = value
             speechRecognizer?.isStopping = false
             self.speechRecognizer!.startRecognition()
+            }
+            
+//            if speechRecognizer?.isStopping != false{
+//            print("Enabling group chat in view controller by turning on S_Recognizer")
+//
+//            speechRecognizer?.ShouldGroupChat = true
+//            speechRecognizer?.groupFriendId = value
+//            speechRecognizer?.isStopping = false
+//            self.speechRecognizer!.startRecognition()
+//            }
+            else{
+                print("Speech Recog Already on")
             }
             
             
@@ -979,26 +993,39 @@ extension ViewController {
         if disabilitytype_check_msg{
             
             print("From viewcontroller Setting Loud Speaker")
+            
             webRTCClient.configureAudioSessionForLoudSpeaker()
         
             if myLangType == "deaf"
             {
+                webRTCClient.toggleSpeakerMute(muted: true)
                 webRTCClient.start_static_CaptureFrames()
-
+                
             }
-           else if myLangType == "blind" && message == "deaf"
+            
+            // for (normal and blind) to (deaf) turn speech on
+           else if myLangType != "deaf" && message == "deaf"
             {
+            
             DispatchQueue.main.async {
                                 print("++++++++Starting REcognition.....++++++")
                                 self.speechRecognizer!.startRecognition()
                             }
             }
+           
+           else
+           {
+            // Set Loud Speaker
+            webRTCClient.configureAudioSessionForLoudSpeaker()
+        
+           }
                 
 //            webRTCClient.localVideoTrack.isEnabled = false
 //            }
             
             if message == "deaf"
             {
+                print("Making Speaking text true")
                 shouldtext_To_speech = true
                 
                 
@@ -1017,6 +1044,7 @@ extension ViewController {
             
         }
         else if message == " "{
+            stopSpeaking()
             cleanupPlayer()
         }
         else {
@@ -1026,7 +1054,9 @@ extension ViewController {
         //for text to speech
         if shouldtext_To_speech
         {
+            print("Speaking")
             //speaking the message
+//            configureAudioSession()
             speak(text: message)
         }
         DispatchQueue.main.async {
@@ -1034,26 +1064,42 @@ extension ViewController {
         }
     }
         
+//    func configureAudioSession() {
+//        do {
+//            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
+//            try AVAudioSession.sharedInstance().setActive(true)
+//        } catch {
+//            print("Failed to set up audio session: \(error)")
+//        }
+//    }
+    
     func speak(text: String) {
-            // Check if the speech synthesizer is speaking
-            if speechSynthesizer.isSpeaking {
-                speechSynthesizer.stopSpeaking(at: .immediate)
-            }
-            
-            // Create an utterance with the given text
-            let utterance = AVSpeechUtterance(string: text)
-            
-            // Set the voice (optional, can set to nil for default voice)
-            utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-            
-            // Adjust the rate, pitch, and volume (optional)
-            utterance.rate = AVSpeechUtteranceDefaultSpeechRate
-            utterance.pitchMultiplier = 1.0
-            utterance.volume = 1.0
-            
-            // Speak the utterance
-            speechSynthesizer.speak(utterance)
+        // Check if the speech synthesizer is speaking
+        if speechSynthesizer.isSpeaking {
+            print("Speech synthesizer is currently speaking. Stopping.")
+            speechSynthesizer.stopSpeaking(at: .immediate)
         }
+        
+        // Create an utterance with the given text
+        let utterance = AVSpeechUtterance(string: text)
+        
+        // Set the voice (optional, can set to nil for default voice)
+        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+        
+        // Adjust the rate, pitch, and volume (optional)
+        utterance.rate = AVSpeechUtteranceDefaultSpeechRate
+        utterance.pitchMultiplier = 1.0
+        utterance.volume = 1.0
+        
+        // Debugging output
+        print("Speaking text: \(text)")
+        
+        // Speak the utterance
+        speechSynthesizer.speak(utterance)
+        
+       
+    }
+
     
     func stopSpeaking() {
         // Stop the speech synthesizer from speaking
@@ -1159,6 +1205,7 @@ extension ViewController {
                 
                 if let SignsvideoContainerView = SignsvideoContainerView {
                     view.addSubview(SignsvideoContainerView)
+                    view.bringSubviewToFront(OutLetHangUp)
                 }
 
 //        // Observe when the video finishes playing
@@ -1293,14 +1340,32 @@ class SpeechRecognizer: NSObject, SFSpeechRecognizerDelegate {
         checkclass = "blind_normal"
     }
     
+    var webRTCClient = WebRTCClient()
    var  groupFriendId = ""
-    var ShouldGroupChat = false
+   var ShouldGroupChat = false
    let  userID = UserDefaults.standard.string(forKey: "userID")!
+    
+    
+    
     func startRecognition() {
         print("Audio Recognition started")
+        
         let audioSession = AVAudioSession.sharedInstance()
         do {
-            try audioSession.setCategory(.record, mode: .default)
+            // Set the audio session category, mode, and options
+            try audioSession.setCategory(.playAndRecord, mode: .default, options: [.duckOthers, .defaultToSpeaker])
+            try audioSession.setMode(.measurement)
+            
+            // Attempt to use the built-in microphone, which includes the earphone microphone if connected
+            if let availableInputs = audioSession.availableInputs {
+                for input in availableInputs {
+                    if input.portType == .builtInMic || input.portType == .headsetMic {
+                        try audioSession.setPreferredInput(input)
+                        break
+                    }
+                }
+            }
+            
             try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
         } catch {
             print("Audio session error: \(error.localizedDescription)")
@@ -1318,39 +1383,31 @@ class SpeechRecognizer: NSObject, SFSpeechRecognizerDelegate {
             if let result = result {
                 print("Transcription: \(result.bestTranscription.formattedString)")
                 
-                if self.ShouldGroupChat{
-                    
+                if self.ShouldGroupChat {
                     print("Group Chat Send.")
-                    socketsClass.shared.Send_GroupChatMsg(friendId: self.groupFriendId, Message: result.bestTranscription.formattedString , from : self.userID)
+                    socketsClass.shared.Send_GroupChatMsg(friendId: self.groupFriendId, Message: result.bestTranscription.formattedString, from: self.userID)
                 }
-                if self.checkclass == "groupchat"{
                 
-//                    self.Group_chats?.textmsg(msg: result.bestTranscription.formattedString)
-                    self.Group_chats?.speechtoTextMsg(message : result.bestTranscription.formattedString)
-                }
-                if self.checkclass == "blind_normal"{
+                if self.checkclass == "groupchat" {
+                    self.Group_chats?.speechtoTextMsg(message: result.bestTranscription.formattedString)
+                } else if self.checkclass == "blind_normal" {
                     self.Blind_NormalGroup?.speechtoText = result.bestTranscription.formattedString
-                }
-                else{
+                } else {
                     self.viewController?.textmsg(msg: result.bestTranscription.formattedString)
-                    
                 }
-                
             }
             
             if error != nil || result?.isFinal == true {
                 print("Restarting recognition")
                 
                 self.stopRecognition()
-                if !self.isStopping{
+                if !self.isStopping {
                     print("within>>> voice check false")
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                   self.startRecognition() // Restart recognition after a short delay
-                               }
-                       }
-                else{
-                    
-                    print("MAking voice check false")
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                        self.startRecognition() // Restart recognition after a short delay
+                    }
+                } else {
+                    print("Making voice check false")
                     self.isStopping = false
                     return
                 }
@@ -1366,12 +1423,13 @@ class SpeechRecognizer: NSObject, SFSpeechRecognizerDelegate {
         audioEngine.prepare()
         
         do {
-            print("strating engine for voice()()()()")
+            print("Starting engine for voice")
             try audioEngine.start()
         } catch {
             print("audioEngine couldn't start because of an error: \(error.localizedDescription)")
         }
     }
+
     
      var isStopping = false
         
