@@ -445,15 +445,26 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
         }
         
         if UserDefaults.standard.object(forKey: "disability_Type") == nil {
+            UserDefaults.standard.set("normal", forKey: "disabilityType")
+            print("Setting disablity to normal")
+        }
+        else{
+            print("user disablity is already setted : \( UserDefaults.standard.string(forKey: "disabilityType"))")
+        }
+        
+        
+        if UserDefaults.standard.object(forKey: "disability_Type") == nil {
             let setting =  settingsViewController()
             setting.fetchUserDisability()
             
-            print("USer disablity is nil so : \(UserDefaults.standard.stringArray(forKey: "disability_Type"))")
+            print("USer disablity is nil so : \(UserDefaults.standard.string(forKey: "disability_Type"))")
             
           
         }
         else{
-            print("User disablity is : \(UserDefaults.standard.stringArray(forKey: "disability_Type"))")
+            
+            
+            print("User disablity is : \(UserDefaults.standard.string(forKey: "disability_Type"))")
         }
             
             

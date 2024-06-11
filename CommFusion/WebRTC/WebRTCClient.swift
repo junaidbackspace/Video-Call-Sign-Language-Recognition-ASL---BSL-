@@ -519,10 +519,10 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
             self.peerConnection = setupPeerConnection()
             self.peerConnection!.delegate = self
             if self.channels.video {
-                self.peerConnection!.add(localVideoTrack, streamIds: ["stream-0"])
+                self.peerConnection!.add(localVideoTrack, streamIds: ["stream-1"])
             }
             if self.channels.audio {
-                self.peerConnection!.add(localAudioTrack, streamIds: ["stream-0"])
+                self.peerConnection!.add(localAudioTrack, streamIds: ["stream-1"])
             }
             if self.channels.datachannel {
                 self.dataChannel = self.setupDataChannel()
@@ -645,19 +645,22 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
             return nil
         }
 
+        // Configure the audio session before creating the WebRTC audio track
+//        configureAudioSession()
+
         // Create audio source with default constraints
         let audioSource = peerConnectionFactory.audioSource(with: RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil))
         let audioTrack = peerConnectionFactory.audioTrack(with: audioSource, trackId: "audio\(userID)")
-       
-        
-        configureAudioSession()
-        
+
         return audioTrack
     }
-    
+
     private func configureAudioSession() {
         do {
             let audioSession = AVAudioSession.sharedInstance()
+            
+            // Deactivate the audio session first
+            try audioSession.setActive(false)
             
             // Set the category, mode, and options for video chat
             try audioSession.setCategory(.playAndRecord, mode: .videoChat, options: [.defaultToSpeaker, .allowBluetooth, .allowBluetoothA2DP])
@@ -670,31 +673,36 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
                 print("Bottom microphone is not available. Using default audio input.")
             }
             
+            // Force the audio output to the speaker
+            try audioSession.overrideOutputAudioPort(.speaker)
+            
             debugAudioRouting()
+            
         } catch {
             print("Error setting up audio session: \(error.localizedDescription)")
         }
     }
-    
-       private func debugAudioRouting() {
-           let audioSession = AVAudioSession.sharedInstance()
-           var i = 0
-           // Print the current audio route information
-           let currentRoute = audioSession.currentRoute
-           for output in currentRoute.outputs {
-            
-               print("\(i): Current audio output: \(output.portType.rawValue) - \(output.portName)")
-            i = i+1
-           }
-        let currentInputRoute = audioSession.currentRoute.inputs
-           if let input = currentInputRoute.first {
-               print("Current audio input: \(input.portType.rawValue) - \(input.portName)")
-           } else {
-               print("No audio input route detected")
-           }
-    }
-   
 
+    private func debugAudioRouting() {
+        let audioSession = AVAudioSession.sharedInstance()
+        var i = 0
+        // Print the current audio route information
+        let currentRoute = audioSession.currentRoute
+        for output in currentRoute.outputs {
+            print("\(i): Current audio output: \(output.portType.rawValue) - \(output.portName)")
+            i += 1
+        }
+        let currentInputRoute = audioSession.currentRoute.inputs
+        if let input = currentInputRoute.first {
+            print("Current audio input: \(input.portType.rawValue) - \(input.portName)")
+        } else {
+            print("No audio input route detected")
+        }
+    }
+    
+    
+    
+    
     func toggleSpeakerMute(muted: Bool) {
        
         print("\n\n====> inside Speaker to mute")
@@ -947,24 +955,45 @@ extension WebRTCClient {
         self.remoteStream = stream
         
         if let track = stream.videoTracks.first {
-            print("video track faund")
+            print("video track found")
             track.add(remoteRenderView!)
         }
         
         if let audioTrack = stream.audioTracks.first{
-            print("audio track faund")
-            audioTrack.source.volume = 0.8
+            print("audio track found")
+            audioTrack.source.volume = 1
             remoteAudioTrack = audioTrack
+            configureAudioSessionForLoudSpeaker()
+            
             DispatchQueue.main.async {
                 print("}}}}}}}stoping dots animation now...")
                 let connecting_animation = ConnectingView()
                 connecting_animation.stopAnimating()
             }
+           
         }
-       
+    
         
         
     }
+    
+     func configureAudioSessionForLoudSpeaker() {
+            do {
+                print("\n\nNow Setting Remote Audio to Loud Speaker")
+                let audioSession = AVAudioSession.sharedInstance()
+                
+                // Ensure the audio session is active
+                try audioSession.setActive(true)
+                
+                // Force the audio output to the speaker
+                try audioSession.overrideOutputAudioPort(.speaker)
+                
+                debugAudioRouting()
+                
+            } catch {
+                print("Error setting audio session to loudspeaker: \(error.localizedDescription)")
+            }
+        }
     
     
     func peerConnection(_ peerConnection: RTCPeerConnection, didGenerate candidate: RTCIceCandidate) {

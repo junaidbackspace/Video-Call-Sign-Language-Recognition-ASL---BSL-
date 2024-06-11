@@ -96,6 +96,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     @IBOutlet weak var OutletbtnAddCall : UIButton!
     let myLangType = UserDefaults.standard.string(forKey: "disabilityType")!
 
+    
+    
    
     
     func configureScrollView(with text: String) {
@@ -336,6 +338,12 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
   
+        
+        if UserDefaults.standard.object(forKey: "disabilityType") == nil {
+            
+            UserDefaults.standard.set("normal", forKey: "disabilityType")
+        }
+        
         let myLangType = UserDefaults.standard.string(forKey: "disabilityType")!
         
         disabilitytype_check_msg = true
@@ -700,7 +708,13 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     func disconnectWebRTC() {
         
         UserDefaults.standard.setValue("0", forKey: "groupchat")
-        let chatmemberID = UserDefaults.standard.string(forKey: "groupchatmember")!
+        var chatmemberID = "0"
+        if UserDefaults.standard.object(forKey: "groupchatmember") != nil
+        {
+            chatmemberID  = UserDefaults.standard.string(forKey: "groupchatmember")!
+        }
+        
+       
         socketsClass.shared.EndGroupChat(friendId: chatmemberID)
         print("getting back to screen call is ended")
             if webRTCClient.isConnected {
@@ -963,6 +977,9 @@ extension ViewController {
         
        
         if disabilitytype_check_msg{
+            
+            print("From viewcontroller Setting Loud Speaker")
+            webRTCClient.configureAudioSessionForLoudSpeaker()
         
             if myLangType == "deaf"
             {
