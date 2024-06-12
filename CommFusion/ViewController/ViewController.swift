@@ -488,7 +488,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
             DispatchQueue.main.asyncAfter(deadline: .now()+3)
             {
                 self.webRTCClient.stop_dynamicframe = true
-                self.webRTCClient.should_predictWord_check = false
+                self.webRTCClient.should_predictWord_check = true
 //                self.webRTCClient.startCaptureFrames()
                 self.static_frameCheck = false
                 

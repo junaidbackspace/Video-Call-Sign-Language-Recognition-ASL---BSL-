@@ -107,11 +107,13 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     
     func start_static_CaptureFrames() {
         if stop_Staticframe_check{
-        Static_captureTimer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(Static_captureFrame), userInfo: nil, repeats: true)
+            Static_captureTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(Static_captureFrame), userInfo: nil, repeats: true)
         }
         }
 
         @objc func Static_captureFrame() {
+            
+            if stop_Staticframe_check{
             print("taking picture")
             delegate?.change_localview_Color(color: UIColor.green, Glowcolor: UIColor.cyan)
             DispatchQueue.main.asyncAfter(deadline: .now()+1)
@@ -126,10 +128,24 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
                 else{
                     //predict word now
                     print("\n}}}}}}}}NOW PREDICTING WORD\n")
+                    
+                    
+                    
+                    let apiUrl = URL(string: "\(Constants.serverURL)/asl-Updatedsigns/detect_hand")!
+                    self.serverWrapper.predictAlphabet(baseUrl: apiUrl, image: static_image) { predictedLabel, error in
+                                     if let error = error {
+                                         print("Error: \(error.localizedDescription)")
+                                     } else if let predictedLabel = predictedLabel {
+                                         print("Predicted Label: \(predictedLabel)")
+                                         self.sendMessge(message: predictedLabel)
+                                        
+                                     }
+                                 }
+             
                 }
             }
-             
         }
+    }
     func stopStaticCaptureFrames() {
         self.Static_captureTimer?.invalidate()
         self.Static_captureTimer = nil
