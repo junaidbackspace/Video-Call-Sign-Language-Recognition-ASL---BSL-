@@ -145,7 +145,7 @@ class GroupCall_Blind_NormalViewController: UIViewController {
     
     func setupSpeechToText()
     {
-        speechRecognizer = SpeechRecognizer(blind_normalGroup: self)
+        speechRecognizer = SpeechRecognizer(blind_normalGroup: self ,friendfirst: String(userfirst_id) , friendsecond: String(usersecond_id) )
         self.speechRecognizer!.startRecognition()
         
     }

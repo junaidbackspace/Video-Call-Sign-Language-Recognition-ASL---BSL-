@@ -446,7 +446,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
            }
            else{
             //already speech recognizer is on
-            
+            if  !speechRecognizer!.isSpeechOn{
             if speechRecognizer?.isStopping == false{
             print("Enabling group chat in view controller by turning on S_Recognizer")
             
@@ -454,6 +454,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
             speechRecognizer?.groupFriendId = value
             speechRecognizer?.isStopping = false
             self.speechRecognizer!.startRecognition()
+            }
             }
             
 //            if speechRecognizer?.isStopping != false{
@@ -1318,6 +1319,8 @@ class SpeechRecognizer: NSObject, SFSpeechRecognizerDelegate {
     weak var Group_chats: ChatScreenViewController?
     weak var Blind_NormalGroup: GroupCall_Blind_NormalViewController?
     
+    var Msguserone = ""
+    var MSgusertwo = ""
     var checkclass  = ""
     
     init(viewController: ViewController) {
@@ -1327,15 +1330,17 @@ class SpeechRecognizer: NSObject, SFSpeechRecognizerDelegate {
         checkclass = "videocall"
     }
     
-    init(groupchat: ChatScreenViewController) {
+    init(groupchat: ChatScreenViewController ) {
         self.Group_chats = groupchat
         super.init()
         speechRecognizer?.delegate = self
         checkclass = "groupchat"
     }
-    init(blind_normalGroup: GroupCall_Blind_NormalViewController) {
+    init(blind_normalGroup: GroupCall_Blind_NormalViewController, friendfirst : String , friendsecond : String) {
         self.Blind_NormalGroup = blind_normalGroup
         super.init()
+        Msguserone = friendfirst
+        MSgusertwo = friendsecond
         speechRecognizer?.delegate = self
         checkclass = "blind_normal"
     }
@@ -1343,12 +1348,15 @@ class SpeechRecognizer: NSObject, SFSpeechRecognizerDelegate {
     var webRTCClient = WebRTCClient()
    var  groupFriendId = ""
    var ShouldGroupChat = false
+    var isSpeechOn = false
    let  userID = UserDefaults.standard.string(forKey: "userID")!
     
     
     
     func startRecognition() {
         print("Audio Recognition started")
+        
+        isSpeechOn = true
         
         let audioSession = AVAudioSession.sharedInstance()
         do {
@@ -1390,9 +1398,15 @@ class SpeechRecognizer: NSObject, SFSpeechRecognizerDelegate {
                 
                 if self.checkclass == "groupchat" {
                     self.Group_chats?.speechtoTextMsg(message: result.bestTranscription.formattedString)
-                } else if self.checkclass == "blind_normal" {
+                }
+                
+                else if self.checkclass == "blind_normal" {
                     self.Blind_NormalGroup?.speechtoText = result.bestTranscription.formattedString
-                } else {
+                    var text = result.bestTranscription.formattedString
+                    socketsClass.shared.Send_GroupChatMsgByDeaf(friendId: self.Msguserone , Message: text, from: self.userID )
+                    socketsClass.shared.Send_GroupChatMsgByDeaf(friendId: self.MSgusertwo , Message: text, from: self.userID )
+                }
+                else {
                     self.viewController?.textmsg(msg: result.bestTranscription.formattedString)
                 }
             }
@@ -1435,6 +1449,8 @@ class SpeechRecognizer: NSObject, SFSpeechRecognizerDelegate {
         
     
     func stopRecognition() {
+        
+            isSpeechOn = false
             print("Stopping audio engine and recognition task")
             audioEngine.stop()
             
