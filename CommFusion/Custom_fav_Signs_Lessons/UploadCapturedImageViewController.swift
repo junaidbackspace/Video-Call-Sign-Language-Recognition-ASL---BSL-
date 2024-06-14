@@ -1,5 +1,6 @@
 import UIKit
 
+
 class UploadCapturedImageViewController: UIViewController {
     
     var images: [UIImage] = []
@@ -8,6 +9,8 @@ class UploadCapturedImageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let modelManager = SignLanguageModelManager(modelFileName: "DeepLabV3")
         
         // Set background color
         view.backgroundColor = .white
@@ -163,5 +166,83 @@ class UploadCapturedImageViewController: UIViewController {
     deinit {
         // Remove keyboard notification observers when the view controller is deallocated
         NotificationCenter.default.removeObserver(self)
+    }
+}
+
+
+
+import UIKit
+import TensorFlowLite
+
+class ViewController: UIViewController {
+    
+    // TensorFlow Lite model variables
+    var interpreter: Interpreter?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Initialize TensorFlow Lite Interpreter
+        if let modelPath = Bundle.main.path(forResource: "model", ofType: "tflite") {
+            interpreter = try? Interpreter(modelPath: modelPath)
+        }
+        
+        // Example usage with an input image
+        if let inputImage = UIImage(named: "input_image.jpg"),
+           let inputTensor = preprocess(image: inputImage) {
+            // Perform inference
+            if let outputTensor = try? interpreter?.inferring(from: inputTensor) as? [Float] {
+                // Process outputTensor as needed (e.g., classification results)
+                print("Inference successful")
+                print("Output tensor:", outputTensor)
+            } else {
+                print("Inference failed")
+            }
+        }
+    }
+    
+    // Preprocess image into TensorFlow Lite input tensor
+    private func preprocess(image: UIImage) -> Tensor? {
+        guard let cgImage = image.cgImage else { return nil }
+        
+        // Resize image to match model input size
+        let inputWidth = 224
+        let inputHeight = 224
+        
+        // Create a new context with the desired size and draw the image into that context
+        let size = CGSize(width: inputWidth, height: inputHeight)
+        UIGraphicsBeginImageContext(size)
+        defer { UIGraphicsEndImageContext() }
+        UIGraphicsGetCurrentContext()?.interpolationQuality = .high
+        image.draw(in: CGRect(origin: .zero, size: size))
+        guard let resizedImage = UIGraphicsGetImageFromCurrentImageContext() else { return nil }
+        
+        // Normalize the pixel values and convert to tensor
+        let inputTensor: Tensor
+        do {
+            let imageData = resizedImage.normalized()
+            inputTensor = try Tensor(data: imageData, shape: [1, inputWidth, inputHeight, 3])
+        } catch {
+            print("Error converting image to tensor:", error)
+            return nil
+        }
+        
+        return inputTensor
+    }
+}
+
+// UIImage extension for pixel normalization
+extension UIImage {
+    func normalized() -> Data {
+        guard let cgImage = cgImage else { return Data() }
+        let size = CGSize(width: cgImage.width, height: cgImage.height)
+        let minDimension = min(size.width, size.height)
+        let scale = UIScreen.main.scale
+        let width = Int(minDimension * scale)
+        let height = Int(minDimension * scale)
+        let context = CGContext(data: nil, width: width, height: height, bitsPerComponent: 8, bytesPerRow: width * 4, space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGImageAlphaInfo.noneSkipFirst.rawValue)!
+        context.interpolationQuality = .high
+        context.draw(cgImage, in: CGRect(origin: .zero, size: CGSize(width: width, height: height)))
+        return context.makeImage()!.dataProvider!.data! as Data
     }
 }

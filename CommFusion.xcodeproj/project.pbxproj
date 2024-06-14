@@ -83,6 +83,7 @@
 		65A986ED2B7CA3250011753C /* termsConditionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A986EC2B7CA3250011753C /* termsConditionViewController.swift */; };
 		65A986F12B7CA8240011753C /* aboutAppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A986F02B7CA8240011753C /* aboutAppViewController.swift */; };
 		65A986FC2B7CF10B0011753C /* CallerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A986FB2B7CF10B0011753C /* CallerViewController.swift */; };
+		65B160752C1CAB8B0018FAFF /* DeepLabV3.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 65B160742C1CAB8B0018FAFF /* DeepLabV3.mlmodel */; };
 		65BFA2B02B77743A007E73A8 /* giphy.gif in Resources */ = {isa = PBXBuildFile; fileRef = 65BFA2AF2B77743A007E73A8 /* giphy.gif */; };
 		65BFA2B82B7783F8007E73A8 /* test.gif in Resources */ = {isa = PBXBuildFile; fileRef = 65BFA2B72B7783F8007E73A8 /* test.gif */; };
 		65C2B3752B79F22300A916E6 /* settingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C2B3742B79F22300A916E6 /* settingsViewController.swift */; };
@@ -225,6 +226,7 @@
 		65A986EC2B7CA3250011753C /* termsConditionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = termsConditionViewController.swift; sourceTree = "<group>"; };
 		65A986F02B7CA8240011753C /* aboutAppViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = aboutAppViewController.swift; sourceTree = "<group>"; };
 		65A986FB2B7CF10B0011753C /* CallerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallerViewController.swift; sourceTree = "<group>"; };
+		65B160742C1CAB8B0018FAFF /* DeepLabV3.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = DeepLabV3.mlmodel; sourceTree = "<group>"; };
 		65BFA2AF2B77743A007E73A8 /* giphy.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = giphy.gif; sourceTree = "<group>"; };
 		65BFA2B72B7783F8007E73A8 /* test.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = test.gif; sourceTree = "<group>"; };
 		65C2B3742B79F22300A916E6 /* settingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = settingsViewController.swift; sourceTree = "<group>"; };
@@ -454,6 +456,14 @@
 			path = Structs;
 			sourceTree = "<group>";
 		};
+		65B160732C1CAB6F0018FAFF /* customsigns_model */ = {
+			isa = PBXGroup;
+			children = (
+				65B160742C1CAB8B0018FAFF /* DeepLabV3.mlmodel */,
+			);
+			path = customsigns_model;
+			sourceTree = "<group>";
+		};
 		65BFA2AE2B77740A007E73A8 /* gifFiles */ = {
 			isa = PBXGroup;
 			children = (
@@ -480,6 +490,7 @@
 		65CE5D402B76969800771A84 /* Custom_fav_Signs_Lessons */ = {
 			isa = PBXGroup;
 			children = (
+				65B160732C1CAB6F0018FAFF /* customsigns_model */,
 				657F46762B8FB4E700B391A6 /* CollectionView */,
 				65BFA2AE2B77740A007E73A8 /* gifFiles */,
 				65CE5D412B7696F700771A84 /* PlayerLessonsViewController.swift */,
@@ -953,6 +964,7 @@
 				6577F51A2B78CE58005AD8AD /* AddCustomSignsViewController.swift in Sources */,
 				AFAF58EA21EA0AD300609BB7 /* UIColorExtention.swift in Sources */,
 				65CE5D3D2B75FCCF00771A84 /* CallLogsTableTableViewCell.swift in Sources */,
+				65B160752C1CAB8B0018FAFF /* DeepLabV3.mlmodel in Sources */,
 				65A986ED2B7CA3250011753C /* termsConditionViewController.swift in Sources */,
 				6589ED752C07A96C00A45276 /* GroupsViewController.swift in Sources */,
 				651E5C0A2BA466DC005DB71C /* CallTranscriptionTableViewCell.swift in Sources */,
