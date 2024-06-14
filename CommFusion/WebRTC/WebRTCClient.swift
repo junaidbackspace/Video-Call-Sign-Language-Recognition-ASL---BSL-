@@ -126,21 +126,11 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
                         self.delegate?.removeBorderAndGlow()
                 }
                 else{
+                    self.delegate?.removeBorderAndGlow()
                     //predict word now
                     print("\n}}}}}}}}NOW PREDICTING WORD\n")
                     
-                    
-                    
-                    let apiUrl = URL(string: "\(Constants.serverURL)/asl-Updatedsigns/detect_hand")!
-                    self.serverWrapper.predictAlphabet(baseUrl: apiUrl, image: static_image) { predictedLabel, error in
-                                     if let error = error {
-                                         print("Error: \(error.localizedDescription)")
-                                     } else if let predictedLabel = predictedLabel {
-                                         print("Predicted Label: \(predictedLabel)")
-                                         self.sendMessge(message: predictedLabel)
-                                        
-                                     }
-                                 }
+                    self.predict_WordsSign(image: static_image)
              
                 }
             }
@@ -204,7 +194,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     
     func predict_staticSign(image : UIImage)
     {
-        let apiUrl = URL(string: "\(Constants.serverURL)/asl-signs/predict/")!
+        let apiUrl = URL(string: "\(Constants.serverURL)/asl-Updatedsigns/detect_hand")!
 //        let apiUrl = URL(string: "\(Constants.serverURL)/asl-Updatedsigns/detect_hand")!
                      serverWrapper.predictAlphabet(baseUrl: apiUrl, image: image) { predictedLabel, error in
                          if let error = error {
@@ -225,12 +215,12 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     func predict_WordsSign(image : UIImage)
     {
 
-        let apiUrl = URL(string: "\(Constants.serverURL)/asl-Updatedsigns/detect_hand")!
-                     serverWrapper.predictAlphabet(baseUrl: apiUrl, image: image) { predictedLabel, error in
+        let apiUrl = URL(string: "\(Constants.serverURL)/asl-Updatedsigns/predictWP")!
+        serverWrapper.predictWords(baseUrl: apiUrl, image: image) { predictedLabel, error in
                          if let error = error {
                              print("Error: \(error.localizedDescription)")
                          } else if let predictedLabel = predictedLabel {
-                             print("Predicted Label: \(predictedLabel)")
+                             print("Predicted Word: \(predictedLabel)")
                              self.sendMessge(message: predictedLabel)
                             
                             if self.ShouldGroupChat{

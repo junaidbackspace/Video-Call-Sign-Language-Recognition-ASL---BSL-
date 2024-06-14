@@ -13,7 +13,7 @@ struct ServerResponse: Decodable {
 }
 struct Constants {
 
-    static let serverURL = "http://192.168.238.118:5000"
-    static let nodeserverIP = "192.168.238.119"
+    static let serverURL = "http://192.168.31.153:5000"
+    static let nodeserverIP = "192.168.31.105"
 
 }

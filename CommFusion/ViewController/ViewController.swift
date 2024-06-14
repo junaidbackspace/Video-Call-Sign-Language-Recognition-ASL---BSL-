@@ -485,7 +485,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         if static_frameCheck {
             webRTCClient.stopStaticCaptureFrames()
             performColorFade()
-            DispatchQueue.main.asyncAfter(deadline: .now()+3)
+            DispatchQueue.main.asyncAfter(deadline: .now()+2)
             {
                 self.webRTCClient.stop_dynamicframe = true
                 self.webRTCClient.should_predictWord_check = true
@@ -499,10 +499,11 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         }
         else{
             performColorFade()
-            DispatchQueue.main.asyncAfter(deadline: .now()+3)
+            DispatchQueue.main.asyncAfter(deadline: .now()+2)
             {
                 self.webRTCClient.stop_dynamicframe = false
                 self.webRTCClient.stop_Staticframe_check = true
+                self.webRTCClient.should_predictWord_check = false
                 self.webRTCClient.Permanent_stopCaptureFrames()
                 self.webRTCClient.start_static_CaptureFrames()
             }
@@ -1043,6 +1044,12 @@ extension ViewController {
             print("Starting video of sign")
             self.play_sign_video(name: message)
             
+            
+            DispatchQueue.main.asyncAfter(deadline: .now()+3)
+            {
+                print("\n::::::><after 2 sec cleaning Video player\n")
+                self.cleanupPlayer()
+            }
         }
         else if message == " "{
             stopSpeaking()
@@ -1214,6 +1221,7 @@ extension ViewController {
 
         // Start playing the video
         player?.play()
+        
     }
 
 
