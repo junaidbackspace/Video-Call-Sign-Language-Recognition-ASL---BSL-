@@ -33,7 +33,7 @@ class FineTuningModelViewController: UIViewController {
 
         do {
             interpreter = try Interpreter(modelPath: modelPath)
-            try interpreter?.xallocateTensors()
+            try interpreter?.allocateTensors()
             modelLoaded = true
         } catch {
             fatalError("Failed to create the interpreter: \(error)")
