@@ -20,7 +20,7 @@ class test_Custom_SingsViewController: UIViewController {
             fatalError("Failed to create the interpreter: \(error)")
         }
 
-        if let prediction = predict(image: UIImage(named: "aaa.jpeg")!) {
+        if let prediction = predict(image: UIImage(named: "11.jpeg")!) {
             print("Prediction is: \(prediction)")
         } else {
             print("Failed to get prediction.")
@@ -92,8 +92,12 @@ class test_Custom_SingsViewController: UIViewController {
     }
 
     private var labels: [String] {
-        return ["Hi I am Junaid", "label2", "label3"] // Replace with your actual labels
+        return ["Hi I am Junaid", "Stop", "stop"] // Replace with your actual labels
     }
+    
+    
+    
+    
 }
 
 extension Data {
@@ -105,45 +109,12 @@ extension Data {
     }
 }
 
-extension CVPixelBuffer {
-    func toNormalizedData() -> Data? {
-        CVPixelBufferLockBaseAddress(self, .readOnly)
-        defer { CVPixelBufferUnlockBaseAddress(self, .readOnly) }
-
-        guard let baseAddress = CVPixelBufferGetBaseAddress(self) else {
-            fatalError("Failed to get base address of pixel buffer.")
-        }
-
-        let width = CVPixelBufferGetWidth(self)
-        let height = CVPixelBufferGetHeight(self)
-        let bytesPerRow = CVPixelBufferGetBytesPerRow(self)
-        let buffer = baseAddress.assumingMemoryBound(to: UInt8.self)
-
-        var data = Data(count: width * height * 3 * MemoryLayout<Float>.size)
-        data.withUnsafeMutableBytes { (outputBuffer: UnsafeMutableRawBufferPointer) in
-            let outputPointer = outputBuffer.baseAddress!.assumingMemoryBound(to: Float.self)
-            var pixelIndex = 0
-            for row in 0..<height {
-                for col in 0..<width {
-                    let pixelOffset = row * bytesPerRow + col * 4
-                    let r = Float(buffer[pixelOffset + 1]) / 255.0
-                    let g = Float(buffer[pixelOffset + 2]) / 255.0
-                    let b = Float(buffer[pixelOffset + 3]) / 255.0
-                    outputPointer[pixelIndex] = r
-                    outputPointer[pixelIndex + 1] = g
-                    outputPointer[pixelIndex + 2] = b
-                    pixelIndex += 3
-                }
-            }
-        }
-        return data
-    }
-}
-
 extension UIImage {
-    func pixelBuffer(width: Int, height: Int) -> CVPixelBuffer? {
-        let attrs = [kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue,
-                     kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue] as CFDictionary
+    func pixelBuffer(width: Int = 150, height: Int = 150) -> CVPixelBuffer? {
+        let attrs = [
+            kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue,
+            kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue
+        ] as CFDictionary
         var pixelBuffer: CVPixelBuffer?
         let status = CVPixelBufferCreate(kCFAllocatorDefault, width, height,
                                          kCVPixelFormatType_32ARGB, attrs, &pixelBuffer)
@@ -174,3 +145,43 @@ extension UIImage {
         return buffer
     }
 }
+
+extension CVPixelBuffer {
+    func toNormalizedData() -> Data? {
+        CVPixelBufferLockBaseAddress(self, .readOnly)
+        defer { CVPixelBufferUnlockBaseAddress(self, .readOnly) }
+
+        guard let baseAddress = CVPixelBufferGetBaseAddress(self) else {
+            fatalError("Failed to get base address of pixel buffer.")
+        }
+
+        let width = CVPixelBufferGetWidth(self)
+        let height = CVPixelBufferGetHeight(self)
+        let bytesPerRow = CVPixelBufferGetBytesPerRow(self)
+        let buffer = baseAddress.assumingMemoryBound(to: UInt8.self)
+
+        var data = Data(count: width * height * 3 * MemoryLayout<Float>.size)
+        data.withUnsafeMutableBytes { (outputBuffer: UnsafeMutableRawBufferPointer) in
+            let outputPointer = outputBuffer.bindMemory(to: Float.self).baseAddress!
+            var pixelIndex = 0
+            for row in 0..<height {
+                for col in 0..<width {
+                    let pixelOffset = row * bytesPerRow + col * 4
+                    let r = Float(buffer[pixelOffset + 2]) / 255.0 // Red channel
+                    let g = Float(buffer[pixelOffset + 1]) / 255.0 // Green channel
+                    let b = Float(buffer[pixelOffset]) / 255.0     // Blue channel
+                    outputPointer[pixelIndex] = r
+                    outputPointer[pixelIndex + 1] = g
+                    outputPointer[pixelIndex + 2] = b
+                    pixelIndex += 3
+                }
+            }
+        }
+
+        // Log actual size of the data
+        print("Converted pixel buffer to normalized data with size: \(data.count)")
+
+        return data
+    }
+}
+
