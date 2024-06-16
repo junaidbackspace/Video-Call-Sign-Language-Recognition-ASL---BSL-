@@ -35,6 +35,9 @@ class GroupCall_deaf_ViewController: UIViewController, AVCapturePhotoCaptureDele
     
     @IBAction func hangupCall (_ sender : Any)
     {
+        
+        socketsClass.shared.GroupCall_End(caller1: String(userfirst_id), caller2: String(usersecond_id))
+        
         stopCamera()
         self.navigationController?.popViewController(animated: true)
         self.navigationController?.popViewController(animated: true)

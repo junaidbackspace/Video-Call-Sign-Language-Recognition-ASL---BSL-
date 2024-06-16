@@ -63,6 +63,7 @@ class GroupCall_Blind_NormalViewController: UIViewController {
     
     @IBAction func hangupcall(_ sender : Any)
     {
+        socketsClass.shared.GroupCall_End(caller1: String(userfirst_id), caller2: String(usersecond_id))
         
         self.speechRecognizer!.isStopping = true
         self.speechRecognizer!.stopRecognition()

@@ -267,12 +267,23 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
                 UserDefaults.standard.setValue("0", forKey: "groupchat")
                 
             }
+            
+            
+            //group_chat_ended
             else{
                 print("in else again saving 0 in groupcall check")
                 UserDefaults.standard.setValue("0", forKey: "groupchat")
             }
 
             }
+            
+        }
+        
+        if type == "ChatmemberEnds_groupchat"{
+            
+            print("Ending Group Chat")
+            NotificationCenter.default.post(name: Notification.Name("chatmemberEnds_chat"), object: nil)
+            UserDefaults.standard.setValue("0", forKey: "groupchat")
             
         }
         
@@ -396,7 +407,7 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
         DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
             // Ensure that the delegate is set and the function is implemented
            
-                NotificationCenter.default.post(name: .grouchatAccepted, object: nil,  userInfo: ["callerid": self.groupChat_AcceptId])
+            NotificationCenter.default.post(name: .grouchatAccepted, object: nil,  userInfo: ["callerid": self.chatSenderID])
                    
                 return
            
@@ -504,6 +515,22 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
        userID = String(UserDefaults.standard.integer(forKey: "userID"))
         // Send call initiation message
         let callData: [String: Any] = ["type": "group_call_accepted", "from": userID, "caller1": caller1,"caller2":caller2]
+        do {
+            print("\nAccepting group call : \(callData)")
+            let jsonData = try JSONSerialization.data(withJSONObject: callData, options: [])
+            socket.write(data: jsonData)
+            
+        } catch {
+            print("Error serializing call canceling data: \(error)")
+        }
+    }
+    
+    func GroupCall_End( caller1: String , caller2 : String) {
+       
+        self.connectSocket()
+       userID = String(UserDefaults.standard.integer(forKey: "userID"))
+        // Send call initiation message
+        let callData: [String: Any] = ["type": "group_call_end", "from": userID, "caller1": caller1,"caller2":caller2]
         do {
             print("\nAccepting group call : \(callData)")
             let jsonData = try JSONSerialization.data(withJSONObject: callData, options: [])

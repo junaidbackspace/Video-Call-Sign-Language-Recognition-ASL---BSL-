@@ -94,6 +94,10 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
  
     @IBOutlet weak var OutLetSwitchCam: UIButton!
     @IBOutlet weak var OutletbtnAddCall : UIButton!
+    
+    @IBOutlet weak var groupchat_View : UIView!
+    @IBOutlet weak var groupmember_Profile : UIImageView!
+    @IBOutlet weak var groupmember_Name : UILabel!
     let myLangType = UserDefaults.standard.string(forKey: "disabilityType")!
 
     
@@ -367,6 +371,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         
         NotificationCenter.default.addObserver(self, selector: #selector(EnableGroup_Chat(_:)), name: Notification.Name("Noti_GroupChatAccepted"), object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(member_EndsChat), name: Notification.Name("chatmemberEnds_chat"), object: nil)
         
         #if targetEnvironment(simulator)
         // simulator does not have camera
@@ -429,6 +434,12 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         self.setupUI()
     }
     
+    
+    @objc func member_EndsChat()
+    {
+        print("group member leaved")
+        groupchat_View.isHidden = true
+    }
     var groupFriendId = " "
     var ShouldGroupChat = false
     @objc func EnableGroup_Chat(_ notification: Notification)
@@ -439,6 +450,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         self.ShouldGroupChat = true
         if let value = notification.userInfo?["callerid"] as? String {
             
+            groupchat_View.isHidden = false
+            fetchGroupMemberData(callerId: value)
             if myLangType == "deaf" //|| myLangType == "blind"
            {
             webRTCClient.ShouldGroupChat = true
@@ -454,25 +467,66 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
             speechRecognizer?.groupFriendId = value
             speechRecognizer?.isStopping = false
             self.speechRecognizer!.startRecognition()
-            }
-            }
-            
-//            if speechRecognizer?.isStopping != false{
-//            print("Enabling group chat in view controller by turning on S_Recognizer")
-//
-//            speechRecognizer?.ShouldGroupChat = true
-//            speechRecognizer?.groupFriendId = value
-//            speechRecognizer?.isStopping = false
-//            self.speechRecognizer!.startRecognition()
-//            }
-            else{
+                    }
+                }
+
+                else{
                 print("Speech Recog Already on")
-            }
+                    }
             
             
            }
         }
+        
         }
+    }
+    
+    
+    func fetchGroupMemberData(callerId : String) {
+       
+        let userID = String(callerId)
+        let Url = "\(Constants.serverURL)/user/userdetails/\(userID)"
+        print("URL: "+Url)
+      
+        let url = URL(string: Url)!
+        
+        self.serverWrapper.fetchUserInfo(baseUrl: url, structure: singleUserInfo.self) { userInfo, error in
+            if let error = error {
+                print("inner URL: \(Url)")
+                print("Error in receiving:", error.localizedDescription)
+            } else if let userObject = userInfo {
+                print("JSON Data:", userObject)
+                self.processContactsData(userObject)
+            } else {
+                print("No data received from the server")
+            }
+        }
+    }
+
+    func processContactsData(_ userObject: singleUserInfo) {
+        print("Processing user data")
+        let Fname = userObject.fname
+        let Lname = userObject.lname
+        let member_Profile = userObject.profile_picture
+        
+       
+        
+        let group = DispatchGroup()
+          group.enter()
+
+        let urlString = "\(Constants.serverURL)\(member_Profile)"
+
+        if let url = URL(string: urlString) {
+            groupchat_View.isHidden = false
+            groupmember_Profile.kf.setImage(with: url, placeholder: UIImage(named: "No image found"))
+            groupmember_Name.text = Fname+" "+Lname
+        }
+        else {
+            // Handle invalid URL
+            print("Invalid URL:", urlString)
+        }
+        
+        group.leave()
     }
     
     var overlayView: UIView!
@@ -631,6 +685,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         remoteVideoViewContainter.addSubview(OutLetHangUp)
         remoteVideoViewContainter.addSubview(OutLetSwitchCam)
         remoteVideoViewContainter.addSubview(OutletbtnAddCall)
+        remoteVideoViewContainter.addSubview(groupchat_View)
 
         remoteVideoViewContainter.addSubview(msgtextView)
        
@@ -671,11 +726,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
     @objc func hangupButtonTapped(){
         print("hangup Tapped")
-//        if myLangType == "blind"
-//        {
-//        speechRecognizer?.isStopping = true
-//        speechRecognizer?.stopRecognition()
-//        }
+
         self.ShouldGroupChat = false
         speechRecognizer?.ShouldGroupChat = false
         
@@ -723,6 +774,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
     func disconnectWebRTC() {
         
+        
         UserDefaults.standard.setValue("0", forKey: "groupchat")
         var chatmemberID = "0"
         if UserDefaults.standard.object(forKey: "groupchatmember") != nil
@@ -736,12 +788,14 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
             if webRTCClient.isConnected {
                 webRTCClient.disconnect()
                 DispatchQueue.main.async {
+                    self.groupchat_View.isHidden = true
                     print("Closing Video Call")
                     self.navigationController?.popViewController(animated: true)
                     self.navigationController?.popViewController(animated: true)
                 }
             } else {
                 DispatchQueue.main.async {
+                    self.groupchat_View.isHidden = true
                     print("WebRTC is disconnected , now backing to screen")
                     self.navigationController?.popViewController(animated: true)
                     self.navigationController?.popViewController(animated: true)
