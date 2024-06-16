@@ -13,6 +13,7 @@ class GroupCall_deaf_ViewController: UIViewController, AVCapturePhotoCaptureDele
     var user = User()
     var serverWrapper = APIWrapper()
     var captureTimer: Timer?
+    var overlayView: UIView!
     
     var captureSession: AVCaptureSession!
     var stillImageOutput: AVCapturePhotoOutput!
@@ -20,6 +21,9 @@ class GroupCall_deaf_ViewController: UIViewController, AVCapturePhotoCaptureDele
     var capturedImage: UIImage?
     var userfirst_id = 0
     var usersecond_id = 0
+    var Name_First_User = ""
+    var Name_Second_User = ""
+    
     let userID = UserDefaults.standard.string(forKey: "userID")!
     
     @IBOutlet weak var Profilepic_Firstuser : UIImageView!
@@ -49,12 +53,71 @@ class GroupCall_deaf_ViewController: UIViewController, AVCapturePhotoCaptureDele
         
         NotificationCenter.default.addObserver(self, selector: #selector(messageRecieved(_:)), name: Notification.Name("ChatMsg_Recieved"), object: nil)
         
-        self.captureTimer = Timer.scheduledTimer(timeInterval: 1.0 , target: self, selector: #selector(self.takePicture), userInfo: nil, repeats: true)
+        NotificationCenter.default.addObserver(self, selector: #selector(hangupCall), name: Notification.Name("groupChatEnd"), object: nil)
         
-      
+        
+        self.captureTimer = Timer.scheduledTimer(timeInterval: 2.0 , target: self, selector: #selector(self.takePicture), userInfo: nil, repeats: true)
+        
+        var doubletap = UITapGestureRecognizer(target: self, action: #selector(predictWords))
+        doubletap.numberOfTapsRequired = 2
+        view.addGestureRecognizer(doubletap)
        
+        
+        overlayView = UIView(frame: view.bounds)
+        overlayView.backgroundColor = UIColor.clear
+        overlayView.isUserInteractionEnabled = false
+        view.addSubview(overlayView)
     }
     
+    
+    var static_frameCheck = true
+    @objc func predictWords()  {
+        
+        //toggle static , dynamic
+        if static_frameCheck {
+           
+            performColorFade()
+            static_frameCheck = false
+            
+        }
+        else{
+            performColorFade()
+            
+            static_frameCheck = true
+            }
+        
+        }
+    
+    func performColorFade() {
+            // Set the initial color of the overlay view
+            overlayView.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.4)
+            
+            // Animate the color fade in and out
+            UIView.animate(withDuration: 0.5, animations: {
+                self.overlayView.backgroundColor = UIColor.blue.withAlphaComponent(0.2)
+            }) { _ in
+                UIView.animate(withDuration: 0.5, animations: {
+                    self.overlayView.backgroundColor = UIColor.clear
+                })
+            }
+        }
+    
+    
+    
+    @objc func takePicture() {
+        
+        let audioSession = AVAudioSession.sharedInstance()
+            do {
+                try audioSession.setCategory(.playAndRecord, mode: .default, options: [.mixWithOthers])
+                try audioSession.setActive(true)
+            } catch {
+                print("Error setting up audio session: \(error)")
+            }
+
+        
+        let settings = AVCapturePhotoSettings()
+        stillImageOutput.capturePhoto(with: settings, delegate: self)
+    }
     
     @objc func messageRecieved(_ notification : Notification)
      {
@@ -62,11 +125,11 @@ class GroupCall_deaf_ViewController: UIViewController, AVCapturePhotoCaptureDele
              if let Message = notification.userInfo?["message"] as? String {
          if userfirst_id == Int(userid) {
              
-            textMessage.text = userid+": "+Message
+            textMessage.text = Name_First_User+": "+Message
              
          }
          else{
-            textMessage.text = userid+": "+Message
+            textMessage.text = Name_Second_User+": "+Message
          }
              
              }
@@ -119,10 +182,7 @@ class GroupCall_deaf_ViewController: UIViewController, AVCapturePhotoCaptureDele
            videoPreviewLayer.frame = cameraView.bounds
        }
 
-       @objc func takePicture() {
-           let settings = AVCapturePhotoSettings()
-           stillImageOutput.capturePhoto(with: settings, delegate: self)
-       }
+      
 
        func stopCamera() {
            captureSession.stopRunning()
@@ -133,27 +193,36 @@ class GroupCall_deaf_ViewController: UIViewController, AVCapturePhotoCaptureDele
            guard let imageData = photo.fileDataRepresentation() else { return }
            let static_image = UIImage(data: imageData)
 
-        self.predict_staticSign(image: static_image!)
-           // Process the image as needed, e.g., assign to an UIImageView
-//           let imageView = UIImageView(image: image)
-//           imageView.frame = cameraView.bounds
-//           imageView.contentMode = .scaleAspectFit
-//           cameraView.addSubview(imageView)
+        self.sendtoServer(image: static_image!)
+          
        }
    
    
-    func predict_staticSign(image : UIImage)
+    func sendtoServer(image : UIImage)
     {
-        let apiUrl = URL(string: "\(Constants.serverURL)/asl-signs/predict/")!
-        serverWrapper.predictAlphabet(baseUrl: apiUrl, image: image) { [self] predictedLabel, error in
-                         if let error = error {
-                             print("Error: \(error.localizedDescription)")
-                         } else if let predictedLabel = predictedLabel {
-                             print("Predicted Label: \(predictedLabel)")
-                            socketsClass.shared.Send_GroupChatMsgByDeaf(friendId: String(userfirst_id), Message: predictedLabel, from: userID )
-                            socketsClass.shared.Send_GroupChatMsgByDeaf(friendId: String(usersecond_id), Message: predictedLabel, from: userID )
-                         }
-                     }
+        //MARK:- predicting alphabets now
+        if static_frameCheck{
+            
+//        let apiUrl = URL(string: "\(Constants.serverURL)/asl-signs/predict/")!
+//        serverWrapper.predictAlphabet(baseUrl: apiUrl, image: image) { [self] predictedLabel, error in
+//                         if let error = error {
+//                             print("Error: \(error.localizedDescription)")
+//                         } else if let predictedLabel = predictedLabel {
+//                             print("Predicted Label: \(predictedLabel)")
+//                            socketsClass.shared.Send_GroupChatMsgByDeaf(friendId: String(userfirst_id), Message: predictedLabel, from: userID )
+//                            socketsClass.shared.Send_GroupChatMsgByDeaf(friendId: String(usersecond_id), Message: predictedLabel, from: userID )
+//                         }
+//                     }
+            
+            predict_staticSign(image: image)
+    }
+    
+        //MARK:- predicting Words now
+    else{
+    predict_WordsSign(image: image)
+    
+    
+        }
     }
     
     
@@ -215,4 +284,46 @@ class GroupCall_deaf_ViewController: UIViewController, AVCapturePhotoCaptureDele
         }
 
 
+    
+    
+    func predict_staticSign(image : UIImage)
+    {
+        let apiUrl = URL(string: "\(Constants.serverURL)/asl-Updatedsigns/detect_hand")!
+                     serverWrapper.predictAlphabet(baseUrl: apiUrl, image: image) { predictedLabel, error in
+                         if let error = error {
+                             print("Error: \(error.localizedDescription)")
+                         }
+                         else if let predictedLabel = predictedLabel {
+                            
+                             print("Predicted Label: \(predictedLabel)")
+                            
+                            
+                            socketsClass.shared.Send_GroupChatMsgByDeaf(friendId: String(self.userfirst_id), Message: predictedLabel, from: self.userID )
+                            socketsClass.shared.Send_GroupChatMsgByDeaf(friendId: String(self.usersecond_id), Message: predictedLabel, from: self.userID )
+                            
+                            
+                            }
+                         }
+                     
+    }
+    
+    
+    //prediction words
+    func predict_WordsSign(image : UIImage)
+    {
+
+        let apiUrl = URL(string: "\(Constants.serverURL)/asl-Updatedsigns/predictWP")!
+        serverWrapper.predictWords(baseUrl: apiUrl, image: image) { predictedLabel, error in
+                         if let error = error {
+                             print("Error: \(error.localizedDescription)")
+                         } else if let predictedLabel = predictedLabel {
+                             print("Predicted Word: \(predictedLabel)")
+                             
+                            socketsClass.shared.Send_GroupChatMsgByDeaf(friendId: String(self.userfirst_id), Message: predictedLabel, from: self.userID )
+                            socketsClass.shared.Send_GroupChatMsgByDeaf(friendId: String(self.usersecond_id), Message: predictedLabel, from: self.userID )
+                         }
+    }
+    
+    }
+    
 }

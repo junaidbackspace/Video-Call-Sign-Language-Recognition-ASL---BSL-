@@ -48,6 +48,15 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
     
          override func viewDidLoad() {
              super.viewDidLoad()
+            
+            
+            if let image = UIImage(named: "video-conference") {
+                        // Set the image to the UIImageView
+                profilePic.image = image
+                    } else {
+                        print("\nProfile Group Image not found .\n")
+                    }
+            
             var is_ringon = UserDefaults.standard.string(forKey: "notifi_sound")
             if is_ringon == "on"
             {
@@ -79,6 +88,9 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
             
             //if group chat
             else {
+                
+               
+                
                 let group = DispatchGroup()
                 
                 group.enter()
@@ -289,6 +301,8 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
             }
         //it is Group Chat
         else{
+            
+            
             let myLangType = UserDefaults.standard.string(forKey: "disabilityType")!
             
             if myLangType == "deaf"
@@ -300,6 +314,8 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
                     print("call friend id : \(self.calllerid)")
                 controller.userfirst_id = caller1_id
                 controller.usersecond_id = caller2_id
+                controller.Name_First_User = caller1Name
+                controller.Name_Second_User = caller2Name
                 controller.modalPresentationStyle = .fullScreen
                   self.navigationController?.pushViewController(controller, animated: true)
             
