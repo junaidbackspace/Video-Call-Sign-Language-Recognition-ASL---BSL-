@@ -100,12 +100,16 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     var groupFriendId = " "
     let userID = UserDefaults.standard.string(forKey: "userID")!
 //    MARK:- static frames
+    
     var Static_captureTimer: Timer?
     var stop_Staticframe_check = true
     var should_predictWord_check = false
+    var signtype = UserDefaults.standard.string(forKey: "SignType")
     
     
     func start_static_CaptureFrames() {
+        print("Sign type : \(signtype)")
+        
         if stop_Staticframe_check{
             Static_captureTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(Static_captureFrame), userInfo: nil, repeats: true)
         }
@@ -120,7 +124,8 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
             {
             let static_image =  self.localRenderView!.asImage()
                 
-                
+                if self.signtype == "ASL"{
+                    
                 if !self.should_predictWord_check{
                         self.predict_staticSign(image: static_image)
                         self.delegate?.removeBorderAndGlow()
@@ -132,6 +137,11 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
                     
                     self.predict_WordsSign(image: static_image)
              
+                }
+            }
+               else{
+                    print("Predicting BSL NOW")
+                self.predict_BSL_Sign(image: static_image)
                 }
             }
         }
@@ -221,6 +231,25 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
                              print("Error: \(error.localizedDescription)")
                          } else if let predictedLabel = predictedLabel {
                              print("Predicted Word: \(predictedLabel)")
+                             self.sendMessge(message: predictedLabel)
+                            
+                            if self.ShouldGroupChat{
+                                socketsClass.shared.Send_GroupChatMsg(friendId: self.groupFriendId, Message: predictedLabel, from : self.userID)
+                            }
+                         }
+                     }
+    }
+    
+    //prediction BSL
+    func predict_BSL_Sign(image : UIImage)
+    {
+
+        let apiUrl = URL(string: "\(Constants.serverURL)/asl-Updatedsigns/predictBSL")!
+        serverWrapper.predictBSL(baseUrl: apiUrl, image: image) { predictedLabel, error in
+                         if let error = error {
+                             print("Error: \(error.localizedDescription)")
+                         } else if let predictedLabel = predictedLabel {
+                             print("Predicted BSL : \(predictedLabel)")
                              self.sendMessge(message: predictedLabel)
                             
                             if self.ShouldGroupChat{
