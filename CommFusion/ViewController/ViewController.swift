@@ -11,6 +11,8 @@ import Starscream
 import WebRTC
 import UIKit
 import Speech
+import AVFoundation
+
 
 class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate, CameraSessionDelegate {
     
@@ -73,6 +75,36 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
             }
         }
     }
+    
+    
+    //MARK:- deaf and mute signs
+    private var playedGifs: Set<String> = []
+    private var wordToGifMap: [String: String] = [
+        "hello": "hello.gif",
+        "how": "howareyou.gif",
+        "cool": "cool.gif",
+        "happy": "happy.gif",
+        "fine": "iamfine.gif",
+        "learning": "iamlearning.gif",
+        "love": "iloveyou.gif",
+        "calm": "keepcalmandstayhome.gif",
+        "kiss": "kiss.gif",
+        "me": "me.gif",
+        "meet": "nicetomeetyou.gif",
+        "no": "no.gif",
+        "ok": "ok.gif",
+        "please": "please.gif",
+        "sorry": "sorry.gif",
+        "super": "super.gif",
+        "thank": "thankyou.gif",
+        "try": "tryagain.gif",
+        "understand": "understand.gif",
+        "from": "whereareyoufrom.gif",
+        "wonderful": "wonderful.gif",
+        "you": "you.gif"
+        // Add more mappings as needed
+    ]
+    
     
     @IBAction func btnAddCall(_ sender  : Any)
     {
@@ -337,7 +369,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
     var v_id = 0
     
-  
+//    let gifchecker = GifManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -1040,7 +1072,7 @@ extension ViewController {
         }
     }
     
-   
+
     
     func didReceiveMessage(message: String) {
         print("viewController message recieved : \(message)")
@@ -1110,7 +1142,12 @@ extension ViewController {
             cleanupPlayer()
         }
         else {
-            
+            //displaying signs
+            if myLangType == "deaf"
+            {
+                print("Recieving msg : \(message)")
+                processTranscription(message)
+            }
         }
         
         //for text to speech
@@ -1126,14 +1163,27 @@ extension ViewController {
         }
     }
         
-//    func configureAudioSession() {
-//        do {
-//            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
-//            try AVAudioSession.sharedInstance().setActive(true)
-//        } catch {
-//            print("Failed to set up audio session: \(error)")
-//        }
-//    }
+
+    func processTranscription(_ transcription: String) {
+        let words = transcription.lowercased().split(separator: " ")
+        
+        for word in words {
+            let wordStr = String(word)
+            if let gifName = wordToGifMap[wordStr], !playedGifs.contains(wordStr) {
+               
+                playedGifs.insert(wordStr)
+                
+                print("giving text for video : \(wordStr)")
+               
+                play_sign_gif(name: wordStr)
+                DispatchQueue.main.asyncAfter(deadline: .now()+2)
+                {
+                    self.cleanupPlayer()
+                }
+            }
+        }
+    }
+    
     
     func speak(text: String) {
         // Check if the speech synthesizer is speaking
@@ -1231,9 +1281,56 @@ extension ViewController {
        }
 
       
-//           cleanupPlayer()
-       
-   
+
+    func play_sign_gif(name: String) {
+            // Clean up any existing GIF and views
+            cleanupGif()
+
+            guard let gifPath = Bundle.main.path(forResource: name.lowercased(), ofType: "gif") else {
+                print("GIF file not found.")
+                return
+            }
+
+            guard let gifData = NSData(contentsOfFile: gifPath) else {
+                print("Failed to load GIF data.")
+                return
+            }
+
+            let gif = UIImage.gif(data: gifData as Data)
+            
+            // Define the frame for the GIF image view
+            let gifWidth: CGFloat = 200.0 // specify desired width
+            let gifHeight: CGFloat = 150.0 // specify desired height
+            let xPos: CGFloat = (self.view.bounds.width - gifWidth) / 2 // center horizontally
+            let yPos: CGFloat = (self.view.bounds.height - gifHeight) - 150 // position vertically
+
+            // Set up UIImageView for GIF
+            let gifImageView = UIImageView(image: gif)
+            gifImageView.frame = CGRect(x: xPos, y: yPos, width: gifWidth, height: gifHeight)
+            gifImageView.contentMode = .scaleAspectFill
+            
+            // Add the GIF UIImageView to the view
+            SignsvideoContainerView = UIView(frame: view.bounds)
+            if let SignsvideoContainerView = SignsvideoContainerView {
+                SignsvideoContainerView.addSubview(gifImageView)
+                view.addSubview(SignsvideoContainerView)
+                view.bringSubviewToFront(OutLetHangUp)
+            }
+        }
+
+
+    
+    @objc func stopGif() {
+            cleanupGif()
+        }
+        
+        func cleanupGif() {
+            if let SignsvideoContainerView = SignsvideoContainerView {
+                SignsvideoContainerView.removeFromSuperview()
+            }
+            SignsvideoContainerView = nil
+        }
+    
 
     func play_sign_video(name  : String) {
         
