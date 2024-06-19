@@ -1,6 +1,5 @@
 import UIKit
-import TensorFlowLite
-
+import Alamofire
 
 class UploadCapturedImageViewController: UIViewController {
     
@@ -158,15 +157,40 @@ class UploadCapturedImageViewController: UIViewController {
             print("Text field is nil")
             return
         }
-        
-        // Use the text variable here as needed
-        print("Text from text field: \(text)")
+        trainModel()
     }
     
     deinit {
         // Remove keyboard notification observers when the view controller is deallocated
         NotificationCenter.default.removeObserver(self)
     }
+    
+    
+    func trainModel() {
+        let url = "\(Constants.serverURL)/testing-CustomSigns/train/"
+            AF.upload(multipartFormData: { multipartFormData in
+                for (index, image) in self.images.enumerated() {
+                    if let imageData = image.jpegData(compressionQuality: 0.5) {
+                        multipartFormData.append(imageData, withName: "images[\(index)]", fileName: "image_\(index).jpg", mimeType: "image/jpeg")
+                    }
+                }
+                multipartFormData.append(self.label.data(using: .utf8)!, withName: "\(textField?.text)")
+            }, to: url)
+            .uploadProgress { progress in
+                print("Upload Progress: \(progress.fractionCompleted)")
+            }
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    print("Training Response: \(value)")
+                    // Handle success response
+                case .failure(let error):
+                    print("Error: \(error)")
+                    // Handle failure
+                }
+            }
+        }
+    
 }
 
 

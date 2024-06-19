@@ -1,44 +1,36 @@
 PODS:
+  - Alamofire (5.9.1)
   - DropDown (2.3.13)
   - GoogleWebRTC (1.1.32000)
   - Kingfisher (7.11.0)
   - Starscream (3.0.6)
   - SwiftGifOrigin (1.7.0)
-  - TensorFlowLiteC (2.14.0):
-    - TensorFlowLiteC/Core (= 2.14.0)
-  - TensorFlowLiteC/Core (2.14.0)
-  - TensorFlowLiteSwift (2.14.0):
-    - TensorFlowLiteSwift/Core (= 2.14.0)
-  - TensorFlowLiteSwift/Core (2.14.0):
-    - TensorFlowLiteC (= 2.14.0)
 
 DEPENDENCIES:
+  - Alamofire
   - DropDown
   - GoogleWebRTC
   - Kingfisher
   - Starscream (~> 3.0.2)
   - SwiftGifOrigin
-  - TensorFlowLiteSwift
 
 SPEC REPOS:
   trunk:
+    - Alamofire
     - DropDown
     - GoogleWebRTC
     - Kingfisher
     - Starscream
     - SwiftGifOrigin
-    - TensorFlowLiteC
-    - TensorFlowLiteSwift
 
 SPEC CHECKSUMS:
+  Alamofire: f36a35757af4587d8e4f4bfa223ad10be2422b8c
   DropDown: 8a2116376c1981888557f72ec2ffc9a5e0e456ec
   GoogleWebRTC: 4d261187b30512efdb711d21fa961a6adf138717
   Kingfisher: b9c985d864d43515f404f1ef4a8ce7d802ace3ac
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
   SwiftGifOrigin: fbd6cf37afcfcf97a5c3db996ddc0492e5c5c145
-  TensorFlowLiteC: a836de9b6e6018665ccc349538bdd2c3b80dd7a5
-  TensorFlowLiteSwift: f706b143b69d7bf433aba7b08049bdd11c321a10
 
-PODFILE CHECKSUM: c662e2982271390b0779e2f299b7a4dc7b7127aa
+PODFILE CHECKSUM: e3bd2d589c8f04b66377276891ef7980fed8640f
 
 COCOAPODS: 1.13.0

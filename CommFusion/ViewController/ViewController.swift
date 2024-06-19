@@ -1,10 +1,4 @@
-//
-//  ViewController.swift
-//  SimpleWebRTC
-//
-//  Created by n0 on 2019/01/05.
-//  Copyright © 2019年 n0. All rights reserved.
-//
+
 
 import UIKit
 import Starscream
