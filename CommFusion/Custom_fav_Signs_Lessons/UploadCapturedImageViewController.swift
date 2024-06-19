@@ -15,9 +15,14 @@ class UploadCapturedImageViewController: UIViewController {
     var progressView: UIProgressView!
     var timer: Timer?
     
+    var signstext : [String] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if let customSigns = UserDefaults.standard.stringArray(forKey: "customsigns")
+        {
+            signstext = customSigns
+        }
         // Save images to disk and generate URLs
         imageUrls = saveImagesToDisk(images: images)
         
@@ -168,6 +173,8 @@ class UploadCapturedImageViewController: UIViewController {
             return
         }
         
+       // adding in custom signs Array
+        signstext.append(text)
         // Reset text field border if valid text is entered
         textField?.layer.borderColor = nil
         textField?.layer.borderWidth = 0.0
