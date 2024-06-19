@@ -10,15 +10,20 @@ import UIKit
 
 class CustomSignsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
+    var signstext : [String] = []
     override func viewDidLoad() {
         super.viewDidLoad()
+        if let customSigns = UserDefaults.standard.stringArray(forKey: "customsigns")
+        {
+            signstext = customSigns
+        }
         tble.delegate = self
         tble.dataSource = self
         // Do any additional setup after loading the view.
     }
     
 
-    var signtext = ["Hello Junaid","Whats going on","i am fine","How was the day","Did you do diner","i am Beautiful"]
+//    var signtext = ["Hello Junaid","Whats going on","i am fine","How was the day","Did you do diner","i am Beautiful"]
     let ApprovalstatusImages = ["approved", "rejected", "pending"]
 
     @IBOutlet weak var tble: UITableView!
@@ -30,7 +35,7 @@ class CustomSignsViewController: UIViewController, UITableViewDataSource, UITabl
         return 80
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return signtext.count
+        return signstext.count
     }
     
    
@@ -51,7 +56,7 @@ class CustomSignsViewController: UIViewController, UITableViewDataSource, UITabl
             cell?.Approvalstatus?.image = image
                 }
        
-        cell?.signtext.text =  signtext[indexPath.row]
+        cell?.signtext.text =  signstext[indexPath.row]
         
        
         return cell!
@@ -65,7 +70,7 @@ class CustomSignsViewController: UIViewController, UITableViewDataSource, UITabl
         
         let controller = self.storyboard?.instantiateViewController(identifier: "playerController") as! PlayerLessonsViewController
         controller.trainingname =  "Custom Sign"
-        controller.signtext = signtext [indexPath.row]
+        controller.signtext = signstext [indexPath.row]
         controller.modalPresentationStyle = .fullScreen
         self.navigationController?.pushViewController(controller, animated: true)
         

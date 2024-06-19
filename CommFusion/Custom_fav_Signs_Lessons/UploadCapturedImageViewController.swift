@@ -200,6 +200,8 @@ class UploadCapturedImageViewController: UIViewController {
 
     
     func showSuccessAlert(message: String) {
+        
+        UserDefaults.standard.setValue(signstext, forKey: "customsigns")
         let alert = UIAlertController(title: "Success", message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { [weak self] _ in
             self?.navigateBack()
