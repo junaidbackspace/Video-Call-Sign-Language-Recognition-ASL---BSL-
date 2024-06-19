@@ -3,9 +3,14 @@ import UIKit
 
 class APIWrapper {
   
+    private let session: URLSession
 
-
-
+    init() {
+            let configuration = URLSessionConfiguration.default
+            configuration.timeoutIntervalForRequest = 300 // Set timeout to 300 seconds (5 minutes)
+            configuration.timeoutIntervalForResource = 300
+            session = URLSession(configuration: configuration)
+        }
 
     func insertData(baseUrl: String, userDictionary: [String: Any], completion: @escaping (String?, Error?) -> Void) {
         guard let url = URL(string: baseUrl) else {
@@ -600,5 +605,69 @@ class APIWrapper {
     }
 
     
+    func uploadCustom_SignsImages(user: String, label: String, images: [URL], completion: @escaping (Result<TrainResponse, Error>) -> Void) {
+        guard let url = URL(string: "\(Constants.serverURL)/testing-CustomSigns/train/") else {
+               completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
+               return
+           }
+           
+           var request = URLRequest(url: url)
+           request.httpMethod = "POST"
+           
+           let boundary = UUID().uuidString
+           request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+           
+           var data = Data()
+           
+           // Add user parameter
+           data.append("--\(boundary)\r\n".data(using: .utf8)!)
+           data.append("Content-Disposition: form-data; name=\"user\"\r\n\r\n".data(using: .utf8)!)
+           data.append("\(user)\r\n".data(using: .utf8)!)
+           
+           // Add label parameter
+           data.append("--\(boundary)\r\n".data(using: .utf8)!)
+           data.append("Content-Disposition: form-data; name=\"label\"\r\n\r\n".data(using: .utf8)!)
+           data.append("\(label)\r\n".data(using: .utf8)!)
+           
+           // Add images
+           for (index, imageUrl) in images.enumerated() {
+               guard let imageData = try? Data(contentsOf: imageUrl) else {
+                   completion(.failure(NSError(domain: "Failed to load image data", code: 0, userInfo: nil)))
+                   return
+               }
+               
+               data.append("--\(boundary)\r\n".data(using: .utf8)!)
+               data.append("Content-Disposition: form-data; name=\"images\"; filename=\"image\(index).jpg\"\r\n".data(using: .utf8)!)
+               data.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
+               data.append(imageData)
+               data.append("\r\n".data(using: .utf8)!)
+           }
+           
+           data.append("--\(boundary)--\r\n".data(using: .utf8)!)
+           
+           request.httpBody = data
+           
+           // Perform the request with the shared session
+           let task = session.dataTask(with: request) { (responseData, response, error) in
+               if let error = error {
+                   completion(.failure(error))
+                   return
+               }
+               
+               guard let responseData = responseData else {
+                   completion(.failure(NSError(domain: "No response data", code: 0, userInfo: nil)))
+                   return
+               }
+               
+               do {
+                   let response = try JSONDecoder().decode(TrainResponse.self, from: responseData)
+                   completion(.success(response))
+               } catch {
+                   completion(.failure(error))
+               }
+           }
+           
+           task.resume()
+       }
     
 }

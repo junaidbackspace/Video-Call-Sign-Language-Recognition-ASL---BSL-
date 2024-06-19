@@ -1,5 +1,4 @@
 PODS:
-  - Alamofire (5.9.1)
   - DropDown (2.3.13)
   - GoogleWebRTC (1.1.32000)
   - Kingfisher (7.11.0)
@@ -7,7 +6,6 @@ PODS:
   - SwiftGifOrigin (1.7.0)
 
 DEPENDENCIES:
-  - Alamofire
   - DropDown
   - GoogleWebRTC
   - Kingfisher
@@ -16,7 +14,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - Alamofire
     - DropDown
     - GoogleWebRTC
     - Kingfisher
@@ -24,13 +21,12 @@ SPEC REPOS:
     - SwiftGifOrigin
 
 SPEC CHECKSUMS:
-  Alamofire: f36a35757af4587d8e4f4bfa223ad10be2422b8c
   DropDown: 8a2116376c1981888557f72ec2ffc9a5e0e456ec
   GoogleWebRTC: 4d261187b30512efdb711d21fa961a6adf138717
   Kingfisher: b9c985d864d43515f404f1ef4a8ce7d802ace3ac
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
   SwiftGifOrigin: fbd6cf37afcfcf97a5c3db996ddc0492e5c5c145
 
-PODFILE CHECKSUM: e3bd2d589c8f04b66377276891ef7980fed8640f
+PODFILE CHECKSUM: b9da47896c32ae1f9582aa6377cf78545fc67261
 
 COCOAPODS: 1.13.0

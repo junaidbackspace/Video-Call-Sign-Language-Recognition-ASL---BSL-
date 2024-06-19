@@ -100,7 +100,7 @@ class AddCustomSignsViewController: UIViewController, AVCapturePhotoCaptureDeleg
     func captureImages() {
         var captureCount = 0
         let captureTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-            if captureCount < 10 {
+            if captureCount < 5 {
                 let settings = AVCapturePhotoSettings()
                 self.stillImageOutput.capturePhoto(with: settings, delegate: self)
                 captureCount += 1
@@ -118,10 +118,10 @@ class AddCustomSignsViewController: UIViewController, AVCapturePhotoCaptureDeleg
             
             timerLabel.text = String (capturedImages.count)
             print("Total Captured images",capturedImages.count)
-            if capturedImages.count == 10 { // Change this to the desired number of images
+            if capturedImages.count == 5 { // Change this to the desired number of images
               
                 
-                print("Captured 10 images")
+                print("Captured 5 images")
                 navigateToNextController()
             }
         }

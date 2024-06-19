@@ -98,15 +98,6 @@
 		652131312C21877A00A250D1 /* S-BSL.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 652130E32C21877900A250D1 /* S-BSL.jpg */; };
 		652131322C21877A00A250D1 /* Y-ASL.gif in Resources */ = {isa = PBXBuildFile; fileRef = 652130E42C21877900A250D1 /* Y-ASL.gif */; };
 		652C0AEE2BBC0A0C00D89A57 /* lessonsStrct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652C0AED2BBC0A0C00D89A57 /* lessonsStrct.swift */; };
-		6530B1182C1D7831005F0881 /* test_Custom_SingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6530B1172C1D7831005F0881 /* test_Custom_SingsViewController.swift */; };
-		6530B11D2C1D800B005F0881 /* Custom_signs_model.tflite in Resources */ = {isa = PBXBuildFile; fileRef = 6530B1092C1D5F14005F0881 /* Custom_signs_model.tflite */; };
-		6530B1212C1DC39A005F0881 /* LocalModelRetrainingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6530B1202C1DC39A005F0881 /* LocalModelRetrainingViewController.swift */; };
-		6530B1282C1DC7EF005F0881 /* 44.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 6530B1242C1DC7EE005F0881 /* 44.jpeg */; };
-		6530B1292C1DC7EF005F0881 /* 55.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 6530B1252C1DC7EE005F0881 /* 55.jpeg */; };
-		6530B12A2C1DC7EF005F0881 /* 33.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 6530B1262C1DC7EF005F0881 /* 33.jpeg */; };
-		6530B12B2C1DC7EF005F0881 /* 22.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 6530B1272C1DC7EF005F0881 /* 22.jpeg */; };
-		6530B12F2C1DC7F8005F0881 /* 11.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 6530B12E2C1DC7F8005F0881 /* 11.jpeg */; };
-		6530B1372C1DDB73005F0881 /* FineTuningModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6530B1362C1DDB73005F0881 /* FineTuningModelViewController.swift */; };
 		65357E1E2C083E96008C366D /* ChatScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65357E1D2C083E96008C366D /* ChatScreenViewController.swift */; };
 		65374FF62C0B1AB200CF5009 /* GroupCall_Blind_NormalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65374FF52C0B1AB200CF5009 /* GroupCall_Blind_NormalViewController.swift */; };
 		65374FFA2C0B1AEF00CF5009 /* GroupCall_deaf_ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65374FF92C0B1AEF00CF5009 /* GroupCall_deaf_ViewController.swift */; };
@@ -328,15 +319,6 @@
 		652130E32C21877900A250D1 /* S-BSL.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "S-BSL.jpg"; sourceTree = "<group>"; };
 		652130E42C21877900A250D1 /* Y-ASL.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "Y-ASL.gif"; sourceTree = "<group>"; };
 		652C0AED2BBC0A0C00D89A57 /* lessonsStrct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lessonsStrct.swift; sourceTree = "<group>"; };
-		6530B1092C1D5F14005F0881 /* Custom_signs_model.tflite */ = {isa = PBXFileReference; lastKnownFileType = file; path = Custom_signs_model.tflite; sourceTree = "<group>"; };
-		6530B1172C1D7831005F0881 /* test_Custom_SingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = test_Custom_SingsViewController.swift; sourceTree = "<group>"; };
-		6530B1202C1DC39A005F0881 /* LocalModelRetrainingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalModelRetrainingViewController.swift; sourceTree = "<group>"; };
-		6530B1242C1DC7EE005F0881 /* 44.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 44.jpeg; sourceTree = "<group>"; };
-		6530B1252C1DC7EE005F0881 /* 55.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 55.jpeg; sourceTree = "<group>"; };
-		6530B1262C1DC7EF005F0881 /* 33.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 33.jpeg; sourceTree = "<group>"; };
-		6530B1272C1DC7EF005F0881 /* 22.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 22.jpeg; sourceTree = "<group>"; };
-		6530B12E2C1DC7F8005F0881 /* 11.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 11.jpeg; sourceTree = "<group>"; };
-		6530B1362C1DDB73005F0881 /* FineTuningModelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FineTuningModelViewController.swift; sourceTree = "<group>"; };
 		65357E1D2C083E96008C366D /* ChatScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatScreenViewController.swift; sourceTree = "<group>"; };
 		65374FF52C0B1AB200CF5009 /* GroupCall_Blind_NormalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCall_Blind_NormalViewController.swift; sourceTree = "<group>"; };
 		65374FF92C0B1AEF00CF5009 /* GroupCall_deaf_ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCall_deaf_ViewController.swift; sourceTree = "<group>"; };
@@ -590,22 +572,6 @@
 			path = SplashScreen;
 			sourceTree = "<group>";
 		};
-		6530B1052C1D5553005F0881 /* Custom_Signs_model */ = {
-			isa = PBXGroup;
-			children = (
-				6530B12E2C1DC7F8005F0881 /* 11.jpeg */,
-				6530B1272C1DC7EF005F0881 /* 22.jpeg */,
-				6530B1262C1DC7EF005F0881 /* 33.jpeg */,
-				6530B1242C1DC7EE005F0881 /* 44.jpeg */,
-				6530B1252C1DC7EE005F0881 /* 55.jpeg */,
-				6530B1092C1D5F14005F0881 /* Custom_signs_model.tflite */,
-				6530B1202C1DC39A005F0881 /* LocalModelRetrainingViewController.swift */,
-				6530B1172C1D7831005F0881 /* test_Custom_SingsViewController.swift */,
-				6530B1362C1DDB73005F0881 /* FineTuningModelViewController.swift */,
-			);
-			name = Custom_Signs_model;
-			sourceTree = "<group>";
-		};
 		6557C1292C04F6CA00057048 /* AslSigns */ = {
 			isa = PBXGroup;
 			children = (
@@ -837,7 +803,6 @@
 			isa = PBXGroup;
 			children = (
 				652130962C21874F00A250D1 /* sings_words */,
-				6530B1052C1D5553005F0881 /* Custom_Signs_model */,
 				650C50DF2C0F03D400EE0F22 /* add_Call */,
 				6589ED7C2C07BEFF00A45276 /* Group_Chat */,
 				6557C1292C04F6CA00057048 /* AslSigns */,
@@ -1068,7 +1033,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				652130F12C21877A00A250D1 /* X-BSL.jpg in Resources */,
-				6530B11D2C1D800B005F0881 /* Custom_signs_model.tflite in Resources */,
 				652131192C21877A00A250D1 /* X-ASL.gif in Resources */,
 				6557C1712C051B3600057048 /* f.mp4 in Resources */,
 				6557C1722C051B3600057048 /* g.mp4 in Resources */,
@@ -1099,13 +1063,11 @@
 				652131302C21877A00A250D1 /* R-BSL.jpg in Resources */,
 				652131172C21877A00A250D1 /* L-ASL.gif in Resources */,
 				6557C1802C051B3600057048 /* u.mp4 in Resources */,
-				6530B12B2C1DC7EF005F0881 /* 22.jpeg in Resources */,
 				652130E82C21877A00A250D1 /* U-ASL.gif in Resources */,
 				652130FD2C21877A00A250D1 /* G-BSL.jpg in Resources */,
 				6557C1812C051B3600057048 /* v.mp4 in Resources */,
 				652131122C21877A00A250D1 /* kiss.gif in Resources */,
 				6521311D2C21877A00A250D1 /* K-ASL.gif in Resources */,
-				6530B1292C1DC7EF005F0881 /* 55.jpeg in Resources */,
 				652131322C21877A00A250D1 /* Y-ASL.gif in Resources */,
 				6521312E2C21877A00A250D1 /* B-BSL.jpg in Resources */,
 				6557C1822C051B3600057048 /* w.mp4 in Resources */,
@@ -1130,7 +1092,6 @@
 				652130F52C21877A00A250D1 /* F-ASL.gif in Resources */,
 				6557C16D2C051B1D00057048 /* d.mp4 in Resources */,
 				652131232C21877A00A250D1 /* Y-BSL.jpg in Resources */,
-				6530B12F2C1DC7F8005F0881 /* 11.jpeg in Resources */,
 				6557C16A2C051B1900057048 /* c.mp4 in Resources */,
 				6521312D2C21877A00A250D1 /* C-ASL.gif in Resources */,
 				652130F32C21877A00A250D1 /* W-BSL.jpg in Resources */,
@@ -1149,7 +1110,6 @@
 				652130E92C21877A00A250D1 /* O-ASL.gif in Resources */,
 				652131062C21877A00A250D1 /* P-BSL.jpg in Resources */,
 				652130EB2C21877A00A250D1 /* J-ASL.png in Resources */,
-				6530B1282C1DC7EF005F0881 /* 44.jpeg in Resources */,
 				652131252C21877A00A250D1 /* yes.gif in Resources */,
 				6521312A2C21877A00A250D1 /* happyfathersday.gif in Resources */,
 				652130FA2C21877A00A250D1 /* R-ASL.gif in Resources */,
@@ -1165,7 +1125,6 @@
 				658650122BECE4DD007946D7 /* glow.mp3 in Resources */,
 				AF711AAF21DFAD6E005CA4FA /* LaunchScreen.storyboard in Resources */,
 				65556C2D2BFD9ACE00B41A38 /* waiting.wav in Resources */,
-				6530B12A2C1DC7EF005F0881 /* 33.jpeg in Resources */,
 				6521311B2C21877A00A250D1 /* S-ASL.gif in Resources */,
 				652130FE2C21877A00A250D1 /* please.gif in Resources */,
 				652131292C21877A00A250D1 /* deafanddumb.gif in Resources */,
@@ -1301,7 +1260,6 @@
 				6573B4772B716AAE000DD658 /* onlineContactsViewController.swift in Sources */,
 				65861D982B77EEED0038A38D /* FavoriteLectureViewController.swift in Sources */,
 				6577F5142B78BB39005AD8AD /* CustomSignsViewController.swift in Sources */,
-				6530B1182C1D7831005F0881 /* test_Custom_SingsViewController.swift in Sources */,
 				65374FFA2C0B1AEF00CF5009 /* GroupCall_deaf_ViewController.swift in Sources */,
 				65357E1E2C083E96008C366D /* ChatScreenViewController.swift in Sources */,
 				65E2078A2B74061100978CAC /* UserProfileViewController.swift in Sources */,
@@ -1312,7 +1270,6 @@
 				6577F5102B78B650005AD8AD /* CustomSignsTableViewCell.swift in Sources */,
 				657F46782B8FB52300B391A6 /* Custom_LessonsListCollectionViewCell.swift in Sources */,
 				6509506B2B9488AD00035C85 /* UserStrct.swift in Sources */,
-				6530B1212C1DC39A005F0881 /* LocalModelRetrainingViewController.swift in Sources */,
 				65E2077C2B73A99E00978CAC /* AddContactViewController.swift in Sources */,
 				65C2B37B2B7A157400A916E6 /* ProfileSettingsViewController.swift in Sources */,
 				65A986F12B7CA8240011753C /* aboutAppViewController.swift in Sources */,
@@ -1322,7 +1279,6 @@
 				65CE5D3D2B75FCCF00771A84 /* CallLogsTableTableViewCell.swift in Sources */,
 				65A986ED2B7CA3250011753C /* termsConditionViewController.swift in Sources */,
 				6589ED752C07A96C00A45276 /* GroupsViewController.swift in Sources */,
-				6530B1372C1DDB73005F0881 /* FineTuningModelViewController.swift in Sources */,
 				651E5C0A2BA466DC005DB71C /* CallTranscriptionTableViewCell.swift in Sources */,
 				65E199572B7E244600149118 /* VideoCallViewController.swift in Sources */,
 				6589ED792C07BB3300A45276 /* GroupsTableTableViewCell.swift in Sources */,

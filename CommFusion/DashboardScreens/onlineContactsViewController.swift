@@ -8,7 +8,7 @@
 
 import UIKit
 import Kingfisher
-import TensorFlowLite
+
 
 class onlineContactsViewController: UIViewController,UITableViewDataSource, UITableViewDelegate  {
 //    func presentIncomingCallScreen(isRecieving: Bool) {
@@ -406,10 +406,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
 
     override func viewDidLoad() {
         super.viewDidLoad()
-    
-        
-        //MARK:-
-        
+  
         
         
         //MARK:-
