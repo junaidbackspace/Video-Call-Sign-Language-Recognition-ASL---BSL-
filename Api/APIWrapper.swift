@@ -7,8 +7,8 @@ class APIWrapper {
 
     init() {
             let configuration = URLSessionConfiguration.default
-            configuration.timeoutIntervalForRequest = 300 // Set timeout to 300 seconds (5 minutes)
-            configuration.timeoutIntervalForResource = 300
+            configuration.timeoutIntervalForRequest = 600 // Set timeout to 300 seconds (5 minutes)
+            configuration.timeoutIntervalForResource = 600
             session = URLSession(configuration: configuration)
         }
 
