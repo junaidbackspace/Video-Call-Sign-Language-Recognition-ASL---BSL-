@@ -113,6 +113,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         
     }
    
+    @IBOutlet weak var lbl_customSign : UILabel!
+    @IBOutlet weak var customSign_Switch : UISwitch!
     @IBOutlet weak var msgtextView: UITextView!
 
     @IBOutlet weak var OutLet_Mic_Mute: UIButton!
@@ -130,6 +132,24 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     
     
    
+    @IBAction func switchCustomSigns (_ sender : Any)
+    {
+        if customSign_Switch.isOn{
+            lbl_customSign.isHidden = false
+            print("\n\tcustom signs onn\n")
+            webRTCClient.shouldPredict_Custom_Signs = true
+        }
+        
+        else {
+            webRTCClient.shouldPredict_Custom_Signs = false
+            print("\n\tcustom signs off\n")
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now()+2)
+        {
+            self.lbl_customSign.isHidden = true
+            
+        }
+    }
     
     func configureScrollView(with text: String) {
         
@@ -350,6 +370,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         }
     }
     
+    
     func disableAutoLock() {
            // Save the current auto-lock state
            isAutoLockEnabledBeforeCall = UIApplication.shared.isIdleTimerDisabled
@@ -450,6 +471,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         msgtextView.layer.zPosition = 1
         OutLetSwitchCam.layer.zPosition = 1
         OutletbtnAddCall.layer.zPosition = 1
+        customSign_Switch.layer.zPosition = 1
+        lbl_customSign.layer.zPosition = 1
     
         if myLangType == "deaf"{
         let doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap(_:)))
@@ -643,6 +666,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         
         
        
+        groupchat_View?.subviews.last?.isUserInteractionEnabled = true
+        
         //MARK:- setting user defined size and color
         
         let size = font_sizeDefault.integer(forKey: "fontsize")
@@ -702,6 +727,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         localVideoView?.center.y = self.view.center.y - 180
         localVideoView?.center.x = self.view.center.x + 120
         localVideoView?.subviews.last?.isUserInteractionEnabled = true
+        
         self.view.addSubview(localVideoView!)
        
         
@@ -719,12 +745,14 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         remoteVideoViewContainter.addSubview(OutLetSwitchCam)
         remoteVideoViewContainter.addSubview(OutletbtnAddCall)
         remoteVideoViewContainter.addSubview(groupchat_View)
-
+        remoteVideoViewContainter.addSubview(customSign_Switch)
+        remoteVideoViewContainter.addSubview(lbl_customSign)
         remoteVideoViewContainter.addSubview(msgtextView)
        
         
         //Adding drag Gesture in local video view
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(dragview(_:)))
+        groupchat_View?.addGestureRecognizer(panGesture)
         localVideoView?.addGestureRecognizer(panGesture)
         
         // Create and configure the overlay view

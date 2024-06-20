@@ -670,4 +670,74 @@ class APIWrapper {
            task.resume()
        }
     
+    
+    func CustomSigns_Predict(url : URL,image: UIImage, user: String, completion: @escaping (Result<String, Error>) -> Void) {
+        // Convert UIImage to Data
+        guard let imageData = image.jpegData(compressionQuality: 1.0) else {
+            print("Error converting image to data")
+            return
+        }
+        
+        // Create a URLRequest
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        
+        // Define boundary string
+        let boundary = UUID().uuidString
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        
+        // Create multipart form data
+        var body = Data()
+        
+        // Append user data
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"user\"\r\n\r\n".data(using: .utf8)!)
+        body.append("\(user)\r\n".data(using: .utf8)!)
+        
+        // Append image data
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"image\"; filename=\"image.jpg\"\r\n".data(using: .utf8)!)
+        body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
+        body.append(imageData)
+        body.append("\r\n".data(using: .utf8)!)
+        
+        // End boundary
+        body.append("--\(boundary)--\r\n".data(using: .utf8)!)
+        
+        request.httpBody = body
+        
+        // Create and start a URLSession data task
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            guard let data = data else {
+                let error = NSError(domain: "com.yourapp.error", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data received"])
+                completion(.failure(error))
+                return
+            }
+            
+            do {
+                if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                   let prediction = jsonResponse["prediction"] as? String {
+                    completion(.success(prediction))
+                } else if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                          let error = jsonResponse["error"] as? String {
+                    let error = NSError(domain: "com.yourapp.error", code: -1, userInfo: [NSLocalizedDescriptionKey: error])
+                    completion(.failure(error))
+                } else {
+                    let error = NSError(domain: "com.yourapp.error", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid response from server"])
+                    completion(.failure(error))
+                }
+            } catch {
+                completion(.failure(error))
+            }
+        }
+        
+        task.resume()
+    }
+
+    
 }

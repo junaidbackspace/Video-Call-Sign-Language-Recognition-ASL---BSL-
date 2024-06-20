@@ -104,6 +104,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     var Static_captureTimer: Timer?
     var stop_Staticframe_check = true
     var should_predictWord_check = false
+    var shouldPredict_Custom_Signs = false
     var signtype = UserDefaults.standard.string(forKey: "SignType")
     
     
@@ -117,32 +118,47 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
 
         @objc func Static_captureFrame() {
             
+            
             if stop_Staticframe_check{
             print("taking picture")
             delegate?.change_localview_Color(color: UIColor.green, Glowcolor: UIColor.cyan)
-            DispatchQueue.main.asyncAfter(deadline: .now()+1)
+                DispatchQueue.main.asyncAfter(deadline: .now()+1.5)
             {
             let static_image =  self.localRenderView!.asImage()
                 
-                if self.signtype == "ASL"{
+                if self.shouldPredict_Custom_Signs{
+                    print("Prediction custom signs now")
+                    self.Predict_CustomSigns(image: static_image)
+                    DispatchQueue.main.asyncAfter(deadline: .now()+2)
+                    {
+                        print("moving forward to take pic after 2 sec ")
+                    }
                     
-                if !self.should_predictWord_check{
-                        self.predict_staticSign(image: static_image)
-                        self.delegate?.removeBorderAndGlow()
                 }
-                else{
-                    self.delegate?.removeBorderAndGlow()
-                    //predict word now
-                    print("\n}}}}}}}}NOW PREDICTING WORD\n")
+                else
+                    {
+                        if self.signtype == "ASL"{
                     
-                    self.predict_WordsSign(image: static_image)
+                        if !self.should_predictWord_check{
+                                self.predict_staticSign(image: static_image)
+                                self.delegate?.removeBorderAndGlow()
+                        }
+                        else{
+                            self.delegate?.removeBorderAndGlow()
+                            //predict word now
+                            print("\n}}}}}}}}NOW PREDICTING WORD\n")
+                    
+                            self.predict_WordsSign(image: static_image)
              
-                }
-            }
-               else{
-                    print("Predicting BSL NOW")
-                self.predict_BSL_Sign(image: static_image)
-                }
+                            }
+                        }
+                
+                        else{
+                        print("Predicting BSL NOW")
+                        self.predict_BSL_Sign(image: static_image)
+                        }
+                
+                    }
             }
         }
     }
@@ -259,6 +275,25 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
                      }
     }
 
+   func Predict_CustomSigns(image: UIImage) {
+    
+    serverWrapper.CustomSigns_Predict(url: URL(string : "\(Constants.serverURL)/testing-CustomSigns/predict/")!, image: image, user: userID){
+        result in
+            switch result {
+            case .success(let prediction):
+                print("Prediction: \(prediction)")
+                
+                self.sendMessge(message: prediction)
+               
+               if self.ShouldGroupChat{
+                   socketsClass.shared.Send_GroupChatMsg(friendId: self.groupFriendId, Message: prediction, from : self.userID)
+               }
+                
+            case .failure(let error):
+                print("Error: \(error.localizedDescription)")
+            }
+        }
+    }
     
 
     func createVideoFromFrames() {

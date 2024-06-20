@@ -257,6 +257,7 @@ class UploadCapturedImageViewController: UIViewController {
             timer = nil
             
             let color =  colors.randomElement()
+            colors.removeAll{ $0 == color}
             if color == "a"{
                 progressView.tintColor = UIColor.magenta
             }
@@ -273,7 +274,7 @@ class UploadCapturedImageViewController: UIViewController {
             }
             if color == "e"
             {
-                progressView.tintColor = UIColor.systemPink
+                progressView.tintColor = UIColor.systemRed
             }
             else {
                 progressView.tintColor = UIColor.cyan

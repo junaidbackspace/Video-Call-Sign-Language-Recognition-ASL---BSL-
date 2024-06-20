@@ -3868,6 +3868,23 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemTealColor"/>
                             </view>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" title="Custom Signs" translatesAutoresizingMaskIntoConstraints="NO" id="Pnt-5X-OO5">
+                                <rect key="frame" x="35" y="28" width="49" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="onTintColor" systemColor="systemGreenColor"/>
+                                <color key="thumbTintColor" systemColor="systemBackgroundColor"/>
+                                <connections>
+                                    <action selector="switchCustomSigns:" destination="BYZ-38-t0r" eventType="touchUpInside" id="hPA-wS-ToL"/>
+                                </connections>
+                            </switch>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Custom Signs" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CyG-Ol-6Xz">
+                                <rect key="frame" x="12" y="62" width="117" height="23"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                <color key="textColor" systemColor="systemGreenColor"/>
+                                <color key="highlightedColor" systemColor="systemGreenColor"/>
+                                <color key="shadowColor" systemColor="tertiarySystemBackgroundColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -3879,9 +3896,11 @@ By using the Application, you acknowledge that you have read, understood, and ag
                         <outlet property="OutLet_Mic_Mute" destination="6Zf-IW-vs7" id="hnq-dS-ppp"/>
                         <outlet property="OutLet_speaker_Mute" destination="MhY-XV-PtI" id="l17-RU-TDt"/>
                         <outlet property="OutletbtnAddCall" destination="OgF-7f-y16" id="cFJ-qc-ycf"/>
+                        <outlet property="customSign_Switch" destination="Pnt-5X-OO5" id="phk-wo-2Q8"/>
                         <outlet property="groupchat_View" destination="Rvi-E9-BLx" id="1Qp-ec-nuY"/>
                         <outlet property="groupmember_Name" destination="dSM-Aq-Zmv" id="ZYa-FI-H7d"/>
                         <outlet property="groupmember_Profile" destination="Igc-ff-UnN" id="Nh4-vR-dMZ"/>
+                        <outlet property="lbl_customSign" destination="CyG-Ol-6Xz" id="ImO-Xb-3IR"/>
                         <outlet property="msgtextView" destination="jim-tr-1r5" id="vVo-v4-RWL"/>
                     </connections>
                 </viewController>
