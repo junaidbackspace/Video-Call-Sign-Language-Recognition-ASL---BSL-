@@ -186,9 +186,7 @@ ws.on('close', function () {
     }
             
         else if (data.type === 'group_call_end') {
-            console.log(" group chat accepted");
            
-                
                 const caller1 = clients.get(data.caller1); // user
                 const caller2 = clients.get(data.caller2);
                 
@@ -196,7 +194,7 @@ ws.on('close', function () {
                
                 caller1.send(JSON.stringify({ type: 'ChatmemberEnds_groupchat',chatuserid: data.from}));
                 console.log(`Sending Group chat End Noti to : '${data.caller1}' by : '${data.from}'`);
-                caller2.send(JSON.stringify({ type: 'group_chat_ended',chatuserid: data.from }));
+                caller2.send(JSON.stringify({ type: 'ChatmemberEnds_groupchat',chatuserid: data.from }));
                 console.log(`Sending Group chat End Noti to : '${data.caller2}' by : '${data.from}'`);
                
         

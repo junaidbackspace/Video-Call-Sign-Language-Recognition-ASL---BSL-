@@ -532,7 +532,7 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
         // Send call initiation message
         let callData: [String: Any] = ["type": "group_call_end", "from": userID, "caller1": caller1,"caller2":caller2]
         do {
-            print("\nAccepting group call : \(callData)")
+            
             let jsonData = try JSONSerialization.data(withJSONObject: callData, options: [])
             socket.write(data: jsonData)
             

@@ -47,6 +47,7 @@ class GroupCall_Blind_NormalViewController: UIViewController {
             msg_seconduser.text = Message
         }
                 print(" chat message is : \(Message)")
+                TexttoSpeech(text : Message)
             
             }
         }
@@ -179,10 +180,7 @@ class GroupCall_Blind_NormalViewController: UIViewController {
             user.Lname = userObject.lname
             
             user.ProfilePicture = userObject.profile_picture
-//            user.Email = userObject.email
-//            user.UserType = userObject.disability_type
-//            user.BioStatus = userObject.bio_status
-//            user.OnlineStatus = userObject.online_status
+
             
             let group = DispatchGroup()
               group.enter()
@@ -210,4 +208,6 @@ class GroupCall_Blind_NormalViewController: UIViewController {
             group.leave()
         }
 
+    
+  
 }

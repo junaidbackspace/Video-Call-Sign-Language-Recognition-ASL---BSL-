@@ -75,6 +75,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     private var playedGifs: Set<String> = []
     private var wordToGifMap: [String: String] = [
         "hello": "hello.gif",
+        "helo": "hello.gif",
         "how": "howareyou.gif",
         "cool": "cool.gif",
         "happy": "happy.gif",
@@ -94,8 +95,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         "try": "tryagain.gif",
         "understand": "understand.gif",
         "from": "whereareyoufrom.gif",
-        "wonderful": "wonderful.gif",
-        "you": "you.gif"
+        "wonderful": "wonderful.gif"
+//        "you": "you.gif"
         // Add more mappings as needed
     ]
     
@@ -291,6 +292,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
          
             msgtextView.text = "Chat Member : "+Message
              print(" chat message is : \(Message)")
+                speak(text: Message)
              
              }
          
@@ -464,7 +466,10 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     @objc func member_EndsChat()
     {
         print("group member leaved")
-        groupchat_View.isHidden = true
+        groupchat_View?.isHidden = true
+        self.ShouldGroupChat = false
+        speechRecognizer?.ShouldGroupChat  = false
+        groupchat_View.removeFromSuperview()
     }
     var groupFriendId = " "
     var ShouldGroupChat = false
@@ -474,9 +479,11 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
             
         print("Entered in Group Chat Enable")
         self.ShouldGroupChat = true
+        speechRecognizer?.ShouldGroupChat = true
+        
         if let value = notification.userInfo?["callerid"] as? String {
             
-            groupchat_View.isHidden = false
+            groupchat_View?.isHidden = false
             fetchGroupMemberData(callerId: value)
             if myLangType == "deaf" //|| myLangType == "blind"
            {
@@ -488,7 +495,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
             if  !speechRecognizer!.isSpeechOn{
             if speechRecognizer?.isStopping == false{
             print("Enabling group chat in view controller by turning on S_Recognizer")
-            
+                self.ShouldGroupChat = true
             speechRecognizer?.ShouldGroupChat = true
             speechRecognizer?.groupFriendId = value
             speechRecognizer?.isStopping = false
@@ -543,7 +550,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         let urlString = "\(Constants.serverURL)\(member_Profile)"
 
         if let url = URL(string: urlString) {
-            groupchat_View.isHidden = false
+            groupchat_View?.isHidden = false
             groupmember_Profile.kf.setImage(with: url, placeholder: UIImage(named: "No image found"))
             groupmember_Name.text = Fname+" "+Lname
         }
@@ -814,14 +821,14 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
             if webRTCClient.isConnected {
                 webRTCClient.disconnect()
                 DispatchQueue.main.async {
-                    self.groupchat_View.isHidden = true
+                    self.groupchat_View?.isHidden = true
                     print("Closing Video Call")
                     self.navigationController?.popViewController(animated: true)
                     self.navigationController?.popViewController(animated: true)
                 }
             } else {
                 DispatchQueue.main.async {
-                    self.groupchat_View.isHidden = true
+                    self.groupchat_View?.isHidden = true
                     print("WebRTC is disconnected , now backing to screen")
                     self.navigationController?.popViewController(animated: true)
                     self.navigationController?.popViewController(animated: true)
@@ -1272,6 +1279,7 @@ extension ViewController {
            playerLayer = nil
            playerItem = nil
            player = nil
+           SignsvideoContainerView?.removeFromSuperview()
        }
 
       
@@ -1308,7 +1316,7 @@ extension ViewController {
             if let SignsvideoContainerView = SignsvideoContainerView {
                 SignsvideoContainerView.addSubview(gifImageView)
                 view.addSubview(SignsvideoContainerView)
-                view.bringSubviewToFront(OutLetHangUp)
+                
             }
         }
 
@@ -1361,8 +1369,6 @@ extension ViewController {
                     view.bringSubviewToFront(OutLetHangUp)
                 }
 
-//        // Observe when the video finishes playing
-//        NotificationCenter.default.addObserver(self, selector: #selector(videoDidFinish), name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
 
         // Start playing the video
         player?.play()
@@ -1378,7 +1384,7 @@ extension ViewController {
             playerLayer = nil
             playerItem = nil
             player = nil
-
+            SignsvideoContainerView?.removeFromSuperview()
             // Stop observing the notification
             NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
         }
@@ -1500,7 +1506,8 @@ class SpeechRecognizer: NSObject, SFSpeechRecognizerDelegate {
     
     var webRTCClient = WebRTCClient()
    var  groupFriendId = ""
-   var ShouldGroupChat = false
+   var
+    ShouldGroupChat = false
     var isSpeechOn = false
    let  userID = UserDefaults.standard.string(forKey: "userID")!
     
