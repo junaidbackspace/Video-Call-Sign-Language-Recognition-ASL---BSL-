@@ -105,7 +105,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     var stop_Staticframe_check = true
     var should_predictWord_check = false
     var shouldPredict_Custom_Signs = false
-    var signtype = UserDefaults.standard.string(forKey: "SignType")
+    let signtype = UserDefaults.standard.string(forKey: "SignType")
     
     
     func start_static_CaptureFrames() {
@@ -116,27 +116,38 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         }
         }
 
+    
+    var didGetCustomsign_Response = true
         @objc func Static_captureFrame() {
             
             
             if stop_Staticframe_check{
             print("taking picture")
-            delegate?.change_localview_Color(color: UIColor.green, Glowcolor: UIColor.cyan)
-                DispatchQueue.main.asyncAfter(deadline: .now()+1.5)
+           
+            DispatchQueue.main.asyncAfter(deadline: .now()+1.5)
             {
             let static_image =  self.localRenderView!.asImage()
                 
+                
                 if self.shouldPredict_Custom_Signs{
-                    print("Prediction custom signs now")
-                    self.Predict_CustomSigns(image: static_image)
-                    DispatchQueue.main.asyncAfter(deadline: .now()+2)
-                    {
-                        print("moving forward to take pic after 2 sec ")
-                    }
+                    self.delegate?.change_localview_Color(color: UIColor.yellow, Glowcolor: UIColor.green)
                     
+                    
+                    if self.didGetCustomsign_Response {
+                        print("Prediction custom signs now")
+                        self.didGetCustomsign_Response = false
+                        self.Predict_CustomSigns(image: static_image)
+                    
+                        
+                    }
                 }
+                
+                //predict signs
                 else
                     {
+                        
+                        self.delegate?.change_localview_Color(color: UIColor.green, Glowcolor: UIColor.cyan)
+                        
                         if self.signtype == "ASL"{
                     
                         if !self.should_predictWord_check{
@@ -283,6 +294,9 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
             case .success(let prediction):
                 print("Prediction: \(prediction)")
                 
+                self.didGetCustomsign_Response = true
+                //clear border color
+                self.delegate?.removeBorderAndGlow()
                 self.sendMessge(message: prediction)
                
                if self.ShouldGroupChat{
@@ -290,6 +304,8 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
                }
                 
             case .failure(let error):
+                self.didGetCustomsign_Response = true
+                self.delegate?.removeBorderAndGlow()
                 print("Error: \(error.localizedDescription)")
             }
         }
