@@ -361,6 +361,7 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
     
     }
 
+    var shouldSkip = false
     
     func processContactsData(_ jsonArray: [CallLogs]) {
         
@@ -375,6 +376,11 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
         var combinedContacts = [User]()
         
         for i in 0..<jsonArray.count {
+            
+            if shouldSkip{
+                shouldSkip = false
+                continue
+            }
             let userObject = jsonArray[i]
             
             let call_id = userObject.VideoCallId
@@ -417,11 +423,25 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
                 user.Call_EndTime = "not ended"
             }
             
+            if i < jsonArray.count - 1 {
+                       print("Current VideoCallId: \(userObject.VideoCallId), Next VideoCallId: \(jsonArray[i + 1].VideoCallId)")
+                   }
+
+            
             // Check for group call
-            if i < jsonArray.count - 1 && userObject.VideoCallId == jsonArray[i + 1].VideoCallId {
+            if  i < jsonArray.count - 1 && userObject.VideoCallId == jsonArray[i + 1].VideoCallId {
                 let nextUserObject = jsonArray[i + 1]
                 user.Fname += " & " + nextUserObject.OtherParticipantFname
-                print("\(user.Fname)")
+                user.Lname = ""
+                print("Current user is :\(user.Fname)")
+                
+                shouldSkip = true
+//                if combinedContacts.contains(where: { $0.CallId == userObject.VideoCallId }) {
+//                                combinedContacts.removeAll(where: { $0.CallId == userObject.VideoCallId })
+//                                print("Removing previous user with CallId: \(userObject.VideoCallId)")
+//                            }
+               
+                print("\(user.Fname) , i : \(i)")
 //                user.Lname += " & " + nextUserObject.OtherParticipantLname
             }
 
@@ -437,6 +457,13 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
             self.tble.reloadData()
         }
     }
+    
+    //    func formatDuration(_ duration: TimeInterval) -> String {
+    //        let hours = Int(duration) / 3600
+    //        let minutes = Int(duration) / 60 % 60
+    //        let seconds = Int(duration) % 60
+    //        return String(format: "%02i:%02i:%02i", hours, minutes, seconds)
+    //    }
 
     var loadingView: UIView!
     var activityIndicator: UIActivityIndicatorView!

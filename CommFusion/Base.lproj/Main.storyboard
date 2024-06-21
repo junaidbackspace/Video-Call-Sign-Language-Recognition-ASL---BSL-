@@ -2968,9 +2968,9 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bcj-EC-8CD">
-                                                    <rect key="frame" x="84" y="25" width="156" height="21"/>
+                                                    <rect key="frame" x="84" y="25" width="213" height="21"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="156" id="aX9-zw-itO"/>
+                                                        <constraint firstAttribute="width" constant="213" id="aX9-zw-itO"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                     <nil key="textColor"/>
