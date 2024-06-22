@@ -50,12 +50,7 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
              super.viewDidLoad()
             
             
-            if let image = UIImage(named: "video-conference") {
-                        // Set the image to the UIImageView
-                profilePic.image = image
-                    } else {
-                        print("\nProfile Group Image not found .\n")
-                    }
+        print("VID is : \(vid)")
             
             var is_ringon = UserDefaults.standard.string(forKey: "notifi_sound")
             if is_ringon == "on"
@@ -89,7 +84,12 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
             //if group chat
             else {
                 
-               
+                if let image = UIImage(named: "video-conference") {
+                            // Set the image to the UIImageView
+                    profilePic.image = image
+                        } else {
+                            print("\nProfile Group Image not found .\n")
+                        }
                 
                 let group = DispatchGroup()
                 
@@ -302,6 +302,7 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
         //it is Group Chat
         else{
             
+            CallAccept_API(vid: vid, userid: userid)
             
             let myLangType = UserDefaults.standard.string(forKey: "disabilityType")!
             
@@ -454,18 +455,42 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
             caller2Name = user.Fname + " " + user.Lname
         }
         
-        let urlString = "\(Constants.serverURL)\(user.ProfilePicture)"
-        if let url = URL(string: urlString) {
-            profilePic.kf.setImage(with: url, placeholder: UIImage(named: "No image found")) { result in
-                completion()
-            }
-        } else {
-            // Handle invalid URL
-            print("Invalid URL:", urlString)
-            completion()
-        }
+        completion()
+//        let urlString = "\(Constants.serverURL)\(user.ProfilePicture)"
+//        if let url = URL(string: urlString) {
+//            profilePic.kf.setImage(with: url, placeholder: UIImage(named: "No image found")) { result in
+//                completion()
+//            }
+//        } else {
+//            // Handle invalid URL
+//            print("Invalid URL:", urlString)
+//            completion()
+//        }
     }
 
+    
+    func CallAccept_API(vid : Int ,userid : Int )
+    {
+      
+        let Url = "\(Constants.serverURL)/video-call/add-participant"
+        
+        let Dic: [String: Any] = [
+            "video_call_id": vid,
+              "user_id": userid ]
+    
+        serverWrapper.insertData(baseUrl: Url,  userDictionary: Dic) { responseString, error in
+            if let error = error {
+                print("===>Error:", error)
+               }
+
+            if let responseString = responseString {
+              
+                print("response:", responseString)
+              
+           }
+            print("DIC : \(Dic)")
+        }
+    }
     
     
     deinit {

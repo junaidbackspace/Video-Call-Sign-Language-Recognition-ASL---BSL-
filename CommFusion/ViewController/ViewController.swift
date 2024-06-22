@@ -455,6 +455,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
             print("====>>> shared socket id \(v_id) , Friend id : \(callFriendId)")
             self.CallAccept_API(vid: v_id, userid: Int(self.userID)!)
             self.CallAccept_API(vid: v_id, userid: Int(self.callFriendId)!)
+            isReciever = 1
         }
         //call reciever accepted call
         else{
@@ -486,6 +487,32 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     }
     
     
+    
+    func addCall_Api(vid : Int ,userid : Int )
+    {
+      
+        let Url = "\(Constants.serverURL)/video-call/add-participant"
+        
+        let Dic: [String: Any] = [
+            "video_call_id": vid,
+              "user_id": userid ]
+    
+        serverWrapper.insertData(baseUrl: Url,  userDictionary: Dic) { responseString, error in
+            if let error = error {
+                print("===>Error:", error)
+               }
+
+            if let responseString = responseString {
+              
+                print("response:", responseString)
+              
+           }
+            print("DIC : \(Dic)")
+        }
+    }
+    
+    
+    
     @objc func member_EndsChat()
     {
         print("group member leaved")
@@ -505,6 +532,12 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         speechRecognizer?.ShouldGroupChat = true
         
         if let value = notification.userInfo?["callerid"] as? String {
+            
+            if isReciever == 1 {
+            print("adding group chat in call logs vid : \(v_id)")
+                addCall_Api(vid: v_id, userid: Int(value)!)
+            
+            }
             
             groupchat_View?.isHidden = false
             fetchGroupMemberData(callerId: value)

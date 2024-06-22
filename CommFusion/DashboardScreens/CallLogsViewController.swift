@@ -423,9 +423,9 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
                 user.Call_EndTime = "not ended"
             }
             
-            if i < jsonArray.count - 1 {
-                       print("Current VideoCallId: \(userObject.VideoCallId), Next VideoCallId: \(jsonArray[i + 1].VideoCallId)")
-                   }
+//            if i < jsonArray.count - 1 {
+//                       print("Current VideoCallId: \(userObject.VideoCallId), Next VideoCallId: \(jsonArray[i + 1].VideoCallId)")
+//                   }
 
             
             // Check for group call
@@ -441,7 +441,7 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
 //                                print("Removing previous user with CallId: \(userObject.VideoCallId)")
 //                            }
                
-                print("\(user.Fname) , i : \(i)")
+               
 //                user.Lname += " & " + nextUserObject.OtherParticipantLname
             }
 
