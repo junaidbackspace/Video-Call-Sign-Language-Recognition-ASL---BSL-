@@ -669,6 +669,18 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         }
     
     
+    @objc func dragview_GroupMember(_ gestureRecognizer: UIPanGestureRecognizer) {
+            guard let draggedView = gestureRecognizer.view else { return }
+            
+            let translation = gestureRecognizer.translation(in: self.view)
+            
+            if gestureRecognizer.state == .changed {
+                draggedView.center = CGPoint(x: draggedView.center.x + translation.x,
+                                              y: draggedView.center.y + translation.y)
+                gestureRecognizer.setTranslation(CGPoint.zero, in: self.view)
+            }
+        }
+    
     @objc func dragview(_ gestureRecognizer: UIPanGestureRecognizer) {
             guard let draggedView = gestureRecognizer.view else { return }
             
@@ -785,7 +797,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         
         //Adding drag Gesture in local video view
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(dragview(_:)))
-        groupchat_View?.addGestureRecognizer(panGesture)
+        let Drag_Groupmember = UIPanGestureRecognizer(target: self, action: #selector(dragview_GroupMember(_:)))
+        groupchat_View?.addGestureRecognizer(Drag_Groupmember)
         localVideoView?.addGestureRecognizer(panGesture)
         
         // Create and configure the overlay view
@@ -1148,6 +1161,7 @@ extension ViewController {
         
             if myLangType == "deaf"
             {
+                customSign_Switch.isHidden = false
                 webRTCClient.toggleSpeakerMute(muted: true)
                 webRTCClient.start_static_CaptureFrames()
                 

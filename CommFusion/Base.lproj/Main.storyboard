@@ -3868,7 +3868,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemTealColor"/>
                             </view>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" title="Custom Signs" translatesAutoresizingMaskIntoConstraints="NO" id="Pnt-5X-OO5">
+                            <switch hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" title="Custom Signs" translatesAutoresizingMaskIntoConstraints="NO" id="Pnt-5X-OO5">
                                 <rect key="frame" x="35" y="28" width="49" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="onTintColor" systemColor="systemGreenColor"/>

@@ -118,13 +118,14 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
 
     
     var didGetCustomsign_Response = true
+    var didGetAlphabets_Response = true
         @objc func Static_captureFrame() {
             
             
             if stop_Staticframe_check{
             print("taking picture")
            
-            DispatchQueue.main.asyncAfter(deadline: .now()+1.5)
+            DispatchQueue.main.asyncAfter(deadline: .now()+1)
             {
             let static_image =  self.localRenderView!.asImage()
                 
@@ -146,16 +147,23 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
                 else
                     {
                         
-                        self.delegate?.change_localview_Color(color: UIColor.green, Glowcolor: UIColor.cyan)
-                        
                         if self.signtype == "ASL"{
                     
                         if !self.should_predictWord_check{
-                                self.predict_staticSign(image: static_image)
-                                self.delegate?.removeBorderAndGlow()
+                            self.delegate?.change_localview_Color(color: UIColor.green, Glowcolor: UIColor.cyan)
+                            
+                            //Respnose comes or not
+                            if self.didGetAlphabets_Response{
+                                self.didGetAlphabets_Response = false
+                                self.mypredict_staticSign(image: static_image)
+
+                            }
+                            
                         }
                         else{
-                            self.delegate?.removeBorderAndGlow()
+                            self.delegate?.change_localview_Color(color: UIColor.red, Glowcolor: UIColor.systemPink)
+                            
+//                            self.delegate?.removeBorderAndGlow()
                             //predict word now
                             print("\n}}}}}}}}NOW PREDICTING WORD\n")
                     
@@ -166,6 +174,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
                 
                         else{
                         print("Predicting BSL NOW")
+                            self.delegate?.change_localview_Color(color: UIColor.purple ,Glowcolor: UIColor.cyan)
                         self.predict_BSL_Sign(image: static_image)
                         }
                 
@@ -235,8 +244,39 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
 //        let apiUrl = URL(string: "\(Constants.serverURL)/asl-Updatedsigns/detect_hand")!
                      serverWrapper.predictAlphabet(baseUrl: apiUrl, image: image) { predictedLabel, error in
                          if let error = error {
+                            
                              print("Error: \(error.localizedDescription)")
+                            self.didGetAlphabets_Response = true
+                            self.delegate?.removeBorderAndGlow()
+                         }
+                         
+                         else if let predictedLabel = predictedLabel {
+                            
+                            self.delegate?.removeBorderAndGlow()
+                            self.didGetAlphabets_Response = true
+                             print("Predicted Label: \(predictedLabel)")
+                             self.sendMessge(message: predictedLabel)
+                            
+                            if self.ShouldGroupChat{
+                                socketsClass.shared.Send_GroupChatMsg(friendId: self.groupFriendId, Message: predictedLabel, from : self.userID)
+                            }
+                         }
+                     }
+    }
+    
+    func mypredict_staticSign(image : UIImage)
+    {
+        let apiUrl = URL(string: "\(Constants.serverURL)/asl-signs/predict/")!
+//        let apiUrl = URL(string: "\(Constants.serverURL)/asl-Updatedsigns/detect_hand")!
+                     serverWrapper.mypredictAlphabet(baseUrl: apiUrl, image: image) { predictedLabel, error in
+                         if let error = error {
+                             print("Error: \(error.localizedDescription)")
+                            self.didGetAlphabets_Response = true
+                            self.delegate?.removeBorderAndGlow()
+                            
                          } else if let predictedLabel = predictedLabel {
+                            self.delegate?.removeBorderAndGlow()
+                            self.didGetAlphabets_Response = true
                              print("Predicted Label: \(predictedLabel)")
                              self.sendMessge(message: predictedLabel)
                             
@@ -255,8 +295,12 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         let apiUrl = URL(string: "\(Constants.serverURL)/asl-Updatedsigns/predictWP")!
         serverWrapper.predictWords(baseUrl: apiUrl, image: image) { predictedLabel, error in
                          if let error = error {
+                            self.delegate?.removeBorderAndGlow()
                              print("Error: \(error.localizedDescription)")
+                            
                          } else if let predictedLabel = predictedLabel {
+                            
+                            self.delegate?.removeBorderAndGlow()
                              print("Predicted Word: \(predictedLabel)")
                              self.sendMessge(message: predictedLabel)
                             
@@ -274,8 +318,13 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         let apiUrl = URL(string: "\(Constants.serverURL)/asl-Updatedsigns/predictBSL")!
         serverWrapper.predictBSL(baseUrl: apiUrl, image: image) { predictedLabel, error in
                          if let error = error {
+                            
+                            self.delegate?.removeBorderAndGlow()
                              print("Error: \(error.localizedDescription)")
+                            
                          } else if let predictedLabel = predictedLabel {
+                            
+                            self.delegate?.removeBorderAndGlow()
                              print("Predicted BSL : \(predictedLabel)")
                              self.sendMessge(message: predictedLabel)
                             

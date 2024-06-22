@@ -58,7 +58,11 @@ class LessonsListViewController: UIViewController, UICollectionViewDataSource, U
         controller.guester_id = content[row].Gesture_id
         controller.Resource_URL = content[row].Les_Res
         
-        print("")
+        if trainingname == "Words" {
+        controller.wordsResourceURL = leasonURL
+        print("setting words urls")
+        }
+        
         controller.hidesBottomBarWhenPushed = true
         controller.modalPresentationStyle = .fullScreen
         self.navigationController?.pushViewController(controller, animated: true)
@@ -76,6 +80,9 @@ class LessonsListViewController: UIViewController, UICollectionViewDataSource, U
            }
     }
     
+    
+    var leasonURL = [String]()
+    
  //   MARK:-
     func fetchLessonsData() {
        
@@ -90,7 +97,7 @@ class LessonsListViewController: UIViewController, UICollectionViewDataSource, U
             } else if let jsonData = Lessoncontent {
                 print("JSON Data:", jsonData)
                
-                self.processContactsData(jsonData)
+                self.processLessonData(jsonData)
             } else {
                 print("No data received from the server")
             }
@@ -98,13 +105,14 @@ class LessonsListViewController: UIViewController, UICollectionViewDataSource, U
     
     }
 
-    func processContactsData(_ jsonArray: [Lesson]) {
+    func processLessonData(_ jsonArray: [Lesson]) {
             for userObject in jsonArray {
                 let GestId = userObject.Id
                 let Lid = userObject.LessonId
                 let Des = userObject.Description
                 let Res = userObject.Resource
               
+                leasonURL.append(Res)
 
                 // Now you can use these properties as needed
                 print("Guester_ID: \(GestId), Lesson Id : \(Lid), Description: \(Des), Resource: \(Res)")

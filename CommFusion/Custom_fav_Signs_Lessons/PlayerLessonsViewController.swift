@@ -27,6 +27,7 @@ class PlayerLessonsViewController: UIViewController {
     var lesson_id = 0
     var guester_id = 0
     
+    var wordsResourceURL = [String]()
     var filenames = [String]()
 
    
@@ -39,50 +40,105 @@ class PlayerLessonsViewController: UIViewController {
     }
     @IBAction func btn_back_lesson(_ sender: Any) {
         
-        //Setting next gif path
-        var count = 0
-        for i in 0..<26 {
-            let letter = Character(UnicodeScalar(97 + i)!)
-            let filename = "\(letter).gif"
-            print("\n letter: \(filename)")
-            filenames.append(filename)
-             }
-        //minimum id
-        if guester_id > 41 {
-        for name in filenames{
-            if name == Resource_URL{
-               
-                Resource_URL = filenames[count-1]
-                break
+        
+        
+        if trainingname == "Words" {
+            
+            
+            var count = 0
+            for i in 0..<26 {
+                let letter = Character(UnicodeScalar(97 + i)!)
+                let filename = "\(letter).gif"
+                print("\n letter: \(filename)")
+                filenames.append(filename)
+                 }
+            //minimum id
+            if guester_id > 66 {
+            for name in wordsResourceURL{
+                if name == Resource_URL{
+                   
+                    Resource_URL = wordsResourceURL[count+1]
+                    break
+                }
+                count -= 1
             }
-            count += 1
-        }
-            guester_id -= 1
-        }
-            let parts = Resource_URL.split(separator: ".")
-            let firstPart = String(parts.first ?? "")
-            lbl_Current_Content_name.text = "Sign for \(firstPart)"
-            getLessonGIF()
-           
-      
         
-        timer?.invalidate()
-        timer = nil
+                guester_id -= 1
+            }
+                let parts = Resource_URL.split(separator: ".")
+                let firstPart = String(parts.first ?? "")
+                lbl_Current_Content_name.text = "Sign for \(firstPart)"
+                getLessonGIF()
+               
+          
+            
+            timer?.invalidate()
+            timer = nil
+            
+            elapsedTime = 0
+            pgrbar_Time.progress = 0
+            isPaused = !isPaused
+               
+            startTimer()
+            if fav_less.contains(guester_id)
+            {
+            if let currentImage = OutLetisfaviorteStar.currentBackgroundImage,
+                   currentImage == UIImage(systemName: "star.fill")?.withTintColor(UIColor.yellow) {
+            }
+            }
+            else{
+                self.OutLetisfaviorteStar.setBackgroundImage(UIImage(systemName: "star"), for: .normal)
+               
+            }
+        }
         
-        elapsedTime = 0
-        pgrbar_Time.progress = 0
-        isPaused = !isPaused
-           
-        startTimer()
-        if fav_less.contains(guester_id)
-        {
-        if let currentImage = OutLetisfaviorteStar.currentBackgroundImage,
-               currentImage == UIImage(systemName: "star.fill")?.withTintColor(UIColor.yellow) {
-        }
-        }
         else{
-            self.OutLetisfaviorteStar.setBackgroundImage(UIImage(systemName: "star"), for: .normal)
-           
+            //Alphabets
+                //Setting next gif path
+                var count = 0
+                for i in 0..<26 {
+                    let letter = Character(UnicodeScalar(97 + i)!)
+                    let filename = "\(letter).gif"
+                    print("\n letter: \(filename)")
+                    filenames.append(filename)
+                     }
+                //minimum id
+                if guester_id > 41 {
+                for name in filenames{
+                    if name == Resource_URL{
+                       
+                        Resource_URL = filenames[count-1]
+                        break
+                    }
+                    count += 1
+                }
+                    guester_id -= 1
+                }
+                    let parts = Resource_URL.split(separator: ".")
+                    let firstPart = String(parts.first ?? "")
+                    lbl_Current_Content_name.text = "Sign for \(firstPart)"
+                    getLessonGIF()
+                   
+              
+                
+                timer?.invalidate()
+                timer = nil
+                
+                elapsedTime = 0
+                pgrbar_Time.progress = 0
+                isPaused = !isPaused
+                   
+                startTimer()
+                if fav_less.contains(guester_id)
+                {
+                if let currentImage = OutLetisfaviorteStar.currentBackgroundImage,
+                       currentImage == UIImage(systemName: "star.fill")?.withTintColor(UIColor.yellow) {
+                }
+                }
+                else{
+                    self.OutLetisfaviorteStar.setBackgroundImage(UIImage(systemName: "star"), for: .normal)
+                   
+                }
         }
     }
     @IBAction func btn_pause_lesson(_ sender: Any) {
@@ -124,7 +180,56 @@ class PlayerLessonsViewController: UIViewController {
     }
     @IBAction func btn_next_lesson(_ sender: Any) {
         
+        if trainingname == "Words"
+        {
+            
+            
+            var count = 0
+            
+            //max Limit
+            if guester_id < 86 {
+            for name in wordsResourceURL{
+                if name == Resource_URL{
+                   
+                    Resource_URL = wordsResourceURL[count+1]
+                    break
+                }
+                count += 1
+            }
         
+                guester_id += 1
+            }
+                let parts = Resource_URL.split(separator: ".")
+                let firstPart = String(parts.first ?? "")
+                lbl_Current_Content_name.text = "Sign for \(firstPart)"
+                getLessonGIF()
+               
+          
+            
+            timer?.invalidate()
+            timer = nil
+            
+            elapsedTime = 0
+            pgrbar_Time.progress = 0
+            
+            isPaused = !isPaused
+               
+            startTimer()
+            if fav_less.contains(guester_id)
+            {
+                self.OutLetisfaviorteStar.setBackgroundImage(UIImage(systemName: "star.fill"), for: .normal)
+            }
+            else{
+                self.OutLetisfaviorteStar.setBackgroundImage(UIImage(systemName: "star"), for: .normal)
+               
+            }
+            
+            
+            
+            
+            
+        }
+        else{
         //Setting next gif path
         var count = 0
         for i in 0..<26 {
@@ -170,7 +275,7 @@ class PlayerLessonsViewController: UIViewController {
             self.OutLetisfaviorteStar.setBackgroundImage(UIImage(systemName: "star"), for: .normal)
            
         }
-            
+        }
         
     }
     
@@ -310,7 +415,7 @@ func usergetLesson()
     {
         let category = trainingname.lowercased()
         var signtype = UserDefaults.standard.string(forKey: "SignType")!.lowercased()
-         urlString = "\(Constants.serverURL)/gesture/\(signtype)/\(category)/\(Resource_URL)"
+         urlString = "\(Constants.serverURL)/gesture/\(signtype)/alphabets/\(Resource_URL)"
         print ("URL IS : \(urlString)")
         if let url = URL(string: urlString) {
                fetchGifDataFromServer(url: url) { (gifData, error) in
