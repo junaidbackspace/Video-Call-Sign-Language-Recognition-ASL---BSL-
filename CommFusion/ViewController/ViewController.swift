@@ -1247,7 +1247,7 @@ extension ViewController {
             let wordStr = String(word)
             if let gifName = wordToGifMap[wordStr], !playedGifs.contains(wordStr) {
                
-                playedGifs.insert(wordStr)
+//                playedGifs.insert(wordStr)
                 
                 print("giving text for video : \(wordStr)")
                

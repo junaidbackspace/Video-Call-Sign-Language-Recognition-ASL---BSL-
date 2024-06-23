@@ -46,21 +46,19 @@ class PlayerLessonsViewController: UIViewController {
             
             
             var count = 0
-            for i in 0..<26 {
-                let letter = Character(UnicodeScalar(97 + i)!)
-                let filename = "\(letter).gif"
-                print("\n letter: \(filename)")
-                filenames.append(filename)
-                 }
+           
             //minimum id
             if guester_id > 66 {
+                
             for name in wordsResourceURL{
                 if name == Resource_URL{
-                   
-                    Resource_URL = wordsResourceURL[count+1]
+                    if  count > 0 {
+                        self.Resource_URL = self.wordsResourceURL[count-1]
                     break
+                    }
+                    
                 }
-                count -= 1
+                count += 1
             }
         
                 guester_id -= 1
