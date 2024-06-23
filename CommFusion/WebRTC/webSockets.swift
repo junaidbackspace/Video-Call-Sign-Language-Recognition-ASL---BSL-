@@ -439,10 +439,11 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
     func receiveIncomingCall() {
        
         DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
+            print("outside gaurd statement of call reciver")
             // Ensure that the delegate is set and the function is implemented
             guard let delegate = self.incomingCallDelegate else {
                
-                
+                print("opening call receiver screen")
                 NotificationCenter.default.post(name: .openViewControllerNotification, object: nil,  userInfo: ["callerid": self.callerid])
                    
                 return

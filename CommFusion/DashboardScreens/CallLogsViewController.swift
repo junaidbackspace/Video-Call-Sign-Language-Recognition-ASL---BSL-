@@ -165,40 +165,75 @@ class CallLogsViewController: UIViewController, UITableViewDataSource, UITableVi
              n += 1
         }
         
-       
+       //check for group chat
+        if contacts[indexPath.row].Fname.contains("&") {
+//            let components = inputString.split(separator: Character(delimiter))
+                   
+                    cell?.name.text = contacts[indexPath.row].Fname+" "+contacts[indexPath.row].Lname
+                    
+                    cell?.callStatus.image = callStatusCheck(iscaller: contacts[indexPath.row].isCaller,ismissed: 0)
+                   
+            if contacts[indexPath.row].OnlineStatus == 1{
+                    if let image = UIImage(named: "online", in: Bundle.main, compatibleWith: nil) {
+                        cell?.isActive?.image = image
+                            }
+                    }
+                    
+                    cell?.callTime.text = contacts[indexPath.row].Call_StartTime
+                    
+                    if let image = UIImage(named: "online", in: Bundle.main, compatibleWith: nil) {
+                        cell?.isActive?.image = image
+                            }
+                    
+//                    cell?.call.tag = indexPath.row
+                        cell?.call.isHidden = true
+                    
+                    let base = "\(Constants.serverURL)\(contacts[indexPath.row].ProfilePicture)"
+                    
+                    if let url = URL(string: base) {
+                        cell?.profilepic.kf.setImage(with: url, placeholder: UIImage(named: "No image found"))
+                        cell?.profilepic?.layer.cornerRadius = 28
+                        cell?.profilepic?.clipsToBounds = true
+                          }
+            
+        }
+        else {
+            
         
-        cell?.name.text = contacts[indexPath.row].Fname+" "+contacts[indexPath.row].Lname
-        
-        cell?.callStatus.image = callStatusCheck(iscaller: contacts[indexPath.row].isCaller,ismissed: 0)
-       
-        
-        
-        if contacts[indexPath.row].OnlineStatus == 1{
-        if let image = UIImage(named: "online", in: Bundle.main, compatibleWith: nil) {
-            cell?.isActive?.image = image
+                
+                cell?.name.text = contacts[indexPath.row].Fname+" "+contacts[indexPath.row].Lname
+                
+                cell?.callStatus.image = callStatusCheck(iscaller: contacts[indexPath.row].isCaller,ismissed: 0)
+               
+                
+                
+                if contacts[indexPath.row].OnlineStatus == 1{
+                if let image = UIImage(named: "online", in: Bundle.main, compatibleWith: nil) {
+                    cell?.isActive?.image = image
+                        }
                 }
+                
+                
+                
+                cell?.callTime.text = contacts[indexPath.row].Call_StartTime
+                
+                if let image = UIImage(named: "online", in: Bundle.main, compatibleWith: nil) {
+                    cell?.isActive?.image = image
+                        }
+                
+                cell?.call.tag = indexPath.row
+                cell?.call.addTarget(self, action: #selector(btn_call(_:)), for: .touchUpInside)
+                
+                
+                let base = "\(Constants.serverURL)\(contacts[indexPath.row].ProfilePicture)"
+                
+                if let url = URL(string: base) {
+                    cell?.profilepic.kf.setImage(with: url, placeholder: UIImage(named: "No image found"))
+                    cell?.profilepic?.layer.cornerRadius = 28
+                    cell?.profilepic?.clipsToBounds = true
+                      }
         }
         
-        
-        
-        cell?.callTime.text = contacts[indexPath.row].Call_StartTime
-        
-        if let image = UIImage(named: "online", in: Bundle.main, compatibleWith: nil) {
-            cell?.isActive?.image = image
-                }
-        
-        cell?.call.tag = indexPath.row
-        cell?.call.addTarget(self, action: #selector(btn_call(_:)), for: .touchUpInside)
-        
-        
-        let base = "\(Constants.serverURL)\(contacts[indexPath.row].ProfilePicture)"
-        
-        if let url = URL(string: base) {
-            cell?.profilepic.kf.setImage(with: url, placeholder: UIImage(named: "No image found"))
-            cell?.profilepic?.layer.cornerRadius = 28
-            cell?.profilepic?.clipsToBounds = true
-              }
-                
         return cell!
     }
     

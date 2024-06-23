@@ -710,7 +710,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
                   muteButton.setBackgroundImage(UIImage(named: "mute"), for: .normal)
                   muteButton.frame = CGRect(x: 50, y: 5, width: 17, height: 17)
                   muteButton.addTarget(self, action: #selector(muteButtonTapped), for: .touchUpInside)
-                  customView.addSubview(muteButton)
+//                  customView.addSubview(muteButton)
 
                   // Add block user button
                   let blockButton = UIButton(type: .system)
