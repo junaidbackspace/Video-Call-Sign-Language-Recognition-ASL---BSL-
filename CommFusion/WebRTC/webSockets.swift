@@ -585,6 +585,9 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
     
     func Send_GroupChatMsg(friendId: String ,Message : String , from : String ) {
        
+         let groupchatisEnabled = UserDefaults.standard.string(forKey: "groupchat")
+        if groupchatisEnabled == "1"
+        {
         self.connectSocket()
        userID = String(UserDefaults.standard.integer(forKey: "userID"))
         var chatmember = UserDefaults.standard.string(forKey: "groupchatmember")
@@ -598,8 +601,13 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
         } catch {
             print("Error serializing call canceling data: \(error)")
         }
+        }
     }
     
+    
+    // let groupchatisEnabled = UserDefaults.standard.string(forKey: "groupchat")
+//    if groupchatisEnabled == "1"
+//    {
     func Send_GroupChatMsgByDeaf(friendId: String ,Message : String , from : String ) {
        
         self.connectSocket()
