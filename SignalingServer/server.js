@@ -9,7 +9,7 @@ console.log('websocket server start.' + ' ipaddress = ' + ip.address() + ' port 
 // Map to store WebSocket connections with their IDs
 const clients = new Map();
 const callers = new Map();
-
+const groupchat_members = new Map();
 
 wsServer.on('connection', function (ws) {
    
@@ -258,6 +258,8 @@ function handleGroupChat(c1, c2,user , v_id) {
     console.log("within group call ");
     if (clients.has(user)) {
         const recipient = clients.get(user); //friend
+        
+        groupchat_members.set(user , recipient)
         const caller1 = clients.get(c1); // user
         const caller2 = clients.get(c2);
         // Send call initiation message to the recipient
@@ -283,4 +285,6 @@ function handleGroupChat(c1, c2,user , v_id) {
         return `User '${to}' is not connected.`;
     }
 }
+    
+    
 });
