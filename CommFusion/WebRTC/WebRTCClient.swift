@@ -54,6 +54,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     var delegate: WebRTCClientDelegate?
     public private(set) var isConnected: Bool = false
     
+    var didsenddisablity = false
     
     
 
@@ -1152,6 +1153,7 @@ extension WebRTCClient {
 }
 
 // MARK: - RTCVideoView Delegate
+
 extension WebRTCClient{
     func videoView(_ videoView: RTCVideoRenderer, didChangeVideoSize size: CGSize) {
         let isLandScape = size.width < size.height
@@ -1172,9 +1174,12 @@ extension WebRTCClient{
             parentView = remoteView
             
 //             sending disable user type
+            if !didsenddisablity{
+                didsenddisablity = true
             let LangType = UserDefaults.standard.string(forKey: "disabilityType")!
             print("<<<>>>>Sending disability type : \(LangType)")
             self.sendMessge(message:  LangType)
+            }
         }
         
         guard let _renderView = renderView, let _parentView = parentView else {

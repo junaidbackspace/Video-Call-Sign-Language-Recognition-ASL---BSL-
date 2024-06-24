@@ -77,6 +77,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         "hello": "hello.gif",
         "helo": "hello.gif",
         "how": "howareyou.gif",
+        
         "cool": "cool.gif",
         "happy": "happy.gif",
         "fine": "iamfine.gif",
@@ -95,8 +96,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         "try": "tryagain.gif",
         "understand": "understand.gif",
         "from": "whereareyoufrom.gif",
-        "wonderful": "wonderful.gif"
-//        "you": "you.gif"
+        "wonderful": "wonderful.gif",
+        "you": "you.gif"
         // Add more mappings as needed
     ]
     
