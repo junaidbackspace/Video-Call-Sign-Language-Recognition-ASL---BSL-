@@ -403,12 +403,43 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
    }
     
    
-   
+    func test() {
+        let startTime = getCurrentFormattedDate()
+        let endTime = getCurrentFormattedDate()
+        
+        let newSegment = TranscriptSegment(
+            UserId: 2,
+            VideoCallId: "2345", // Replace with the actual VideoCallId
+            StartTime: startTime,
+            EndTime: endTime,
+            Content: "test test"
+        )
+        
+        self.serverWrapper.createTranscriptSegment(segment: newSegment) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let responseSegment):
+                    print("Created Transcript Segment: \(responseSegment)")
+                    // Handle success, e.g., update UI or perform additional tasks
+                case .failure(let error):
+                    print("Failed to create transcript segment: \(error)")
+                    // Handle failure, e.g., show error message to user
+                }
+            }
+        }
+    }
+
+    func getCurrentFormattedDate() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        dateFormatter.timeZone = TimeZone(identifier: "UTC")
+        return dateFormatter.string(from: Date())
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
   
-        
+        test()
         
         //MARK:-
         if socketsClass.shared.isConnected(){

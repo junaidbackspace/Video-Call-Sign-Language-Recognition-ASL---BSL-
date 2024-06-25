@@ -132,3 +132,24 @@ struct UserFavouriteLessons : Codable{
 }
 
 
+struct TranscriptSegment: Codable {
+    let UserId: Int
+    let VideoCallId: String
+    let StartTime: String
+    let EndTime: String
+    let Content: String
+}
+
+
+struct CreateTranscriptSegmentResponse: Codable {
+    
+    let UserId: Int
+    let VideoCallId: String
+    let StartTime: String
+    let EndTime: String
+    let Content: String
+    let Id: Int
+    let SegmentNumber: Int
+}
+
+

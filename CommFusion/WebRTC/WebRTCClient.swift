@@ -289,28 +289,56 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     }
     
     
+    func getCurrentFormattedDate() -> String {
+        let dateFormatter = ISO8601DateFormatter()
+        dateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        let currentDate = Date()
+        return dateFormatter.string(from: currentDate)
+    }
+    
     //prediction words
-    func predict_WordsSign(image : UIImage)
-    {
+    func predict_WordsSign(image: UIImage) {
+        let startTime = getCurrentFormattedDate()
 
+        var label = ""
         let apiUrl = URL(string: "\(Constants.serverURL)/asl-Updatedsigns/predictWP")!
         serverWrapper.predictWords(baseUrl: apiUrl, image: image) { predictedLabel, error in
-                         if let error = error {
-                            self.delegate?.removeBorderAndGlow()
-                             print("Error: \(error.localizedDescription)")
-                            
-                         } else if let predictedLabel = predictedLabel {
-                            
-                            self.delegate?.removeBorderAndGlow()
-                             print("Predicted Word: \(predictedLabel)")
-                             self.sendMessge(message: predictedLabel)
-                            
-                            if self.ShouldGroupChat{
-                                socketsClass.shared.Send_GroupChatMsg(friendId: self.groupFriendId, Message: predictedLabel, from : self.userID)
-                            }
-                         }
-                     }
+            if let error = error {
+                self.delegate?.removeBorderAndGlow()
+                print("Error: \(error.localizedDescription)")
+            } else if let predictedLabel = predictedLabel {
+                self.delegate?.removeBorderAndGlow()
+                print("Predicted Word: \(predictedLabel)")
+                self.sendMessge(message: predictedLabel)
+                label = predictedLabel
+
+                if self.ShouldGroupChat {
+                    socketsClass.shared.Send_GroupChatMsg(friendId: self.groupFriendId, Message: predictedLabel, from: self.userID)
+                }
+
+//                let endTime = self.getCurrentFormattedDate()
+//                let newSegment = TranscriptSegment(
+//                    userId: Int(self.userID)!,
+//                    videoCallId: "2345", // Replace with the actual VideoCallId
+//                    startTime: startTime,
+//                    endTime: endTime,
+//                    content: label,
+//                    segmentNumber: nil // This will be set by the server
+//                )
+//
+//                self.serverWrapper.createTranscriptSegment(segment: newSegment) { result in
+//                    switch result {
+//                    case .success(let responseSegment):
+//                        print("Created Transcript Segment: \(responseSegment)")
+//                    case .failure(let error):
+//                        print("Failed to create transcript segment: \(error)")
+//                    }
+//                }
+            }
+        }
     }
+
+
     
     //prediction BSL
     func predict_BSL_Sign(image : UIImage)

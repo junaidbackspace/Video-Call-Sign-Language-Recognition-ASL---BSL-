@@ -811,4 +811,49 @@ class APIWrapper {
                      }
                  }.resume()
              }
+    
+    
+    
+    func createTranscriptSegment(segment: TranscriptSegment, completion: @escaping (Result<CreateTranscriptSegmentResponse, Error>) -> Void) {
+        
+        print("segment is : ",segment)
+        guard let url = URL(string: "\(Constants.serverURL)/transcriptsegments/") else {
+            print("Invalid URL")
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        do {
+            let jsonData = try JSONEncoder().encode(segment)
+            request.httpBody = jsonData
+        } catch {
+            completion(.failure(error))
+            return
+        }
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+
+            guard let data = data else {
+                print("No data returned")
+                return
+            }
+
+            do {
+                let responseSegment = try JSONDecoder().decode(CreateTranscriptSegmentResponse.self, from: data)
+                completion(.success(responseSegment))
+            } catch {
+                completion(.failure(error))
+            }
+        }
+
+        task.resume()
+    }
+
 }
