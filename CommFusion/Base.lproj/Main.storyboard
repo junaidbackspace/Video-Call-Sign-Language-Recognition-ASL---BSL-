@@ -2297,14 +2297,14 @@
         <scene sceneID="KxS-R2-bg1">
             <objects>
                 <viewController storyboardIdentifier="termsconditions" id="6pY-0x-mis" customClass="termsConditionViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="IkY-Jv-J3B">
+                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="IkY-Jv-J3B">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vfm-PR-29H">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vfm-PR-29H">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4WX-Ji-1Zt">
+                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4WX-Ji-1Zt">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="3400"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" lineBreakMode="wordWrap" numberOfLines="150" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9cu-2A-9BU">
@@ -3658,6 +3658,23 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w1h-zk-abw">
+                                        <rect key="frame" x="8" y="126.66666666666666" width="18" height="23"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="28" id="T2q-5J-9Vy"/>
+                                        </constraints>
+                                        <state key="normal" backgroundImage="arrowtriangle.left.fill" catalog="system"/>
+                                        <connections>
+                                            <action selector="backbtn:" destination="J62-k5-xsU" eventType="touchUpInside" id="SEu-1a-FNS"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yLX-Ry-6tz">
+                                        <rect key="frame" x="267" y="123.66666666666652" width="18" height="23"/>
+                                        <state key="normal" backgroundImage="arrowtriangle.right.fill" catalog="system"/>
+                                        <connections>
+                                            <action selector="freshbtn:" destination="J62-k5-xsU" eventType="touchUpInside" id="ZC7-EA-AWf"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.20392156862745098" green="0.61960784313725492" blue="0.46274509803921571" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -3665,18 +3682,23 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                     <constraint firstAttribute="width" constant="304" id="6IU-rk-RyR"/>
                                     <constraint firstAttribute="bottom" secondItem="c5r-vf-wOV" secondAttribute="bottom" constant="8" id="74p-aa-lcc"/>
                                     <constraint firstItem="c5r-vf-wOV" firstAttribute="top" secondItem="NCi-mj-YDw" secondAttribute="bottom" constant="12" id="F2s-N1-ePE"/>
+                                    <constraint firstAttribute="bottom" secondItem="yLX-Ry-6tz" secondAttribute="bottom" constant="18.000000000000142" id="HOG-yQ-dkE"/>
                                     <constraint firstAttribute="trailing" secondItem="NCi-mj-YDw" secondAttribute="trailing" constant="36" id="HVd-92-bbD"/>
+                                    <constraint firstItem="w1h-zk-abw" firstAttribute="leading" secondItem="c5r-vf-wOV" secondAttribute="leading" id="Kjg-ih-yPG"/>
                                     <constraint firstItem="c5r-vf-wOV" firstAttribute="top" secondItem="NCi-mj-YDw" secondAttribute="bottom" constant="12" id="McK-FD-XNt"/>
                                     <constraint firstAttribute="height" constant="167" id="UKa-CR-VJ4"/>
                                     <constraint firstItem="MHA-Hv-iZP" firstAttribute="top" secondItem="uGz-aL-iL1" secondAttribute="top" constant="8" id="XJM-93-39S"/>
                                     <constraint firstItem="MHA-Hv-iZP" firstAttribute="leading" secondItem="uGz-aL-iL1" secondAttribute="leading" constant="115.67" id="YnK-vJ-dg0"/>
+                                    <constraint firstAttribute="trailing" secondItem="yLX-Ry-6tz" secondAttribute="trailing" constant="19" id="jZa-2G-vrF"/>
                                     <constraint firstItem="NCi-mj-YDw" firstAttribute="top" secondItem="MHA-Hv-iZP" secondAttribute="bottom" constant="8" symbolic="YES" id="lPp-6L-SkL"/>
+                                    <constraint firstAttribute="bottom" secondItem="w1h-zk-abw" secondAttribute="bottom" constant="15.000000000000142" id="n2e-A8-gxN"/>
                                     <constraint firstAttribute="trailing" secondItem="c5r-vf-wOV" secondAttribute="trailing" constant="8" id="p7l-TS-4bq"/>
                                     <constraint firstAttribute="trailing" secondItem="MHA-Hv-iZP" secondAttribute="trailing" constant="115.33" id="vQf-4J-P0Q"/>
                                     <constraint firstItem="NCi-mj-YDw" firstAttribute="leading" secondItem="uGz-aL-iL1" secondAttribute="leading" constant="44" id="yFe-9q-pK8"/>
+                                    <constraint firstItem="yLX-Ry-6tz" firstAttribute="centerY" secondItem="c5r-vf-wOV" secondAttribute="centerY" id="z8y-6K-VGP"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mJU-cw-puj">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mJU-cw-puj">
                                 <rect key="frame" x="55" y="344" width="304" height="167"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Biginner" translatesAutoresizingMaskIntoConstraints="NO" id="DY5-TC-BkE">

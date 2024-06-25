@@ -390,6 +390,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
 //    let gifchecker = GifManager()
     
     override func viewDidLoad() {
+        
+       
         super.viewDidLoad()
   
         
@@ -524,13 +526,15 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     }
     var groupFriendId = " "
     var ShouldGroupChat = false
+    var countmember = 0
     @objc func EnableGroup_Chat(_ notification: Notification)
     {
+        countmember += 1
        if !ShouldGroupChat{ //if already enabled
             
         print("Entered in Group Chat Enable")
-        self.ShouldGroupChat = true
-        speechRecognizer?.ShouldGroupChat = true
+//        self.ShouldGroupChat = true
+//        speechRecognizer?.ShouldGroupChat = true
         
         if let value = notification.userInfo?["callerid"] as? String {
             
@@ -541,7 +545,9 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
             }
             
             groupchat_View?.isHidden = false
+            
             fetchGroupMemberData(callerId: value)
+            
             if myLangType == "deaf" //|| myLangType == "blind"
            {
             webRTCClient.ShouldGroupChat = true
@@ -556,7 +562,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
             speechRecognizer?.ShouldGroupChat = true
             speechRecognizer?.groupFriendId = value
             speechRecognizer?.isStopping = false
-            self.speechRecognizer!.startRecognition()
+//            self.speechRecognizer!.startRecognition()
                     }
                 }
 
@@ -1165,7 +1171,8 @@ extension ViewController {
                 customSign_Switch.isHidden = false
                 webRTCClient.toggleSpeakerMute(muted: true)
                 webRTCClient.start_static_CaptureFrames()
-                
+                webRTCClient.toggleMicMute(muted: true)
+                webRTCClient.toggleSpeakerMute(muted: ismute_speaker)
             }
             
             // for (normal and blind) to (deaf) turn speech on
@@ -1174,7 +1181,7 @@ extension ViewController {
             
             DispatchQueue.main.async {
                                 print("++++++++Starting REcognition.....++++++")
-                                self.speechRecognizer!.startRecognition()
+//                                self.speechRecognizer!.startRecognition()
                             }
             }
            
@@ -1284,7 +1291,7 @@ extension ViewController {
         print("Speaking text: \(text)")
         
         // Speak the utterance
-        speechSynthesizer.speak(utterance)
+//        speechSynthesizer.speak(utterance)
         
        
     }

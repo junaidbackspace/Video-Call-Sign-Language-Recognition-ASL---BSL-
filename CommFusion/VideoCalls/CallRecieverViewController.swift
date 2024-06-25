@@ -44,7 +44,6 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
          let maxButtonTranslation: CGFloat = 100 // Adjust the maximum translation as needed
 
     
-   
     
          override func viewDidLoad() {
              super.viewDidLoad()
@@ -106,7 +105,7 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
                 }
                 
                 group.notify(queue: DispatchQueue.main) {
-                    self.lblname.text = self.caller1Name + " & " + self.caller2Name
+                    self.lblname.text = "Teacher : "+self.caller1Name //+ " & " + self.caller2Name
                     print("getting call from \(self.caller1Name) & \(self.caller2Name)")
                 }
             }
@@ -307,22 +306,22 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
             
             let myLangType = UserDefaults.standard.string(forKey: "disabilityType")!
             
-            if myLangType == "deaf"
-            {
-                
-                socketsClass.shared.GroupCallAccepted(caller1: String(caller1_id), caller2: String(caller2_id))
-                let controller = (self.storyboard?.instantiateViewController(identifier: "groupcall_Deaf_Screen"))! as GroupCall_deaf_ViewController
-                   
-                    print("call friend id : \(self.calllerid)")
-                controller.userfirst_id = caller1_id
-                controller.usersecond_id = caller2_id
-                controller.Name_First_User = caller1Name
-                controller.Name_Second_User = caller2Name
-                controller.modalPresentationStyle = .fullScreen
-                  self.navigationController?.pushViewController(controller, animated: true)
-            
-            }
-            else{
+//            if myLangType == "deaf"
+//            {
+//
+//                socketsClass.shared.GroupCallAccepted(caller1: String(caller1_id), caller2: String(caller2_id))
+//                let controller = (self.storyboard?.instantiateViewController(identifier: "groupcall_Deaf_Screen"))! as GroupCall_deaf_ViewController
+//
+//                    print("call friend id : \(self.calllerid)")
+//                controller.userfirst_id = caller1_id
+//                controller.usersecond_id = caller2_id
+//                controller.Name_First_User = caller1Name
+//                controller.Name_Second_User = caller2Name
+//                controller.modalPresentationStyle = .fullScreen
+//                  self.navigationController?.pushViewController(controller, animated: true)
+//
+//            }
+//            else{
                 socketsClass.shared.GroupCallAccepted(caller1: String(caller1_id), caller2: String(caller2_id))
                 let controller = (self.storyboard?.instantiateViewController(identifier: "groupcall_blind_normalScreen"))! as GroupCall_Blind_NormalViewController
                 
@@ -332,7 +331,7 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
                     print("caller 1 : \(caller1_id) and caller 2  : \(caller2_id)")
                 controller.modalPresentationStyle = .fullScreen
                   self.navigationController?.pushViewController(controller, animated: true)
-            }
+//            }
         }
         }
         
