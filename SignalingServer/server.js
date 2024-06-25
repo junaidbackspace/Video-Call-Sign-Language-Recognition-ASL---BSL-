@@ -126,6 +126,7 @@ ws.on('close', function () {
 }
 });
                     
+//<<<<<<< HEAD
    }
          
          
@@ -139,6 +140,63 @@ ws.on('close', function () {
                 console.log("sending call ending msg to user ID:", data.callerID);
                 
                 callerID.send(JSON.stringify({ type: 'call_ended' }));
+//=======
+                    console.log("sending call ending msg to user ID:", data.callerID);
+                    
+                    callerID.send(JSON.stringify({ type: 'call_ended' }));
+                    
+                   
+                    callers.delete(data.callerID);
+                    callers.delete(data.callenderID);
+                } else {
+                    console.log("Caller ID not found or invalid type");
+                }
+               }
+               else if ( type === 'cancellcall')
+               {
+                const callerID =  clients.get(data.from);
+                const callenderID = clients.get(data.to);
+                if (callenderID) {
+                    
+                    console.log("sending call Cancell msg to user ID:", data.to);
+                    
+                    callenderID.send(JSON.stringify({ type: 'call_cancell' }));
+                    
+                    
+                } else {
+                    console.log("Caller ID not found or invalid type");
+                }
+               }
+                
+               else if (data.type === 'classStart') {
+                   console.log(" group chat");
+                 handleClassChat(data.newUser,data.from);
+
+              }
+                
+              else if (data.type === 'groupchat') {
+                  console.log(" group chat");
+                handleGroupChat(data.caller1, data.caller2 , data.newUser,data.videocallid);
+
+             }
+
+            else if (data.type === 'group_call_accepted') {
+                console.log(" group chat accepted");
+               
+                    
+                    const caller1 = clients.get(data.caller1); // user
+                    const caller2 = clients.get(data.caller2);
+                    
+                    console.log("ringing")
+                   
+                    caller1.send(JSON.stringify({ type: 'group_chat_accept',chatuserid: data.from}));
+                    console.log(`Sending Group chat accept Noti to : '${data.caller1}' by : '${data.from}'`);
+                    caller2.send(JSON.stringify({ type: 'group_chat_accept',chatuserid: data.from }));
+                    console.log(`Sending Group chat accept Noti to : '${data.caller2}' by : '${data.from}'`);
+                   
+            
+        }
+//>>>>>>> 143f9eb (teach screens completed)
                 
                
                 callers.delete(data.callerID);
@@ -224,6 +282,7 @@ ws.on('close', function () {
 });
 
         
+//<<<<<<< HEAD
 
 
 
@@ -288,3 +347,41 @@ function handleGroupChat(c1, c2,user , v_id) {
     
     
 });
+//=======
+        function handleClassChat(user,teacher) {
+            // Check if the recipient (to) is connected
+            console.log("within class call ");
+            if (clients.has(user)) {
+                
+                const recipient = clients.get(user); //chat friend
+                
+                groupchat_members.set(user , recipient)
+                const caller1 = clients.get(teacher); // user
+                
+                // Send call initiation message to the recipient
+                if (callers.has(user)) {
+                    caller1.send(JSON.stringify({ type: 'busy', to: to }));
+                    console.log(`User  '${user}' is busy on other call `);
+                    return;
+                }
+                else{
+                console.log("ringing")
+                //caller1.send(JSON.stringify({ type: 'ringing', to: to }));
+                //caller2.send(JSON.stringify({ type: 'ringing', to: to }));
+
+                recipient.send(JSON.stringify({ type: 'incoming_class_call', user1: teacher }));
+                console.log(`Initiating call from '${teacher} & ${user}' to '${user}' videocall id : '${vid}'`);
+                return `Initiating call from '${from}' to '${to}'`;
+                }
+            } else {
+                console.log(`User '${to}' is not connected.`);
+                // Optionally, you can send a message back to the caller indicating that the recipient is not available
+                const caller = clients.get(from);
+                caller.send(JSON.stringify({ type: 'recipient_not_available', to: to }));
+                return `User '${to}' is not connected.`;
+            }
+        }
+        
+        
+    });
+//>>>>>>> 143f9eb (teach screens completed)

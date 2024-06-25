@@ -234,11 +234,14 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         }
         
 //<<<<<<< HEAD
+//<<<<<<< HEAD
+//=======
+   
 //=======
         if type == "incoming_class_call"{
            
-            UserDefaults.standard.setValue("1", forKey: "ClassCall")
-           
+            UserDefaults.standard.setValue("1", forKey: "groupchat")
+//>>>>>>> 900ae87 (teach screens completed)
             print("incoming Class call From: \(caller1)")
             callerid = caller1
             UserDefaults.standard.setValue("1", forKey: "groupchat")
@@ -248,7 +251,10 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         }
         
         
-//>>>>>>> 0d3d00f (some changes)
+//<<<<<<< HEAD
+////>>>>>>> 0d3d00f (some changes)
+//=======
+//>>>>>>> 900ae87 (teach screens completed)
         if type == "ringing" {
             print("user \(from) is ringing ")
             NotificationCenter.default.post(name: Notification.Name("UpdateLabelNotification"), object: nil, userInfo: ["text": "Ringing..."])
@@ -492,6 +498,25 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
                     }
             }
     
+    func receiveClassCall(firstuser_id : Int ) {
+       
+        
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
+            print("outside gaurd statement of call reciver")
+            // Ensure that the delegate is set and the function is implemented
+            guard let delegate = self.incomingCallDelegate else {
+               
+                print("opening call receiver screen")
+                NotificationCenter.default.post(name: .openViewControllerNotification, object: nil,  userInfo: ["callerid": firstuser_id])
+                   
+                return
+            }
+            
+       }
+        
+        
+    }
+    
     
     func CancellCall(with friendId: String) {
        
@@ -612,6 +637,26 @@ func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
             
                     }
             }
+    
+    
+    
+    func ClassRoomCall(with friendId: String ) {
+       
+        self.connectSocket()
+       userID = String(UserDefaults.standard.integer(forKey: "userID"))
+        // Send call initiation message
+        let callData: [String: Any] = ["type": "classStart" ,"newUser" : friendId, "from": userID]
+        do {
+            print("\n \(callData)")
+            let jsonData = try JSONSerialization.data(withJSONObject: callData, options: [])
+            socket.write(data: jsonData)
+            print("Class call initiated...")
+            UserDefaults.standard.setValue("1", forKey: "groupchat")
+        } catch {
+            print("Error serializing call canceling data: \(error)")
+        }
+    }
+    
 
 }
 extension Notification.Name {
