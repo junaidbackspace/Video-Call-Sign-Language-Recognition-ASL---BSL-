@@ -439,7 +439,8 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
     override func viewDidLoad() {
         super.viewDidLoad()
   
-        test()
+        serverWrapper.fetchTranscript(userId: 2, videoCallId: 2345)
+//        test()
         
         //MARK:-
         if socketsClass.shared.isConnected(){

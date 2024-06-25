@@ -152,4 +152,34 @@ struct CreateTranscriptSegmentResponse: Codable {
     let SegmentNumber: Int
 }
 
+import Foundation
 
+struct TranscriptResponseSegment: Codable {
+    let id: Int
+    let userId: Int
+    let videoCallId: Int
+    let segmentNumber: Int
+    let startTime: String
+    let endTime: String
+    let content: String
+    let fullname: String
+
+    enum CodingKeys: String, CodingKey {
+        case id = "Id"
+        case userId = "UserId"
+        case videoCallId = "VideoCallId"
+        case segmentNumber = "SegmentNumber"
+        case startTime = "StartTime"
+        case endTime = "EndTime"
+        case content = "Content"
+        case fullname = "Fullname"
+    }
+}
+
+struct TranscriptResponse: Codable {
+    let transcriptSegments: [TranscriptResponseSegment]
+
+    enum CodingKeys: String, CodingKey {
+        case transcriptSegments = "transcript_segments"
+    }
+}

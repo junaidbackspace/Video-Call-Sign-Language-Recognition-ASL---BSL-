@@ -855,5 +855,38 @@ class APIWrapper {
 
         task.resume()
     }
+    
+    
+    func fetchTranscript(userId: Int, videoCallId: Int) {
+        let urlString = "\(Constants.serverURL)/video-call/transcript/\(userId)/\(videoCallId)"
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL")
+            return
+        }
+
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+                return
+            }
+
+            guard let data = data else {
+                print("No data")
+                return
+            }
+
+            do {
+                let decoder = JSONDecoder()
+                let transcriptResponse = try decoder.decode(TranscriptResponse.self, from: data)
+                for segment in transcriptResponse.transcriptSegments {
+                    print("Segment \(segment.segmentNumber): \(segment.content) by \(segment.fullname)")
+                }
+            } catch {
+                print("Error decoding response: \(error.localizedDescription)")
+            }
+        }
+
+        task.resume()
+    }
 
 }
