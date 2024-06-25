@@ -233,6 +233,22 @@ func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
            
         }
         
+//<<<<<<< HEAD
+//=======
+        if type == "incoming_class_call"{
+           
+            UserDefaults.standard.setValue("1", forKey: "ClassCall")
+           
+            print("incoming Class call From: \(caller1)")
+            callerid = caller1
+            UserDefaults.standard.setValue("1", forKey: "groupchat")
+            
+            self.receiveClassCall(firstuser_id: Int(caller1)!)
+           
+        }
+        
+        
+//>>>>>>> 0d3d00f (some changes)
         if type == "ringing" {
             print("user \(from) is ringing ")
             NotificationCenter.default.post(name: Notification.Name("UpdateLabelNotification"), object: nil, userInfo: ["text": "Ringing..."])

@@ -274,6 +274,7 @@ class CallRecieverViewController: UIViewController,AVAudioPlayerDelegate {
 
 
     let isGroupCall = UserDefaults.standard.string(forKey: "groupchat")
+    let isClassCall = UserDefaults.standard.string(forKey: "ClassCall")
     func acceptCall() {
         musicPlayer?.stop()
         
