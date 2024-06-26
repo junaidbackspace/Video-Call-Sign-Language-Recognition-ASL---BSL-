@@ -1,5 +1,13 @@
+# Database
+https://drive.google.com/file/d/11BKq20Dmcqw-w9JJ1UgM_yli9CJhDcGx/view?usp=sharing
+
+# Api's
+https://drive.google.com/file/d/1xnK7YzgPjuVap1l7g94OyN_RAiNMYRnh/view?usp=sharing
+
+
 # Feature
 
+- Fast API's (Load Balancer )Technology used
 - Real time Signs Recognition in Video Call
 - Support Group Call by (2 devices peer to peer video call - others by socket)
 - For Deaf & Dumb video Call by default it Detects (Alphabets) on Double Tap it shifted to Detect (Words - Sentences)
