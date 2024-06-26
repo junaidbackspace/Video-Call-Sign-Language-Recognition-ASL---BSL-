@@ -1,17 +1,14 @@
-# SimpleWebRTCExample
-
-This is simple WebRTC Exmaple project for iOS written in Swift.
-![result](https://raw.githubusercontent.com/tkmn0/SimpleWebRTCExample_iOS/master/media/sample.gif)
-
 # Feature
 
-- Super simple WebRTC example project written in Swift.
-- Example command lines to build WebRTC.framework.[here](https://github.com/tkmn0/SimpleWebRTCExample_iOS/blob/master/docs/BuildWebRTCFrameworkFlow.md)
-- ~~Includes prebuild WebRTC.framework [here](https://github.com/tkmn0/SimpleWebRTCExample_iOS/releases). (This is for TEST ONLY.)~~ THIS IS REMOVED.
-- Datachannel implementation (text and bytes).
-- File Source implementation.
-- Camera position switching(tap local camera view.)
-- Includes super simple signaling server written in node.js.
+- Real time Signs Recognition in Video Call
+- Support Group Call by (2 devices peer to peer video call - others by socket)
+- For Deaf & Dumb video Call by default it Detects (Alphabets) on Double Tap it shifted to Detect (Words - Sentences)
+- Allows to Create Custom Signs by using (Vision Transformers)
+- In Video Call Sign Language Animations .GIF Integrated for Deaf & Dumb along with Text of caller Communication
+- Text to speech for Blind Integrated
+- Lessons for learning Sign Language Integrated
+- Text Size , Color , Opacity for video Call Screen Provided
+
 
 # Dependency
 
