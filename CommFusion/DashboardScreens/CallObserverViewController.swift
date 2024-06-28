@@ -20,7 +20,7 @@ class CallObserverViewController: UITabBarController, IncomingCallDelegate {
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 
                 guard let firstVC = storyboard.instantiateViewController(withIdentifier: "onlineContacts") as? onlineContactsViewController,
-                      let secondVC = storyboard.instantiateViewController(withIdentifier: "createclass") as? AddClassMemberViewController,
+//                      let secondVC = storyboard.instantiateViewController(withIdentifier: "createclass") as? AddClassMemberViewController,
                       let  thirdVC = storyboard.instantiateViewController(withIdentifier: "calllogs") as? CallLogsViewController,
                       let forthVC = storyboard.instantiateViewController(withIdentifier: "leassonsDashbaord") as? leassonsViewController else {
                     fatalError("Unable to instantiate one or more view controllers from storyboard")
@@ -28,12 +28,12 @@ class CallObserverViewController: UITabBarController, IncomingCallDelegate {
                 
                 // Set tab bar items
         firstVC.tabBarItem = UITabBarItem(title: "Online Contacts", image: UIImage(systemName: "person.2"), tag: 0)
-        secondVC.tabBarItem = UITabBarItem(title: "Groups", image: UIImage(systemName: "person.3"), tag: 1)
+//        secondVC.tabBarItem = UITabBarItem(title: "Groups", image: UIImage(systemName: "person.3"), tag: 1)
         thirdVC.tabBarItem = UITabBarItem(title: "Call History", image: UIImage(systemName: "phone.fill"), tag: 2)
         forthVC.tabBarItem = UITabBarItem(title: "Lessons", image: UIImage(named: "lessons_TAB"), tag: 3)
 
                 
-        viewControllers = [firstVC ,secondVC, thirdVC , forthVC]
+        viewControllers = [firstVC , thirdVC , forthVC]
         
         NotificationCenter.default.addObserver(self, selector: #selector(openViewController(_:)), name: .openViewControllerNotification, object: nil)
         
