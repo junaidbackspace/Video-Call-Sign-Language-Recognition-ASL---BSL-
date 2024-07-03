@@ -1598,15 +1598,15 @@ class SpeechRecognizer: NSObject, SFSpeechRecognizerDelegate {
     
     func startRecognition() {
         print("Audio Recognition started")
-
+        
         isSpeechOn = true
-
+        
         let audioSession = AVAudioSession.sharedInstance()
         do {
             // Set the audio session category, mode, and options
             try audioSession.setCategory(.playAndRecord, mode: .default, options: [.duckOthers, .defaultToSpeaker])
             try audioSession.setMode(.measurement)
-
+            
             // Attempt to use the built-in microphone, which includes the earphone microphone if connected
             if let availableInputs = audioSession.availableInputs {
                 for input in availableInputs {
@@ -1616,44 +1616,47 @@ class SpeechRecognizer: NSObject, SFSpeechRecognizerDelegate {
                     }
                 }
             }
-
+            
             try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
         } catch {
             print("Audio session error: \(error.localizedDescription)")
         }
-
+        
         recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
-
+        
         guard let recognitionRequest = recognitionRequest else {
             fatalError("Unable to create an SFSpeechAudioBufferRecognitionRequest object")
         }
-
+        
         recognitionRequest.shouldReportPartialResults = true
-
+        
         recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest, resultHandler: { (result, error) in
             if let result = result {
                 print("Transcription: \(result.bestTranscription.formattedString)")
-
+                
                 if self.ShouldGroupChat {
                     print("Group Chat Send.")
                     socketsClass.shared.Send_GroupChatMsg(friendId: self.groupFriendId, Message: result.bestTranscription.formattedString, from: self.userID)
                 }
-
+                
                 if self.checkclass == "groupchat" {
                     self.Group_chats?.speechtoTextMsg(message: result.bestTranscription.formattedString)
-                } else if self.checkclass == "blind_normal" {
+                }
+                
+                else if self.checkclass == "blind_normal" {
                     self.Blind_NormalGroup?.speechtoText = result.bestTranscription.formattedString
                     var text = result.bestTranscription.formattedString
-                    socketsClass.shared.Send_GroupChatMsgByDeaf(friendId: self.Msguserone, Message: text, from: self.userID)
-                    socketsClass.shared.Send_GroupChatMsgByDeaf(friendId: self.MSgusertwo, Message: text, from: self.userID)
-                } else {
+                    socketsClass.shared.Send_GroupChatMsgByDeaf(friendId: self.Msguserone , Message: text, from: self.userID )
+                    socketsClass.shared.Send_GroupChatMsgByDeaf(friendId: self.MSgusertwo , Message: text, from: self.userID )
+                }
+                else {
                     self.viewController?.textmsg(msg: result.bestTranscription.formattedString)
                 }
             }
-
+            
             if error != nil || result?.isFinal == true {
                 print("Restarting recognition")
-
+                
                 self.stopRecognition()
                 if !self.isStopping {
                     print("within>>> voice check false")
@@ -1667,22 +1670,15 @@ class SpeechRecognizer: NSObject, SFSpeechRecognizerDelegate {
                 }
             }
         })
-
+        
         let inputNode = audioEngine.inputNode
         let recordingFormat = inputNode.outputFormat(forBus: 0)
-        
-        // Validate the sample rate and channel count
-        guard recordingFormat.sampleRate > 0, recordingFormat.channelCount > 0 else {
-            print("Invalid recording format: \(recordingFormat)")
-            return
-        }
-
         inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
             self.recognitionRequest?.append(buffer)
         }
-
+        
         audioEngine.prepare()
-
+        
         do {
             print("Starting engine for voice")
             try audioEngine.start()
@@ -1690,7 +1686,6 @@ class SpeechRecognizer: NSObject, SFSpeechRecognizerDelegate {
             print("audioEngine couldn't start because of an error: \(error.localizedDescription)")
         }
     }
-
 
     
      var isStopping = false
