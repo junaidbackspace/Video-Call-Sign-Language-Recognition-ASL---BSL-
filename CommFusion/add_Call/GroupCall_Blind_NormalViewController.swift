@@ -40,123 +40,123 @@ class GroupCall_Blind_NormalViewController: UIViewController {
     @IBOutlet weak var view_FirstUser : UIView!
     @IBOutlet weak var view_SecondUser : UIView!
     
-    var Msg = ""
-    var currentmsg = -1
-    
-    
-    
-    func getCurrentFormattedDate() -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        dateFormatter.timeZone = TimeZone(identifier: "UTC")
-        return dateFormatter.string(from: Date())
-    }
-   
-    func test(msg : String) {
-        let startTime = getCurrentFormattedDate()
-        let endTime = getCurrentFormattedDate()
-        
-        let newSegment = TranscriptSegment(
-            UserId: 2,
-            VideoCallId: "2345", // Replace with the actual VideoCallId
-            StartTime: startTime,
-            EndTime: endTime,
-            Content: "msg"
-        )
-    }
-        
-    
-    @IBAction func backbtn(_ sender: UIButton)
-    {
-        print("Current message : \(currentmsg) , Total count \(msgList.count)")
-//        currentmsg -= 1
-//        if (currentmsg > 0) {
-        
-        Msg = msgList.popLast()!
-        print("Poped msg : \(Msg)")
-            msg_firstuser.text = Msg
-            if myLangType == "deaf"{
-            processTranscription(Msg)
-        }
-        else{
-            print("speak check")
-            speak(text: Msg)
-        }
+//    var Msg = ""
+//    var currentmsg = -1
+//
+//
+//
+//    func getCurrentFormattedDate() -> String {
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+//        dateFormatter.timeZone = TimeZone(identifier: "UTC")
+//        return dateFormatter.string(from: Date())
+//    }
+//
+//    func test(msg : String) {
+//        let startTime = getCurrentFormattedDate()
+//        let endTime = getCurrentFormattedDate()
+//
+//        let newSegment = TranscriptSegment(
+//            UserId: 2,
+//            VideoCallId: "2345", // Replace with the actual VideoCallId
+//            StartTime: startTime,
+//            EndTime: endTime,
+//            Content: "msg"
+//        )
+//    }
+//
+//
+//    @IBAction func backbtn(_ sender: UIButton)
+//    {
+//        print("Current message : \(currentmsg) , Total count \(msgList.count)")
+////        currentmsg -= 1
+////        if (currentmsg > 0) {
+//
+//        Msg = msgList.popLast()!
+//        print("Poped msg : \(Msg)")
+//            msg_firstuser.text = Msg
+//            if myLangType == "deaf"{
+//            processTranscription(Msg)
 //        }
-    }
-    @IBAction func freshbtn(_ sender: UIButton)
-    {
-        print("Current message : \(currentmsg) , Total count \(msgList.count)")
-        Msg =  msgList.last!
-        print("fresh msg is : \(Msg)")
-        msg_firstuser.text = Msg
-        processTranscription(Msg)
-        if myLangType == "deaf"{
-            processTranscription(Msg)
-        }
-        else{
-            print("speak check")
-            speak(text: Msg)
-        }
-        
-    }
-    
-    private var playedGifs: Set<String> = []
-    private var wordToGifMap: [String: String] = [
-        "hello": "hello.gif",
-        "helo": "hello.gif",
-        "how": "howareyou.gif",
-        "cool": "cool.gif",
-        "happy": "happy.gif",
-        "fine": "iamfine.gif",
-        "learning": "iamlearning.gif",
-        "love": "iloveyou.gif",
-        "calm": "keepcalmandstayhome.gif",
-        "kiss": "kiss.gif",
-        "me": "me.gif",
-        "meet": "nicetomeetyou.gif",
-        "no": "no.gif",
-        "ok": "ok.gif",
-        "please": "please.gif",
-        "sorry": "sorry.gif",
-        "super": "super.gif",
-        "thank": "thankyou.gif",
-        "try": "tryagain.gif",
-        "understand": "understand.gif",
-        "from": "whereareyoufrom.gif",
-        "wonderful": "wonderful.gif"
-//        "you": "you.gif"
-        // Add more mappings as needed
-    ]
-    
-    
+//        else{
+//            print("speak check")
+//            speak(text: Msg)
+//        }
+////        }
+//    }
+//    @IBAction func freshbtn(_ sender: UIButton)
+//    {
+//        print("Current message : \(currentmsg) , Total count \(msgList.count)")
+//        Msg =  msgList.last!
+//        print("fresh msg is : \(Msg)")
+//        msg_firstuser.text = Msg
+//        processTranscription(Msg)
+//        if myLangType == "deaf"{
+//            processTranscription(Msg)
+//        }
+//        else{
+//            print("speak check")
+//            speak(text: Msg)
+//        }
+//
+//    }
+//
+//    private var playedGifs: Set<String> = []
+//    private var wordToGifMap: [String: String] = [
+//        "hello": "hello.gif",
+//        "helo": "hello.gif",
+//        "how": "howareyou.gif",
+//        "cool": "cool.gif",
+//        "happy": "happy.gif",
+//        "fine": "iamfine.gif",
+//        "learning": "iamlearning.gif",
+//        "love": "iloveyou.gif",
+//        "calm": "keepcalmandstayhome.gif",
+//        "kiss": "kiss.gif",
+//        "me": "me.gif",
+//        "meet": "nicetomeetyou.gif",
+//        "no": "no.gif",
+//        "ok": "ok.gif",
+//        "please": "please.gif",
+//        "sorry": "sorry.gif",
+//        "super": "super.gif",
+//        "thank": "thankyou.gif",
+//        "try": "tryagain.gif",
+//        "understand": "understand.gif",
+//        "from": "whereareyoufrom.gif",
+//        "wonderful": "wonderful.gif"
+////        "you": "you.gif"
+//        // Add more mappings as needed
+//    ]
+//
+//
     let myLangType = UserDefaults.standard.string(forKey: "disabilityType")!
    @objc func messageRecieved(_ notification : Notification)
     {
     
-      currentmsg += 1
+//      currentmsg += 1
     print("displaying chat message")
         if let userid = notification.userInfo?["from"] as? String {
             if let Message = notification.userInfo?["message"] as? String {
-//        if userfirst_id == Int(userid) {
+        if userfirst_id == Int(userid) {
+
+            msg_firstuser.text = Message
+            processTranscription(Message)
+        }
+        else{
+            msg_seconduser.text = Message
+        }
 //
-//            msg_firstuser.text = Message
-//            processTranscription(Message)
-//        }
-//        else{
-//            msg_seconduser.text = Message
-//        }
-                
-                if myLangType == "deaf"
-                {
-                    print("Runing fings")
-                    processTranscription(Message)
-                }
-                else{
-                    print("speaking...")
-                    TexttoSpeech(text : Message)
-                }
-                
+//                if myLangType == "deaf"
+//                {
+//                    print("Runing fings")
+//                    processTranscription(Message)
+//                }
+//                else{
+//                    print("speaking...")
+//                    TexttoSpeech(text : Message)
+//                }
+//
                 msg_firstuser.text = Message
                 if Message != " "{
                 msgList.append(Message)

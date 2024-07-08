@@ -1816,14 +1816,14 @@
         <scene sceneID="zPq-uy-VkO">
             <objects>
                 <viewController storyboardIdentifier="profilesettingsScreen" id="K7Z-Vh-RAa" customClass="ProfileSettingsViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="n1f-oW-XYb">
+                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="n1f-oW-XYb">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="blZ-uu-W4P">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="blZ-uu-W4P">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QNu-QK-fp3">
+                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QNu-QK-fp3">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="1200"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VhQ-vS-CJ7">
@@ -2296,14 +2296,14 @@
         <scene sceneID="KxS-R2-bg1">
             <objects>
                 <viewController storyboardIdentifier="termsconditions" id="6pY-0x-mis" customClass="termsConditionViewController" customModule="CommFusion" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="IkY-Jv-J3B">
+                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="IkY-Jv-J3B">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vfm-PR-29H">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vfm-PR-29H">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4WX-Ji-1Zt">
+                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4WX-Ji-1Zt">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="3400"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" lineBreakMode="wordWrap" numberOfLines="150" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9cu-2A-9BU">
@@ -3697,7 +3697,7 @@ By using the Application, you acknowledge that you have read, understood, and ag
                                     <constraint firstItem="yLX-Ry-6tz" firstAttribute="centerY" secondItem="c5r-vf-wOV" secondAttribute="centerY" id="z8y-6K-VGP"/>
                                 </constraints>
                             </view>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mJU-cw-puj">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mJU-cw-puj">
                                 <rect key="frame" x="55" y="344" width="304" height="167"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Biginner" translatesAutoresizingMaskIntoConstraints="NO" id="DY5-TC-BkE">
