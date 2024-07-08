@@ -126,12 +126,13 @@ ws.on('close', function () {
 }
 });
                     
-//<<<<<<< HEAD
+
    }
          
          
-        }     
-           else if ( type === 'call_ended')
+        }
+            
+    else if ( type === 'call_ended')
            {
             const callerID =  clients.get(data.callerID);
             const callenderID = clients.get(data.callenderID);
@@ -140,7 +141,7 @@ ws.on('close', function () {
                 console.log("sending call ending msg to user ID:", data.callerID);
                 
                 callerID.send(JSON.stringify({ type: 'call_ended' }));
-//=======
+
                     console.log("sending call ending msg to user ID:", data.callerID);
                     
                     callerID.send(JSON.stringify({ type: 'call_ended' }));
@@ -151,8 +152,8 @@ ws.on('close', function () {
                 } else {
                     console.log("Caller ID not found or invalid type");
                 }
-               }
-               else if ( type === 'cancellcall')
+            }
+    else if ( type === 'cancellcall')
                {
                 const callerID =  clients.get(data.from);
                 const callenderID = clients.get(data.to);
@@ -168,19 +169,19 @@ ws.on('close', function () {
                 }
                }
                 
-               else if (data.type === 'classStart') {
+  else if (data.type === 'classStart') {
                    console.log(" group chat");
                  handleClassChat(data.newUser,data.from);
 
               }
                 
-              else if (data.type === 'groupchat') {
+else if (data.type === 'groupchat') {
                   console.log(" group chat");
                 handleGroupChat(data.caller1, data.caller2 , data.newUser,data.videocallid);
 
              }
 
-            else if (data.type === 'group_call_accepted') {
+  else if (data.type === 'group_call_accepted') {
                 console.log(" group chat accepted");
                
                     
@@ -196,16 +197,10 @@ ws.on('close', function () {
                    
             
         }
-//>>>>>>> 143f9eb (teach screens completed)
+
                 
-               
-                callers.delete(data.callerID);
-                callers.delete(data.callenderID);
-            } else {
-                console.log("Caller ID not found or invalid type");
-            }
-           }
-           else if ( type === 'cancellcall')
+            
+    else if ( type === 'cancellcall')
            {
             const callerID =  clients.get(data.from);
             const callenderID = clients.get(data.to);
@@ -220,7 +215,7 @@ ws.on('close', function () {
                 console.log("Caller ID not found or invalid type");
             }
            }
-          else if (data.type === 'groupchat') {
+     else if (data.type === 'groupchat') {
               console.log(" group chat");
             handleGroupChat(data.caller1, data.caller2 , data.newUser,data.videocallid);
 
@@ -281,8 +276,7 @@ ws.on('close', function () {
 }
 });
 
-        
-//<<<<<<< HEAD
+
 
 
 
@@ -347,7 +341,7 @@ function handleGroupChat(c1, c2,user , v_id) {
     
     
 });
-//=======
+
         function handleClassChat(user,teacher) {
             // Check if the recipient (to) is connected
             console.log("within class call ");
@@ -384,4 +378,4 @@ function handleGroupChat(c1, c2,user , v_id) {
         
         
     });
-//>>>>>>> 143f9eb (teach screens completed)
+

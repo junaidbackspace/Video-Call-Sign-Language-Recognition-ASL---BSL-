@@ -141,7 +141,7 @@ class GroupCall_Blind_NormalViewController: UIViewController {
         if userfirst_id == Int(userid) {
 
             msg_firstuser.text = Message
-            processTranscription(Message)
+//            processTranscription(Message)
         }
         else{
             msg_seconduser.text = Message
@@ -177,87 +177,87 @@ class GroupCall_Blind_NormalViewController: UIViewController {
         
     }
     
-    func processTranscription(_ transcription: String) {
-        let words = transcription.lowercased().split(separator: " ")
-        
-        for word in words {
-            let wordStr = String(word)
-            if let gifName = wordToGifMap[wordStr], !playedGifs.contains(wordStr) {
-               
-//                playedGifs.insert(wordStr)
-                
-                print("giving text for video : \(wordStr)")
-               
-                play_sign_gif(name: wordStr)
-                DispatchQueue.main.asyncAfter(deadline: .now()+2)
-                {
-                    self.cleanupPlayer()
-                }
-            }
-        }
-    }
+//    func processTranscription(_ transcription: String) {
+//        let words = transcription.lowercased().split(separator: " ")
+//
+//        for word in words {
+//            let wordStr = String(word)
+//            if let gifName = wordToGifMap[wordStr]{
+//
+////                playedGifs.insert(wordStr)
+//
+//                print("giving text for video : \(wordStr)")
+//
+//                play_sign_gif(name: wordStr)
+//                DispatchQueue.main.asyncAfter(deadline: .now()+2)
+//                {
+//                    self.cleanupPlayer()
+//                }
+//            }
+//        }
+//    }
     
     
-    func cleanupPlayer() {
-           if let playerItem = playerItem {
-               NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
-           }
-           playerLayer?.removeFromSuperlayer()
-           playerLayer = nil
-           playerItem = nil
-           player = nil
-           SignsvideoContainerView?.removeFromSuperview()
-       }
+//    func cleanupPlayer() {
+//           if let playerItem = playerItem {
+//               NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
+//           }
+//           playerLayer?.removeFromSuperlayer()
+//           playerLayer = nil
+//           playerItem = nil
+//           player = nil
+//           SignsvideoContainerView?.removeFromSuperview()
+//       }
 
     
-    func play_sign_gif(name: String) {
-            // Clean up any existing GIF and views
-            cleanupGif()
-
-            guard let gifPath = Bundle.main.path(forResource: name.lowercased(), ofType: "gif") else {
-                print("GIF file not found.")
-                return
-            }
-
-            guard let gifData = NSData(contentsOfFile: gifPath) else {
-                print("Failed to load GIF data.")
-                return
-            }
-
-            let gif = UIImage.gif(data: gifData as Data)
-            
-            // Define the frame for the GIF image view
-            let gifWidth: CGFloat = 200.0 // specify desired width
-            let gifHeight: CGFloat = 150.0 // specify desired height
-            let xPos: CGFloat = (self.view.bounds.width - gifWidth) / 2 // center horizontally
-            let yPos: CGFloat = (self.view.bounds.height - gifHeight) - 150 // position vertically
-
-            // Set up UIImageView for GIF
-            let gifImageView = UIImageView(image: gif)
-            gifImageView.frame = CGRect(x: xPos, y: yPos, width: gifWidth, height: gifHeight)
-            gifImageView.contentMode = .scaleAspectFill
-            
-            // Add the GIF UIImageView to the view
-            SignsvideoContainerView = UIView(frame: view.bounds)
-            if let SignsvideoContainerView = SignsvideoContainerView {
-                SignsvideoContainerView.addSubview(gifImageView)
-                view.addSubview(SignsvideoContainerView)
-                
-            }
-        }
-
-
-    
-    @objc func stopGif() {
-            cleanupGif()
-        }
-        
-        func cleanupGif() {
-            if let SignsvideoContainerView = SignsvideoContainerView {
-                SignsvideoContainerView.removeFromSuperview()
-            }
-            SignsvideoContainerView = nil
-        }
+//    func play_sign_gif(name: String) {
+//            // Clean up any existing GIF and views
+//            cleanupGif()
+//
+//            guard let gifPath = Bundle.main.path(forResource: name.lowercased(), ofType: "gif") else {
+//                print("GIF file not found.")
+//                return
+//            }
+//
+//            guard let gifData = NSData(contentsOfFile: gifPath) else {
+//                print("Failed to load GIF data.")
+//                return
+//            }
+//
+//            let gif = UIImage.gif(data: gifData as Data)
+//
+//            // Define the frame for the GIF image view
+//            let gifWidth: CGFloat = 200.0 // specify desired width
+//            let gifHeight: CGFloat = 150.0 // specify desired height
+//            let xPos: CGFloat = (self.view.bounds.width - gifWidth) / 2 // center horizontally
+//            let yPos: CGFloat = (self.view.bounds.height - gifHeight) - 150 // position vertically
+//
+//            // Set up UIImageView for GIF
+//            let gifImageView = UIImageView(image: gif)
+//            gifImageView.frame = CGRect(x: xPos, y: yPos, width: gifWidth, height: gifHeight)
+//            gifImageView.contentMode = .scaleAspectFill
+//
+//            // Add the GIF UIImageView to the view
+//            SignsvideoContainerView = UIView(frame: view.bounds)
+//            if let SignsvideoContainerView = SignsvideoContainerView {
+//                SignsvideoContainerView.addSubview(gifImageView)
+//                view.addSubview(SignsvideoContainerView)
+//
+//            }
+//        }
+//
+//
+//
+//    @objc func stopGif() {
+//            cleanupGif()
+//        }
+//
+//        func cleanupGif() {
+//            if let SignsvideoContainerView = SignsvideoContainerView {
+//                SignsvideoContainerView.removeFromSuperview()
+//            }
+//            SignsvideoContainerView = nil
+//        }
     
     
     @IBAction func hangupcall(_ sender : Any)
