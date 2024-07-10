@@ -27,9 +27,6 @@
   </tr>
 </table>
 
-![IMG_9235](https://github.com/junaidbackspace/Video-Call-Sign-Language-Recognition-ASL---BSL-/assets/88697352/72a8602c-5e6c-473f-aaf1-4e1c7d8ad378)
-
-
 
 
 # Database
