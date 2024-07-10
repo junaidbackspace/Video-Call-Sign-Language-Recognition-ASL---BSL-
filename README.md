@@ -1,14 +1,22 @@
-<img src="https://github.com/junaidbackspace/Video-Call-Sign-Language-Recognition-ASL---BSL-/assets/88697352/6b6cf6b4-9ca7-43a4-a9ee-f026ca3d0f8f" alt="IMG_9237" width="300">
-<p>Adding Person in Video Call</p>
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+  <div style="flex: 1; min-width: 300px; max-width: 45%;">
+    <img src="https://github.com/junaidbackspace/Video-Call-Sign-Language-Recognition-ASL---BSL-/assets/88697352/6b6cf6b4-9ca7-43a4-a9ee-f026ca3d0f8f" alt="IMG_9237" width="100%">
+    <p>Adding Person in Video Call</p>
+  </div>
+  <div style="flex: 1; min-width: 300px; max-width: 45%;">
+    <img src="https://github.com/junaidbackspace/Video-Call-Sign-Language-Recognition-ASL---BSL-/assets/88697352/8b5e19fc-75ef-4ba4-81fd-1c80e6a5c4f6" alt="IMG_9238" width="100%">
+    <p>Receiving Group Call</p>
+  </div>
+  <div style="flex: 1; min-width: 300px; max-width: 45%;">
+    <img src="https://github.com/junaidbackspace/Video-Call-Sign-Language-Recognition-ASL---BSL-/assets/88697352/b54168d7-9afd-4b27-8607-137709cf686d" alt="IMG_9239" width="100%">
+    <p>Group Member Screen</p>
+  </div>
+  <div style="flex: 1; min-width: 300px; max-width: 45%;">
+    <img src="https://github.com/junaidbackspace/Video-Call-Sign-Language-Recognition-ASL---BSL-/assets/88697352/a24bb2b0-c4af-479d-9020-516b99dbb86d" alt="IMG_9241" width="100%">
+    <p>Group Call Interface</p>
+  </div>
+</div>
 
-<img src="https://github.com/junaidbackspace/Video-Call-Sign-Language-Recognition-ASL---BSL-/assets/88697352/8b5e19fc-75ef-4ba4-81fd-1c80e6a5c4f6" alt="IMG_9238" width="300">
-<p>Receiving Group Call</p>
-
-<img src="https://github.com/junaidbackspace/Video-Call-Sign-Language-Recognition-ASL---BSL-/assets/88697352/b54168d7-9afd-4b27-8607-137709cf686d" alt="IMG_9239" width="300">
-<p>Group Member Screen</p>
-
-<img src="https://github.com/junaidbackspace/Video-Call-Sign-Language-Recognition-ASL---BSL-/assets/88697352/a24bb2b0-c4af-479d-9020-516b99dbb86d" alt="IMG_9241" width="300">
-<p>Group Call Interface</p>
 
 
 
