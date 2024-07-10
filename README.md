@@ -1,3 +1,13 @@
+![IMG_9237](https://github.com/junaidbackspace/Video-Call-Sign-Language-Recognition-ASL---BSL-/assets/88697352/6b6cf6b4-9ca7-43a4-a9ee-f026ca3d0f8f)
+Adding Person in Video Call
+![IMG_9238](https://github.com/junaidbackspace/Video-Call-Sign-Language-Recognition-ASL---BSL-/assets/88697352/8b5e19fc-75ef-4ba4-81fd-1c80e6a5c4f6)
+Recieving Group Call
+![IMG_9239](https://github.com/junaidbackspace/Video-Call-Sign-Language-Recognition-ASL---BSL-/assets/88697352/b54168d7-9afd-4b27-8607-137709cf686d)
+Group member Screen
+![IMG_9241](https://github.com/junaidbackspace/Video-Call-Sign-Language-Recognition-ASL---BSL-/assets/88697352/a24bb2b0-c4af-479d-9020-516b99dbb86d)
+
+
+
 # Database
 https://drive.google.com/file/d/11BKq20Dmcqw-w9JJ1UgM_yli9CJhDcGx/view?usp=sharing
 
