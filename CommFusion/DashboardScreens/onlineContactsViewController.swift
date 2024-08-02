@@ -439,7 +439,7 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
     override func viewDidLoad() {
         super.viewDidLoad()
   
-        serverWrapper.fetchTranscript(userId: 2, videoCallId: 2345)
+//        serverWrapper.fetchTranscript(userId: 2, videoCallId: 2345)
 //        test()
         
         //MARK:-
@@ -506,7 +506,11 @@ class onlineContactsViewController: UIViewController,UITableViewDataSource, UITa
         }
             
             
+        if UserDefaults.standard.object(forKey: "notifi_sound") == nil {
+            print("setting on - onload\n")
+            UserDefaults.standard.setValue("on", forKey: "notifi_sound")
             
+        }
         if UserDefaults.standard.object(forKey: "rigntones") == nil {
             UserDefaults.standard.setValue("default", forKey: "rigntones")
             
