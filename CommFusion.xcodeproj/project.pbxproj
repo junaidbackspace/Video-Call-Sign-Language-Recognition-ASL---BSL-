@@ -833,7 +833,7 @@
 				AF15C0AE21E41A58005B4ED6 /* Extentions */,
 				AF711ADB21E14DC1005CA4FA /* Utility */,
 				AF711AD821E14484005CA4FA /* WebRTC */,
-				AF711AD721E1445F005CA4FA /* ViewController */,
+				AF711AD721E1445F005CA4FA /* VideoCall_ViewController */,
 				AF711AA421DFAD6C005CA4FA /* AppDelegate.swift */,
 				AF711AA821DFAD6C005CA4FA /* Main.storyboard */,
 				AF711AAD21DFAD6E005CA4FA /* LaunchScreen.storyboard */,
@@ -860,12 +860,12 @@
 			path = SimpleWebRTCUITests;
 			sourceTree = "<group>";
 		};
-		AF711AD721E1445F005CA4FA /* ViewController */ = {
+		AF711AD721E1445F005CA4FA /* VideoCall_ViewController */ = {
 			isa = PBXGroup;
 			children = (
 				AF711AA621DFAD6C005CA4FA /* ViewController.swift */,
 			);
-			path = ViewController;
+			path = VideoCall_ViewController;
 			sourceTree = "<group>";
 		};
 		AF711AD821E14484005CA4FA /* WebRTC */ = {

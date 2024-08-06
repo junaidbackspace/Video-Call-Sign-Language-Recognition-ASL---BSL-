@@ -538,33 +538,34 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         
         if let value = notification.userInfo?["callerid"] as? String {
             
-            if isReciever == 1 {
-            print("adding group chat in call logs vid : \(v_id)")
-                addCall_Api(vid: v_id, userid: Int(value)!)
-            
-            }
-            
-            groupchat_View?.isHidden = false
-            
-            fetchGroupMemberData(callerId: value)
-            
-            if myLangType == "deaf" //|| myLangType == "blind"
-           {
-            webRTCClient.ShouldGroupChat = true
-            webRTCClient.groupFriendId = value
-           }
-           else{
-            //already speech recognizer is on
-            if  !speechRecognizer!.isSpeechOn{
-            if speechRecognizer?.isStopping == false{
-            print("Enabling group chat in view controller by turning on S_Recognizer")
-                self.ShouldGroupChat = true
-            speechRecognizer?.ShouldGroupChat = true
-            speechRecognizer?.groupFriendId = value
-            speechRecognizer?.isStopping = false
-//            self.speechRecognizer!.startRecognition()
-                    }
+                if isReciever == 1 {
+                print("adding group chat in call logs vid : \(v_id)")
+                    addCall_Api(vid: v_id, userid: Int(value)!)
+                
                 }
+                
+                groupchat_View?.isHidden = false
+                
+                fetchGroupMemberData(callerId: value)
+            
+                    if myLangType == "deaf"
+                       {
+                    webRTCClient.ShouldGroupChat = true
+                    webRTCClient.groupFriendId = value
+                       }
+                    
+                   else{
+                    //already speech recognizer is on
+                    if  !speechRecognizer!.isSpeechOn{
+                    if speechRecognizer?.isStopping == false{
+                    print("Enabling group chat in view controller by turning on S_Recognizer")
+                        self.ShouldGroupChat = true
+                    speechRecognizer?.ShouldGroupChat = true
+                    speechRecognizer?.groupFriendId = value
+                    speechRecognizer?.isStopping = false
+        //            self.speechRecognizer!.startRecognition()
+                            }
+                        }
 
                 else{
                 print("Speech Recog Already on")
@@ -1181,7 +1182,7 @@ extension ViewController {
             
             DispatchQueue.main.async {
                                 print("++++++++Starting REcognition.....++++++")
-//                                self.speechRecognizer!.startRecognition()
+                                self.speechRecognizer!.startRecognition()
                             }
             }
            
@@ -1255,7 +1256,7 @@ extension ViewController {
             let wordStr = String(word)
             if let gifName = wordToGifMap[wordStr], !playedGifs.contains(wordStr) {
                
-//                playedGifs.insert(wordStr)
+                playedGifs.insert(wordStr)
                 
                 print("giving text for video : \(wordStr)")
                
