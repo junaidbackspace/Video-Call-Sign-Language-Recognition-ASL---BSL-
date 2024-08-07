@@ -1292,7 +1292,7 @@ extension ViewController {
         print("Speaking text: \(text)")
         
         // Speak the utterance
-//        speechSynthesizer.speak(utterance)
+        speechSynthesizer.speak(utterance)
         
        
     }
